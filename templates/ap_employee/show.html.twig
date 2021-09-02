@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApEmployee{% endblock %}
+
+{% block body %}
+    <h1>ApEmployee</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ap_employee.id }}</td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ ap_employee.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ ap_employee.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ ap_employee.email }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ ap_employee.password }}</td>
+            </tr>
+            <tr>
+                <th>Notification</th>
+                <td>{{ ap_employee.notification ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Active</th>
+                <td>{{ ap_employee.active ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Checkin</th>
+                <td>{{ ap_employee.checkin ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Hour_count</th>
+                <td>{{ ap_employee.hourCount }}</td>
+            </tr>
+            <tr>
+                <th>Weekly_hour</th>
+                <td>{{ ap_employee.weeklyHour }}</td>
+            </tr>
+            <tr>
+                <th>role</th>
+                <td>{{ ap_employee.Role}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('ap_employee_index') }}">back to list</a>
+
+    <a href="{{ path('ap_employee_edit', {'id': ap_employee.id}) }}">edit</a>
+
+    {{ include('ap_employee/_delete_form.html.twig') }}
+{% endblock %}

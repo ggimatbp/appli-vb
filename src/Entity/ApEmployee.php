@@ -62,6 +62,12 @@ class ApEmployee
      */
     private $weekly_hour;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=ApRole::class, inversedBy="apEmployees")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Role;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -171,6 +177,18 @@ class ApEmployee
     public function setWeeklyHour(int $weekly_hour): self
     {
         $this->weekly_hour = $weekly_hour;
+
+        return $this;
+    }
+
+    public function getRole(): ?ApRole
+    {
+        return $this->Role;
+    }
+
+    public function setRole(?ApRole $Role): self
+    {
+        $this->Role = $Role;
 
         return $this;
     }
