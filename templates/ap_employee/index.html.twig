@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApEmployee index{% endblock %}
+
+{% block body %}
+    <h1>ApEmployee index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Notification</th>
+                <th>Active</th>
+                <th>Checkin</th>
+                <th>Hour_count</th>
+                <th>Weekly_hour</th>
+                <th>role</th>
+                <th>actions</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+        {% for ap_employee in ap_employees %}
+            <tr>
+                <td>{{ ap_employee.id }}</td>
+                <td>{{ ap_employee.firstname }}</td>
+                <td>{{ ap_employee.lastname }}</td>
+                <td>{{ ap_employee.email }}</td>
+                <td>{{ ap_employee.password }}</td>
+                <td>{{ ap_employee.notification ? 'Yes' : 'No' }}</td>
+                <td>{{ ap_employee.active ? 'Yes' : 'No' }}</td>
+                <td>{{ ap_employee.checkin ? 'Yes' : 'No' }}</td>
+                <td>{{ ap_employee.hourCount }}</td>
+                <td>{{ ap_employee.weeklyHour }}</td>
+                <td>{{ ap_employee.Role.name }}</td>
+                <td>
+                    <a href="{{ path('ap_employee_show', {'id': ap_employee.id}) }}">show</a>
+                    <a href="{{ path('ap_employee_edit', {'id': ap_employee.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('ap_employee_new') }}">Create new</a>
+{% endblock %}

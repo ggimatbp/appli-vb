@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ApTab{% endblock %}
+
+{% block body %}
+    <h1>Create new ApTab</h1>
+
+    {{ include('ap_tab/_form.html.twig') }}
+
+    <a href="{{ path('ap_tab_index') }}">back to list</a>
+{% endblock %}
