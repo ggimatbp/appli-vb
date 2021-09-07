@@ -34,10 +34,21 @@ class ApRole
      */
     private $apEmployees;
 
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $JsonRole = [];
+
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="roleId")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->apAccesses = new ArrayCollection();
         $this->apEmployees = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -52,7 +63,7 @@ class ApRole
 
     public function setName(string $name): self
     {
-        $this->name = $name;
+        $this->name = strtoupper($name);
 
         return $this;
     }
@@ -111,6 +122,48 @@ class ApRole
             // set the owning side to null (unless already changed)
             if ($apEmployee->getRole() === $this) {
                 $apEmployee->setRole(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getJsonRole(): ?array
+    {
+        return $this->JsonRole;
+    }
+
+    public function setJsonRole(string $name): self
+    {
+        $this->JsonRole[] = "ROLE_$name";
+        
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setRoleId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getRoleId() === $this) {
+                $user->setRoleId(null);
             }
         }
 

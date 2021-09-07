@@ -2,13 +2,18 @@
 
 namespace App\Entity;
 
+
+use App\Entity\ApRole;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -34,6 +39,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=apRole::class, inversedBy="users")
+     */
+    private $roleId;
 
     public function getId(): ?int
     {
@@ -82,12 +92,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(?apRole $roleId): self
     {
-        $this->roles = $roles;
-
+        $contributor = new ApRole();
+        $this->roleId = $roleId;
         return $this;
     }
+    
 
     /**
      * @see PasswordAuthenticatedUserInterface
@@ -122,5 +133,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getRoleId(): ?apRole
+    {
+        return $this->roleId;
+    }
+
+    public function setRoleId(?apRole $roleId): self
+    {
+        $this->roleId = $roleId;
+
+        return $this;
     }
 }

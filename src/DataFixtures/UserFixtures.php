@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\ApRole;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use app\Entity\User;
@@ -23,7 +24,7 @@ class UserFixtures extends Fixture
     // Création d’un utilisateur de type “contributeur” (= auteur)
     $contributor = new User();
     $contributor->setEmail('contributor@monsite.com');
-    $contributor->setRoles(['ROLE_CONTRIBUTOR']);
+    $contributor->setRoleId(new ApRole(25));
     $contributor->setPassword($this->passwordHasher->hashPassword(
         $contributor,
         '123'
@@ -34,16 +35,22 @@ class UserFixtures extends Fixture
     // Création d’un utilisateur de type “administrateur”
     $admin = new User();
     $admin->setEmail('admin@monsite.com');
-    $admin->setRoles(['ROLE_ADMIN']);
     $admin->setPassword($this->passwordHasher->hashPassword(
         $admin,
         '123'
     ));
+    
 
     $manager->persist($admin);
 
     // Sauvegarde des 2 nouveaux utilisateurs :
     $manager->flush();
-        $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return array(
+            AppRoleFixture::class,
+        );
     }
 }
