@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210907120800 extends AbstractMigration
+final class Version20210908093720 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,16 +20,12 @@ final class Version20210907120800 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user ADD role_id_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D64988987678 FOREIGN KEY (role_id_id) REFERENCES ap_role (id)');
-        $this->addSql('CREATE INDEX IDX_8D93D64988987678 ON user (role_id_id)');
+        $this->addSql('ALTER TABLE ap_role DROP json_role');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D64988987678');
-        $this->addSql('DROP INDEX IDX_8D93D64988987678 ON user');
-        $this->addSql('ALTER TABLE user DROP role_id_id');
+        $this->addSql('ALTER TABLE ap_role ADD json_role VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`');
     }
 }

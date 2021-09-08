@@ -22,7 +22,7 @@ class ApRole
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    public $name;
 
     /**
      * @ORM\OneToMany(targetEntity=ApAccess::class, mappedBy="role")
@@ -33,11 +33,6 @@ class ApRole
      * @ORM\OneToMany(targetEntity=ApEmployee::class, mappedBy="Role")
      */
     private $apEmployees;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $JsonRole = [];
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="roleId")
@@ -128,17 +123,17 @@ class ApRole
         return $this;
     }
 
-    public function getJsonRole(): ?array
-    {
-        return $this->JsonRole;
-    }
+    // public function getJsonRole()
+    // {
+    //     return $this->JsonRole;
+    // }
 
-    public function setJsonRole(string $name): self
-    {
-        $this->JsonRole[] = "ROLE_$name";
+    // public function setJsonRole(string $name): self
+    // {
+    //     $this->JsonRole = "ROLE_$name";
         
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * @return Collection|User[]

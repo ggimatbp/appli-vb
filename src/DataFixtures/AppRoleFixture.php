@@ -13,16 +13,16 @@ class AppRoleFixture extends Fixture
     // Création d’un utilisateur de type “contributeur” (= auteur)
     $contributor = new ApRole();
     $contributor->setName("CONTRIBUTOR");
-    $contributor->setJsonRole($contributor->getName());
 
     $manager->persist($contributor);
+    $this->addReference('Role_' . 1 , $contributor);
 
     // Création d’un utilisateur de type “administrateur”
     $admin = new ApRole();
     $admin->setName('ADMIN');
-    $admin->setJsonRole($admin->getName());
     $manager->persist($admin);
-
+    $this->addReference('Role_' . 2 , $admin);
+    
     // Sauvegarde des 2 nouveaux utilisateurs :
     $manager->flush();
     }

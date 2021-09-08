@@ -24,23 +24,24 @@ class UserFixtures extends Fixture
     // Création d’un utilisateur de type “contributeur” (= auteur)
     $contributor = new User();
     $contributor->setEmail('contributor@monsite.com');
-    $contributor->setRoleId(new ApRole(25));
+    $contributor->setRoleId($this->getReference('Role_1'));
     $contributor->setPassword($this->passwordHasher->hashPassword(
         $contributor,
         '123'
     ));
+    $contributor->setRoles($this->getReference('Role_1')->name);
 
     $manager->persist($contributor);
 
     // Création d’un utilisateur de type “administrateur”
     $admin = new User();
     $admin->setEmail('admin@monsite.com');
+    $admin->setRoleId($this->getReference('Role_2'));
     $admin->setPassword($this->passwordHasher->hashPassword(
         $admin,
         '123'
     ));
-    
-
+    $admin->setRoles($this->getReference('Role_2')->name);
     $manager->persist($admin);
 
     // Sauvegarde des 2 nouveaux utilisateurs :

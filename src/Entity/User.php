@@ -92,12 +92,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(?apRole $roleId): self
+    public function setRoles(string $roles): self
     {
-        $contributor = new ApRole();
-        $this->roleId = $roleId;
+        
+        $this->roles[] = "ROLE_$roles";
+            
         return $this;
+        
     }
+
+    // public function setJsonRoleUser(string $name): self
+    // {
+    //     $this->JsonRole[] = "ROLE_$name";
+        
+    //     return $this;
+    // }
+
     
 
     /**
