@@ -49,4 +49,43 @@
 
     <a href="{{ path('ap_employee_new') }}">Create new</a>
 
+    <h1>ApTab index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>path</th>
+                <th>clef de la table supérieur</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ap_tab in ap_tabs %}
+            <tr>
+                <td>{{ ap_tab.id }}</td>
+                <td>{{ ap_tab.name }}</td>
+                <td>{{ ap_tab.path }}</td>
+                <td> 
+                {% if ap_tab.apTab.id is defined %}
+                {{ap_tab.apTab.id }}
+                {% endif %}
+
+                </td> 
+                <td>
+                    <a href="{{ path('ap_tab_show', {'id': ap_tab.id}) }}">show</a>
+                    <a href="{{ path('ap_tab_edit', {'id': ap_tab.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('ap_tab_new') }}">Create new</a>
+
     {% endblock %}

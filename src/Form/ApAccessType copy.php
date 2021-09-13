@@ -18,6 +18,11 @@ class ApAccessType extends AbstractType
             ->add('_edit')
             ->add('_delete')
             ->add('tab', null, ['choice_label'=>'name'])
+            ->add('role', null, ['choice_label'=>'name'])
+            ->add('delete', ButtonType::class, [
+                'label' => 'Supprimer cette variation',
+                'attr' => ['class' => 'btn btn-danger btn-pos', 'data-remove-item' => '.variation'],
+            ]);
         ;
     }
 
@@ -25,6 +30,8 @@ class ApAccessType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ApAccess::class,
+            'role' => ApRole::class,
+            'tab' => ApTab::class,
         ]);
     }
 }

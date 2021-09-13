@@ -49,6 +49,7 @@ class ApAccess
      */
     private $_delete;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -125,4 +126,5 @@ class ApAccess
 
         return $this;
     }
+
 }

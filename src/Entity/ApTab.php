@@ -29,9 +29,26 @@ class ApTab
      */
     private $apAccesses;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=ApTab::class, inversedBy="parent")
+     * @ORM\JoinColumn(onDelete="CASCADE") 
+     */
+    private $apTab;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApTab::class, mappedBy="apTab")
+     */
+    private $parent;
+
     public function __construct()
     {
         $this->apAccesses = new ArrayCollection();
+        $this->parent = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,6 +92,60 @@ class ApTab
             // set the owning side to null (unless already changed)
             if ($apAccess->getTab() === $this) {
                 $apAccess->setTab(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(?string $path): self
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    public function getApTab(): ?self
+    {
+        return $this->apTab;
+    }
+
+    public function setApTab(?self $apTab): self
+    {
+        $this->apTab = $apTab;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getParent(): Collection
+    {
+        return $this->parent;
+    }
+
+    public function addParent(self $parent): self
+    {
+        if (!$this->parent->contains($parent)) {
+            $this->parent[] = $parent;
+            $parent->setApTab($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParent(self $parent): self
+    {
+        if ($this->parent->removeElement($parent)) {
+            // set the owning side to null (unless already changed)
+            if ($parent->getApTab() === $this) {
+                $parent->setApTab(null);
             }
         }
 

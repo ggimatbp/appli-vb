@@ -1,0 +1,46 @@
+ {{ form_start(form) }}
+{{ form_errors(form.name) }}
+{{ form_label(form.name, "Nom du Role :") }}
+    {{ form_widget(form.name) }}
+
+{{ form_errors(form.apAccesses) }}
+{{ form_label(form.apAccesses, "Nom de :") }}
+    {{ form_widget(form.apAccesses) }}
+    {{dump()}}
+        {# {% for tab in form.apAccesses %}
+            <li>{{ form_row(tag.name) }}</li>
+        {% endfor %} #}
+{# <ul class="apAccesses" data-index="{{ form.apAccesses|length > 0 ? form.apAccesses|last.vars.view + 1 : 0 }}" data-prototype="{{ form_widget(form.apAccesses.vars.prototype)|e('html_attr') }}"></ul> #}
+<button type="button" class="add_item_link" data-collection-holder-class="apAccesses">Add an Accesses</button>
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }} 
+
+
+{# {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }} #}
+
+<script>
+document
+  .querySelectorAll('.add_item_link')
+  .forEach(btn => btn.addEventListener("click", addFormToCollection));
+  const addFormToCollection = (e) => {
+  const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+  const item = document.createElement('li');
+
+  item.innerHTML = collectionHolder
+    .dataset
+    .prototype
+    .replace(
+      /__name__/g,
+      collectionHolder.dataset.index
+    );
+
+  collectionHolder.appendChild(item);
+
+  collectionHolder.dataset.index++;
+};
+</script>

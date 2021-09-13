@@ -25,7 +25,7 @@ class ApRole
     public $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=ApAccess::class, mappedBy="role")
+     * @ORM\OneToMany(targetEntity=ApAccess::class, cascade={"persist"}, mappedBy="role")
      */
     private $apAccesses;
 
@@ -164,4 +164,15 @@ class ApRole
 
         return $this;
     }
+
+    public function addTag(ApAccess $apAccess): void
+    {
+        $this->apAccess->add($apAccess);
+    }
+
+    public function removeTag(ApAccess $apAccess): void
+    {
+        // ...
+    }
+
 }
