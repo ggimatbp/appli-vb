@@ -165,14 +165,14 @@ class ApRole
         return $this;
     }
 
-    public function addTag(ApAccess $apAccess): void
+    public function addapAccesses(ApAccess $apAccess): void
     {
         $this->apAccess->add($apAccess);
     }
 
-    public function removeTag(ApAccess $apAccess): void
+    public function removeApAccesses(ApAccess $apAccess): void
     {
-        // ...
+        $this->tags->removeElement($apAccess);
     }
 
 }

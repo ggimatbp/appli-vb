@@ -16,13 +16,15 @@ class ApRoleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name');
+            ->add('name')
+            ;
 
         $builder
             ->add('apaccesses', CollectionType::class, [
                 'entry_type' => ApAccessType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ]);
 

@@ -1,13 +1,31 @@
 {{ form_start(form) }}
-<ul class="apaccesses" data-index="{{ form.apaccesses|length > 0 ? form.apaccesses|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.apaccesses.vars.prototype)|e('html_attr') }}"></ul>
 
 
-<button type="button" class="add_item_link" data-collection-holder-class="apaccesses">Add an access</button>
+ {{ form_row(form.name) }}
 
+<ul class="apaccesses" data-index="{{ form.apaccesses|length > 0 ? form.apaccesses|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.apaccesses.vars.prototype)|e('html_attr') }}">
+
+        {% for apaccess in form.apaccesses %}
+            {# <li>{{ form_row(apaccess.view) }}</li>
+            <li>{{ form_row(apaccess.add) }}</li>
+            <li>{{ form_row(apaccess.edit) }}</li>
+            <li>{{ form_row(apaccess.delete) }}</li>
+            <li>{{ form_row(apaccess.tab) }}</li> #}
+            
+        {% endfor %}
+</ul>
+<button type="button" class="add_item_link" data-collection-holder-class="apaccesses">Add a apaccess</button>
+<input type="submit" value="Envoyer le formulaire">
 {{ form_end(form) }}
 
 <script>
-  const addFormToCollection = (e) => {
+
+const apaccesses = document.querySelectorAll('li.apaccesses')
+apaccesses.forEach((apaccess) => {
+    addapaccessFormDeleteLink(apaccess)
+})
+
+function addFormToCollection(e){
   const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
   const item = document.createElement('li');
@@ -19,14 +37,29 @@
       /__name__/g,
       collectionHolder.dataset.index
     );
-
+addapaccessFormDeleteLink(item);
   collectionHolder.appendChild(item);
 
   collectionHolder.dataset.index++;
 };
 
+
 document
   .querySelectorAll('.add_item_link')
   .forEach(btn => btn.addEventListener("click", addFormToCollection));
+
+function addapaccessFormDeleteLink (apaccessFormLi){
+    const removeFormButton = document.createElement('button')
+    removeFormButton.classList
+    removeFormButton.innerText = 'Delete this access'
+
+    apaccessFormLi.append(removeFormButton);
+
+    removeFormButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        // remove the li for the tag form
+        apaccessFormLi.remove();
+    });
+}
 
 </script>
