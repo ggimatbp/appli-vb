@@ -4,7 +4,9 @@
 
 {% block body %}
     <h1>Register</h1>
-
+<pre>
+    {{ dump() }}
+</pre>
     {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword, {

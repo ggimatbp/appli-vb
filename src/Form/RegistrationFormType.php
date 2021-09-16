@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -43,6 +44,8 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('roleId', null, ['choice_label'=>'name'])
+
         ;
     }
 
