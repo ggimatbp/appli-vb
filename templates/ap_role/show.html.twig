@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>ApRole</h1>
-
+{{dump()}}
     <table class="table">
         <tbody>
             <tr>
@@ -17,7 +17,33 @@
             </tr>
         </tbody>
     </table>
+    <table class="table">
+        <tbody>
+        {% for apAccess in ap_role.apaccesses %}
+            <tr>
+                <th>nom</th>
+                <td>{{ apAccess.tab.name }}</td>
+            </tr>
+            <tr>
+                <th></th>
+            </tr>
+            <tr>
+                <th>_view</th>
+                <td>{{ apAccess.view ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>_add</th>
+                <td>{{ apAccess.add ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>_edit</th>
+                <td>{{ apAccess.edit ? 'Yes' : 'No' }}</td>
 
+            </tr>
+            
+            {% endfor %}
+        </tbody>
+    </table>
     <a href="{{ path('ap_role_index') }}">back to list</a>
 
     <a href="{{ path('ap_role_edit', {'id': ap_role.id}) }}">edit</a>

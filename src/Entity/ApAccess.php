@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ApAccessRepository;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @ORM\Entity(repositoryClass=ApAccessRepository::class)
@@ -40,7 +41,7 @@ class ApAccess
 
     /**
      * @ORM\ManyToOne(targetEntity=ApRole::class, inversedBy="apAccesses")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE") 
      */
     private $role;
 
@@ -49,7 +50,13 @@ class ApAccess
      */
     private $_delete;
 
+
     public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId($id): ?int
     {
         return $this->id;
     }
@@ -125,4 +132,5 @@ class ApAccess
 
         return $this;
     }
+
 }

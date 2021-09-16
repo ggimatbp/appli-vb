@@ -25,7 +25,7 @@ class ApRole
     public $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=ApAccess::class, mappedBy="role")
+     * @ORM\OneToMany(targetEntity=ApAccess::class, cascade={"persist"}, mappedBy="role")
      */
     private $apAccesses;
 
@@ -71,6 +71,7 @@ class ApRole
         return $this->apAccesses;
     }
 
+
     public function addApAccess(ApAccess $apAccess): self
     {
         if (!$this->apAccesses->contains($apAccess)) {
@@ -93,35 +94,35 @@ class ApRole
         return $this;
     }
 
-    /**
-     * @return Collection|ApEmployee[]
-     */
-    public function getApEmployees(): Collection
-    {
-        return $this->apEmployees;
-    }
+    // /**
+    //  * @return Collection|ApEmployee[]
+    //  */
+    // public function getApEmployees(): Collection
+    // {
+    //     return $this->apEmployees;
+    // }
 
-    public function addApEmployee(ApEmployee $apEmployee): self
-    {
-        if (!$this->apEmployees->contains($apEmployee)) {
-            $this->apEmployees[] = $apEmployee;
-            $apEmployee->setRole($this);
-        }
+    // public function addApEmployee(ApEmployee $apEmployee): self
+    // {
+    //     if (!$this->apEmployees->contains($apEmployee)) {
+    //         $this->apEmployees[] = $apEmployee;
+    //         $apEmployee->setRole($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeApEmployee(ApEmployee $apEmployee): self
-    {
-        if ($this->apEmployees->removeElement($apEmployee)) {
-            // set the owning side to null (unless already changed)
-            if ($apEmployee->getRole() === $this) {
-                $apEmployee->setRole(null);
-            }
-        }
+    // public function removeApEmployee(ApEmployee $apEmployee): self
+    // {
+    //     if ($this->apEmployees->removeElement($apEmployee)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($apEmployee->getRole() === $this) {
+    //             $apEmployee->setRole(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     // public function getJsonRole()
     // {
@@ -164,4 +165,15 @@ class ApRole
 
         return $this;
     }
+
+    public function addapAccesses(ApAccess $apAccess): void
+    {
+        $this->apAccess->add($apAccess);
+    }
+
+    public function removeApAccesses(ApAccess $apAccess): void
+    {
+        $this->tags->removeElement($apAccess);
+    }
+
 }
