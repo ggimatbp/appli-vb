@@ -45,6 +45,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $roleId;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastname;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -80,22 +95,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
+    // /**
+    //  * @see UserInterface
+    //  */
+    // public function getRoles(): array
+    // {
+    //     $roles = $this->roles;
+    //     // guarantee every user at least has ROLE_USER
+    //     $roles[] = 'ROLE_USER';
+
+    //     return array_unique($roles);
+    // }
+
     /**
      * @see UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        return $this->roles;
 
-        return array_unique($roles);
     }
 
     public function setRoles(string $roles): self
     {
         
-        $this->roles[] = "ROLE_$roles";
+        $this->roles = ["ROLE_$roles"];
             
         return $this;
         
@@ -153,6 +177,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoleId(?apRole $roleId): self
     {
         $this->roleId = $roleId;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

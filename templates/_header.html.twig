@@ -7,6 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       {% if app.user.RoleId is defined %}
+      <li> {{ app.user.firstname }}</li>
         {% for apAccess in app.user.RoleId.apAccesses %}  
           {% if apAccess.tab.apTab is null %}
              {% if apAccess.view == true %} 
