@@ -30,7 +30,9 @@ class UserFixtures extends Fixture
         '123'
     ));
     $contributor->setRoles($this->getReference('Role_1')->name);
-
+    $contributor->setFirstname("Michel");
+    $contributor->setLastname("Plaqueminier");
+    $contributor->setActive(1);
     $manager->persist($contributor);
 
     // Création d’un utilisateur de type “administrateur”
@@ -41,6 +43,9 @@ class UserFixtures extends Fixture
         $admin,
         '123'
     ));
+    $admin->setFirstname("anita");
+    $admin->setLastname("jesusdasilva");
+    $admin->setActive(1);
     $admin->setRoles($this->getReference('Role_2')->name);
     $manager->persist($admin);
 

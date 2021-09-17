@@ -122,15 +122,15 @@ class ApRoleController extends AbstractController
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
-            foreach($originalaccesses as $access)
-            {
-                if (false === $apRole->getApAccesses()->contains($access)){
+            // foreach($originalaccesses as $access)
+            // {
+            //     if (false === $apRole->getApAccesses()->contains($access)){
 
                     
-                     $access->setApAccesses(null);
-                     $entityManager->persist($access);
-                }
-            }  
+            //          $access->setApAccesses(null);
+            //          $entityManager->persist($access);
+            //     }
+            // }  
 
 
             $this->getDoctrine()->getManager()->flush();
