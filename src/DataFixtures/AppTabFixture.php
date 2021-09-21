@@ -16,7 +16,7 @@ class AppTabFixture extends Fixture
                 ['name' => 'employee',
                 'path' => 'manager'],
                 ['name' => 'role',
-                'path' => 'manager_'],
+                'path' => 'manager'],
             ]
         ],
         [
