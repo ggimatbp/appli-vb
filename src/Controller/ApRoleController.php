@@ -131,7 +131,7 @@ class ApRoleController extends AbstractController
             //          $entityManager->persist($access);
             //     }
             // }  
-
+        
 
             $this->getDoctrine()->getManager()->flush();
 

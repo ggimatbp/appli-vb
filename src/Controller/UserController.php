@@ -83,6 +83,9 @@ class UserController extends AbstractController
             //     }
             $roleName = $user->getRoleId()->name;
             $user->setRoles($roleName);
+            if($user->getActive() == false){
+                $user->setNoRoles();
+            }
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
