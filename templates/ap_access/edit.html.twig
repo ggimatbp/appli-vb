@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ApAccess{% endblock %}
+
+{% block body %}
+    <h1>Edit ApAccess</h1>
+
+    {{ include('ap_access/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('ap_access_index') }}">back to list</a>
+
+    {{ include('ap_access/_delete_form.html.twig') }}
+{% endblock %}

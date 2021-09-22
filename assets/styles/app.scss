@@ -1,2 +1,9 @@
+// @import 'variable.scss';
 @import "~bootstrap/scss/bootstrap";
 @import 'home.scss';
+@import 'navbar.scss';
+@import 'tab.scss';
+
+h1{
+color: $indigo-500;
+}
