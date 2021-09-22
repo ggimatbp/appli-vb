@@ -1,29 +1,42 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light ">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      {% if app.user.RoleId is defined %}
-      <li> {{ app.user.firstname }}</li>
-        {% for apAccess in app.user.RoleId.apAccesses %}  
-          {% if apAccess.tab.apTab is null %}
-             {% if apAccess.view == true %} 
-              <li class="nav-item">     
-                <a class="nav-link" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>
-              </li>
-             {% endif %} 
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-      </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</nav>
-        
+
+
+				{% if app.user.RoleId is defined %}
+						{{ app.user.firstname }}
+						{{ app.user.lastname }}
+					{% for apAccess in app.user.RoleId.apAccesses %}
+						{% if apAccess.view == true %}
+							{% if apAccess.tab.apTab is null %}
+									<a class="nav-link" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>								
+							{% endif %}
+						{% endif %}
+
+					{% endfor %}
+          {% set foo = 0 %}
+          <ul class="nav nav-pills d-flex justify-content-around" id="pills-tab" role="tablist">
+            {% for apAccess in app.user.RoleId.apAccesses %}
+              {% if apAccess.view == true %}
+              
+                {% if apAccess.tab.apTab is not null and app.request.attributes.get('_route') == apAccess.tab.apTab.path %}
+                {% set foo = foo + 1 %}
+                <li class="nav-item " role="presentation">
+                            <button class="nav-link {{foo == 1 ? 'active' : '' }}" id="pills-{{ apAccess.tab.name }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ apAccess.tab.name }}" type="button" role="tab" aria-controls="pills-{{ apAccess.tab.name }}" aria-selected="true">{{ apAccess.tab.name }}</button>
+                          </li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+          {% set faa = 0 %}
+          <div class="tab-content" id="pills-tabContent">
+            {% for apAccess in app.user.RoleId.apAccesses %}
+              {% if apAccess.view == true %}
+                {% if apAccess.tab.apTab is not null and app.request.attributes.get('_route') == apAccess.tab.apTab.path %}
+                {% set faa = faa + 1 %}
+                  {{ dump(apAccess) }}
+                        <div class="tab-pane fade {{faa == 1 ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+				{% endif %}
+
+

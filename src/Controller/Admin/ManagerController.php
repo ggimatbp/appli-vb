@@ -27,4 +27,5 @@ class ManagerController extends AbstractController
             'users' => $userRepository->findAll()
         ]);
     }
+
 }
