@@ -14,14 +14,14 @@ class AppTabFixture extends Fixture
             'path' => 'manager',
             'children' => [
                 ['name' => 'employee',
-                'path' => 'manager'],
+                'path' => 'employee'],
                 ['name' => 'role',
-                'path' => 'manager'],
+                'path' => 'roleAndAccess'],
             ]
         ],
         [
             'name' => 'Prise en Charge',
-            'path' => 'manager',
+            'path' => 'manager1',
             'children' => [
                 [
                     'name' => 'En cours',
