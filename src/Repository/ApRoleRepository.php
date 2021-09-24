@@ -36,7 +36,7 @@ class ApRoleRepository extends ServiceEntityRepository
     }
     */
 
-    /*
+    
     public function findOneBySomeField($value): ?ApRole
     {
         return $this->createQueryBuilder('a')
@@ -46,5 +46,5 @@ class ApRoleRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
+    
 }

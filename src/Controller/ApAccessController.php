@@ -32,7 +32,7 @@ class ApAccessController extends AbstractController
     public function new(Request $request): Response
     {
         $apAccess = new ApAccess();
-        $form = $this->createForm(ApAccessType::class, $apAccess);
+        $form = $this->createForm(ApAccessType::class, $apAccess, array('user' => $apAccess->getRole()));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

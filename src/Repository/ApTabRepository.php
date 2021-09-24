@@ -35,16 +35,27 @@ class ApTabRepository extends ServiceEntityRepository
         ;
     }
     */
+    // public function getTabByRole($user)
+    // {
+    //     $em = $this->getEntityManager();
+    //     return $query = $em->createQuery(
+    //         'SELECT * FROM `ap_tab` WHERE `ap_tab`.id  NOT IN (SELECT ap_access.tab_id FROM ap_access WHERE ap_access.role_id = 18)'
 
-    /*
-    public function findOneBySomeField($value): ?ApTab
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    //     );
+    // }
+    
+    // public function getTabByRole($user)
+    // {
+    //     $queryBuilder = $this->createQueryBuilder('t');
+    //     $sub = $queryBuilder;
+    //         ->addSelect('(SELECT ap_access.tab_id FROM ap_access WHERE ap_access.role_id = 18)')
+    //          ->where( 'tab.id = :role' )
+    //          ->setParameter('role', $user)
+    //         ->orderBy('tab.id', 'ASC');
+    //         // $er->andWhere($er->expr()->in('ap_access.tab_id'));
+
+    //         return $queryBuilder->getQuery()->getResult();
+    //     ;
+    // }
+    
 }

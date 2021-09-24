@@ -2,16 +2,29 @@
 
 
  {{ form_row(form.name) }}
-
+<pre>
+    {{ dump(form) }}
+</pre>
 <ul class="apaccesses" data-index="{{ form.apaccesses|length > 0 ? form.apaccesses|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.apaccesses.vars.prototype)|e('html_attr') }}">
 {% for apaccessRole in ap_role.apaccesses %}
 <pre>
-    {{ dump(apaccessRole.tab.id) }}
+   
+    {{ dump(apaccessRole.tab.name) }}
 </pre>
 {% endfor %}
         {% for apaccess in form.apaccesses %}
 
-            <li>{{ form_row(apaccess) }}
+            <li> {{form_row(apaccess)}}
+            {# <li>{{ form_row(apaccess._view) }}
+            {{ form_row(apaccess._add) }}
+            {{ form_row(apaccess._edit) }}
+            {{ form_row(apaccess._delete) }}</li>
+            <li>{{ form_row(apaccess.tab) }}</li>
+            <pre>
+                {{ dump(apaccess.vars.value.tab) }}
+            </pre>
+            {{ dump(apaccess) }}
+            {{ dump(apaccess.vars.value.role) }} #}
             <a class="js-delete" href="{{ path('ap_role_access_delete', {'id': apaccess.id.vars.value}) }}">Delete</a>
             </li>
                        
