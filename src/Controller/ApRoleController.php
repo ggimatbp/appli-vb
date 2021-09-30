@@ -117,7 +117,7 @@ class ApRoleController extends AbstractController
             $originalaccesses->add($apaccess);
         }
 
-        $editForm = $this->createForm(ApRoleType::class, $apRole, array('user' => $apRole->getId()));
+        $editForm = $this->createForm(ApRoleType::class, $apRole);
        $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

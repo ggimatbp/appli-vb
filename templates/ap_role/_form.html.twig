@@ -14,13 +14,13 @@
 {% endfor %}
         {% for apaccess in form.apaccesses %}
 
-            <li> {{form_row(apaccess)}}
-            {# <li>{{ form_row(apaccess._view) }}
+            {# <li> {{form_row(apaccess)}} #}
+            <li>{{ form_row(apaccess._view) }}
             {{ form_row(apaccess._add) }}
             {{ form_row(apaccess._edit) }}
-            {{ form_row(apaccess._delete) }}</li>
-            <li>{{ form_row(apaccess.tab) }}</li>
-            <pre>
+            {{ form_row(apaccess._delete) }}
+            {{ form_row(apaccess.tab) }}
+            {# <pre>
                 {{ dump(apaccess.vars.value.tab) }}
             </pre>
             {{ dump(apaccess) }}

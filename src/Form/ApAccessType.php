@@ -21,8 +21,7 @@ class ApAccessType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        $user = $options['user'];
-        var_dump($user);
+        // $user = $options['user'];
         $builder
             ->add('_view')
             ->add('_add')
@@ -34,17 +33,20 @@ class ApAccessType extends AbstractType
                 // 'query_builder' => function(entityRepository $er) {
                 //     return $this->$er->createQueryBuilder('');
                 // },
-                'class' => ApTab::class,
                 
-                'query_builder' => function(ApTabRepository $repository) use ($user)  {  
-                     return $repository->getTabByRole($user);
-                        // $er->createQueryBuilder('t')
-                        // ->addSelect('(SELECT ap_access.tab_id FROM ap_access WHERE ap_access.role_id = 18)')
-                        //  ->where( 'a.id = ap_access.tab_id' );
-                        //  ->setParameter('role', $user)
-                        // ->orderBy('tab.id', 'ASC');
-                        // $er->andWhere($er->expr()->in('ap_access.tab_id'));
-                },
+                'class' => ApTab::class,
+                     
+                
+                // 'query_builder' => function(EntityRepository $er) use ($user)  {
+                //         $qb = $er->createQueryBuilder('t')
+                //         ->leftJoin('t.apAccesses', 'a','WITH', 't.id = a.tab')
+                //         ->where( 'a.role = :role' );
+                //     $queryBuilderComparaison = $er->createQueryBuilder('ta')
+                //     ->where('ta.id' . ' not in (' . $qb->getDQL() . ')')
+                //     ->orWhere('ta.id = :id')
+                //     ->setParameter('role', $user);
+                //     return $queryBuilderComparaison;
+                // },
                 'choice_label' => 'name',
             ])
             
@@ -55,7 +57,6 @@ class ApAccessType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ApAccess::class,
-            'user' => null,
         ]);
     }
 }
