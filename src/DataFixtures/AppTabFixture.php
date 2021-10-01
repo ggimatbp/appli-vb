@@ -14,9 +14,9 @@ class AppTabFixture extends Fixture
             'path' => 'manager',
             'children' => [
                 ['name' => 'employee',
-                'path' => 'employee'],
+                'path' => 'manager/employee.html.twig'],
                 ['name' => 'role',
-                'path' => 'roleAndAccess'],
+                'path' => 'manager/roleAndAccess.html.twig'],
             ]
         ],
         [
