@@ -31,20 +31,24 @@ class ApAccessRepository extends ServiceEntityRepository
             ->orderBy('a.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
+            ->getResult    // public function getTabByRoleaccess($user)
+    // {
+    //     $queryBuilder = $this->createQueryBuilder('a')
+    //         ->where( 'a.role!= :role' );
+    //         // ->orderBy('t.id', 'ASC');
+    //         // $er->andWhere($er->expr()->in('ap_access.tab_id'));
+    //     $queryBuilderComparaison = $this->createQueryBuilder('ta')
+    //     ->leftJoin('ta.tab' , 't')
+    //     ->where('t.id NOT IN (' . $queryBuilder->getDQL() . ')')
+    //     ->setParameter('role', $user);
+        
+    //     return $queryBuilderComparaison->getQuery()->getResult();
+ 
+    // }()
         ;
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?ApAccess
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+
+
 }

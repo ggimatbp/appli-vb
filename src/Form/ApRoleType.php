@@ -10,11 +10,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class ApRoleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // $user = $options['user'];
         $builder
             ->add('name')
             ;
@@ -33,6 +35,7 @@ class ApRoleType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ApRole::class,
+            'user' => null,
         ]);
     }
 }

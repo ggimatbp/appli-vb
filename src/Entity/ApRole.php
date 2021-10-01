@@ -72,6 +72,7 @@ class ApRole
     }
 
 
+
     public function addApAccess(ApAccess $apAccess): self
     {
         if (!$this->apAccesses->contains($apAccess)) {
