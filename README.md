@@ -1,14 +1,13 @@
 # appli-vb
 
+
 composer install
 
 
-php/bin d:f:l
+php bin/console d:f:l
 
 
 symfony server:start
-
-
 
 
 yarn install
