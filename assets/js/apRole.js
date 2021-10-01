@@ -165,22 +165,22 @@ console.table(arrayOptionSelected)
   let option = arrayAllOptionWithoutSelected
   let lastIndex = $('.apaccesses li select')
   $('.apaccesses li select').each(function (index) {
-
+ console.log(this)
     option = arrayAllOptionWithoutSelected
-   if (index != lastIndex.length - 1 ){
-     
+    if (index != lastIndex.length - 1 ){
      option.push('<option value="' + $(this).val() + '" selected="selected">' + $(this).children("option").filter(":selected").text() + '</option>');
      console.log(('<option value="' + $(this).val() + '" selected="selected">' + $(this).children("option").filter(":selected").text() + '</option>'))
      $(this).empty()
      $(this).append(option)
      option.pop()
+     console.log(this)
     }
     else {
-      console.table(option)
-        let firstChoice = ('<option value="' + $(this).children("option").first().val() + '" selected="selected">' + $(this).children("option").first().text() + '</option>')
-        option.push(firstChoice)
-       console.log(this)
-      //  console.log(firstChoice)
+    //   console.table(option)
+    //     let firstChoice = ('<option value="' + $(this).children("option").first().val() + '" selected="selected">' + $(this).children("option").first().text() + '</option>')
+    //     option.push(firstChoice)
+    //    console.log(this)
+    //   //  console.log(firstChoice)
       $(this).empty()
       $(this).append(option)
 
