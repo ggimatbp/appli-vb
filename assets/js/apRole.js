@@ -140,12 +140,13 @@ function replaceOptionOnAdd(){
   }
   );
 
-
+  console.table(arrayOptionSelect)
   // we put all the selected tabs on an array
   let arrayOptionSelected = [];
   $('.apaccesses li').find('select').each(function () {
     arrayOptionSelected.push('<option value="' + $(this).val() + '">' + $(this).children("option").filter(":selected").text() + '</option>');
   })
+  arrayOptionSelected.pop()
   // we create an array of tabs without the selected one
   let arrayAllOptionWithoutSelected = arrayOptionSelect;
 
@@ -157,27 +158,37 @@ function replaceOptionOnAdd(){
     }
   }
 
+console.table(arrayAllOptionWithoutSelected)
 // we add the selected value to the array and we change the select value with the new one
 
-
+console.table(arrayOptionSelected)
   let option = arrayAllOptionWithoutSelected
   let lastIndex = $('.apaccesses li select')
   $('.apaccesses li select').each(function (index) {
 
     option = arrayAllOptionWithoutSelected
-    if (index != lastIndex.length - 1 ){
-      
-    option.push('<option value="' + $(this).val() + '" selected="selected">' + $(this).children("option").filter(":selected").text() + '</option>');
+   if (index != lastIndex.length - 1 ){
+     
+     option.push('<option value="' + $(this).val() + '" selected="selected">' + $(this).children("option").filter(":selected").text() + '</option>');
+     console.log(('<option value="' + $(this).val() + '" selected="selected">' + $(this).children("option").filter(":selected").text() + '</option>'))
+     $(this).empty()
+     $(this).append(option)
+     option.pop()
     }
     else {
-      let firstChoice = ('<option value="' + $(this).children("option").last().val() + '" selected="selected">' + $(this).children("option").last().text() + '</option>')
-      option.push(firstChoice)
+      console.table(option)
+        let firstChoice = ('<option value="' + $(this).children("option").first().val() + '" selected="selected">' + $(this).children("option").first().text() + '</option>')
+        option.push(firstChoice)
+       console.log(this)
+      //  console.log(firstChoice)
+      $(this).empty()
+      $(this).append(option)
 
     }
     
-    $(this).empty()
-    $(this).append(option)
-    option.pop()
+    // $(this).empty()
+    // $(this).append(option)
+    // option.pop()
     // $(this).append(arrayAllOptionWithoutSelected)
   })
   console.log('replaceOptionOnAdd')
@@ -236,11 +247,11 @@ function refreshOptionOnclick(){
   $('.apaccesses li select').on("click", function (index) {
     // il faut que je trouve le slected puis que je le mette dans le pool des select pour éviter qu'il disparraisse
     let theLostOne = ('<option value="' + $(this).val() + '">' + $(this).children("option").filter(":selected").text() + '</option>')
-    console.log(theLostOne + 123)
+    // console.log(theLostOne + 123)
     $('.apaccesses li select')
 .each(function (){
       // *** JS logical to not have twice the same select option ***
-      console.log(this)
+     // console.log(this)
       // we put in a variable all the tabs options 
       let arrayOptionSelect = [];
       $('.apaccesses li select').first().find('option').each(function () {
@@ -249,7 +260,7 @@ function refreshOptionOnclick(){
       );
       
       // il faut que je trouve le slected puis que je le mette dans le pool des select pour éviter qu'il disparraisse
-      console.log('<option value="' + $(this).val() + '">' + $(this).children("option").filter(":selected").text() + '</option>')
+     // console.log('<option value="' + $(this).val() + '">' + $(this).children("option").filter(":selected").text() + '</option>')
 
       // we put all the selected tabs on an array
       let arrayOptionSelected = [];
@@ -271,11 +282,11 @@ function refreshOptionOnclick(){
       // we add the selected value to the array and we change the select value with the new one
 
       let option = arrayAllOptionWithoutSelected
-      console.log(arrayOptionSelect.length + arrayOptionSelected.length)
-      console.log(arrayOptionSelected.length + " / Selected")
-      console.log(arrayOptionSelect.length + " / arrayOptionSelect")
+      console.log(arrayOptionSelect.length + arrayOptionSelected.length + '   / OptionSelect ' + arrayOptionSelect.length + '    /arrayOptionSelected ' + arrayOptionSelected.length )
+      // console.log(arrayOptionSelected.length + " / Selected")
+      // console.log(arrayOptionSelect.length + " / arrayOptionSelect")
       //  $('.apaccesses li select').each(function () {
-        console.log(('<option value="' + $(this).val() + '">' + $(this).children("option").filter(":selected").text() + '</option>'))
+        //console.log(('<option value="' + $(this).val() + '">' + $(this).children("option").filter(":selected").text() + '</option>'))
         option = arrayAllOptionWithoutSelected
         // il faut que je trouve le slected puis que je le mette dans le pool des select pour éviter qu'il disparraisse
         if( theLostOne != ('<option value="' + $(this).val() + '">' + $(this).children("option").filter(":selected").text() + '</option>') )
