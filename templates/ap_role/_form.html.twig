@@ -1,40 +1,89 @@
 {{ form_start(form) }}
 
 
- {{ form_row(form.name) }}
-<pre>
-    {{ dump(form) }}
-</pre>
-<ul class="apaccesses" data-index="{{ form.apaccesses|length > 0 ? form.apaccesses|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.apaccesses.vars.prototype)|e('html_attr') }}">
-{% for apaccessRole in ap_role.apaccesses %}
-<pre>
-   
-    {{ dump(apaccessRole.tab.name) }}
-</pre>
-{% endfor %}
-        {% for apaccess in form.apaccesses %}
 
-            {# <li> {{form_row(apaccess)}} #}
-            <li>{{ form_row(apaccess._view) }}
+ {{ form_row(form.name) }}
+ <input type="submit" value="changer le nom">
+<pre>
+    {# {{ dump() }} #}
+</pre>
+{# <ul class="apaccesses" data-index="{{ form.apaccesses|length > 0 ? form.apaccesses|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.apaccesses.vars.prototype)|e('html_attr') }}"> #}
+
+{# {% for apaccessRole in ap_role.apaccesses %}
+{% endfor %} #}
+        {# {% for apaccess in form.apaccesses %} #}
+
+            {# { <li> {{form_row(apaccess)}} 
+
+            {# <li> #}
+            {# {{apaccess.vars.value.tab.name}} #}
+            {# {{ dump(apaccess.vars.value) }} #}
+            
+            {# {{ form_row(apaccess._view) }}
             {{ form_row(apaccess._add) }}
             {{ form_row(apaccess._edit) }}
-            {{ form_row(apaccess._delete) }}
-            {{ form_row(apaccess.tab) }}
+            {{ form_row(apaccess._delete) }} #}
+            {# <a  href="{{ path('add_auth_on_click', {id: apaccess.vars.value.id})}}" class="js-add" >  #}
+            {# {{dump( apaccess.vars.value.view)}}           #}
+                {# {% if apaccess.vars.value.view == true %} 
+                    <i class="fas fa-check"></i>
+                {% else %} <i class="fas fa-times"></i>
+                {% endif %}
+                 add
+            </a>
+            <a  href="{{ path('delete_auth_on_click', {id: apaccess.vars.value.id})}}" class="js-delete">delete</a>
+            <a  href="{{ path('edit_auth_on_click', {id: apaccess.vars.value.id})}}" class="js-edit">edit</a>
+            <a  href="{{ path('view_auth_on_click', {id: apaccess.vars.value.id})}}" class="js-view">view</a>
+            {{ form_row(apaccess.tab) }} #}
             {# <pre>
                 {{ dump(apaccess.vars.value.tab) }}
             </pre>
             {{ dump(apaccess) }}
             {{ dump(apaccess.vars.value.role) }} #}
-            <a class="js-delete" href="{{ path('ap_role_access_delete', {'id': apaccess.id.vars.value}) }}">Delete</a>
-            </li>
+             {# <a class="js-delete" href="{{ path('ap_role_access_delete', {'id': apaccess.id.vars.value}) }}">Delete</a> #}
+            {# </li> 
                        
+        {% endfor %} #}
+        {% for apaccess in ap_role.apaccesses %}
+        <h2>{{apaccess.tab.name}}</h2>
+         <a  href="{{ path('add_auth_on_click', {id: apaccess.id})}}" class="js-check" > 
+            {# {{dump( apaccess.vars.value.view)}}           #}
+                {% if apaccess.add == true %} 
+                    <i class="fas fa-check"></i>
+                {% else %} <i class="fas fa-times"></i>
+                {% endif %}
+                 add
+            </a>
+            <br>
+            <a  href="{{ path('delete_auth_on_click', {id: apaccess.id})}}" class="js-check">
+                {% if apaccess.delete == true %} 
+                    <i class="fas fa-check"></i>
+                {% else %} <i class="fas fa-times"></i>
+                {% endif %}delete</a>
+            <a  href="{{ path('edit_auth_on_click', {id: apaccess.id})}}" class="js-check">
+                {% if apaccess.edit == true %} 
+                    <i class="fas fa-check"></i>
+                {% else %} <i class="fas fa-times"></i>
+                {% endif %}
+                edit
+            </a>
+            <a  href="{{ path('view_auth_on_click', {id: apaccess.id})}}" class="js-check">
+            {% if apaccess.view == true %} 
+                    <i class="fas fa-check"></i>
+                {% else %} <i class="fas fa-times"></i>
+                {% endif %}view</a>
+
+        
+
         {% endfor %}
+
+
 {# 
         {% for apaccess in ap_role.apaccesses %}
         {{ dump(apaccess.id) }}
         {% endfor %}
         #}
-</ul> 
-<button type="button" class="add_item_link" data-collection-holder-class="apaccesses">Add a apaccess</button>
-<input type="submit" value="Envoyer le formulaire">
+{# </ul>  #}
+{# <button type="button" class="add_item_link" data-collection-holder-class="apaccesses">Add a apaccess</button> #}
+
 {{ form_end(form) }}

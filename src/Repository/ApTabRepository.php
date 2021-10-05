@@ -19,6 +19,15 @@ class ApTabRepository extends ServiceEntityRepository
         parent::__construct($registry, ApTab::class);
     }
 
+
+    public function findAllId()
+    {
+        return $this->createQueryBuilder('a')
+            ->select(`a.id`)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return ApTab[] Returns an array of ApTab objects
     //  */
@@ -34,6 +43,10 @@ class ApTabRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    
+
+
     */
     // public function getTabByRole($user)
     // {

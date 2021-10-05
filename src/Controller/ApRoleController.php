@@ -6,11 +6,13 @@ namespace App\Controller;
 
 use App\Entity\ApRole;
 use App\Entity\ApAccess;
+use App\Entity\ApTab;
 use App\Form\ApRoleType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ApRoleRepository;
 use App\Repository\ApAccessRepository;
+use App\Repository\ApTabRepository;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\Persistence\ObjectManager;
 use phpDocumentor\Reflection\Types\Integer;
@@ -18,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 /**
  * @Route("/ap/role")
@@ -37,7 +40,7 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/new", name="ap_role_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, ApTabRepository $apTabRepository): Response
     {
         $apRole = new ApRole();
 
@@ -52,8 +55,27 @@ class ApRoleController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // foreach($apTabRepository as );
+            //if submit we create all access 
+            
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apRole);
+            $bob = $apTabRepository->findAllId(); 
+            //    var_dump($bob);
+                foreach($bob as $tab){
+                    $apAccess = new ApAccess;
+                    $apAccess->setTab($tab);
+                    $apAccess->setRole($apRole);
+                    $apAccess->setView(0);
+                    $apAccess->setAdd(0);
+                    $apAccess->setEdit(0);
+                    $apAccess->setDelete(0);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($apAccess);
+                };
+
             $entityManager->flush();
 
             return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
@@ -62,6 +84,7 @@ class ApRoleController extends AbstractController
         return $this->renderForm('ap_role/new.html.twig', [
             'ap_role' => $apRole,
             'form' => $form,
+            'tabs' => $apTabRepository->findAll(),
         ]);
     }
 
@@ -118,7 +141,7 @@ class ApRoleController extends AbstractController
         }
 
         $editForm = $this->createForm(ApRoleType::class, $apRole);
-       $editForm->handleRequest($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
