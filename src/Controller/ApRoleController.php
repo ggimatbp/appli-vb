@@ -77,8 +77,10 @@ class ApRoleController extends AbstractController
                 };
 
             $entityManager->flush();
-
-            return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
+                $id = $apRole->getId();
+            // return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
+           // return $this->redirect('http://symfony.com/doc');
+           return $this->redirect('/ap/role/' . $id . '/edit');
         }
 
         return $this->renderForm('ap_role/new.html.twig', [
@@ -180,6 +182,21 @@ class ApRoleController extends AbstractController
         }
 
         return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    /**
+     * @route("/editNameOnClick/{id}", name="edit_name_onclick")
+     */
+   
+    public function editNameOnClick(Request $request, ApRole $apRole, EntityManagerInterface $manager) : response
+    {
+        $roleName = $request->get('task');
+         $apRole->setName($roleName);
+        $manager->flush();
+        
+        return $this->json(["code" => 200,
+         "message" => "changer nom"], 200);
     }
 
 }

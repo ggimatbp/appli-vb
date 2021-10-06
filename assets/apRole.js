@@ -7,35 +7,62 @@ import $ from 'jquery';
 import { vNotify } from './app';
 
 $(document).ready(function () {
- vNotify();
+  vNotify();
 })
 
- const { default: axios } = require("axios");
+const { default: axios } = require("axios");
 
- document.querySelectorAll('a.js-check').forEach(function(link){
+document.querySelectorAll('a.js-check').forEach(function (link) {
   link.addEventListener('click', onClickAddAuth);
 })
 
 
-  function onClickAddAuth(e){
+function onClickAddAuth(e) {
 
-      e.preventDefault();
-      const url = this.href;
-      const icone = this.querySelector('i');
-      axios.get(url).then(function() {
-        
-        if(icone.classList.contains('fa-times')){
-         vNotify().success({text:'Changement pris en compte.', title:'Ajout de droit'});
-         icone.classList.replace('fa-times', 'fa-check');
+  e.preventDefault();
+  const url = this.href;
+  const icone = this.querySelector('i');
+  axios.get(url).then(function () {
 
-        }else{
-          vNotify().success({text:'Changement pris en compte.', title:'Retrait de droit'});
-          icone.classList.replace("fa-check","fa-times");
-        }
-      }).catch(function() {
-        window.alert("une erreur s'est produite")
-      })
-  }
+    if (icone.classList.contains('fa-times-circle')) {
+      vNotify().success({ text: 'Changement pris en compte.', title: 'Ajout de droit' });
+      icone.classList.replace('fa-times-circle', 'fa-check-square');
+      icone.classList.replace('text-danger', 'text-success');
+    } else {
+      vNotify().success({ text: 'Changement pris en compte.', title: 'Retrait de droit' });
+      icone.classList.replace("fa-check-square", "fa-times-circle");
+      icone.classList.replace('text-success', 'text-danger');
+
+    }
+  }).catch(function () {
+    vNotify().error({ text: 'This is an error notification.', title: 'Error' });
+  })
+}
+
+// logic pour le changement de nom en ajax
+
+$('#role-name-btn').unbind('click').click(function (e) {
+  let roleName = $('#role-name').val();
+  let roleId = $('#role-name').data('id');
+  $.ajax({
+    url:'/ap/role/editNameOnClick/' + roleId,
+    type: "POST",
+    dataType: "json",
+    data: {
+        "task": roleName
+    },
+    async: true,
+    success: function ()
+    {
+      vNotify().success({ text: 'Changement pris en compte.', title: 'changement de droit' });
+
+    },
+    error: function ()
+    {
+      vNotify().error({ text: 'This is an error notification.', title: 'Error' });
+    }
+});
+})
 
 
   // vNotify().info({text:'This is an info notification.', title:'Info Notification.'});
@@ -43,8 +70,8 @@ $(document).ready(function () {
   // vNotify().warning({text:'This is a warning notification.', title:'Warning Notification.'});
   // vNotify().error({text:'This is an error notification.', title:'Error Notification.'});
   // vNotify().notify({text:'This is a notify notification.', title:'Notify Notification.'});
-  
-  
+
+
 // const apaccesses = document.querySelectorAll('li.apaccesses')
 // apaccesses.forEach((apaccess) => {
 //   addapaccessFormDeleteLink(apaccess)
@@ -95,7 +122,7 @@ $(document).ready(function () {
 //   removeFormButton.addEventListener('click', (e) => {
 //     e.preventDefault()
 //     let optionToPutBack = '<option value="' + $(removeFormButton).parent().find('select option').last().val() + '">' + $(removeFormButton).parent().find('select option').last().text() + '</option>'
-    
+
 //     // remove the li for the tag form
 //     apaccessFormLi.remove();
 //     putBackOption(optionToPutBack)
@@ -105,7 +132,7 @@ $(document).ready(function () {
 
 // function onClickBtnDelete(event) {
 
-  
+
 //   let optionToPutBack = '<option value="' + $(this).parent().find('select option').last().val() + '">' + $(this).parent().find('select option').last().text() + '</option>'
 //   const url = this.href;
 //   let element = this;
@@ -156,7 +183,7 @@ $(document).ready(function () {
 
 
 //   let option = arrayAllOptionWithoutSelected
-  
+
 //   $('.apaccesses li select').each(function (index) {
 //     option = arrayAllOptionWithoutSelected
 //     option.push('<option value="' + $(this).val() + '" selected="selected">' + $(this).children("option").filter(":selected").text() + '</option>');
@@ -177,7 +204,7 @@ $(document).ready(function () {
 /***************************** REPLACE OPTION WHEN ADDING APACCESSES ***************/
 
 // function replaceOptionOnAdd(){
-  
+
 //   let arrayOptionSelect = [];
 //   $('.apaccesses li select').first().find('option').each(function () {
 //     arrayOptionSelect.push('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
@@ -229,7 +256,7 @@ $(document).ready(function () {
 //       $(this).append(option)
 
 //     }
-    
+
 //     // $(this).empty()
 //     // $(this).append(option)
 //     // option.pop()
@@ -285,8 +312,8 @@ $(document).ready(function () {
 // // ********   AddEventlistener to modify the list every time you click on the selected option. ***********  //
 
 // function refreshOptionOnclick(){
-  
-  
+
+
 
 //   $('.apaccesses li select').on("click", function (index) {
 //     // il faut que je trouve le slected puis que je le mette dans le pool des select pour éviter qu'il disparraisse
@@ -302,7 +329,7 @@ $(document).ready(function () {
 //         arrayOptionSelect.push('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
 //       }
 //       );
-      
+
 //       // il faut que je trouve le slected puis que je le mette dans le pool des select pour éviter qu'il disparraisse
 //      // console.log('<option value="' + $(this).val() + '">' + $(this).children("option").filter(":selected").text() + '</option>')
 
@@ -343,7 +370,7 @@ $(document).ready(function () {
 //         option.push('<option value="' + $(this).val() + '" selected="selected">' + $(this).children("option").filter(":selected").text() + '</option>');
 //          $(this).empty()
 //          $(this).append(option)
-         
+
         //console.log(option + ' on refreshOptionOnclick')
           // option.pop()
         // $(this).append(arrayAllOptionWithoutSelected)
@@ -352,7 +379,7 @@ $(document).ready(function () {
       // $(this).append(arrayAllOptionWithoutSelected)
     // })
 
-  
+
 // console.log('refreshOptionOnclick')
 //       })   
 // }

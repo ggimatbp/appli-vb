@@ -19,7 +19,6 @@ class ApRoleType extends AbstractType
         // $user = $options['user'];
         $builder
             ->add('name')
-            
             ;
 
 
