@@ -1,9 +1,20 @@
 // @import 'variable.scss';
+@import "~@fortawesome/fontawesome-free/css/all.css";
 @import "~bootstrap/scss/bootstrap";
+@import "notifyMessage.scss";
 @import 'home.scss';
 @import 'navbar.scss';
+@import 'role.scss';
 @import 'tab.scss';
 
 h1{
-color: $indigo-500;
+color: $indigo-600;
+}
+
+h2{
+    color: $indigo-500
+}
+
+h3{
+    color: $indigo-400
 }

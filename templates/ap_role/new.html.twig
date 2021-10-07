@@ -3,9 +3,11 @@
 {% block title %}New ApRole{% endblock %}
 
 {% block body %}
-    <h1>Create new ApRole</h1>
+<div class="aprole-global-container">
+    <h3>Créer un rôle</h1>
 
-    {{ include('ap_role/_form.html.twig') }}
+    {{ include('ap_role/_formNew.html.twig') }}
 
-    <a href="{{ path('ap_role_index') }}">back to list</a>
+    <a class="bottom-fix btn-edit-role btn btn-ligth" href="{{ path('manager') }}">Revenir au manager</a>
+</div>
 {% endblock %}

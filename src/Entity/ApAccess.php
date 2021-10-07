@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ApAccessRepository;
+use App\Repository\ApTabRepository;
 use Doctrine\ORM\Mapping as ORM;
 use phpDocumentor\Reflection\Types\Integer;
 
@@ -133,4 +134,15 @@ class ApAccess
         return $this;
     }
 
+    // We create all access 
+    // public function allAccess($user, ApTabRepository $apTabRepository)
+    // {
+    //     $Alltab = [];
+    //     $apTabRepository->findAll();
+    //     // dump $apTabRepository
+        
+    //     }
 }
+
+
+

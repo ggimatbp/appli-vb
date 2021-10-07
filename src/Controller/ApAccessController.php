@@ -99,18 +99,111 @@ class ApAccessController extends AbstractController
      * @route("/deleteAccess/{id}", name="ap_role_access_delete")
      */
 
-    public function deleteAccess(ApAccess $apAccess, EntityManagerInterface $manager, ApAccessRepository $apAccessRepository) : Response
-     {
-         $user = $this->getUser();
+    // public function deleteAccess(ApAccess $apAccess, EntityManagerInterface $manager, ApAccessRepository $apAccessRepository) : Response
+    //  {
+    //      $user = $this->getUser();
 
-         if($user){
-            $apAccess = $apAccessRepository->findOneBy([
-                'id' => $apAccess
-            ]);
-            $manager->remove($apAccess);
+    //      if($user){
+    //         $apAccess = $apAccessRepository->findOneBy([
+    //             'id' => $apAccess
+    //         ]);
+    //         $manager->remove($apAccess);
+    //         $manager->flush();
+    //     }
+    //     return $this->json(["code" => 200, "message" => "access delete"], 200);
+
+    //  }
+
+    // function for ajax add authorisation
+    
+    /**
+     * @route("/addAuthOnClick/{id}", name="add_auth_on_click")
+     */
+    
+    public function addAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
+    {
+        //var_dump($apAccess->getAdd());
+        if($apAccess->getAdd() == 1)
+        {
+            $apAccess->setAdd(0);
             $manager->flush();
         }
-        return $this->json(["code" => 200, "message" => "access delete"], 200);
+        else
+        {
+            $apAccess->setAdd(1);
+            $manager->flush();
+        }
+        return $this->json(["code" => 200,
+         "message" => "access add",
+        "status" => $apAccess->getAdd()], 200);
+    }
 
-     }
+    /**
+     * @route("/deleteAuthOnClick/{id}", name="delete_auth_on_click")
+     */
+    
+    public function DeleteAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
+    {
+        //var_dump($apAccess->getAdd());
+        if($apAccess->getDelete() == 1)
+        {
+            $apAccess->setDelete(0);
+            $manager->flush();
+        }
+        else
+        {
+            $apAccess->setDelete(1);
+            $manager->flush();
+        }
+        return $this->json(["code" => 200,
+        "message" => "access delete",
+        "status" => $apAccess->getDelete()], 200);
+    }
+
+
+    /**
+     * @route("/editAuthOnClick/{id}", name="edit_auth_on_click")
+    */
+
+    public function editAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
+    {
+        //var_dump($apAccess->getAdd());
+        if($apAccess->getEdit() == 1)
+        {
+            $apAccess->setEdit(0);
+            $manager->flush();
+        }
+        else
+        {
+            $apAccess->setEdit(1);
+            $manager->flush();
+        }
+        return $this->json(["code" => 200,
+         "message" => "access Edit",
+        "status" => $apAccess->getEdit()],
+          200);
+    }
+
+        /**
+     * @route("/viewAuthOnClick/{id}", name="view_auth_on_click")
+    */
+
+    public function viewAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
+    {
+        //var_dump($apAccess->getAdd());
+        if($apAccess->getView() == 1)
+        {
+            $apAccess->setView(0);
+            $manager->flush();
+        }
+        else
+        {
+            $apAccess->setView(1);
+            $manager->flush();
+        }
+        return $this->json(["code" => 200,
+        "message" => "access View",
+        "status" => $apAccess->getView()], 200);
+    }
+
 }

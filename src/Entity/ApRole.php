@@ -26,6 +26,7 @@ class ApRole
 
     /**
      * @ORM\OneToMany(targetEntity=ApAccess::class, cascade={"persist"}, mappedBy="role")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $apAccesses;
 
@@ -73,15 +74,15 @@ class ApRole
 
 
 
-    public function addApAccess(ApAccess $apAccess): self
-    {
-        if (!$this->apAccesses->contains($apAccess)) {
-            $this->apAccesses[] = $apAccess;
-            $apAccess->setRole($this);
-        }
+    // public function addApAccess(ApAccess $apAccess): self
+    // {
+    //     if (!$this->apAccesses->contains($apAccess)) {
+    //         $this->apAccesses[] = $apAccess;
+    //         $apAccess->setRole($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function removeApAccess(ApAccess $apAccess): self
     {
@@ -167,14 +168,14 @@ class ApRole
         return $this;
     }
 
-    public function addapAccesses(ApAccess $apAccess): void
-    {
-        $this->apAccess->add($apAccess);
-    }
+    // public function addapAccesses(ApAccess $apAccess): void
+    // {
+    //     $this->apAccess->add($apAccess);
+    // }
 
-    public function removeApAccesses(ApAccess $apAccess): void
-    {
-        $this->tags->removeElement($apAccess);
-    }
+    // public function removeApAccesses(ApAccess $apAccess): void
+    // {
+    //     $this->tags->removeElement($apAccess);
+    // }
 
 }
