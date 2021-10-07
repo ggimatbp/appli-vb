@@ -29,41 +29,4 @@
 
     <a href="{{ path('ap_role_new') }}">nouveau</a>
 
-        <h1>Acces en fonction des rôles</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>role</th>
-                <th>tab</th>
-                <th>_view</th>
-                <th>_add</th>
-                <th>_edit</th>
-                <th>_delete</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for ap_access in ap_accesses %}
-            <tr>
-                <td>{{ ap_access.role.name }}</td>
-                <td>{{ ap_access.tab.name }}</td>
-                <td>{{ ap_access.view ? 'Yes' : 'No' }}</td>
-                <td>{{ ap_access.add ? 'Yes' : 'No' }}</td>
-                <td>{{ ap_access.edit ? 'Yes' : 'No' }}</td>
-                <td>{{ ap_access.delete ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('ap_access_show', {'id': ap_access.id}) }}">show</a>
-                    <a href="{{ path('ap_access_edit', {'id': ap_access.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('ap_access_new') }}">Create new</a>
 {% endblock %}

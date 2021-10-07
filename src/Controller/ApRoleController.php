@@ -124,7 +124,7 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_role_edit", methods={"GET","POST"})
      */
-    public function edit($id, Request $request, ApRole $apRole, EntityManagerInterface $entityManager): Response
+    public function edit($id, ApRole $apRole, EntityManagerInterface $entityManager): Response
     {
 
         //  if(empty($apRole)){
@@ -142,10 +142,10 @@ class ApRoleController extends AbstractController
             $originalaccesses->add($apaccess);
         }
 
-        $editForm = $this->createForm(ApRoleType::class, $apRole);
-        $editForm->handleRequest($request);
+        // $editForm = $this->createForm(ApRoleType::class, $apRole);
+        // $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        // if ($editForm->isSubmitted() && $editForm->isValid()) {
 
             // foreach($originalaccesses as $access)
             // {
@@ -158,14 +158,14 @@ class ApRoleController extends AbstractController
             // }  
         
 
-            $this->getDoctrine()->getManager()->flush();
+        //     $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
-        }
+        //     return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
+        // }
 
         return $this->renderForm('ap_role/edit.html.twig', [
             'ap_role' => $apRole,
-            'form' => $editForm,
+            // 'form' => $editForm,
         ]);
     }
 
@@ -181,7 +181,7 @@ class ApRoleController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('manager', [], Response::HTTP_SEE_OTHER);
     }
 
 

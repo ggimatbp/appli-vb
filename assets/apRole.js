@@ -54,7 +54,7 @@ $('#role-name-btn').unbind('click').click(function (e) {
     async: true,
     success: function ()
     {
-      vNotify().success({ text: 'Changement pris en compte.', title: 'changement de droit' });
+      vNotify().success({ text: 'Changement pris en compte.', title: 'changement de nom du rôle' });
 
     },
     error: function ()
