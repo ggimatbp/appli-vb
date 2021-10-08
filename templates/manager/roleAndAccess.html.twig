@@ -1,32 +1,33 @@
 {% block tabcontent %}
-    <h1>Manager les rôles</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>numéro</th>
-                <th>Nom</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for ap_role in ap_roles %}
-            <tr>
-                <td>{{ ap_role.id }}</td>
-                <td>{{ ap_role.name }}</td>
-                <td>
-                    <a href="{{ path('ap_role_show', {'id': ap_role.id}) }}">voir</a>
-                    <a href="{{ path('ap_role_edit', {'id': ap_role.id}) }}">modifier</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('ap_role_new') }}">nouveau</a>
+<div class="aprole-global-container">
+    <h1 class="management-h1">Manager les rôles</h1>
+    <a href="{{ path('ap_role_new') }}" class="btn-new btn-bottom btn-edit-role btn btn-ligth">nouveau</a>
+    <div class="aprole-global-container">    
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="title-table1">Nom</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for ap_role in ap_roles %}
+                <tr>
+                    <td class="onglet-fontsize-role-table">{{ ap_role.name }}</td>
+                    <td>
+                        <a href="{{ path('ap_role_edit', {'id': ap_role.id}) }}" class="btn-bottom btn-edit-role btn btn-ligth">modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Aucun résultat</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        
+    
+</div>
 
 {% endblock %}

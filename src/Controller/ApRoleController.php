@@ -176,6 +176,7 @@ class ApRoleController extends AbstractController
     public function delete(Request $request, ApRole $apRole): Response
     {
         if ($this->isCsrfTokenValid('delete'.$apRole->getId(), $request->request->get('_token'))) {
+            
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apRole);
             $entityManager->flush();

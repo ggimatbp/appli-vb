@@ -1,4 +1,12 @@
 li .active {
-    background-color: $indigo-500 !important;
+    background-color:$primaryColor !important;
     color: white !important;
+    font-weight: $fontWeight;
+    border-bottom: $primaryColor !important ;
+
+}
+
+.nav-item-uniform{
+    color: black; 
+    font-weight: $fontWeight;
 }
