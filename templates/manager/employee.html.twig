@@ -1,84 +1,54 @@
 {% block tabcontent %}
-<h1>Liste des employés</h1>
+<div class="aprole-global-container">
+    <h1 class="management-h1">Liste des employés</h1>
+    <a class="btn-new btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_new') }}">Nouveau</a>
+    <div class="aprole-global-container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="title-table1">Id</th>
+                    <th class="title-table1">Nom</th>
+                    <th class="title-table1">Prénom</th>
+                    <th class="title-table1">Email</th>
+                    <th class="title-table1">Roles</th>
+                    <th class="title-table1">Actif</th>
+                    <th class="title-table1">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}
+                    <td>{{ user.firstname }}</td>
+                    <td>{{ user.lastname }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.roleId ? user.roleId.name : '' }}</td>
+                    <td>{{ user.active ? 'Oui' : 'Non' }}</td>
 
- <h1>User index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Password</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Active</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ user.active ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-                    <a href="{{ path('user_edit_password', {'id': user.id}) }}">edit password</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('ap_employee_new') }}">Create new</a>
-
-    <h1>ApTab index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>path</th>
-                <th>clef de la table supérieur</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for ap_tab in ap_tabs %}
-            <tr>
-                <td>{{ ap_tab.id }}</td>
-                <td>{{ ap_tab.name }}</td>
-                <td>{{ ap_tab.path }}</td>
-                <td> 
-                {% if ap_tab.apTab.id is defined %}
-                {{ap_tab.apTab.id }}
-                {% endif %}
-
-                </td> 
-                <td>
-                    <a href="{{ path('ap_tab_show', {'id': ap_tab.id}) }}">show</a>
-                    <a href="{{ path('ap_tab_edit', {'id': ap_tab.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('ap_tab_new') }}">Create new</a>
-
+                    <td>
+                    <div class="btn-group dropstart">
+                        <button class="btn btn-secondary  btn-edit-role  dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Actions
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="{{ path('user_show', {'id': user.id}) }}">Voir</a></li>
+                            <li><a class="dropdown-item" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a></li>
+                            <li> <a class="dropdown-item" href="{{ path('user_edit_password', {'id': user.id}) }}">Modifier mot de passe</a></li>
+                        
+                        </ul>
+                    </div>
+                        {# <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <a  class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_edit_password', {'id': user.id}) }}">Modifier mdp</a> #}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">Aucun résultat</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        
+</div>
     {% endblock %}

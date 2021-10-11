@@ -64,6 +64,32 @@ $('#role-name-btn').unbind('click').click(function (e) {
 });
 })
 
+// logique pour le changement de mot de passe 
+console.log(123);
+
+$('#passwor-modificator-btn').unbind('click').click(function (e) {
+  let userPassword = $('#user-password').val();
+  let userId = $('#user-password').data('id');
+  $.ajax({
+    url:'/user/editPasswordOnClick/' + userId,
+    type: "POST",
+    dataType: "json",
+    data: {
+        "task": userPassword
+    },
+    async: true,
+    success: function ()
+    {
+      vNotify().success({ text: 'Changement pris en compte.', title: 'changement du mot passe' });
+
+    },
+    error: function ()
+    {
+      vNotify().error({ text: 'Le changement de mot de passe a échoué', title: 'Erreur' });
+    }
+});
+})
+
 
   // vNotify().info({text:'This is an info notification.', title:'Info Notification.'});
   // vNotify().success({text:'This is a success notification.', title:'Success Notification.'});

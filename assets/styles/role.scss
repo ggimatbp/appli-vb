@@ -1,5 +1,10 @@
 .aprole-global-container{
-    padding:16px
+    padding:$gloabalPaddingContainer
+}
+
+.management-h1{
+margin-bottom: 2 * $paddingTitle;
+margin-top:$paddingTitle;
 }
 
 .div-edit-role-name{
@@ -24,9 +29,18 @@
     margin-right: 16px;
 }
 
+.btn-new{
+    margin:16px;
+}
+
 .btn-edit-role{
-    background:#6610f2;
+    background:$primaryColor;
     color: white;
+    box-sizing: unset;
+}
+
+.btn{
+    font-weight:$fontWeight;
 }
 
 .btn:hover{
@@ -44,11 +58,11 @@
 //title table
 
 .title-table1{
-    font-size: 1.2rem;
+    font-size: $titletable1;
 }
 
 .title-table2{
-    font-size:1.1rem;
+    font-size: $titletable2;
 }
 
 .onglet-fontsize-role-table{
@@ -71,4 +85,21 @@
     position: absolute;
     bottom:10%;
     left:10%;
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1000;
+    display: none;
+    /* min-width: 10rem; */
+    padding: 0.5rem 0;
+    margin: 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
 }
