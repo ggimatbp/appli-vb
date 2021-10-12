@@ -1,20 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Nouvel utilisateur{% endblock %}
-
+{% block javascripts %}
+{{ encore_entry_script_tags('apRole') }}
+{% endblock %}
 {% block body %}
 <div class="aprole-global-container">
     <h1>Créer un nouvel utilisateur</h1>
     <div class="aprole-global-container">
-    {# {{ include('user/_formNew.html.twig') }} #}
     {{ form_start(form) }}
-    {# {{ form_widget(form) }} #}
     {{form_row(form.email, { 'label': 'Mail'})}}
     {{form_row(form.firstname, { 'label': 'Prenom'})}}
     {{form_row(form.lastname, { 'label': 'Nom'})}}
     {{form_row(form.active, { 'label': 'Compte actif'})}}
     {{form_row(form.roleId, { 'label': 'Role'})}}
-    {{form_row(form.plainPassword, { 'label': 'Mot de passe'})}}
+    <div id ="user-new-password" >{{form_row(form.plainPassword, { 'label': 'Mot de passe'})}}</div>
+
+    {# générateur de mot de passe #}
+    <div class="d-flex mb-3">
+
+    <input class="w-100 form-control " id="visualisation-password-generator" placeholder="Mot de passe sécurisé à générer automatiquement">
+
+<button type="button" class="btn-bottom btn-edit-role btn btn-ligth" id="password-generator-btn">
+  Générateur
+</button>
+  </div>
+
     <div class="aprole-global-container">
     <div class="d-flex justify-content-around">
         <a class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('manager') }}">Retour</a>

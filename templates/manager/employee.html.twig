@@ -33,12 +33,8 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="{{ path('user_show', {'id': user.id}) }}">Voir</a></li>
                             <li><a class="dropdown-item" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a></li>
-                            <li> <a class="dropdown-item" href="{{ path('user_edit_password', {'id': user.id}) }}">Modifier mot de passe</a></li>
-                        
                         </ul>
                     </div>
-                        {# <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        <a  class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_edit_password', {'id': user.id}) }}">Modifier mdp</a> #}
                     </td>
                 </tr>
             {% else %}

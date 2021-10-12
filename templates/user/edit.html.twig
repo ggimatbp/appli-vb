@@ -10,32 +10,28 @@
     <div class="aprole-global-container">
         <h4 class="mb-3">Modification de {{user.firstname}} {{user.lastname}}</h4>
         {{ form_start(form) }}
-
         {# {{ dump() }} #}
         {{form_row(form.email, { 'label': 'Mail'})}}
     {{form_row(form.firstname, { 'label': 'Prenom'})}}
     {{form_row(form.lastname, { 'label': 'Nom'})}}
     {{form_row(form.active, { 'label': 'Compte actif'})}}
     {{form_row(form.roleId, { 'label': 'Role'})}}
-
         <div>
         {{ form_end(form) }}
-         
-            <div class="d-flex justify-content-around">
+            <div class="d-flex justify-content-around mb-3">
                  <a class='btn-bottom btn-edit-role btn btn-ligth' href="{{ path('manager') }}">Retour</a>
                 <button class="btn-bottom btn-edit-role btn btn-ligth">{{ button_label|default('enregistrer') }}</button>
-                {# <a href="{{ path('user_edit_password', {'id': user.id}) }}">Modifier le mot de passe</a> #}
                     {{ include('user/_delete_form.html.twig') }}
             </div>
-
+            <!-- Button trigger modal -->
+            <div class="d-flex justify-content-around">
+                <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" data-bs-toggle="modal" data-bs-target="#password-modificator">
+                Modifier le mot de passe
+                </button>
+            </div>
         </div>
     </div>
 </div>
-
-<!-- Button trigger modal -->
-<button type="button" class="btn-bottom btn-edit-role btn btn-ligth" data-bs-toggle="modal" data-bs-target="#password-modificator">
-Modifier le mot de passe
-</button>
 
 <!-- Modal -->
 <div class="modal fade" id="password-modificator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -46,12 +42,19 @@ Modifier le mot de passe
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
        </div>
        <div class="modal-body">
-            <span>Êtes vous sûr de vouloir supprimer le mot de passe du profil de <strong>{{user.firstname}}</strong></span>
+            <span>Êtes vous sûr de vouloir remplacer le mot de passe du profil de <strong>{{user.firstname}}, ceci est définitif.</strong></span>
             <div class="d-flex justify-content-around div-edit-role-name">
                 <div class="d-flex">
-                    <input class="edit-user-password" type="text" name="name" id="user-password" data-id="{{user.id}}">
+                    <input placeholder="Nouveau mot de passe" class="edit-user-password" type="text" name="name" id="user-password" data-id="{{user.id}}">
                     <button  id="passwor-modificator-btn" type='button' class='btn-edit-role btn btn-ligth' data-bs-dismiss="modal">Soumettre</button>
                 </div>
+                    
+            </div>
+            <div class="d-flex mb-3">
+                <input class="form-control " id="visualisation-password-generator" placeholder="Mot de passe sécurisé à générer automatiquement">
+                <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" id="password-generator-btn">
+                Générateur
+                </button>
             </div>
         </div> 
         <div class="modal-footer d-flex justify-content-end">         
