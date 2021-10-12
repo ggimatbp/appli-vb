@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\RegistrationFormType;
-use App\Form\UserPasswordType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\PasswordGenerator;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @Route("/user")
@@ -108,67 +109,40 @@ class UserController extends AbstractController
         ]);
     }
 
-
-
-
-///////exemple pour faire mon mdp en ajax//////////
+///////modifier mon mdp en ajax//////////
     /**
      * @route("/editPasswordOnClick/{id}", name="edit_name_onclick")
      */
    
-    public function editNameOnClick(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $manager) : response
+    public function editPasswordOnClick(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $manager) : response
     {
         $userPassword = $request->get('task');
-        $user->setPassword(
-        $passwordEncoder->encodePassword($user,$userPassword)
-        );
-        $manager->flush();
-        
-        return $this->json(["code" => 200,
-         "message" => "changer de mot de passe"], 200);
-    }
-
-
-//////// fin de lexemple ////////
-
-
-
-//////
-
-
-    /**
-     * @Route("/{id}/edit/password", name="user_edit_password", methods={"GET","POST"})
-     */
-    public function editPassword(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder): Response
-    {
-        $form = $this->createForm(UserPasswordType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('plainPassword')->getData()) {
-               // to do sécurity edit 
-                $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-            } else {
-                $user->getPassword();
-                }
-            // $roleName = $user->getRoleId()->name;
-            // $user->setRoles($roleName);
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('manager', [], Response::HTTP_SEE_OTHER);
+        $majuscule = preg_match('@[A-Z]@', $userPassword);
+	    $minuscule = preg_match('@[a-z]@', $userPassword);
+	    $chiffre = preg_match('@[0-9]@', $userPassword);
+        if(!$majuscule && !$minuscule && !$chiffre || strlen($userPassword) < 12)
+        { 
+                return $this->json([], 404);
+        }else{
+            $user->setPassword(
+                $passwordEncoder->encodePassword($user,$userPassword)
+                );
+                $manager->flush();
+                
+                return $this->json(["code" => 200,
+                "message" => "changer de mot de passe"], 200);
         }
-
-        return $this->renderForm('user/editpassword.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
     }
-
+    
+//////// générer mon mot de passe en ajax ////////
+    /**
+     * @Route("/password/generator", name="user_password_generator")
+     */
+    public function createRandomPasswordOnClick(PasswordGenerator $passwordGenerator)
+    {
+        
+         return $this->json([$passwordGenerator->generateRandomStrongPassword(12)], 200);
+    }
 
     /**
      * @Route("/{id}", name="user_delete", methods={"POST"})
