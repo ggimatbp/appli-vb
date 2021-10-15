@@ -1,0 +1,30 @@
+
+ {% for user in users %}
+
+                <tr>
+                    <td>{{ user.id }}
+                    <td>{{ user.lastname }}</td>
+                    <td>{{ user.firstname }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.roleId ? user.roleId.name : '' }}</td>
+                    <td>{{ user.active ? 'Oui' : 'Non' }}</td>
+
+                    <td>
+                    <div class="btn-group dropstart">
+                        <button class="btn btn-secondary  btn-edit-role  dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Actions
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="{{ path('user_show', {'id': user.id}) }}">Voir</a></li>
+                            <li><a class="dropdown-item" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a></li>
+                        </ul>
+                    </div>
+                    </td>
+                </tr>
+
+            {% else %}
+                <tr>
+                    <td colspan="8">Aucun résultat</td>
+                </tr>
+
+            {% endfor %}

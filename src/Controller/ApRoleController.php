@@ -182,7 +182,7 @@ class ApRoleController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('manager', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
     }
 
 

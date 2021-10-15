@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -63,6 +64,70 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //         ->getOneOrNullResult()
     //     ;
     // }
-    
-    
+
+
+    //$users = $userRepository->findAll();
+
+    /**
+     * @return User[] Returns an array of User objects
+     */
+
+    public function findUserByfilterField($ajaxActive = null, $ajaxRoleId = null, $ajaxEmail= null, $ajaxFirstname = null, $ajaxLastname = null, $ajaxId = null)
+    {
+        $query =  $this->createQueryBuilder('u');
+        
+        if($ajaxActive != null){
+            $query->andWhere('u.active = :active')
+            ->setParameter('active', $ajaxActive);
+        }
+
+        if($ajaxRoleId != null){
+        $query->andwhere('u.roleId = :roleid')
+             ->setParameter('roleid', $ajaxRoleId);
+        }
+
+        if($ajaxEmail != null){
+        $query->andwhere('u.email LIKE :email')
+        ->setParameter('email', '%'. $ajaxEmail .'%');
+        }
+
+        if($ajaxFirstname != null){
+            $query->andwhere('u.firstname LIKE :firstname')
+            ->setParameter('firstname', '%'. $ajaxFirstname .'%');
+            }
+
+        if($ajaxLastname != null){
+                $query->andwhere('u.lastname LIKE :lastname')
+                ->setParameter('lastname', '%'. $ajaxLastname .'%');
+            }
+
+        if($ajaxId != null){
+            $query->andwhere('u.id LIKE :id')
+            ->setParameter('id', '%'. $ajaxId .'%');
+        }
+
+        return $query->getQuery()->getResult()
+        ;
+    }
+
+
+    // /**
+    // * @return User[] Returns an array of User objects
+    // */
+    // public function findUserByfilterField($active)
+    // {
+    //     $entityManager = $this->getEntityManager();
+
+    //     $query = $entityManager->createQuery(
+    //         'SELECT p
+    //         FROM App\Entity\User u
+    //         WHERE u.active = :active
+    //         ORDER BY u.id ASC'
+    //     )->setParameter('active', $active);
+
+    //     // returns an array of Product objects
+    //     return $query->getResult();
+    // }
+
+
 }

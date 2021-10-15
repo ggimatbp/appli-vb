@@ -1,4 +1,4 @@
-{% block tabcontent %}
+
 <div class="aprole-global-container">
     <h1 class="management-h1">Liste des employés</h1>
     <a class="btn-new btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_new') }}">Nouveau</a>
@@ -10,41 +10,16 @@
                     <th class="title-table1">Nom</th>
                     <th class="title-table1">Prénom</th>
                     <th class="title-table1">Email</th>
-                    <th class="title-table1">Roles</th>
+                    <th class="title-table1">Role</th>
                     <th class="title-table1">Actif</th>
                     <th class="title-table1">Actions</th>
                 </tr>
+                {% include "manager/_filtreEmployee.html.twig" %}
             </thead>
-            <tbody>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}
-                    <td>{{ user.firstname }}</td>
-                    <td>{{ user.lastname }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.roleId ? user.roleId.name : '' }}</td>
-                    <td>{{ user.active ? 'Oui' : 'Non' }}</td>
-
-                    <td>
-                    <div class="btn-group dropstart">
-                        <button class="btn btn-secondary  btn-edit-role  dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            Actions
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="{{ path('user_show', {'id': user.id}) }}">Voir</a></li>
-                            <li><a class="dropdown-item" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a></li>
-                        </ul>
-                    </div>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="8">Aucun résultat</td>
-                </tr>
-            {% endfor %}
+            <tbody id="content-filtered">
+                {% include "manager/_filtredEmployee.html.twig" %}
             </tbody>
         </table>
     </div>
         
 </div>
-    {% endblock %}

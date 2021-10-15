@@ -1,0 +1,34 @@
+<pre>
+    {{ dump() }}
+</pre>
+<form id="form-employee-fiters">
+    <tr>
+        <th><input class="employee-filter" placeholder="Id"id="filter-user-id-input"></th>
+        <th><input class="employee-filter" placeholder="Nom" id="filter-user-lastname-input"></th>
+        <th><input class="employee-filter" placeholder="Prénom" id="filter-user-firstname-input"></th>
+        <th><input class="employee-filter" placeholder="Email" id="filter-user-email-input"></th>
+        <th>
+            <select class="employee-filter" name="Role" placeholder="Role" id="filter-user-role-select">
+            {% for role in ap_roles %}
+           {% if loop.index == 1 %}
+           <option value=""></option>
+            <option value="{{role.id}}">{{role.name}}</option>
+            {% else %}
+            <option value="{{role.id}}" >{{role.name}}</option>
+            {% endif %}
+            {% endfor %}
+            </select>
+        </th>
+        {# <th><input id='filter-role-checkbox' class="filter" type="checkbox" checked></th> #}
+        <th> 
+            <select class="employee-filter" name="Role" id="filter-user-active-select">
+                <option value=""></option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+        </th>
+        <th><button id="btn-employee-search-filter" class="btn-search"><i class="search-image fas fa-search"></i></button>
+        <button id="btn-employee-erease-filter" class="btn-search"><i class="search-image fas fa-eraser"></i></button></th>
+    </tr>
+</form>
+

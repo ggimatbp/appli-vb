@@ -19,7 +19,7 @@
         <div>
         {{ form_end(form) }}
             <div class="d-flex justify-content-around mb-3">
-                 <a class='btn-bottom btn-edit-role btn btn-ligth' href="{{ path('manager') }}">Retour</a>
+                 <a class='btn-bottom btn-edit-role btn btn-ligth' href="{{ path('manager_index') }}">Retour</a>
                 <button class="btn-bottom btn-edit-role btn btn-ligth">{{ button_label|default('enregistrer') }}</button>
                     {{ include('user/_delete_form.html.twig') }}
             </div>
