@@ -1,0 +1,39 @@
+<tr>
+<td colspan="8">
+    <input id="hidden-val-page" type="hidden" name="page" value="{{page}}">
+    <input id="hidden-val-limit" type="hidden" name="limit" value="{{limit}}">
+    <input id="hidden-val-total" type="hidden" name="total" value="{{total}}">
+    <ul id="paginator-select-id" class="pagination justify-content-end">
+        
+                <li class="page-item {{(page == 1) ? 'disabled' : ''}}">
+                     <button class="page-link" data-limit="{{limit}}" data-page="1"><i class="fas fa-angle-double-left"></i></button>
+                </li>
+                <li class="page-item {{(page == 1) ? 'disabled' : ''}}">
+                    <button class="page-link" data-limit="{{limit}}" data-page="{{ page - 1 }}"><i class="fas fa-angle-left"></i></button>
+                </li>
+
+                {% set totalPages = (total / limit)|round(0, 'ceil') %}
+                {% if totalPages == 0 %}
+                {% set totalPages = 1 %}
+                {% endif %}
+{# <input id="hidden-val-total" type="hidden" name="total" value="{{totalPages}}"> #}
+                {% for item in 1..totalPages %}
+                    <li class="page-item {{ (page == item)? 'active': '' }}"> 
+                    <button class="page-link" data-limit="{{limit}}" data-page="{{ item }}">{{item}}</button>
+                    </li>
+                {% endfor %}
+
+                <li>
+                {# faire une méthode ajax juste pour l'input #}
+                        <input autocomplete="off" class="form-control" type ="text" name="pageNumber" id="pageNumber-input-search" placeholder="Page recherchée..."/>
+                </li>
+
+                <li class="page-item {{(page == totalPages) ? 'disabled' : ''}}">
+                    <button class="page-link" data-limit="{{limit}}" data-page="{{ page + 1 }}"><i class="fas fa-angle-right"></i></button>
+                </li>
+                <li class="page-item {{(page == totalPages) ? 'disabled' : ''}}">
+                    <button class="page-link" data-limit="{{limit}}" data-page="{{ totalPages }}"><i class="fas fa-angle-double-right"></i></button>
+                </li>
+            </ul>
+    </td>
+</tr>

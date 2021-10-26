@@ -1,50 +1,49 @@
-{% block tabcontent %}
+
 <div class="aprole-global-container">
     <h1 class="management-h1">Liste des employés</h1>
     <a class="btn-new btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_new') }}">Nouveau</a>
     <div class="aprole-global-container">
         <table class="table table-hover">
             <thead>
-                <tr>
-                    <th class="title-table1">Id</th>
-                    <th class="title-table1">Nom</th>
-                    <th class="title-table1">Prénom</th>
-                    <th class="title-table1">Email</th>
-                    <th class="title-table1">Roles</th>
-                    <th class="title-table1">Actif</th>
-                    <th class="title-table1">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}
-                    <td>{{ user.firstname }}</td>
-                    <td>{{ user.lastname }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.roleId ? user.roleId.name : '' }}</td>
-                    <td>{{ user.active ? 'Oui' : 'Non' }}</td>
+                <tr  id="employee-tr-order" >
+                    <th class="title-table1">Id <button data-name="id" data-order=1><i class="fas fa-chevron-up"></i></i></button><button data-name="id" data-order = 0><i class="fas fa-chevron-down"></i></button></th>
 
-                    <td>
-                    <div class="btn-group dropstart">
-                        <button class="btn btn-secondary  btn-edit-role  dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            Actions
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="{{ path('user_show', {'id': user.id}) }}">Voir</a></li>
-                            <li><a class="dropdown-item" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a></li>
-                        </ul>
-                    </div>
-                    </td>
+                    <th class="title-table1">Nom <button data-name="lastname" data-order=1><i class="fas fa-chevron-up"></i></i></button><button data-name="lastname" data-order = 0><i class="fas fa-chevron-down"></i></button></th>
+
+                    <th class="title-table1">Prénom <button data-name="firstname" data-order=1><i class="fas fa-chevron-up"></i></i></button><button data-name="firstname" data-order = 0><i class="fas fa-chevron-down"></i></button></th>
+
+                    <th class="title-table1">Email <button data-name="email" data-order=1><i class="fas fa-chevron-up"></i></i></button><button data-name="email" data-order = 0><i class="fas fa-chevron-down"></i></button></th>
+
+                    <th class="title-table1">Role <button data-name="role" data-order=1><i class="fas fa-chevron-up"></i></i></button><button data-name="role" data-order=0><i class="fas fa-chevron-down"></i></button> </th>
+
+                    <th class="title-table1">Actif</th>
+
+                    <th class="title-table1">Actions</th>
+
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="8">Aucun résultat</td>
-                </tr>
-            {% endfor %}
+                {% include "manager/_filtreEmployee.html.twig" %}
+            </thead>
+            <tbody id="content-filtered">
+                {% include "manager/_filtredEmployee.html.twig" %}
             </tbody>
+            <tfoot id="pagination_filtered">
+                {% include "manager/_paginationEmployee.html.twig" %}
+            </tfoot>
         </table>
-    </div>
-        
+
+        {# total page display on a single page #}
+
+        <div class="d-flex justify-content-between">
+            <form method = "get" class="d-flex justify-content-around">
+
+                <select class="form-select" aria-label="Default select example" name="pageLimitNumber" placeholder="nbr de pages">
+                    <option  value="">Nbr de lignes</option>
+                    <option  value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                </select>
+                <input type="submit" value="go!">
+            </form>
+        </div>
+    </div>       
 </div>
-    {% endblock %}

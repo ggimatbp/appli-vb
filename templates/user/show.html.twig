@@ -36,7 +36,7 @@
                 </tbody>
             </table>
             <div class="d-flex justify-content-around">
-                <a class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('manager') }}">Retour</a>
+                <a class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('manager_index') }}">Retour</a>
                 <a class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>
                 {{ include('user/_delete_form.html.twig') }}
             </div>
