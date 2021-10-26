@@ -72,10 +72,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * @return User[] Returns an array of User objects
      */
 
-    public function findUserByfilterField($ajaxActive = null, $ajaxRoleId = null, $ajaxEmail= null, $ajaxFirstname = null, $ajaxLastname = null, $ajaxId = null)
+    public function findUserByfilterField($limit, $pages, $ajaxActive = null, $ajaxRoleId = null, $ajaxEmail= null, $ajaxFirstname = null, $ajaxLastname = null, $ajaxId = null, $ajaxOrder = null, $ajaxFilterNameOrder = null)
     {
         $query =  $this->createQueryBuilder('u');
-        
         if($ajaxActive != null){
             $query->andWhere('u.active = :active')
             ->setParameter('active', $ajaxActive);
@@ -106,28 +105,157 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('id', '%'. $ajaxId .'%');
         }
 
-        return $query->getQuery()->getResult()
-        ;
+        //orderby//
+        if($ajaxOrder != null){
+            if($ajaxOrder == 1)
+            {
+                if($ajaxFilterNameOrder == "email"){
+                    $query->orderBy('u.email', 'ASC');
+                }
+                if($ajaxFilterNameOrder == "firstname"){
+                    $query->orderBy('u.firstname', 'ASC');
+                }
+                if($ajaxFilterNameOrder == "lastname"){
+                    $query->orderBy('u.lastname', 'ASC');
+                }
+                if($ajaxFilterNameOrder == "id"){
+                    $query->orderBy('u.id', 'ASC');
+                }
+                if($ajaxFilterNameOrder == "role"){
+                    $query->leftJoin('u.roleId', 'r')
+                    ->orderBy('r.name', 'ASC');
+                }
+                
+            }elseif($ajaxOrder == 0){
+                if($ajaxFilterNameOrder == "email"){
+                    $query->orderBy('u.email', 'DESC');
+                }
+                if($ajaxFilterNameOrder == "firstname"){
+                    $query->orderBy('u.firstname', 'DESC');
+                }
+                if($ajaxFilterNameOrder == "lastname"){
+                    $query->orderBy('u.lastname', 'DESC');
+                }
+                if($ajaxFilterNameOrder == "id"){
+                    $query->orderBy('u.id', 'DESC');
+                }
+                if($ajaxFilterNameOrder == "role"){
+                    $query->leftJoin('u.roleId', 'r')
+                    ->orderBy('r.name', 'DESC');
+                }
+            }
+        }
+            $query->setFirstResult(($pages * $limit) - $limit)
+            ->setMaxresults($limit);
+
+        return $query->getQuery()->getResult();
     }
 
 
-    // /**
-    // * @return User[] Returns an array of User objects
-    // */
-    // public function findUserByfilterField($active)
-    // {
-    //     $entityManager = $this->getEntityManager();
+    /**
+     * Returns all user per page
+     * @return void
+    */
 
-    //     $query = $entityManager->createQuery(
-    //         'SELECT p
-    //         FROM App\Entity\User u
-    //         WHERE u.active = :active
-    //         ORDER BY u.id ASC'
-    //     )->setParameter('active', $active);
+    public function getPaginatedUsers($pages, $limit){
+        $query = $this->createQueryBuilder('u')
+        ->setFirstResult(($pages * $limit) - $limit)
+        ->setMaxresults($limit);
+        return $query->getQuery()->getResult();
+    }
 
-    //     // returns an array of Product objects
-    //     return $query->getResult();
-    // }
+    /**
+     * return number of all Users
+     * 
+     */
+    public function getTotalUsers(){
+        $query = $this->createQueryBuilder('u')
+        ->select('COUNT(u)');
+        
 
+        return $query->getQuery()->getSingleScalarResult();
+    }
 
+    /**
+     * return all users after filter
+     */
+
+    public function getTotalUsersAfterFilters($ajaxActive = null, $ajaxRoleId = null, $ajaxEmail= null, $ajaxFirstname = null, $ajaxLastname = null, $ajaxId = null)
+    {
+        $query =  $this->createQueryBuilder('u');
+        if($ajaxActive != null){
+            $query->andWhere('u.active = :active')
+            ->setParameter('active', $ajaxActive);
+        }
+
+        if($ajaxRoleId != null){
+        $query->andwhere('u.roleId = :roleid')
+             ->setParameter('roleid', $ajaxRoleId);
+        }
+
+        if($ajaxEmail != null){
+        $query->andwhere('u.email LIKE :email')
+        ->setParameter('email', '%'. $ajaxEmail .'%');
+        }
+
+        if($ajaxFirstname != null){
+            $query->andwhere('u.firstname LIKE :firstname')
+            ->setParameter('firstname', '%'. $ajaxFirstname .'%');
+            }
+
+        if($ajaxLastname != null){
+                $query->andwhere('u.lastname LIKE :lastname')
+                ->setParameter('lastname', '%'. $ajaxLastname .'%');
+            }
+
+        if($ajaxId != null){
+            $query->andwhere('u.id LIKE :id')
+            ->setParameter('id', '%'. $ajaxId .'%');
+        }
+
+            $query->select('COUNT(u)');
+
+            return $query->getQuery()->getSingleScalarResult();
+    }
 }
+
+
+
+// public function findUserByfilterField($ajaxActive = null, $ajaxRoleId = null, $ajaxEmail= null, $ajaxFirstname = null, $ajaxLastname = null, $ajaxId = null)
+// {
+//     $query =  $this->createQueryBuilder('u');
+    
+//     if($ajaxActive != null){
+//         $query->andWhere('u.active = :active')
+//         ->setParameter('active', $ajaxActive);
+//     }
+
+//     if($ajaxRoleId != null){
+//     $query->andwhere('u.roleId = :roleid')
+//          ->setParameter('roleid', $ajaxRoleId);
+//     }
+
+//     if($ajaxEmail != null){
+//     $query->andwhere('u.email LIKE :email')
+//     ->setParameter('email', '%'. $ajaxEmail .'%');
+//     }
+
+//     if($ajaxFirstname != null){
+//         $query->andwhere('u.firstname LIKE :firstname')
+//         ->setParameter('firstname', '%'. $ajaxFirstname .'%');
+//         }
+
+//     if($ajaxLastname != null){
+//             $query->andwhere('u.lastname LIKE :lastname')
+//             ->setParameter('lastname', '%'. $ajaxLastname .'%');
+//         }
+
+//     if($ajaxId != null){
+//         $query->andwhere('u.id LIKE :id')
+//         ->setParameter('id', '%'. $ajaxId .'%');
+//     }
+
+//     return $query->getQuery()->getResult()
+//     ;
+// }
+

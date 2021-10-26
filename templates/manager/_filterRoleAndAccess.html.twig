@@ -1,0 +1,13 @@
+        
+<form id="form-employee-fiters">
+    <tr>
+        <th> 
+        <input type="text" placeholder="Nom" id="filter-role-lastname-input" class="employee-role-filter">
+        </th>
+        <th><button id="btn-role-search-filter" class="btn-search"><i class="search-image fas fa-search"></i></button>
+        <button id="btn-role-erease-filter" class="btn-search"><i class="search-image fas fa-eraser"></i></button></th>
+    </tr>
+    <input id="hidden-input-order-and-name" type="hidden" data-ajaxOrderRole="" data-ajaxRoleFilterNameOrder="">
+</form>
+
+{# {{ (filterSession is empty ) ? '' : filterSession['ajaxOrder'] }}" data-ajaxFilterNameOrder="{{ (filterSession is empty ) ? '' : filterSession['ajaxFilterNameOrder'] }} #}

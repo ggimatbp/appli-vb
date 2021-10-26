@@ -46,5 +46,70 @@ class ApRoleRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    /**
+     * @return ApRole[] Returns an array of Role objects
+     */
     
+
+     public function findRoleByFilterField($limit, $pages, $ajaxFilterRoleName = null, $ajaxRoleOrder = null)
+     {
+        $query = $this->createQueryBuilder('r');
+            //order by name
+        if($ajaxFilterRoleName != null){
+            $query->andWhere('r.name LIKE :name')
+            ->setParameter('name', '%' . $ajaxFilterRoleName . '%');
+        }
+
+            //orderby
+
+        if($ajaxRoleOrder != null){
+            if($ajaxRoleOrder == 1)
+            {
+                $query->orderBy('r.name', 'ASC');
+
+            }elseif($ajaxRoleOrder == 0){
+
+                $query->orderBy('r.name', 'DESC');
+
+            }
+        }
+
+        $query->setFirstResult(($pages * $limit) - $limit)
+        ->setMaxresults($limit);
+
+        return $query->getQuery()->getResult();
+     }
+
+     /**
+      * return all roles after filter
+      */
+
+      public function getTotalRoleAfterFilter($ajaxFilterRoleName = null, $ajaxRoleOrder = null)
+      {
+        $query = $this->createQueryBuilder('r');
+            //order by name
+        if($ajaxFilterRoleName != null){
+            $query->andWhere('r.name LIKE :name')
+            ->setParameter('name', '%' . $ajaxFilterRoleName . '%');
+        }
+
+            //orderby
+
+        if($ajaxRoleOrder != null){
+            if($ajaxRoleOrder == 1)
+            {
+                $query->orderBy('r.name', 'ASC');
+
+            }elseif($ajaxRoleOrder == 0){
+
+                $query->orderBy('r.name', 'DESC');
+
+            }
+        }
+
+        $query->select('COUNT(r)');
+
+        return $query->getQuery()->getSingleScalarResult();
+     }
 }
