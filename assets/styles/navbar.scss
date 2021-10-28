@@ -1,3 +1,19 @@
-// .active a{
-//     color: $indigo-500 !important;
-// }
+.header1{
+    width:100%;
+    color: #fff;
+    background-color: $primaryColor;
+    font-weight: $fontWeight;
+}
+
+.header2{
+    width:100%;
+}
+
+.nav{
+    display: flex;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    flex-wrap: unset;
+}
+

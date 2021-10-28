@@ -30,20 +30,5 @@
                 {% include "manager/_paginationEmployee.html.twig" %}
             </tfoot>
         </table>
-
-        {# total page display on a single page #}
-
-        <div class="d-flex justify-content-between">
-            <form method = "get" class="d-flex justify-content-around">
-
-                <select class="form-select" aria-label="Default select example" name="pageLimitNumber" placeholder="nbr de pages">
-                    <option  value="">Nbr de lignes</option>
-                    <option  value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=3>3</option>
-                </select>
-                <input type="submit" value="go!">
-            </form>
-        </div>
     </div>       
 </div>

@@ -1,4 +1,5 @@
 {% block tabcontent %}
+
 <div class="aprole-global-container">
     <h1 class="management-h1">Manager les rôles</h1>
     <a href="{{ path('ap_role_new') }}" class="btn-new btn-bottom btn-edit-role btn btn-ligth">nouveau</a>
@@ -18,16 +19,6 @@
                 {% include "manager/_paginationRoleAndAccess.html.twig" %}
             </tfoot>
         </table>
-            <form method = "get" class="d-flex justify-content-around">
-
-                <select class="form-select" aria-label="Default select example" name="pageLimitNumber" placeholder="nbr de pages">
-                    <option  value="">Nbr de lignes</option>
-                    <option  value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=3>3</option>
-                </select>
-                <input type="submit" value="go!">
-            </form>
     </div>
 </div>
 {% endblock %}
