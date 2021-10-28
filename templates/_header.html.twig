@@ -1,16 +1,17 @@
 
 
 				{% if app.user.RoleId is defined %}
-						{{ app.user.firstname }}
-						{{ app.user.lastname }}
+						{# {{ app.user.firstname }}
+						{{ app.user.lastname }} #}
+        <div class="d-flex">
 					{% for apAccess in app.user.RoleId.apAccesses %}
 						{% if apAccess.view == true %}
 							{% if apAccess.tab.apTab is null %}
-									<a class="nav-item-uniform nav-link" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>								
+									<a class="header1 nav-link" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>
 							{% endif %}
 						{% endif %}
-
 					{% endfor %}
+        </div>
           {% set foo = 0 %}
           <ul class="nav nav-pills d-flex justify-content-around" id="pills-tab" role="tablist">
             {% for apAccess in app.user.RoleId.apAccesses %}
@@ -18,8 +19,8 @@
               
                 {% if apAccess.tab.apTab is not null and app.request.attributes.get('_route') == apAccess.tab.apTab.path %}
                 {% set foo = foo + 1 %}
-                <li class="nav-item " role="presentation">
-                            <button class="nav-item-uniform nav-link {{foo == 1 ? 'active' : '' }}" id="pills-{{ apAccess.tab.name }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ apAccess.tab.name }}" type="button" role="tab" aria-controls="pills-{{ apAccess.tab.name }}" aria-selected="true">{{ apAccess.tab.name }}</button>
+                <li class="header2 nav-item " role="presentation">
+                            <button class="header2 nav-item-uniform nav-link {{foo == 1 ? 'active' : '' }}" id="pills-{{ apAccess.tab.name }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ apAccess.tab.name }}" type="button" role="tab" aria-controls="pills-{{ apAccess.tab.name }}" aria-selected="true">{{ apAccess.tab.name }}</button>
                           </li>
                 {% endif %}
               {% endif %}

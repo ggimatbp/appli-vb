@@ -104,10 +104,9 @@ class ApRoleRepository extends ServiceEntityRepository
             }elseif($ajaxRoleOrder == 0){
 
                 $query->orderBy('r.name', 'DESC');
-
             }
         }
-
+        
         $query->select('COUNT(r)');
 
         return $query->getQuery()->getSingleScalarResult();

@@ -24,7 +24,7 @@ function ajaxFilter(element, ajaxOrder = null, ajaxFilterNameOrder = null){
   let ajaxFirstname = $('#filter-user-firstname-input').val();
   let ajaxLastname = $('#filter-user-lastname-input').val();
   let ajaxId = $('#filter-user-id-input').val();
-  let ajaxLimit = $('#hidden-val-limit').val();
+  let ajaxLimit = $('#employeeSelectLimitLine').val();
   let ajaxPage = element;
 
   let ajaxRoleName = $('#filter-user-role-select option:selected').text();
@@ -67,6 +67,7 @@ function ajaxFilter(element, ajaxOrder = null, ajaxFilterNameOrder = null){
         $("#pagination_filtered").append(response.content2)
         paginationOnclick()
         paginationOnSubmit()
+        employeeLimitModification()
       },
       error: function ()
       {
@@ -145,6 +146,20 @@ $("#employee-tr-order th button").each(function() {
 })
 
 
+// ///Logique de limite du nombre de ligne du tableau de employee /// 
+
+employeeLimitModification()
+
+function employeeLimitModification()
+{
+  $("#employeeSelectLimitLine").change(function(e){
+    e.preventDefault();
+      console.log($("#employeeSelectLimitLine").val() + $(this).data("page") +  $("#hidden-input-order-and-name").data('ajaxRoleOrder'))
+    
+      ajaxFilter($(this).data("page"))
+  });
+}
+
 //logique pour mettre de la couleur au btn ASC DESC en fonction de si ils sont ou non le bouton dont les datas sont enregistré en session via un input hidden
 
 $("#employee-tr-order th button").each(function() {
@@ -169,24 +184,13 @@ $("#employee-tr-order th button").each(function() {
 function ajaxRoleFilter(element, ajaxRoleOrder = null, ajaxRoleOrderName = null){
 
 let ajaxFilterRoleName = $('#filter-role-lastname-input').val();
-console.log(ajaxFilterRoleName);
-let ajaxRoleLimit = $('#hidden-role-val-limit').val();
 let ajaxRolePage = element;
-// console.log(ajaxFilterRoleName + 'ajaxFilterRoleName');
-// if(ajaxRoleOrderName == null)
-//   {
-//     ajaxRoleOrderName =  $("#hidden-input-order-and-name").data('ajaxorderrole')
-// console.log(ajaxRoleOrderName + 'ajaxRoleOrderName')
-
-//   }
-console.log(ajaxRoleOrder)
+let ajaxRoleLimit = $("#hidden-role-input-order-and-name").data('ajaxlimitrole');
 if(ajaxRoleOrder == null)
   {
-    ajaxRoleOrder = $("#hidden-input-order-and-name").data('ajaxorderrole')
-    console.log(ajaxRoleOrder + 'ajaxRoleOrder')
-
+    ajaxRoleOrder = $("#hidden-role-input-order-and-name").data('ajaxorderrole')
   }
-  console.log(ajaxRoleOrder)
+
    $.ajax({
       url:'/manager/' + '?&ajax1=1',
       type: "GET",
@@ -208,6 +212,9 @@ if(ajaxRoleOrder == null)
         $("#pagination-role-filtered").empty();
         $("#pagination-role-filtered").append(response.content2)
         paginationRoleOnclick()
+        roleLimitModification()
+        paginationRoleOnSubmit()
+        $("#roleSelectLimitLine").val($("#hidden-role-input-order-and-name").data('ajaxLimitRole'));
       },
       error: function ()
       {
@@ -241,16 +248,18 @@ $("#role-tr-order th button").each(function() {
 
       //ici je dois faire passer un element (la page) et un data order role name
       ajaxRoleFilter($('#hidden-val-page').val(), $(this).data("orderrole"), $(this).data("namerole"));
-      $("#hidden-input-order-and-name").data('ajaxorderrole', $(this).data("orderrole"));
+      $("#hidden-role-input-order-and-name").data('ajaxorderrole', $(this).data("orderrole"));
       //le role ne serta a rien pour l'instant (dans lhypothése qu'il y aura d'autre élément)
-      $("#hidden-input-order-and-name").data('ajaxrolefilternameorder', $(this).data("namerole"));
-      // console.log($("#hidden-input-order-and-name").data('ajaxrolefilternameorder'))
-      // console.log(11)
+      $("#hidden-role-input-order-and-name").data('ajaxrolefilternameorder', $(this).data("namerole"));
+      $("#role-tr-order th button").each(function(){
+        $(this).removeClass("btn-orderby-highlighted")
+      })
+      $(this).addClass("btn-orderby-highlighted")
+  
     })
 })
-
-$("#hidden-input-order-and-name").data('ajaxorder', $(this).data("order"));
-$("#hidden-input-order-and-name").data('ajaxfilternameorder', $(this).data("name"));
+$("#hidden-role-input-order-and-name").data('ajaxorder', $(this).data("order"));
+$("#hidden-role-input-order-and-name").data('ajaxfilternameorder', $(this).data("name"));
 
 /// logique pagination pour les role on click///
 
@@ -260,7 +269,44 @@ function paginationRoleOnclick()
 {
   $("#paginator-role-select-id li button" ).each(function() {
     $(this).unbind("click").click(function(e){
-      ajaxRoleFilter($(this).data("pagerole"), $("#hidden-input-order-and-name").data('ajaxRoleOrder'))
+      ajaxRoleFilter($(this).data("pagerole"))
   });
 })
 }
+
+/// Barre de recherche pour la pagination du role///
+
+paginationRoleOnSubmit()
+
+function paginationRoleOnSubmit()
+{
+  $('#pageRoleNumber-input-search').on('keypress',function(e) {
+    if(e.which == 13) {
+      ajaxRoleFilter($(this).val())
+  }})
+}
+
+///Logique de limite du nombre de ligne du tableau de Role /// 
+
+roleLimitModification()
+
+function roleLimitModification()
+{
+  $("#roleSelectLimitLine").change(function(e){
+    e.preventDefault();
+      $("#hidden-role-input-order-and-name").data('ajaxlimitrole', $("#roleSelectLimitLine").val());
+      ajaxRoleFilter($(this).data("pagerole"), $("#hidden-role-input-order-and-name").data('ajaxRoleOrder')) 
+ //     console.log( $("#hidden-role-input-order-and-name").data('ajaxlimitrole'))
+  });
+}
+
+
+//logique pour mettre de la couleur au btn ASC DESC en fonction de si ils sont ou non le bouton dont les datas sont enregistré en session via un input hidden
+
+
+$("#role-tr-order th button").each(function() {
+  if($("#hidden-role-input-order-and-name").data('ajaxorderrole') == $(this).data('orderrole'))
+  {
+    $(this).addClass("btn-orderby-highlighted")
+  }
+})
