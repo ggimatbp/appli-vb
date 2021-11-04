@@ -1,0 +1,25 @@
+/** Button **/
+.btn{
+    font-weight:$fontWeight;
+    background-color: $primaryColor;
+    color: $primaryColorText;
+}
+
+.btn:hover{
+    color: $primaryColorHoverText;
+    background-color: $primaryColorHover;
+}
+
+/** Barre de naviguation **/
+.nav{
+    display: flex;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    flex-wrap: unset;
+}
+
+.nav-link:hover{
+    color: $primaryColorHoverText;
+    background-color: $primaryColorHover;
+}

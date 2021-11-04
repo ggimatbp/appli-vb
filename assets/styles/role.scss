@@ -1,14 +1,38 @@
 .aprole-global-container{
-    padding:$gloabalPaddingContainer
+    padding:$gloabalPaddingContainer;
 }
 
-.management-h1{
-margin-bottom: 2 * $paddingTitle;
-margin-top:$paddingTitle;
+.aprole-container-with-title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.aprole-new-container{
+    padding:$gloabalPaddingContainer;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    width:95%;
+}
+
+.aprole-new-role-container{
+    padding:$gloabalPaddingContainer;
+    height: 80vh;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.aprole-user-show{
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .div-edit-role-name{
-    padding: 32px ;
+    justify-content: center;
 }
 
 .edit-role-name{
@@ -26,29 +50,10 @@ margin-top:$paddingTitle;
     font-size: 1.5rem;
     font-weight: 600;
     width:35%;
-    margin-right: 16px;
 }
 
 .btn-new{
     margin:16px;
-}
-
-.btn-edit-role{
-    background:$primaryColor;
-    color: white;
-    box-sizing: unset;
-}
-
-.btn{
-    font-weight:$fontWeight;
-}
-
-.btn:hover{
-    color: white
-}
-
-.btn-bottom{
-    width: 20%;
 }
 
 .btn-delete-100width{
@@ -103,3 +108,48 @@ margin-top:$paddingTitle;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 0.25rem;
 }
+
+
+/*#region mediaquery */
+
+/*#region forms*/
+
+@media (min-width: 568px) { 
+    .aprole-new-container{
+        padding:$gloabalPaddingContainer;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+       width:80%;
+
+    }
+ }
+
+@media (min-width: 768px) { 
+    .aprole-new-container{
+        padding:$gloabalPaddingContainer;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+       width:70%;
+
+    }
+ }
+
+@media (min-height:720px) and ( min-width: 992px)  { 
+    .aprole-new-container{
+        padding:$gloabalPaddingContainer;
+        height:80vh;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+       width:500px;
+    }
+ }
+
+
+/*endregion */
+
+/*endregion */
+
+

@@ -234,9 +234,11 @@ $("#btn-role-search-filter").unbind("click").click(function(e){
 
 $("#btn-role-erease-filter").unbind("click").click(function(e){
   e.preventDefault();
-   $('.employee-role-filter').each((function() {
-    $(this).val("")
-   }))
+    $('#filter-role-lastname-input').val("");
+   $("#hidden-role-input-order-and-name").data('ajaxorderrole', '3');
+   $("#role-tr-order th button").each(function(){
+    $(this).removeClass("btn-orderby-highlighted")
+  })
 })
 
 ///// Logique pour les role order ////

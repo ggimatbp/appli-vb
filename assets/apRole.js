@@ -3,6 +3,10 @@
 
 import $ from 'jquery';
 
+//on import le dropdown de bootstrap (technique pour que la modale ne bloque pas le système de dropdown bootstrap)
+
+import 'bootstrap/js/dist/dropdown';
+
 // On import les notifications
 
 import { vNotify } from './app';
@@ -41,16 +45,17 @@ function onClickAddAuth(e) {
 }
 
 // logic pour le changement de nom en ajax
+// url:'/ap/role/editNameOnClick/' + roleId,
 
 $('#role-name-btn').unbind('click').click(function (e) {
   let roleName = $('#role-name').val();
   let roleId = $('#role-name').data('id');
   $.ajax({
-    url:'/ap/role/editNameOnClick/' + roleId,
-    type: "POST",
+    url:'/ap/role/editName/' + roleId,
+     type: "GET",
     dataType: "json",
     data: {
-        "task": roleName
+         "task": roleName
     },
     async: true,
     success: function ()

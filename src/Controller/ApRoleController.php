@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ApRoleRepository;
 use App\Repository\ApAccessRepository;
 use App\Repository\ApTabRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\Persistence\ObjectManager;
 use phpDocumentor\Reflection\Types\Integer;
@@ -27,6 +28,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApRoleController extends AbstractController
 {
+
+    const BASIC_ROLE = 43;
+
     /**
      * @Route("/", name="ap_role_index", methods={"GET"})
      */
@@ -90,8 +94,11 @@ class ApRoleController extends AbstractController
         ]);
     }
 
+
+
+
     /**
-     * @Route("/{id}", name="ap_role_show", methods={"GET"})
+     * @Route("/show/{id}", name="ap_role_show", methods={"GET"})
      */
     public function show(ApRole $apRole): Response
     {
@@ -120,6 +127,10 @@ class ApRoleController extends AbstractController
     //         'form' => $editForm,
     //     ]);
     // }
+
+
+
+
 
     /**
      * @Route("/{id}/edit", name="ap_role_edit", methods={"GET","POST"})
@@ -170,13 +181,23 @@ class ApRoleController extends AbstractController
     }
 
 
+
+
     /**
-     * @Route("/{id}", name="ap_role_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="ap_role_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApRole $apRole): Response
+    public function delete(Request $request, ApRole $apRole, UserRepository $userRepository, ApRoleRepository $apRoleRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$apRole->getId(), $request->request->get('_token'))) {
-            
+
+            //We took all the users who got the role who's gonna be deleted
+            $userArray = $userRepository->getUsersByRole($apRole->getId());
+            //we took the role object we want to exchange by  the role who's gonna be deleted
+            $lambdaRole = $apRoleRepository->find(self::BASIC_ROLE);
+            //we set the role for all users
+            foreach ($userArray as $user){
+                $user->setRoleId($lambdaRole);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apRole);
             $entityManager->flush();
@@ -185,19 +206,18 @@ class ApRoleController extends AbstractController
         return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
     }
 
-
     /**
-     * @route("/editNameOnClick/{id}", name="edit_name_onclick")
-     */
-   
-    public function editNameOnClick(Request $request, ApRole $apRole, EntityManagerInterface $manager) : response
+     * @route("/editName/{id}", methods={"GET"})
+    */
+
+    public function editotest(Request $request, ApRole $apRole, EntityManagerInterface $manager) : response
     {
+
         $roleName = $request->get('task');
          $apRole->setName($roleName);
-        $manager->flush();
-        
-        return $this->json(["code" => 200,
-         "message" => "changer nom"], 200);
+         $manager->flush();
+       return $this->json(["code" => 200,
+       "message" => "changer nom"], 200);
     }
 
 }

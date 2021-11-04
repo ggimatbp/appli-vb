@@ -5,3 +5,25 @@ background-color: $primaryColor;
 .disabled-pagination{
 color: red
 }
+
+
+.page-link{
+    background-color: $primaryColor;
+    border-color: $primaryColor;
+    color: $primaryColorText;
+}
+
+.page-item.active .page-link{
+    background-color: $primaryColorActive;
+    border-color: $primaryColor;
+}
+
+.page-link:hover{
+    color: $primaryColorHoverText;
+    background-color:$primaryColorHover;
+    border-color: $primaryColorHover;
+}
+
+.pagination-modificator{
+    margin:0;
+}
