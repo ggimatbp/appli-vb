@@ -1,22 +1,21 @@
 <tr>
     <td  colspan="8">
         <div class="d-flex justify-content-between">
-            <div class="">
-                <span class="d-flex">
-                    Affichage
-                    <select placeholder = "looool" class="form-select" aria-label="Default select example" id="roleSelectLimitLine">
+            <div>
+                 <span class="d-flex">
+                    <select class="form-select" aria-label="Default select example" id="roleSelectLimitLine">
                         <option value="">{{limitRole}} </option>
                         <option  value=1>1</option>
                         <option value=2>2</option>
                         <option value=3>3</option>
                     </select>
-                    /{{totalRole}} résultat(s)
-                </span>
+                    <span class="p-2 d-flex align-self-center">/{{totalRole}}</span>
+                 </span> 
             </div>
             <input id="hidden-val-pageRole" type="hidden" name="pageRole" value="{{pageRole}}">
             <input id="hidden-role-val-limit" type="hidden" name="limitRole" value="{{limitRole}}">
             <input id="hidden-val-totalRole" type="hidden" name="totalRole" value="{{totalRole}}">
-            <ul id="paginator-role-select-id" class="pagination justify-content-end">
+            <ul id="paginator-role-select-id" class="pagination pagination-modificator">
                 
                 <li class="page-item {{(pageRole == 1) ? 'disabled' : ''}}">
                     <button class="page-link" data-limitRole="{{limitRole}}" data-pageRole="1"><i class="fas fa-angle-double-left"></i></button>

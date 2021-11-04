@@ -17,8 +17,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @Route("/manager", name="manager_")
  */
 
+
 class ManagerController extends AbstractController
-{
+{	
+    #region function index
     /**
      * @Route("/", name="index")
      */
@@ -239,13 +241,16 @@ class ManagerController extends AbstractController
             $totalRole = $apRoleRepository->getTotalRoleAfterFilter($ajaxFilterRoleName, $ajaxRoleOrder);
             $ap_roles = $apRoleRepository->findRoleByFilterField($limitRole, $pageRole, $ajaxFilterRoleName, $ajaxRoleOrder);
             $total = $userRepository->getTotalUsersAfterFilters($ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId);
-
             $users = $userRepository->findUserByfilterField($limit, $page, $ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId, $ajaxOrder, $ajaxFilterNameOrder);
         }
-        return $this->render('manager/index.html.twig', compact('ap_accesses','ap_roles', 'ap_tabs', 'users', 'controller_name', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession'));
+
+        //For the dropdown role name filter
+        $allRole = $apRoleRepository->findAll();
+
+        return $this->render('manager/index.html.twig', compact('ap_accesses','ap_roles', 'ap_tabs', 'users', 'controller_name', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole'));
     }
 
-
+    #endregion
     /**
      * @Route("/filter_pagination", name="_filter_pagination")
      */
@@ -293,7 +298,6 @@ class ManagerController extends AbstractController
         
         return $this->render('user/index.html.twig', compact('users', 'total', 'limit', 'page'));
     } 
-
 }
 
 

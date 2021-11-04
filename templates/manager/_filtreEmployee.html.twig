@@ -6,7 +6,7 @@
         <th><input class="form-control employee-filter" placeholder="Email" id="filter-user-email-input" value="{{ (filterSession is empty ) ? '' : filterSession['ajaxEmail'] }}"></th>
         <th>
             <select class="form-select employee-filter" name="Role" placeholder="Role" id="filter-user-role-select" >
-            {% for role in ap_roles %}
+            {% for role in allRole %}
            {% if loop.index == 1 %}
            <option  value="{{ (filterSession is empty ) ? '' : filterSession['ajaxRoleId'] }}">{{ (filterSession is empty ) ? '' : filterSession['ajaxRoleName'] }}</option>
             <option value="{{role.id}}">{{role.name}}</option>

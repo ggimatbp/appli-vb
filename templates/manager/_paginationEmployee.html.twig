@@ -1,18 +1,17 @@
 <tr>
 <td colspan="8">
-        <div class="d-flex justify-content-between">
-                <select class="form-select" aria-label="Default select example" id="employeeSelectLimitLine">
-                    <option  value={{limit is defined ? limit : 2}}>{{limit is defined ? limit : 2}}</option>
+    <div class="d-flex justify-content-between">
+                <select class="form-filter-input-global form-select" aria-label="Default select example" id="employeeSelectLimitLine">
+                    <option value={{limit is defined ? limit : 2}}>{{limit is defined ? limit : 2}}</option>
                     <option  value=1>1</option>
                     <option value=2>2</option>
                     <option value=11>3</option>
                 </select>
-        </div>
 
     <input id="hidden-val-page" type="hidden" name="page" value="{{page}}">
     <input id="hidden-val-limit" type="hidden" name="limit" value="{{limit}}">
     <input id="hidden-val-total" type="hidden" name="total" value="{{total}}">
-    <ul id="paginator-select-id" class="pagination justify-content-end">
+    <ul id="paginator-select-id" class="pagination pagination-modificator">
         
                 <li class="page-item {{(page == 1) ? 'disabled' : ''}}">
                      <button class="page-link" data-limit="{{limit}}" data-page="1"><i class="fas fa-angle-double-left"></i></button>
@@ -60,5 +59,6 @@
                     <button class="page-link" data-limit="{{limit}}" data-page="{{ totalPages }}"><i class="fas fa-angle-double-right"></i></button>
                 </li>
             </ul>
+    </div>
     </td>
 </tr> 

@@ -1,11 +1,13 @@
- @import 'variable.scss';
+@import 'variable.scss';
 @import "~@fortawesome/fontawesome-free/css/all.css";
 @import "~bootstrap/scss/bootstrap";
-@import "notifyMessage.scss";
+@import "array.scss";
+@import "bootstrapModification.scss";
 @import "employee.scss";
-@import 'home.scss';
+@import "global.scss";
 @import 'manager.scss';
 @import 'navbar.scss';
+@import "notifyMessage.scss";
 @import 'pagination.scss';
 @import 'role.scss';
 @import 'tab.scss';
@@ -21,3 +23,4 @@ h2{
 h3{
     color: $primaryColor
 }
+
