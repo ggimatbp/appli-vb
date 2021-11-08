@@ -4,10 +4,27 @@
             <div>
                  <span class="d-flex">
                     <select class="form-select" aria-label="Default select example" id="roleSelectLimitLine">
-                        <option value="">{{limitRole}} </option>
+ 
+                         {% if limitRole is defined %} 
+                            {% if limitRole == 1 %}
+                            <option  value="">{{limitRole}}</option>
+                            <option value=2>2</option>
+                            <option value=8>8</option>
+                        {% elseif limitRole == 2 %}
+                            <option value="">{{limitRole}}</option>
+                            <option  value=1>1</option>
+                            <option value=8>8</option>
+                        {% else %}
+                            <option value="">{{limitRole}}</option>
+                            <option  value=1>1</option>
+                            <option value=2>2</option>
+                        {% endif %}
+                    {% else %}
                         <option  value=1>1</option>
                         <option value=2>2</option>
-                        <option value=3>3</option>
+                        <option value=8>8</option>
+                    {% endif %}
+
                     </select>
                     <span class="p-2 d-flex align-self-center">/{{totalRole}}</span>
                  </span> 
@@ -29,16 +46,31 @@
                 {% set totalRolePages = 1 %}
                 {% endif %}
 
+                {% set maxTotalPageRole = totalRolePages %}
+                {% set minTotalPageRole = 1 %} 
+                {# max #}
+                {% if pageRole < (totalRolePages - 3) %}
+                {% set maxTotalPageRole = (pageRole + 2) %}
+                {% endif %}
+                {# min #}
+                {% if pageRole > 3 %}
+                {% set minTotalPageRole = (pageRole - 2) %}
+                <li class="page-item" ><button class="page-link" disabled>...</button></li>           
+                {% endif %}
                 
                 <input id="hidden-val-totalRole" type="hidden" name="totalRole" value="{{totalRolePages}}"> 
-                {% for item in 1..totalRolePages %}
+                {% for item in minTotalPageRole..maxTotalPageRole %}
                     <li class="page-item {{ (pageRole == item)? 'active': '' }}"> 
                     <button class="page-link" data-limitRole="{{limitRole}}" data-pageRole="{{item}}">{{item}}</button>
                     </li>
                 {% endfor %}
 
+                {% if pageRole < (totalRolePages - 3) %}
+                <li class="page-item"><button class="page-link" disabled>...</button></li>
+                {% endif %}
+
                 <li>
-                        <input autocomplete="off" class="form-control" type ="text" name="pageRoleNumber" id="pageRoleNumber-input-search" placeholder="Page recherchée..."/>
+                        <input autocomplete="off" class="form-control pagination-form-search" type ="text" name="pageRoleNumber" id="pageRoleNumber-input-search" placeholder="Page recherchée..."/>
                 </li>
 
                 <li class="page-item {{(pageRole == totalRolePages) ? 'disabled' : ''}}">
@@ -52,3 +84,4 @@
         </div>
     </td>
 </tr>
+

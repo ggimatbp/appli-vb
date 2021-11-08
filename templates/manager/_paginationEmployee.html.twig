@@ -1,13 +1,33 @@
 <tr>
 <td colspan="8">
     <div class="d-flex justify-content-between">
+        <div>
+            <span class="d-flex">              
                 <select class="form-filter-input-global form-select" aria-label="Default select example" id="employeeSelectLimitLine">
-                    <option value={{limit is defined ? limit : 2}}>{{limit is defined ? limit : 2}}</option>
+                 {% if limit is defined %} 
+                    {% if limit == 1 %}
+                        <option  value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=11>11</option>
+                    {% elseif limit == 2 %}
+                        <option value=2>2</option>
+                        <option  value=1>1</option>
+                        <option value=11>11</option>
+                    {% else %}
+                        <option value=11>11</option>
+                        <option  value=1>1</option>
+                        <option value=2>2</option>
+                    {% endif %}
+                 {% else %}
                     <option  value=1>1</option>
                     <option value=2>2</option>
-                    <option value=11>3</option>
+                    <option value=11>11</option>
+                {% endif %} 
                 </select>
-
+                <span class="p-2 d-flex align-self-center">/{{total}}</span>
+                 </span> 
+            </span>
+        </div>
     <input id="hidden-val-page" type="hidden" name="page" value="{{page}}">
     <input id="hidden-val-limit" type="hidden" name="limit" value="{{limit}}">
     <input id="hidden-val-total" type="hidden" name="total" value="{{total}}">
@@ -49,7 +69,7 @@
                 {% endif %}
                 <li>
                 {# faire une méthode ajax juste pour l'input #}
-                        <input autocomplete="off" class="form-control" type ="text" name="pageNumber" id="pageNumber-input-search" placeholder="Page recherchée..."/>
+                        <input autocomplete="off" class="form-control pagination-form-search" type ="text" name="pageNumber" id="pageNumber-input-search" placeholder="Page recherchée..."/>
                 </li>
 
                 <li class="page-item {{(page == totalPages) ? 'disabled' : ''}}">

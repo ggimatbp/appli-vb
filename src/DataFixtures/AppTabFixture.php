@@ -13,9 +13,9 @@ class AppTabFixture extends Fixture
             'name' => 'Management',
             'path' => 'manager',
             'children' => [
-                ['name' => 'employee',
+                ['name' => 'Employé',
                 'path' => 'manager/employee.html.twig'],
-                ['name' => 'role',
+                ['name' => 'Role',
                 'path' => 'manager/roleAndAccess.html.twig'],
             ]
         ],
@@ -38,7 +38,7 @@ class AppTabFixture extends Fixture
             ]
         ],
         [
-            'name' => 'prises en charge BP',
+            'name' => 'Prises en charge BP',
             'path' => 'manager',
             'children' => [
                 [
@@ -73,7 +73,7 @@ class AppTabFixture extends Fixture
             'name' => 'Expedition',
             'path' => 'manager',
             'children' => [
-                ['name' => 'en cours',
+                ['name' => 'En cours',
                 'path' => 'manager'
             ],
                 ['name' => 'Traité',
@@ -85,7 +85,7 @@ class AppTabFixture extends Fixture
             'name' => 'Non-conformités',
             'path' => 'manager',
             'children' => [
-                ['name' => 'en cours',
+                ['name' => 'En cours',
                 'path' => 'manager'],
                 ['name' => 'Archivées',
                 'path' => 'manager'],
@@ -119,7 +119,7 @@ class AppTabFixture extends Fixture
             'children' => [
                 ['name' => 'Batteries-prod',
                 'path' => 'manager'],
-                ['name' => 'velobatterie',
+                ['name' => 'Velobatterie',
                 'path' => 'manager'],
             ]
         ],
@@ -128,26 +128,6 @@ class AppTabFixture extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        // // création d'une tab parent
-        // $management = new ApTab();
-        // $management->setName("Management");
-        // $management->setPath("manager");
-
-        // $manager->persist($management);
-
-        // $this->addReference('Tab_' . 1 , $management);
-
-        // // Création d'une tab enfant employee
-
-        // $employee = new ApTab();
-        // $employee->setName("Employee");
-        // $employee->setPath("home");
-        // $employee->setApTab($this->getReference('Tab_1'));
-        // $manager->persist($employee);
-
-        // // Création d'une tab enfant Rôle
-
-        // $manager->flush();
 
         // Génération des catégories mères
         $tabIndex = 0;

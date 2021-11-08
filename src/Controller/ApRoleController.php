@@ -50,25 +50,13 @@ class ApRoleController extends AbstractController
 
         $form = $this->createForm(ApRoleType::class, $apRole);
         $form->handleRequest($request);
-        // if ($this->isCsrfTokenValid('delete'.$apRole->getApAccesses(), $request->request->get('_token'))) {
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->remove($apRole->getApAccesses());
-        //     $entityManager->flush();
-        // }
-
-
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // foreach($apTabRepository as );
-            //if submit we create all access 
-            
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apRole);
-            $bob = $apTabRepository->findAllId(); 
-            //    var_dump($bob);
-                foreach($bob as $tab){
+            $allTabs = $apTabRepository->findAllId(); 
+                foreach($allTabs as $tab){
                     $apAccess = new ApAccess;
                     $apAccess->setTab($tab);
                     $apAccess->setRole($apRole);
@@ -82,8 +70,6 @@ class ApRoleController extends AbstractController
 
             $entityManager->flush();
                 $id = $apRole->getId();
-            // return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
-           // return $this->redirect('http://symfony.com/doc');
            return $this->redirect('/ap/role/' . $id . '/edit');
         }
 
@@ -93,8 +79,6 @@ class ApRoleController extends AbstractController
             'tabs' => $apTabRepository->findAll(),
         ]);
     }
-
-
 
 
     /**
@@ -107,40 +91,12 @@ class ApRoleController extends AbstractController
         ]);
     }
 
-    // /**
-    //  * @Route("/{id}/edit", name="ap_role_edit", methods={"GET","POST"})
-    //  */
-    // public function edit(Request $request, ApRole $apRole): Response
-    // {
-        
-    //     $editForm = $this->createForm(ApRoleType::class, $apRole);
-    //     $editForm->handleRequest($request);
-
-    //     if ($editForm->isSubmitted() && $editForm->isValid()) {
-    //         $this->getDoctrine()->getManager()->flush();
-
-    //         return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->renderForm('ap_role/edit.html.twig', [
-    //         'ap_role' => $apRole,
-    //         'form' => $editForm,
-    //     ]);
-    // }
-
-
-
-
 
     /**
      * @Route("/{id}/edit", name="ap_role_edit", methods={"GET","POST"})
      */
     public function edit($id, ApRole $apRole, EntityManagerInterface $entityManager): Response
     {
-
-        //  if(empty($apRole)){
-        //      throw $this->createNotFoundException('Pas de role trouvé pour' .$id);
-        //  }
 
          if (null === $apRole = $entityManager->getRepository(ApRole::class)->find($id)) {
             throw $this->createNotFoundException('No task found for id '.$id);
@@ -153,34 +109,10 @@ class ApRoleController extends AbstractController
             $originalaccesses->add($apaccess);
         }
 
-        // $editForm = $this->createForm(ApRoleType::class, $apRole);
-        // $editForm->handleRequest($request);
-
-        // if ($editForm->isSubmitted() && $editForm->isValid()) {
-
-            // foreach($originalaccesses as $access)
-            // {
-            //     if (false === $apRole->getApAccesses()->contains($access)){
-
-                    
-            //          $access->setApAccesses(null);
-            //          $entityManager->persist($access);
-            //     }
-            // }  
-        
-
-        //     $this->getDoctrine()->getManager()->flush();
-
-        //     return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
-        // }
-
         return $this->renderForm('ap_role/edit.html.twig', [
             'ap_role' => $apRole,
-            // 'form' => $editForm,
         ]);
     }
-
-
 
 
     /**
@@ -206,6 +138,7 @@ class ApRoleController extends AbstractController
         return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    
     /**
      * @route("/editName/{id}", methods={"GET"})
     */

@@ -92,29 +92,6 @@ class ApAccessController extends AbstractController
 
         return $this->redirectToRoute('ap_access_index', [], Response::HTTP_SEE_OTHER);
     }
-
-        //function for delete the accesses 
-
-    /**
-     * @route("/deleteAccess/{id}", name="ap_role_access_delete")
-     */
-
-    // public function deleteAccess(ApAccess $apAccess, EntityManagerInterface $manager, ApAccessRepository $apAccessRepository) : Response
-    //  {
-    //      $user = $this->getUser();
-
-    //      if($user){
-    //         $apAccess = $apAccessRepository->findOneBy([
-    //             'id' => $apAccess
-    //         ]);
-    //         $manager->remove($apAccess);
-    //         $manager->flush();
-    //     }
-    //     return $this->json(["code" => 200, "message" => "access delete"], 200);
-
-    //  }
-
-    // function for ajax add authorisation
     
     /**
      * @route("/addAuthOnClick/{id}", name="add_auth_on_click")

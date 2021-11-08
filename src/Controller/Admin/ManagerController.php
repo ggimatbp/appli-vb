@@ -27,7 +27,7 @@ class ManagerController extends AbstractController
     public function index(SessionInterface $session, Request $request, ApAccessRepository $apAccessRepository, ApRoleRepository $apRoleRepository, ApTabRepository $apTabRepository, UserRepository $userRepository): Response
     {
     
-
+        
         $ap_accesses = $apAccessRepository->findAll();
         // $ap_roles = $apRoleRepository->findAll();
         $ap_tabs = $apTabRepository->findAll();
@@ -204,8 +204,6 @@ class ManagerController extends AbstractController
         }
         elseif($request->get('ajax1')){
 
-            // $rolefilterSession = $session->set('roleFilter', ['pageRole' => $pageRole, 'limitRole'  => $limitRole, 'ajaxFilterRoleName'=>  $ajaxFilterRoleName, 'ajaxRoleOrder'=>$ajaxRoleOrder]);
-
             $limitRole = $request->get('ajaxRoleLimit');
 
             $pageRole = $request->get('ajaxRolePage');
@@ -229,8 +227,6 @@ class ManagerController extends AbstractController
             $roleFilterSession = $session->set('roleFilter', ['limitRole' => $limitRole, 'pageRole' => $pageRole, 'ajaxFilterRoleName'  => $ajaxFilterRoleName, 'ajaxRoleOrder'=>  $ajaxRoleOrder]);
 
              $ap_roles = $apRoleRepository->findRoleByFilterField($limitRole, $pageRole, $ajaxFilterRoleName, $ajaxRoleOrder);
-            //  $total = $userRepository->getTotalUsersAfterFilters($ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId);
-            //  $users = $userRepository->findUserByfilterField($limit, $page, $ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId, $ajaxOrder, $ajaxFilterNameOrder);
             
            return new JsonResponse([
             'content' => $this->renderView('manager/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'ap_tabs', 'controller_name', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession')),
@@ -250,7 +246,9 @@ class ManagerController extends AbstractController
         return $this->render('manager/index.html.twig', compact('ap_accesses','ap_roles', 'ap_tabs', 'users', 'controller_name', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole'));
     }
 
-    #endregion
+    #endregion index
+
+
     /**
      * @Route("/filter_pagination", name="_filter_pagination")
      */
@@ -293,28 +291,9 @@ class ManagerController extends AbstractController
                 $limit = ($_GET['pageLimitNumber']);  
             }  
         }
-                //On récupére les annonces de la pages        
+                //On récupére les employés en fonction de la pages et de la limite        
                 $users = $userRepository->getPaginatedUsers($page, $limit);
         
         return $this->render('user/index.html.twig', compact('users', 'total', 'limit', 'page'));
     } 
 }
-
-
-// public function index(ApAccessRepository $apAccessRepository, ApRoleRepository $apRoleRepository, ApTabRepository $apTabRepository, UserRepository $userRepository): Response
-// {
-
-//     $ap_accesses = $apAccessRepository->findAll();
-//     $ap_roles = $apRoleRepository->findAll();
-//     $ap_tabs = $apTabRepository->findAll();
-//     $users = $userRepository->findAll();
-//     $controller_name = 'ManagerController';
-
-//     return $this->render('manager/index.html.twig', [
-//         'controller_name' => 'ManagerController',
-//         'ap_accesses' => $apAccessRepository->findAll(), 
-//         'ap_roles' => $apRoleRepository->findAll(),
-//         'ap_tabs' => $apTabRepository->findAll(),
-//         'users' => $userRepository->findAll()
-//     ]);
-// }

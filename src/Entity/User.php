@@ -60,6 +60,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $active;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $theme;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,18 +100,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    // /**
-    //  * @see UserInterface
-    //  */
-    // public function getRoles(): array
-    // {
-    //     $roles = $this->roles;
-    //     // guarantee every user at least has ROLE_USER
-    //     $roles[] = 'ROLE_USER';
-
-    //     return array_unique($roles);
-    // }
-
     /**
      * @see UserInterface
      */
@@ -132,16 +125,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             
         return $this;
         
-    }
-
-    // public function setJsonRoleUser(string $name): self
-    // {
-    //     $this->JsonRole[] = "ROLE_$name";
-        
-    //     return $this;
-    // }
-
-    
+    }  
 
     /**
      * @see PasswordAuthenticatedUserInterface
@@ -222,6 +206,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getTheme(): ?int
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?int $theme): self
+    {
+        $this->theme = $theme;
 
         return $this;
     }

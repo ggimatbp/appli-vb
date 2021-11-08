@@ -65,9 +65,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //     ;
     // }
 
-
-    //$users = $userRepository->findAll();
-
+#region find user by filter
     /**
      * @return User[] Returns an array of User objects
      */
@@ -75,6 +73,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findUserByfilterField($limit, $pages, $ajaxActive = null, $ajaxRoleId = null, $ajaxEmail= null, $ajaxFirstname = null, $ajaxLastname = null, $ajaxId = null, $ajaxOrder = null, $ajaxFilterNameOrder = null)
     {
         $query =  $this->createQueryBuilder('u');
+        #region filter
         if($ajaxActive != null){
             $query->andWhere('u.active = :active')
             ->setParameter('active', $ajaxActive);
@@ -104,8 +103,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $query->andwhere('u.id LIKE :id')
             ->setParameter('id', '%'. $ajaxId .'%');
         }
-
-        //orderby//
+        #endregion filter
+        #region order
         if($ajaxOrder != null){
             if($ajaxOrder == 1)
             {
@@ -145,13 +144,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 }
             }
         }
+        #endregion order
             $query->setFirstResult(($pages * $limit) - $limit)
             ->setMaxresults($limit);
 
         return $query->getQuery()->getResult();
     }
+#endregion find user by filter
 
-
+#region find user in one page
+//On récupére les employés en fonction de la pages et de la limite 
     /**
      * Returns all user per page
      * @return void
@@ -163,11 +165,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ->setMaxresults($limit);
         return $query->getQuery()->getResult();
     }
+#endregion find user in one page
 
-    /**
-     * return number of all Users
-     * 
-     */
+#region total number of user
+
     public function getTotalUsers(){
         $query = $this->createQueryBuilder('u')
         ->select('COUNT(u)');
@@ -175,10 +176,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $query->getQuery()->getSingleScalarResult();
     }
+#endregion total user
 
-    /**
-     * return all users after filter
-     */
+#region total user after filters
 
     public function getTotalUsersAfterFilters($ajaxActive = null, $ajaxRoleId = null, $ajaxEmail= null, $ajaxFirstname = null, $ajaxLastname = null, $ajaxId = null)
     {
@@ -217,11 +217,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
             return $query->getQuery()->getSingleScalarResult();
     }
+#endregion total user after filters
 
-    /**
-     * return all users by role
-     */
-
+#region user by role
     public function getUsersByRole($role)
     {
         $query =  $this->createQueryBuilder('u');
@@ -229,48 +227,5 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ->setParameter('roleid', $role);
         return $query->getQuery()->getResult();
     }
+#endregion user by role
 }
-
-
-
-
-
-
-// public function findUserByfilterField($ajaxActive = null, $ajaxRoleId = null, $ajaxEmail= null, $ajaxFirstname = null, $ajaxLastname = null, $ajaxId = null)
-// {
-//     $query =  $this->createQueryBuilder('u');
-    
-//     if($ajaxActive != null){
-//         $query->andWhere('u.active = :active')
-//         ->setParameter('active', $ajaxActive);
-//     }
-
-//     if($ajaxRoleId != null){
-//     $query->andwhere('u.roleId = :roleid')
-//          ->setParameter('roleid', $ajaxRoleId);
-//     }
-
-//     if($ajaxEmail != null){
-//     $query->andwhere('u.email LIKE :email')
-//     ->setParameter('email', '%'. $ajaxEmail .'%');
-//     }
-
-//     if($ajaxFirstname != null){
-//         $query->andwhere('u.firstname LIKE :firstname')
-//         ->setParameter('firstname', '%'. $ajaxFirstname .'%');
-//         }
-
-//     if($ajaxLastname != null){
-//             $query->andwhere('u.lastname LIKE :lastname')
-//             ->setParameter('lastname', '%'. $ajaxLastname .'%');
-//         }
-
-//     if($ajaxId != null){
-//         $query->andwhere('u.id LIKE :id')
-//         ->setParameter('id', '%'. $ajaxId .'%');
-//     }
-
-//     return $query->getQuery()->getResult()
-//     ;
-// }
-

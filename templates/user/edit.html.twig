@@ -17,16 +17,22 @@
     {{form_row(form.roleId, { 'label': 'Role'})}}
         <div>
         {{ form_end(form) }}
+        <!-- Button trigger modal -->
+            <div>
+                <button type="button" class="btn-user-edit-password btn-bottom btn-edit-role btn btn-ligth" data-bs-toggle="modal" data-bs-target="#password-modificator">
+                Modifier le mot de passe
+                </button>
+            </div>
             <div class="d-flex justify-content-around mb-3">
-                <button class="btn-bottom btn-edit-role btn btn-ligth">{{ button_label|default('enregistrer') }}</button>
+                <button class="btn-bottom btn-edit-role btn btn-ligth">{{ button_label|default('Enregistrer') }}</button>
                     {{ include('user/_delete_form.html.twig') }}
             </div>
-            <!-- Button trigger modal -->
+            {# <!-- Button trigger modal -->
             <div class="d-flex justify-content-around">
                 <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" data-bs-toggle="modal" data-bs-target="#password-modificator">
                 Modifier le mot de passe
                 </button>
-            </div>
+            </div> #}
         </div>
     </div>
 </div>

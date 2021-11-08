@@ -1,6 +1,7 @@
 
+//#region import 
 
-// On import les notifications
+// On importe les notifications
 
 import { vNotify } from './app';
 
@@ -8,13 +9,19 @@ import { vNotify } from './app';
       vNotify();
     })
 
+// On importe les notifications
    
 import $ from 'jquery';
 
+// On importe le dropdown bootstrap de nouveau car conflit avec modal
+
 import 'bootstrap/js/dist/dropdown'
 
+//#endregion import
 
-//// logique ajax pour les employées (pagination et filtre) //////
+//#region Employee
+
+  //#region ajax employee
 
 function ajaxFilter(element, ajaxOrder = null, ajaxFilterNameOrder = null){
 
@@ -75,17 +82,20 @@ function ajaxFilter(element, ajaxOrder = null, ajaxFilterNameOrder = null){
       }
   });
 }
+  //#endregion ajax employee
 
-
-//// logique de filtre pour les employées //////
-
+  //#region order and filter
+    //#region filter
 
 $("#btn-employee-search-filter").unbind("click").click(function(e){
     e.preventDefault();
     ajaxFilter($('#hidden-val-page').val());
 })
 
-//// logique pour effacer les filtres //////
+    //#endregion filter
+
+
+    //#region erease filter
 
 $("#btn-employee-erease-filter").unbind("click").click(function(e){
   e.preventDefault();
@@ -97,35 +107,13 @@ $("#btn-employee-erease-filter").unbind("click").click(function(e){
    $("#employee-tr-order th button").each(function(){
     $(this).removeClass("btn-orderby-highlighted")
   })
+  ajaxFilter($('#hidden-val-page').val());
 })
 
-//// logique pour changer de page /////
-
-paginationOnclick()
-
-function paginationOnclick()
-{
-  $("#paginator-select-id li button" ).each(function() {
-    $(this).unbind("click").click(function(e){
-      ajaxFilter($(this).data("page"))
-  });
-})
-}
+    //#endregion erease filter
 
 
-// Logique de changement de page dans la barre de recherche//
-
- paginationOnSubmit()
-
-function paginationOnSubmit()
-{
-  $('#pageNumber-input-search').on('keypress',function(e) {
-    if(e.which == 13) {
-      ajaxFilter($(this).val())
-  }})
-}
-
-// order ASC DESC //
+    //#region order
 
 $("#employee-tr-order th button").each(function() {
   
@@ -145,21 +133,10 @@ $("#employee-tr-order th button").each(function() {
   })
 })
 
+    //#endregion order
 
-// ///Logique de limite du nombre de ligne du tableau de employee /// 
 
-employeeLimitModification()
-
-function employeeLimitModification()
-{
-  $("#employeeSelectLimitLine").change(function(e){
-    e.preventDefault();
-      console.log($("#employeeSelectLimitLine").val() + $(this).data("page") +  $("#hidden-input-order-and-name").data('ajaxRoleOrder'))
-    
-      ajaxFilter($(this).data("page"))
-  });
-}
-
+    //#region color btn order
 //logique pour mettre de la couleur au btn ASC DESC en fonction de si ils sont ou non le bouton dont les datas sont enregistré en session via un input hidden
 
 $("#employee-tr-order th button").each(function() {
@@ -173,13 +150,69 @@ $("#employee-tr-order th button").each(function() {
   }
 })
 
+    //#endregion color btn order
 
-//
-//ROLE//
-//
-// logique pour les filtres des roles//
-//
-//
+  //#endregion order and filter
+
+
+
+  //#region pagination and limit
+    //#region change page
+
+paginationOnclick()
+
+function paginationOnclick()
+{
+  $("#paginator-select-id li button" ).each(function() {
+    $(this).unbind("click").click(function(e){
+      ajaxFilter($(this).data("page"))
+  });
+})
+}
+
+    //#endregion change page
+
+
+    //#region change page with search bar
+
+ paginationOnSubmit()
+
+function paginationOnSubmit()
+{
+  $('#pageNumber-input-search').on('keypress',function(e) {
+    if(e.which == 13) {
+      ajaxFilter($(this).val())
+  }})
+}
+
+    //#endregion change page with search bar
+
+
+    //#region limit array line number
+
+employeeLimitModification()
+
+function employeeLimitModification()
+{
+  $("#employeeSelectLimitLine").change(function(e){
+    e.preventDefault();
+      // console.log($("#employeeSelectLimitLine").val() + $(this).data("page") +  $("#hidden-input-order-and-name").data('ajaxRoleOrder'))
+      ajaxFilter($(this).data("page"))
+  });
+}
+
+    //#endregion limit array line number
+
+  //#endregion pagination and limit
+
+
+//#endregion employee
+
+
+//#region Role
+
+
+  //#region Ajax
 
 function ajaxRoleFilter(element, ajaxRoleOrder = null, ajaxRoleOrderName = null){
 
@@ -212,9 +245,9 @@ if(ajaxRoleOrder == null)
         $("#pagination-role-filtered").empty();
         $("#pagination-role-filtered").append(response.content2)
         paginationRoleOnclick()
-        roleLimitModification()
         paginationRoleOnSubmit()
         $("#roleSelectLimitLine").val($("#hidden-role-input-order-and-name").data('ajaxLimitRole'));
+        roleLimitModification()
       },
       error: function ()
       {
@@ -223,14 +256,22 @@ if(ajaxRoleOrder == null)
   });
 }
 
-//// logique de filtre pour les roles //////
+  //#endregion Ajax
+
+
+  //#region order and filter
+
+    //#region filter
 
 $("#btn-role-search-filter").unbind("click").click(function(e){
   e.preventDefault();
   ajaxRoleFilter($('#hidden-val-pageRole').val());
 })
 
-//// Logique pour effacer les filtres des roles ////
+    //#endregion filter
+
+
+    //#region erease filter
 
 $("#btn-role-erease-filter").unbind("click").click(function(e){
   e.preventDefault();
@@ -239,9 +280,13 @@ $("#btn-role-erease-filter").unbind("click").click(function(e){
    $("#role-tr-order th button").each(function(){
     $(this).removeClass("btn-orderby-highlighted")
   })
+  ajaxRoleFilter($('#hidden-val-pageRole').val());
 })
 
-///// Logique pour les role order ////
+  //#endregion erease filter
+
+
+  //#region order
 
 $("#role-tr-order th button").each(function() {
   $(this).unbind("click").click(function(e)
@@ -263,8 +308,27 @@ $("#role-tr-order th button").each(function() {
 $("#hidden-role-input-order-and-name").data('ajaxorder', $(this).data("order"));
 $("#hidden-role-input-order-and-name").data('ajaxfilternameorder', $(this).data("name"));
 
-/// logique pagination pour les role on click///
+    //#endregion order
 
+
+    //#region color btn order
+//logique pour mettre de la couleur au btn ASC DESC en fonction de si ils sont ou non le bouton dont les datas sont enregistré en session via un input hidden
+
+$("#role-tr-order th button").each(function() {
+  if($("#hidden-role-input-order-and-name").data('ajaxorderrole') == $(this).data('orderrole'))
+  {
+    $(this).addClass("btn-orderby-highlighted")
+  }
+})
+
+    //#endregion color btn order
+
+  //#endregion order and filter
+
+
+  //#region pagination and limit
+
+    //#region change page on click
 paginationRoleOnclick()
 
 function paginationRoleOnclick()
@@ -276,7 +340,10 @@ function paginationRoleOnclick()
 })
 }
 
-/// Barre de recherche pour la pagination du role///
+    //#endregion change page on click
+
+
+    //#region change page with search bar
 
 paginationRoleOnSubmit()
 
@@ -288,7 +355,10 @@ function paginationRoleOnSubmit()
   }})
 }
 
-///Logique de limite du nombre de ligne du tableau de Role /// 
+    //#endregion change page with search bar
+
+
+    //#region limit array line number
 
 roleLimitModification()
 
@@ -298,17 +368,11 @@ function roleLimitModification()
     e.preventDefault();
       $("#hidden-role-input-order-and-name").data('ajaxlimitrole', $("#roleSelectLimitLine").val());
       ajaxRoleFilter($(this).data("pagerole"), $("#hidden-role-input-order-and-name").data('ajaxRoleOrder')) 
- //     console.log( $("#hidden-role-input-order-and-name").data('ajaxlimitrole'))
   });
 }
 
+    //#endregion limit array line number
 
-//logique pour mettre de la couleur au btn ASC DESC en fonction de si ils sont ou non le bouton dont les datas sont enregistré en session via un input hidden
+  //#endregion pagination and limit
 
-
-$("#role-tr-order th button").each(function() {
-  if($("#hidden-role-input-order-and-name").data('ajaxorderrole') == $(this).data('orderrole'))
-  {
-    $(this).addClass("btn-orderby-highlighted")
-  }
-})
+//#endregion Role
