@@ -5,6 +5,12 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
+
+        {# {% if app.user.theme == 1 %}
+            {{ encore_entry_link_tags('variableDark') }}
+        {% else %}
+            {{ encore_entry_link_tags('variable') }}
+        {% endif %} #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -13,7 +19,7 @@
         {% endblock %}
     </head>
     <body>
-    
+
 
         {# {% if app.user %} #}
         {# {% if app.user.active == true %}

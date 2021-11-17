@@ -11,12 +11,8 @@ use App\Form\ApRoleType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ApRoleRepository;
-use App\Repository\ApAccessRepository;
 use App\Repository\ApTabRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\Persistence\ObjectManager;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApRoleController extends AbstractController
 {
 
-    const BASIC_ROLE = 43;
+    const BASIC_ROLE = 70;
 
     /**
      * @Route("/", name="ap_role_index", methods={"GET"})
@@ -44,57 +40,65 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/new", name="ap_role_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ApTabRepository $apTabRepository): Response
+    public function new(Request $request, ApTabRepository $apTabRepository, ApRoleRepository $apRoleRepository): Response
     {
         $apRole = new ApRole();
 
         $form = $this->createForm(ApRoleType::class, $apRole);
         $form->handleRequest($request);
-        // if ($this->isCsrfTokenValid('delete'.$apRole->getApAccesses(), $request->request->get('_token'))) {
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->remove($apRole->getApAccesses());
-        //     $entityManager->flush();
-        // }
+        $allRoles = $apRoleRepository->findAll();
+        $newName = $apRole->getName();
+        $sameName = 0;
+        foreach($allRoles as $oneRole){
+            $oneRoleName = $oneRole->getName();    
+            if($newName == $oneRoleName)
+            {
+                $sameName += 1;
+            }
+        }
+        if($sameName == 0)
+        {
+            if ($form->isSubmitted() && $form->isValid()) {
 
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($apRole);
+                $allTabs = $apTabRepository->findAllId(); 
+                    foreach($allTabs as $tab){
+                        $apAccess = new ApAccess;
+                        $apAccess->setTab($tab);
+                        $apAccess->setRole($apRole);
+                        $apAccess->setView(0);
+                        $apAccess->setAdd(0);
+                        $apAccess->setEdit(0);
+                        $apAccess->setDelete(0);
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($apAccess);
+                    };
 
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // foreach($apTabRepository as );
-            //if submit we create all access 
-            
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($apRole);
-            $bob = $apTabRepository->findAllId(); 
-            //    var_dump($bob);
-                foreach($bob as $tab){
-                    $apAccess = new ApAccess;
-                    $apAccess->setTab($tab);
-                    $apAccess->setRole($apRole);
-                    $apAccess->setView(0);
-                    $apAccess->setAdd(0);
-                    $apAccess->setEdit(0);
-                    $apAccess->setDelete(0);
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($apAccess);
-                };
-
-            $entityManager->flush();
-                $id = $apRole->getId();
-            // return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
-           // return $this->redirect('http://symfony.com/doc');
-           return $this->redirect('/ap/role/' . $id . '/edit');
+                    $entityManager->flush();
+                    $id = $apRole->getId();
+            return $this->redirect('/ap/role/' . $id . '/edit');
+            }
+        }elseif($sameName >= 1)
+        {
+            $errorMsg = "Le nom choisi est déjà emprunté";
+            return $this->renderForm('ap_role/new.html.twig', [
+                'same_name' => $sameName,
+                'error_msg' => $errorMsg,
+                'ap_role' => $apRole,
+                'form' => $form,
+                'tabs' => $apTabRepository->findAll(),
+            ]);
         }
 
-        return $this->renderForm('ap_role/new.html.twig', [
-            'ap_role' => $apRole,
-            'form' => $form,
-            'tabs' => $apTabRepository->findAll(),
-        ]);
+            return $this->renderForm('ap_role/new.html.twig', [
+                'same_name' => $sameName,
+                'ap_role' => $apRole,
+                'form' => $form,
+                'tabs' => $apTabRepository->findAll(),
+            ]);
+
     }
-
-
 
 
     /**
@@ -107,40 +111,12 @@ class ApRoleController extends AbstractController
         ]);
     }
 
-    // /**
-    //  * @Route("/{id}/edit", name="ap_role_edit", methods={"GET","POST"})
-    //  */
-    // public function edit(Request $request, ApRole $apRole): Response
-    // {
-        
-    //     $editForm = $this->createForm(ApRoleType::class, $apRole);
-    //     $editForm->handleRequest($request);
-
-    //     if ($editForm->isSubmitted() && $editForm->isValid()) {
-    //         $this->getDoctrine()->getManager()->flush();
-
-    //         return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->renderForm('ap_role/edit.html.twig', [
-    //         'ap_role' => $apRole,
-    //         'form' => $editForm,
-    //     ]);
-    // }
-
-
-
-
 
     /**
      * @Route("/{id}/edit", name="ap_role_edit", methods={"GET","POST"})
      */
     public function edit($id, ApRole $apRole, EntityManagerInterface $entityManager): Response
     {
-
-        //  if(empty($apRole)){
-        //      throw $this->createNotFoundException('Pas de role trouvé pour' .$id);
-        //  }
 
          if (null === $apRole = $entityManager->getRepository(ApRole::class)->find($id)) {
             throw $this->createNotFoundException('No task found for id '.$id);
@@ -153,34 +129,10 @@ class ApRoleController extends AbstractController
             $originalaccesses->add($apaccess);
         }
 
-        // $editForm = $this->createForm(ApRoleType::class, $apRole);
-        // $editForm->handleRequest($request);
-
-        // if ($editForm->isSubmitted() && $editForm->isValid()) {
-
-            // foreach($originalaccesses as $access)
-            // {
-            //     if (false === $apRole->getApAccesses()->contains($access)){
-
-                    
-            //          $access->setApAccesses(null);
-            //          $entityManager->persist($access);
-            //     }
-            // }  
-        
-
-        //     $this->getDoctrine()->getManager()->flush();
-
-        //     return $this->redirectToRoute('ap_role_index', [], Response::HTTP_SEE_OTHER);
-        // }
-
         return $this->renderForm('ap_role/edit.html.twig', [
             'ap_role' => $apRole,
-            // 'form' => $editForm,
         ]);
     }
-
-
 
 
     /**
@@ -206,6 +158,7 @@ class ApRoleController extends AbstractController
         return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    
     /**
      * @route("/editName/{id}", methods={"GET"})
     */

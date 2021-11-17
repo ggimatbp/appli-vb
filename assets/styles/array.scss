@@ -1,13 +1,17 @@
+
 /*#region filter arrow ASC DESC */
 
-.btn-orderby-highlighted{
-color: $primaryColor;
 
+.btn-orderby-highlighted{
+color: $btnPrimaryColor;
+ zoom: 150%;
+// border: 10px solid $btnPrimaryColor;
 }
 
 .btn-orderby-overlook{
     background-color: transparent;
-    border: none;
+    // border: 1px solid transparent;
+    border:none;
     transition: transform .2s;
 }
 

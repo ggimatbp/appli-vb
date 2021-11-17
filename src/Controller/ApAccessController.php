@@ -92,29 +92,6 @@ class ApAccessController extends AbstractController
 
         return $this->redirectToRoute('ap_access_index', [], Response::HTTP_SEE_OTHER);
     }
-
-        //function for delete the accesses 
-
-    /**
-     * @route("/deleteAccess/{id}", name="ap_role_access_delete")
-     */
-
-    // public function deleteAccess(ApAccess $apAccess, EntityManagerInterface $manager, ApAccessRepository $apAccessRepository) : Response
-    //  {
-    //      $user = $this->getUser();
-
-    //      if($user){
-    //         $apAccess = $apAccessRepository->findOneBy([
-    //             'id' => $apAccess
-    //         ]);
-    //         $manager->remove($apAccess);
-    //         $manager->flush();
-    //     }
-    //     return $this->json(["code" => 200, "message" => "access delete"], 200);
-
-    //  }
-
-    // function for ajax add authorisation
     
     /**
      * @route("/addAuthOnClick/{id}", name="add_auth_on_click")
@@ -122,7 +99,6 @@ class ApAccessController extends AbstractController
     
     public function addAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        //var_dump($apAccess->getAdd());
         if($apAccess->getAdd() == 1)
         {
             $apAccess->setAdd(0);
@@ -144,7 +120,6 @@ class ApAccessController extends AbstractController
     
     public function DeleteAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        //var_dump($apAccess->getAdd());
         if($apAccess->getDelete() == 1)
         {
             $apAccess->setDelete(0);
@@ -167,7 +142,6 @@ class ApAccessController extends AbstractController
 
     public function editAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        //var_dump($apAccess->getAdd());
         if($apAccess->getEdit() == 1)
         {
             $apAccess->setEdit(0);
@@ -184,13 +158,12 @@ class ApAccessController extends AbstractController
           200);
     }
 
-        /**
+    /**
      * @route("/viewAuthOnClick/{id}", name="view_auth_on_click")
     */
 
     public function viewAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        //var_dump($apAccess->getAdd());
         if($apAccess->getView() == 1)
         {
             $apAccess->setView(0);

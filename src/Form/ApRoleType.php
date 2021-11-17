@@ -16,24 +16,16 @@ class ApRoleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // $user = $options['user'];
+
         $builder
-            ->add('name')
-            ;
+            ->add('name');
 
-
-        // $builder
-        //     ->add('apaccesses', CollectionType::class, [
-        //         'entry_type' => ApAccessType::class,
-        //         'entry_options' => ['label' => false],              
-        //     ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => ApRole::class,
-            // 'user' => null,
         ]);
     }
 }

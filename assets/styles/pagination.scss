@@ -8,9 +8,9 @@ color: red
 
 
 .page-link{
-    background-color: $primaryColor;
-    border-color: $primaryColor;
-    color: $primaryColorText;
+    background-color: $btnPrimaryColor;
+    border-color: $btnPrimaryColor;
+    color: $btnPrimaryColorText;
 }
 
 .page-item.active .page-link{
@@ -19,11 +19,15 @@ color: red
 }
 
 .page-link:hover{
-    color: $primaryColorHoverText;
-    background-color:$primaryColorHover;
-    border-color: $primaryColorHover;
+    color: $btnPrimaryColor;
+    background-color:$btnPrimaryColorText;
+    border-color: $btnPrimaryColorText;
 }
 
 .pagination-modificator{
     margin:0;
+}
+
+.pagination-form-search{
+    border-radius: 0;
 }

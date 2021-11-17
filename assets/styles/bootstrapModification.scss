@@ -1,13 +1,15 @@
 /** Button **/
 .btn{
     font-weight:$fontWeight;
-    background-color: $primaryColor;
-    color: $primaryColorText;
+    background-color: $btnPrimaryColor;
+    color: $btnPrimaryColorText;
+    border:2px solid transparent;
 }
 
 .btn:hover{
-    color: $primaryColorHoverText;
-    background-color: $primaryColorHover;
+    color: $btnPrimaryColor;
+    background-color: $btnPrimaryColorText;
+    border: 2px solid $btnPrimaryColor;
 }
 
 /** Barre de naviguation **/
@@ -17,6 +19,10 @@
     margin-bottom: 0;
     list-style: none;
     flex-wrap: unset;
+}
+
+.nav-link{
+    color:black
 }
 
 .nav-link:hover{

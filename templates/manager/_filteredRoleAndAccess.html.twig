@@ -1,9 +1,11 @@
 {% for ap_role in ap_roles %}
         <tr>
+
             <td class="onglet-fontsize-role-table">{{ ap_role.name }}</td>
-            <td>
-                <a href="{{ path('ap_role_edit', {'id': ap_role.id}) }}" class="btn-bottom btn btn-ligth">modifier</a>
+            <td class="text-end" >
+                <a href="{{ path('ap_role_edit', {'id': ap_role.id}) }}" class="btn-bottom btn btn-ligth">Modifier</a>
             </td>
+
         </tr>
     {% else %}
         <tr>

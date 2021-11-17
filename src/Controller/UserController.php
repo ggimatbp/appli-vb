@@ -48,6 +48,7 @@ class UserController extends AbstractController
                      $form->get('plainPassword')->getData()
                  )
              );
+            $user->setTheme(0);
             $roleName = $user->getRoleId()->name;
             $user->setRoles($roleName);
             $entityManager = $this->getDoctrine()->getManager();
@@ -82,17 +83,6 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // if ($form->get('plainPassword')->getData()){
-            //    // to do sécurity edit 
-            //     $user->setPassword(
-            //     $passwordEncoder->encodePassword(
-            //         $user,
-            //         $form->get('plainPassword')->getData()
-            //     )
-            // );
-            // } else {
-            //     $user->getPassword();
-            //     }
             $roleName = $user->getRoleId()->name;
             $user->setRoles($roleName);
             if($user->getActive() == false){
@@ -109,7 +99,8 @@ class UserController extends AbstractController
         ]);
     }
 
-///////modifier mon mdp en ajax//////////
+//modifier mon mdp en ajax
+
     /**
      * @route("/editPasswordOnClick/{id}", name="edit_name_onclick")
      */
@@ -134,7 +125,8 @@ class UserController extends AbstractController
         }
     }
     
-//////// générer mon mot de passe en ajax ////////
+//générer mon mot de passe en ajax
+
     /**
      * @Route("/password/generator", name="user_password_generator")
      */

@@ -1,7 +1,11 @@
 {{ form_start(form) }}
-
 <div class="d-flex div-edit-role-name p-5">
- {{ form_widget(form.name, {'attr': {'class': 'new-role-name'}}) }}
+{{ form_widget(form.name, {'attr': {'class': 'new-role-name'}}) }}
  <input class='btn-edit-role btn btn-ligth' type="submit" value="Soumettre le nom">
+</div>
+<div class="d-flex div-edit-role-name">
+    {% if error_msg is defined %}
+        <p class="alert alert-danger">{{error_msg}}</p>
+    {% endif %}
 </div>
 {{ form_end(form) }}
