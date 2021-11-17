@@ -1,13 +1,18 @@
 
 
 				{% if app.user.RoleId is defined %}
-						{# {{ app.user.firstname }}
-						{{ app.user.lastname }} #}
+<pre>
+  {{ dump(app.request.attributes) }}
+</pre>
         <div class="d-flex">
 					{% for apAccess in app.user.RoleId.apAccesses %}
 						{% if apAccess.view == true %}
 							{% if apAccess.tab.apTab is null %}
-									<a class="header1 nav-link" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>
+                 {% if app.request.attributes.get('_route') == apAccess.tab.path %} 
+                    <a class="header1 nav-link active" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>
+                  {% else %}
+                    <a class="headerNotActive nav-link active" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>
+                  {% endif %}
 							{% endif %}
 						{% endif %}
 					{% endfor %}

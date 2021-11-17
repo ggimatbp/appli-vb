@@ -11,12 +11,8 @@ use App\Form\ApRoleType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ApRoleRepository;
-use App\Repository\ApAccessRepository;
 use App\Repository\ApTabRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\Persistence\ObjectManager;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApRoleController extends AbstractController
 {
 
-    const BASIC_ROLE = 43;
+    const BASIC_ROLE = 70;
 
     /**
      * @Route("/", name="ap_role_index", methods={"GET"})
@@ -44,40 +40,64 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/new", name="ap_role_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ApTabRepository $apTabRepository): Response
+    public function new(Request $request, ApTabRepository $apTabRepository, ApRoleRepository $apRoleRepository): Response
     {
         $apRole = new ApRole();
 
         $form = $this->createForm(ApRoleType::class, $apRole);
         $form->handleRequest($request);
+        $allRoles = $apRoleRepository->findAll();
+        $newName = $apRole->getName();
+        $sameName = 0;
+        foreach($allRoles as $oneRole){
+            $oneRoleName = $oneRole->getName();    
+            if($newName == $oneRoleName)
+            {
+                $sameName += 1;
+            }
+        }
+        if($sameName == 0)
+        {
+            if ($form->isSubmitted() && $form->isValid()) {
 
-        if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($apRole);
+                $allTabs = $apTabRepository->findAllId(); 
+                    foreach($allTabs as $tab){
+                        $apAccess = new ApAccess;
+                        $apAccess->setTab($tab);
+                        $apAccess->setRole($apRole);
+                        $apAccess->setView(0);
+                        $apAccess->setAdd(0);
+                        $apAccess->setEdit(0);
+                        $apAccess->setDelete(0);
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($apAccess);
+                    };
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($apRole);
-            $allTabs = $apTabRepository->findAllId(); 
-                foreach($allTabs as $tab){
-                    $apAccess = new ApAccess;
-                    $apAccess->setTab($tab);
-                    $apAccess->setRole($apRole);
-                    $apAccess->setView(0);
-                    $apAccess->setAdd(0);
-                    $apAccess->setEdit(0);
-                    $apAccess->setDelete(0);
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($apAccess);
-                };
-
-            $entityManager->flush();
-                $id = $apRole->getId();
-           return $this->redirect('/ap/role/' . $id . '/edit');
+                    $entityManager->flush();
+                    $id = $apRole->getId();
+            return $this->redirect('/ap/role/' . $id . '/edit');
+            }
+        }elseif($sameName >= 1)
+        {
+            $errorMsg = "Le nom choisi est déjà emprunté";
+            return $this->renderForm('ap_role/new.html.twig', [
+                'same_name' => $sameName,
+                'error_msg' => $errorMsg,
+                'ap_role' => $apRole,
+                'form' => $form,
+                'tabs' => $apTabRepository->findAll(),
+            ]);
         }
 
-        return $this->renderForm('ap_role/new.html.twig', [
-            'ap_role' => $apRole,
-            'form' => $form,
-            'tabs' => $apTabRepository->findAll(),
-        ]);
+            return $this->renderForm('ap_role/new.html.twig', [
+                'same_name' => $sameName,
+                'ap_role' => $apRole,
+                'form' => $form,
+                'tabs' => $apTabRepository->findAll(),
+            ]);
+
     }
 
 

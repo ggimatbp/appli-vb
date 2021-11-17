@@ -13,56 +13,40 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+
+
 /**
  * @Route("/manager", name="manager_")
  */
 
-
 class ManagerController extends AbstractController
 {	
-    #region function index
+#region function index
     /**
      * @Route("/", name="index")
      */
     public function index(SessionInterface $session, Request $request, ApAccessRepository $apAccessRepository, ApRoleRepository $apRoleRepository, ApTabRepository $apTabRepository, UserRepository $userRepository): Response
     {
-    
-        
+    #region Session and pagination
+        #region declare
         $ap_accesses = $apAccessRepository->findAll();
-        // $ap_roles = $apRoleRepository->findAll();
-        $ap_tabs = $apTabRepository->findAll();
-        
-        $controller_name = 'ManagerController';
-        
-        //On récupére le nombre total d'annonces
-       // $total = $userRepository->getTotalUsers();
 
-        //On définit le nombre d'élément par page
-
+        //declare element's number by page
          $limit = $request->query->get("limit", 2);
-
-        //On récupère le numéro de page
-        // $page = (int)$request->query->get("page", 1);
 
         $limitRole = $request->query->get("limitRole", 2);
 
+        //get page number
         $pageRole = (int)$request->query->get("pageRole", 2);
-
-
-        
+    
         // Session for employee 
-
-        $filterLimitSession = $session->get("filterLimit", []);
         $filterSession = $session->get("filter", []);
 
 
         //Session for Role 
-
         $roleFilterSession = $session->get("roleFilter", []);
 
-
-        // Déclarer et ou reprendre les données de la session pour employee
-
+        #region employee: declare or get data session
         if  (isset($filterSession['limit'])) {
              $limit  = $filterSession['limit'];
         } 
@@ -129,9 +113,9 @@ class ManagerController extends AbstractController
         }else{
             $ajaxFilterNameOrder = null;
         }
+        #endregion employee: declare or get data session
 
-        // Déclarer et ou reprendre les données de la session pour role //
-
+        #region Role: declare or get data session
         if  (isset($roleFilterSession['limitRole'])) {
 
             $limitRole = $roleFilterSession['limitRole'];
@@ -155,11 +139,12 @@ class ManagerController extends AbstractController
          }else{
             $pageRole = 1;
          }
+        #endregion Role: declare or get data session
+    #endregion session and pagination  
 
-          
-        //On verifie si on a une requète ajax pour employee
+    #region Employee if Ajax
         if($request->get('ajax')){
-            // $ap_roles = $apRoleRepository->findRoleByFilterField($limitRole, $pageRole);
+            //get all ajax value from apmanager.js and declare them
             $ajaxOrder = $request->get('ajaxOrder');
 
             $ajaxFilterNameOrder = $request->get('ajaxFilterNameOrder');
@@ -182,6 +167,7 @@ class ManagerController extends AbstractController
 
             $page = $request->get('ajaxPage');
 
+            //create a new total related to ajax new filter info for pagination
             $total = $userRepository->getTotalUsersAfterFilters($ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId);
 
             if($page > ceil($total/$limit))
@@ -193,17 +179,23 @@ class ManagerController extends AbstractController
                 $page = 1;
             }
 
+            //get user's results in database related to ajax filter
             $users = $userRepository->findUserByfilterField($limit, $page, $ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId, $ajaxOrder, $ajaxFilterNameOrder);
 
+            //Put all ajax filter in Session
             $filterSession = $session->set('filter', ['limit' => $limit, 'page' => $page, 'ajaxActive'  => $ajaxActive, 'ajaxRoleId'=>  $ajaxRoleId, 'ajaxRoleName'=>$ajaxRoleName, 'ajaxEmail' => $ajaxEmail, 'ajaxFirstname' => $ajaxFirstname, 'ajaxLastname' => $ajaxLastname, 'ajaxId' => $ajaxId, 'ajaxOrder' => $ajaxOrder, 'ajaxFilterNameOrder' => $ajaxFilterNameOrder]);
 
+            //Return only new result of employee and pagination
             return new JsonResponse([
-                'content' => $this->renderView('manager/_filtredEmployee.html.twig', compact('ap_accesses', 'ap_tabs', 'users', 'controller_name', 'total', 'limit', 'page', 'session', 'filterSession')),
-                'content2' =>$this->renderView('manager/_paginationEmployee.html.twig', compact('ap_accesses', 'ap_tabs', 'users', 'controller_name', 'total', 'limit', 'page', 'filterSession')),
+                'content' => $this->renderView('manager/_filtredEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'session', 'filterSession')),
+                'content2' =>$this->renderView('manager/_paginationEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'filterSession')),
             ]);
         }
-        elseif($request->get('ajax1')){
+        #endregion Employee if Ajax
 
+        #region Role if Ajax1
+        elseif($request->get('ajax1')){
+            //get all ajax value from apmanager.js and declare them
             $limitRole = $request->get('ajaxRoleLimit');
 
             $pageRole = $request->get('ajaxRolePage');
@@ -212,7 +204,7 @@ class ManagerController extends AbstractController
             
             $ajaxRoleOrder = $request->get('ajaxRoleOrder');
 
-            //total des roles apres filtre
+            //create a new total related to ajax new filter info for pagination
             $totalRole = $apRoleRepository->getTotalRoleAfterFilter($ajaxFilterRoleName, $ajaxRoleOrder);
 
             if($pageRole > ceil($totalRole/$limitRole))
@@ -224,16 +216,23 @@ class ManagerController extends AbstractController
                 $pageRole = 1;
             }
 
+            //Put all ajax filter in Session
             $roleFilterSession = $session->set('roleFilter', ['limitRole' => $limitRole, 'pageRole' => $pageRole, 'ajaxFilterRoleName'  => $ajaxFilterRoleName, 'ajaxRoleOrder'=>  $ajaxRoleOrder]);
 
-             $ap_roles = $apRoleRepository->findRoleByFilterField($limitRole, $pageRole, $ajaxFilterRoleName, $ajaxRoleOrder);
-            
-           return new JsonResponse([
-            'content' => $this->renderView('manager/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'ap_tabs', 'controller_name', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession')),
-            'content2' => $this->renderView('manager/_paginationRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'ap_tabs', 'controller_name', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession'))
-        ]);
+            //get role's results in database related to ajax filter
+            $ap_roles = $apRoleRepository->findRoleByFilterField($limitRole, $pageRole, $ajaxFilterRoleName, $ajaxRoleOrder);
+
+            //Return only new result of role and pagination 
+            return new JsonResponse([
+            'content' => $this->renderView('manager/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession')),
+            'content2' => $this->renderView('manager/_paginationRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession'))
+            ]);
         }
+        #endregion Role if Ajax
+
+        #region If no Ajax
         else{
+            //get all role and user or related to the one save in session
             $totalRole = $apRoleRepository->getTotalRoleAfterFilter($ajaxFilterRoleName, $ajaxRoleOrder);
             $ap_roles = $apRoleRepository->findRoleByFilterField($limitRole, $pageRole, $ajaxFilterRoleName, $ajaxRoleOrder);
             $total = $userRepository->getTotalUsersAfterFilters($ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId);
@@ -243,57 +242,10 @@ class ManagerController extends AbstractController
         //For the dropdown role name filter
         $allRole = $apRoleRepository->findAll();
 
-        return $this->render('manager/index.html.twig', compact('ap_accesses','ap_roles', 'ap_tabs', 'users', 'controller_name', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole'));
+        return $this->render('manager/index.html.twig', compact('ap_accesses','ap_roles', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole'));
+        #endregion If no Ajax
     }
 
     #endregion index
 
-
-    /**
-     * @Route("/filter_pagination", name="_filter_pagination")
-     */
-
-     public function filters_pagination(UserRepository $userRepository, Request $request)
-    { 
-
-        //On récupére le nombre total d'annonces
-        $total = $userRepository->getTotalUsers();
-
-
-        //On définit le nombre d'élément par page
-        $limit = $request->query->get("limit", 2);;
-
-        //On récupère le numéro de page
-        $page = (int)$request->query->get("page", 1);
-        
-
-        if($_POST)
-        {
-            
-            if(!empty($_POST['pageNumber']))
-            {
-                $page = $_POST['pageNumber'];
-            }
-            if($_POST['pageNumber'] > ceil($total/$limit))
-            {
-                $page = ceil($total/$limit); 
-            }
-            if($_POST['pageNumber'] < $total/$limit)
-            {
-                $page = 1;
-            }
-        }
-
-        if($_GET)
-        {     
-            if(!empty($_GET['pageLimitNumber']))  
-            {
-                $limit = ($_GET['pageLimitNumber']);  
-            }  
-        }
-                //On récupére les employés en fonction de la pages et de la limite        
-                $users = $userRepository->getPaginatedUsers($page, $limit);
-        
-        return $this->render('user/index.html.twig', compact('users', 'total', 'limit', 'page'));
-    } 
 }

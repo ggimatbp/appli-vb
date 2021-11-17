@@ -5,7 +5,7 @@
  * (and its CSS file) in your base layout (base.html.twig).
  */
 
-
+//#region import
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
 
@@ -24,8 +24,12 @@ import './bootstrap';
 require('bootstrap');
 
 
-///// Ajout du système de notification directement dans app car permet de faire un export //
+//#endregion import
 
+
+//#region notification 
+
+// Ajout du système de notification directement dans app car permet de faire un export //
 export function vNotify() {
 
     var positionOption = {
@@ -264,3 +268,5 @@ export function vNotify() {
   // vNotify().warning({text:'This is a warning notification.', title:'Warning Notification.'});
   // vNotify().error({text:'This is an error notification.', title:'Error Notification.'});
   // vNotify().notify({text:'This is a notify notification.', title:'Notify Notification.'});
+
+  //#endregion notification 

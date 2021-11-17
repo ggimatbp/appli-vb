@@ -5,6 +5,12 @@
     border-bottom:0.2rem solid $headerColor;
 }
 
+.headerNotActive{
+    width:100%;
+    color:  $headerColor;
+    font-weight: $fontWeight;
+}
+
 .header2{
     width:100%;
 }

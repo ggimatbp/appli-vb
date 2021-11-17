@@ -99,7 +99,6 @@ class ApAccessController extends AbstractController
     
     public function addAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        //var_dump($apAccess->getAdd());
         if($apAccess->getAdd() == 1)
         {
             $apAccess->setAdd(0);
@@ -121,7 +120,6 @@ class ApAccessController extends AbstractController
     
     public function DeleteAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        //var_dump($apAccess->getAdd());
         if($apAccess->getDelete() == 1)
         {
             $apAccess->setDelete(0);
@@ -144,7 +142,6 @@ class ApAccessController extends AbstractController
 
     public function editAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        //var_dump($apAccess->getAdd());
         if($apAccess->getEdit() == 1)
         {
             $apAccess->setEdit(0);
@@ -161,13 +158,12 @@ class ApAccessController extends AbstractController
           200);
     }
 
-        /**
+    /**
      * @route("/viewAuthOnClick/{id}", name="view_auth_on_click")
     */
 
     public function viewAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        //var_dump($apAccess->getAdd());
         if($apAccess->getView() == 1)
         {
             $apAccess->setView(0);

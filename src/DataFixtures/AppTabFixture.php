@@ -11,13 +11,24 @@ class AppTabFixture extends Fixture
     public const TABLES = [
         [
             'name' => 'Management',
-            'path' => 'manager',
+            'path' => 'manager_index',
             'children' => [
                 ['name' => 'Employé',
                 'path' => 'manager/employee.html.twig'],
                 ['name' => 'Role',
                 'path' => 'manager/roleAndAccess.html.twig'],
             ]
+        ],
+        [
+            'name' => 'Catalogue',
+            'path' => 'catalog_index',
+            'children' => [
+                ['name' => 'Batteries-Prod',
+                'path' => 'catalog/batterieprod.html.twig'],
+                ['name' => 'Velobatterie',
+                'path' => 'catalog/velobatterie.html.twig'],
+            ],
+
         ],
         [
             'name' => 'Prise en Charge',

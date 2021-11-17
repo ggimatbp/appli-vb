@@ -1,4 +1,4 @@
-
+//#region import
 // On import le jquery
 
 import $ from 'jquery';
@@ -14,6 +14,10 @@ import { vNotify } from './app';
 $(document).ready(function () {
   vNotify();
 })
+
+//#endregion import
+
+//#region ajax add/remove auth access
 
 const { default: axios } = require("axios");
 
@@ -44,8 +48,9 @@ function onClickAddAuth(e) {
   })
 }
 
-// logic pour le changement de nom en ajax
-// url:'/ap/role/editNameOnClick/' + roleId,
+//#endregion ajax add/remove auth access
+
+//#region ajax modify role name 
 
 $('#role-name-btn').unbind('click').click(function (e) {
   let roleName = $('#role-name').val();
@@ -69,10 +74,10 @@ $('#role-name-btn').unbind('click').click(function (e) {
     }
 });
 })
+//#endregion ajax modify name
 
-// logique pour le changement de mot de passe 
-
-
+//#region password
+  //#region modify password
 $('#passwor-modificator-btn').unbind('click').click(function (e) {
   let userPassword = $('#user-password').val();
   let userId = $('#user-password').data('id');
@@ -95,9 +100,9 @@ $('#passwor-modificator-btn').unbind('click').click(function (e) {
     }
 });
 })
+  //#endregion modify password
 
-
-
+  //#region ajax password générator
 $('#password-generator-btn').unbind('click').click(function (e) {
   e.preventDefault();
   $.ajax({
@@ -109,14 +114,9 @@ $('#password-generator-btn').unbind('click').click(function (e) {
     async: true,
     success: function (response)
     {
-      //      alert("nouveau mot de passe:" + response + <br> + "Ce mot de passe est directement écrit dans la barre veuillez le copier ici");
-
-
       vNotify().success({ text: 'Génération de mot de passe réussie celui-ci a été copié dans votre presse-papier', title: 'Génération réussie' });
       $("#registration_form_plainPassword").val(response);
       $("#visualisation-password-generator").val(response);
-        // $("#visualisation-password-generator").html("<p>" + response + "</p>"); 
-        // copyText($("#visualisation-password-generator").html());
         let copyFrom = document.createElement("textarea");
         document.body.appendChild(copyFrom);
         copyFrom.textContent = response;
@@ -131,7 +131,8 @@ $('#password-generator-btn').unbind('click').click(function (e) {
     }
 });
 })
-
+  //#endregion ajax password générator
+//#endregion password
 
 
 
