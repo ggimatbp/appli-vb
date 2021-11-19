@@ -45,6 +45,16 @@ class ApTab
      */
     private $parent;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $controlPath;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $position;
+
     public function __construct()
     {
         $this->apAccesses = new ArrayCollection();
@@ -148,6 +158,30 @@ class ApTab
                 $parent->setApTab(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getControlPath(): ?string
+    {
+        return $this->controlPath;
+    }
+
+    public function setControlPath(?string $controlPath): self
+    {
+        $this->controlPath = $controlPath;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?int $position): self
+    {
+        $this->position = $position;
 
         return $this;
     }
