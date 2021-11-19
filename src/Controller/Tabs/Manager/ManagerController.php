@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Tabs\Manager;
 
 use App\Repository\UserRepository;
 use App\Repository\ApTabRepository;
@@ -41,7 +41,6 @@ class ManagerController extends AbstractController
     
         // Session for employee 
         $filterSession = $session->get("filter", []);
-
 
         //Session for Role 
         $roleFilterSession = $session->get("roleFilter", []);
@@ -187,8 +186,8 @@ class ManagerController extends AbstractController
 
             //Return only new result of employee and pagination
             return new JsonResponse([
-                'content' => $this->renderView('manager/_filtredEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'session', 'filterSession')),
-                'content2' =>$this->renderView('manager/_paginationEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'filterSession')),
+                'content' => $this->renderView('tabs/manager/index/_filtredEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'session', 'filterSession')),
+                'content2' =>$this->renderView('tabs/manager/index/_paginationEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'filterSession')),
             ]);
         }
         #endregion Employee if Ajax
@@ -224,8 +223,8 @@ class ManagerController extends AbstractController
 
             //Return only new result of role and pagination 
             return new JsonResponse([
-            'content' => $this->renderView('manager/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession')),
-            'content2' => $this->renderView('manager/_paginationRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession'))
+            'content' => $this->renderView('tabs/manager/index/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession')),
+            'content2' => $this->renderView('tabs/manager/index/_paginationRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession'))
             ]);
         }
         #endregion Role if Ajax
@@ -242,10 +241,12 @@ class ManagerController extends AbstractController
         //For the dropdown role name filter
         $allRole = $apRoleRepository->findAll();
 
-        return $this->render('manager/index.html.twig', compact('ap_accesses','ap_roles', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole'));
+        return $this->render('tabs/manager/index/index.html.twig', compact('ap_accesses','ap_roles', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole'));
         #endregion If no Ajax
     }
 
     #endregion index
 
+    //src/Controller/Tabs/Manager/
 }
+

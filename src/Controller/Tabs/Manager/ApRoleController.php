@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Tabs\Manager;
 
 
 
@@ -82,7 +82,7 @@ class ApRoleController extends AbstractController
         }elseif($sameName >= 1)
         {
             $errorMsg = "Le nom choisi est déjà emprunté";
-            return $this->renderForm('ap_role/new.html.twig', [
+            return $this->renderForm('tabs/manager/ap_role/new.html.twig', [
                 'same_name' => $sameName,
                 'error_msg' => $errorMsg,
                 'ap_role' => $apRole,
@@ -91,7 +91,7 @@ class ApRoleController extends AbstractController
             ]);
         }
 
-            return $this->renderForm('ap_role/new.html.twig', [
+            return $this->renderForm('tabs/manager/ap_role/new.html.twig', [
                 'same_name' => $sameName,
                 'ap_role' => $apRole,
                 'form' => $form,
@@ -106,7 +106,7 @@ class ApRoleController extends AbstractController
      */
     public function show(ApRole $apRole): Response
     {
-        return $this->render('ap_role/show.html.twig', [
+        return $this->render('tabs/manager/ap_role/show.html.twig', [
             'ap_role' => $apRole,
         ]);
     }
@@ -129,7 +129,7 @@ class ApRoleController extends AbstractController
             $originalaccesses->add($apaccess);
         }
 
-        return $this->renderForm('ap_role/edit.html.twig', [
+        return $this->renderForm('tabs/manager/ap_role/edit.html.twig', [
             'ap_role' => $apRole,
         ]);
     }

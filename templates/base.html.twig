@@ -27,11 +27,10 @@
          {# {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a> #}
         {# {% else %} #}
             {% block navbar %}
-            {% include "_header.html.twig" %}
+            {% include "_headerBrut.html.twig" %}
             {% endblock %}
             {% block tab %}{% endblock %}           
             {% block body %}
-            
             {% endblock %}
         {# {% endif %} #}
         {# {% else %}

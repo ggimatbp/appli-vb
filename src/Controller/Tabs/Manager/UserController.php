@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Tabs\Manager;
 
 use App\Entity\User;
 use App\Form\UserType;
@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Constraints\Length;
  */
 class UserController extends AbstractController
 {
+    private $myglobalvar = 'user';
     /**
      * @Route("/", name="user_index", methods={"GET"})
      */
@@ -58,7 +59,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('user/new.html.twig', [
+        return $this->renderForm('tabs/manager/user/new.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
@@ -69,7 +70,7 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', [
+        return $this->render('tabs/manager/user/show.html.twig', [
             'user' => $user,
         ]);
     }
@@ -93,7 +94,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('user/edit.html.twig', [
+        return $this->renderForm('tabs/manager/user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);

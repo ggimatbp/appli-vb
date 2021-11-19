@@ -12,9 +12,9 @@
     <input class="edit-role-name" type="text" name="name" id="role-name" data-id="{{ap_role.id}}" value="{{ap_role.name}}" >
     <button  id="role-name-btn" type='button' class='btn-bottom btn-edit-role btn btn-ligth'>Soumettre le Nom</button> 
 </div>
-    {{ include('ap_role/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('tabs/manager/ap_role/_form.html.twig', {'button_label': 'Update'}) }}
         <div class="d-flex  justify-content-evenly div-edit-role-name">
-            {{ include('ap_role/_delete_form.html.twig') }}
+            {{ include('tabs/manager/ap_role/_delete_form.html.twig') }}
         </div>
 </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Tabs\Catalog;
 
 use App\Entity\ApCatalogModelBp;
 use App\Form\ApCatalogModelBpType;
