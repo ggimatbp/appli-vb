@@ -5,6 +5,7 @@ namespace App\Controller\Tabs\Catalog;
 use App\Entity\ApCatalogCustomerBp;
 use App\Form\ApCatalogCustomerBpType;
 use App\Repository\ApCatalogCustomerBpRepository;
+use App\Repository\ApCatalogModelBpRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class ApCatalogCustomerBpController extends AbstractController
      */
     public function index(ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository): Response
     {
-        return $this->render('ap_catalog_customer_bp/index.html.twig', [
+        return $this->render('tabs/Catalog/ap_catalog_customer_bp/index.html.twig', [
             'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAll(),
         ]);
     }
@@ -42,7 +43,7 @@ class ApCatalogCustomerBpController extends AbstractController
             return $this->redirectToRoute('ap_catalog_customer_bp_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('ap_catalog_customer_bp/new.html.twig', [
+        return $this->renderForm('tabs/Catalog/ap_catalog_customer_bp/new.html.twig', [
             'ap_catalog_customer_bp' => $apCatalogCustomerBp,
             'form' => $form,
         ]);
@@ -51,10 +52,13 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_customer_bp_show", methods={"GET"})
      */
-    public function show(ApCatalogCustomerBp $apCatalogCustomerBp): Response
-    {
-        return $this->render('ap_catalog_customer_bp/show.html.twig', [
+    public function show(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, $id): Response
+    { 
+        $id = $apCatalogCustomerBp->getId();
+        $ModelById = $apCatalogModelBpRepository->findAllById($id);
+        return $this->render('tabs/Catalog/ap_catalog_customer_bp/show.html.twig', [
             'ap_catalog_customer_bp' => $apCatalogCustomerBp,
+            'ModelById' => $ModelById,
         ]);
     }
 
@@ -72,7 +76,7 @@ class ApCatalogCustomerBpController extends AbstractController
             return $this->redirectToRoute('ap_catalog_customer_bp_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('ap_catalog_customer_bp/edit.html.twig', [
+        return $this->renderForm('tabs/Catalog/ap_catalog_customer_bp/edit.html.twig', [
             'ap_catalog_customer_bp' => $apCatalogCustomerBp,
             'form' => $form,
         ]);

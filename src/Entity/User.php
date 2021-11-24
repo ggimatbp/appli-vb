@@ -5,6 +5,8 @@ namespace App\Entity;
 
 use App\Entity\ApRole;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -64,6 +66,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer", nullable=true)
      */
     private $theme;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApCatalogFilesBp::class, mappedBy="user")
+     */
+    private $apCatalogFilesBps;
+
+    public function __construct()
+    {
+        $this->apCatalogFilesBps = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -220,5 +232,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->theme = $theme;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|ApCatalogFilesBp[]
+     */
+    public function getApCatalogFilesBps(): Collection
+    {
+        return $this->apCatalogFilesBps;
+    }
+
+    public function addApCatalogFilesBp(ApCatalogFilesBp $apCatalogFilesBp): self
+    {
+        if (!$this->apCatalogFilesBps->contains($apCatalogFilesBp)) {
+            $this->apCatalogFilesBps[] = $apCatalogFilesBp;
+            $apCatalogFilesBp->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApCatalogFilesBp(ApCatalogFilesBp $apCatalogFilesBp): self
+    {
+        if ($this->apCatalogFilesBps->removeElement($apCatalogFilesBp)) {
+            // set the owning side to null (unless already changed)
+            if ($apCatalogFilesBp->getUser() === $this) {
+                $apCatalogFilesBp->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->lastname;
     }
 }
