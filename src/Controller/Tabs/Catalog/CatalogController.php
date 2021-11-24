@@ -4,6 +4,9 @@ namespace App\Controller\Tabs\Catalog;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\ApCatalogCustomerBpRepository;
+use App\Repository\ApCatalogModelBpRepository; 
+use App\Repository\ApCatalogFilesBpRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -14,12 +17,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CatalogController extends AbstractController
 {	
     #region function index
+
     /**
      * @Route("/", name="index")
      */
-    public function index(): Response
+    public function index(ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
     {
-        return $this->render('catalog/index.html.twig', compact('ap_accesses','ap_roles', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole'));
+        return $this->render('tabs/catalog/index/index.html.twig',  [
+            'ap_catalog_model_bps' => $apCatalogModelBpRepository->findAll(),
+            'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAll(),
+            'ap_catalog_files_bps' => $apCatalogFilesBpRepository->findAll(),
+        ]);
     }
-
+    #endregion function index
 }

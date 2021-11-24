@@ -36,15 +36,15 @@ class ApCatalogCustomerBpRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?ApCatalogCustomerBp
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    
+    // public function findAllById($id): ?ApCatalogCustomerBp
+    // {
+    //     return $this->createQueryBuilder('a')
+    //         ->andWhere('a.customer_id = :id')
+    //         ->setParameter('id', $id)
+    //         ->getQuery()
+    //         ->getResult()
+    //     ;
+    // }
+    
 }

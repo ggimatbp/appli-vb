@@ -23,6 +23,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('apRole', './assets/apRole.js')
     .addEntry('apManager', './assets/apManager.js')
+    .addEntry('apCatalog', './assets/apCatalog.js')
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 

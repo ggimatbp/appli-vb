@@ -2,13 +2,18 @@
 
 namespace App\Controller\Tabs\Catalog;
 
+
+
 use App\Entity\ApCatalogModelBp;
 use App\Form\ApCatalogModelBpType;
+use App\Repository\ApCatalogCustomerBpRepository;
 use App\Repository\ApCatalogModelBpRepository;
+use App\Repository\ApCatalogFilesBpRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 /**
  * @Route("/ap/catalog/model/bp")
@@ -18,10 +23,11 @@ class ApCatalogModelBpController extends AbstractController
     /**
      * @Route("/", name="ap_catalog_model_bp_index", methods={"GET"})
      */
-    public function index(ApCatalogModelBpRepository $apCatalogModelBpRepository): Response
+    public function index(ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository): Response
     {
-        return $this->render('ap_catalog_model_bp/index.html.twig', [
+        return $this->render('tabs/Catalog/ap_catalog_model_bp/index.html.twig', [
             'ap_catalog_model_bps' => $apCatalogModelBpRepository->findAll(),
+            'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAll(),
         ]);
     }
 
@@ -42,7 +48,7 @@ class ApCatalogModelBpController extends AbstractController
             return $this->redirectToRoute('ap_catalog_model_bp_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('ap_catalog_model_bp/new.html.twig', [
+        return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/new.html.twig', [
             'ap_catalog_model_bp' => $apCatalogModelBp,
             'form' => $form,
         ]);
@@ -51,10 +57,12 @@ class ApCatalogModelBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_model_bp_show", methods={"GET"})
      */
-    public function show(ApCatalogModelBp $apCatalogModelBp): Response
+    public function show(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository): Response
     {
-        return $this->render('ap_catalog_model_bp/show.html.twig', [
-            'ap_catalog_model_bp' => $apCatalogModelBp,
+        $id = $apCatalogModelBp->getId();
+        $files = $ApCatalogFilesBpRepository->findAllById($id);
+        return $this->render('tabs/Catalog/ap_catalog_model_bp/show.html.twig', [
+            'ap_catalog_model_bp' => $apCatalogModelBp, 'files' => $files
         ]);
     }
 
@@ -72,7 +80,7 @@ class ApCatalogModelBpController extends AbstractController
             return $this->redirectToRoute('ap_catalog_model_bp_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('ap_catalog_model_bp/edit.html.twig', [
+        return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/edit.html.twig', [
             'ap_catalog_model_bp' => $apCatalogModelBp,
             'form' => $form,
         ]);

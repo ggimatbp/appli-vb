@@ -6,14 +6,14 @@
 						{% if apAccess.view == true %}
 							{% if apAccess.tab.apTab is null %}
                  {% if app.request.attributes.get('_route') == apAccess.tab.path %} 
-                    <a class="header1 nav-link active" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>
+                    <a class="header1 nav-link active text-center" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>                    
                   {% else %}
-                    <a class="headerNotActive nav-link active" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>
+                    <a class="headerNotActive nav-link active text-center" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>
                   {% endif %}
 							{% endif %}
 						{% endif %}
 					{% endfor %}
-            <div class="dropstart"> 
+            <div class="dropstart">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-user"></i>
               </button>
@@ -31,7 +31,7 @@
                 {% if apAccess.tab.apTab is not null and app.request.attributes.get('_route') == apAccess.tab.apTab.path %}
                 {% set foo = foo + 1 %}
                   {% if app.request.query.get("roleback") is defined and app.request.query.get("roleback") != null %}
-                    <li class="header2 nav-item " role="presentation">
+                    <li class="header2 nav-item" role="presentation">
                     <button class="header2 nav-item-uniform nav-link {{foo == app.request.query.get("roleback") ? 'active' : '' }}" id="pills-{{ apAccess.tab.name }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ apAccess.tab.name }}" type="button" role="tab" aria-controls="pills-{{ apAccess.tab.name }}" aria-selected="true">{{ apAccess.tab.name }}</button>
                     </li>
                   {% else %}
@@ -51,14 +51,18 @@
                 {% set showActiveTab = showActiveTab + 1 %}                         
                   {% if app.request.query.get("roleback") is defined and app.request.query.get("roleback") != null %}
                     <div class="tab-pane fade {{showActiveTab == app.request.query.get("roleback") ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div>
-                  {% else %}       
-                    <div class="tab-pane fade {{showActiveTab == 1 ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div>
+                  {% else %}                  
+                     <div class="tab-pane fade {{showActiveTab == 1 ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div> 
                   {% endif %} 
                 {% endif %}
               {% endif %}
             {% endfor %}
           </div>
 				{% endif %}
+        
+<pre>
+  {{ dump() }}
+</pre>
 {# 
         {% set controllerRoutes = {
   1:'ManagerController',
