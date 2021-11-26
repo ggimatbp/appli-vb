@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}New ApCatalogFilesBp{% endblock %}
-
+{% block javascripts %}
+{{ encore_entry_script_tags('apCatalog') }}
+{% endblock %}
 {% block body %}
     <h1>Create new ApCatalogFilesBp</h1>
 

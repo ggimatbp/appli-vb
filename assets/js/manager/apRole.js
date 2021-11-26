@@ -9,7 +9,7 @@ import 'bootstrap/js/dist/dropdown';
 
 // On import les notifications
 
-import { vNotify } from './app';
+import { vNotify } from '../app';
 
 $(document).ready(function () {
   vNotify();

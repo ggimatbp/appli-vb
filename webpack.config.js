@@ -20,10 +20,24 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-    .addEntry('app', './assets/app.js')
-    .addEntry('apRole', './assets/apRole.js')
-    .addEntry('apManager', './assets/apManager.js')
-    .addEntry('apCatalog', './assets/apCatalog.js')
+    //#region JS entry point
+
+    //#region global
+    .addEntry('app', './assets/js/app.js')
+    //#endregion
+    
+    //#region manager
+    .addEntry('apRole', './assets/js/manager/apRole.js')
+    .addEntry('apManager', './assets/js/manager/apManager.js')
+    //#endregion manager
+
+    //#region catalog
+    .addEntry('apCatalog', './assets/js/catalog/apCatalog.js')
+    .addEntry('apCatalogModelBpShow', './assets/js/catalog/apCatalogModelBpShow.js')
+    .addEntry('apCatalogImagePreview', './assets/js/catalog/apCatalogImagePreview.js')
+    //#endregion
+
+    //#endregion JS entry point
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
