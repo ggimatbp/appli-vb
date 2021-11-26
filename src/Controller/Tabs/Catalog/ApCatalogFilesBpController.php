@@ -4,11 +4,12 @@ namespace App\Controller\Tabs\Catalog;
 
 use App\Entity\ApCatalogFilesBp;
 use App\Form\ApCatalogFilesBpType;
-use App\Repository\ApCatalogFilesBpRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use App\Repository\ApCatalogFilesBpRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/ap/catalog/files/bp")
@@ -90,5 +91,21 @@ class ApCatalogFilesBpController extends AbstractController
         }
 
         return $this->redirectToRoute('ap_catalog_files_bp_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    /**
+     * @route("/delete/{id}", methods={"GET"})
+    */
+
+    public function editotest(ApCatalogFilesBp $apCatalogFilesBp, EntityManagerInterface $manager) : response
+    {
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->remove($apCatalogFilesBp);
+            $manager->flush();
+            return $this->json(["code" => 200,
+            "message" => "delete"], 200);
+
     }
 }

@@ -3,7 +3,7 @@
 
 // On importe les notifications
 
-import { vNotify } from './app';
+import { vNotify } from '../app';
 
    $(document).ready(function () {
       vNotify();

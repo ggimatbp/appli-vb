@@ -3,14 +3,18 @@
 @import "~bootstrap/scss/bootstrap";
 @import "array.scss";
 @import "bootstrapModification.scss";
+@import "card.scss";
 @import "employee.scss";
 @import "global.scss";
 @import 'manager.scss';
+@import 'modal.scss';
 @import 'navbar.scss';
 @import "notifyMessage.scss";
 @import 'pagination.scss';
 @import 'role.scss';
 @import 'tab.scss';
+@import 'uploadFile.scss';
+
 
 h1{
 color: $primaryColor
