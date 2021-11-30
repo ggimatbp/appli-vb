@@ -3,10 +3,12 @@
 namespace App\Controller\Tabs\Catalog;
 
 use App\Entity\ApCatalogFilesBp;
+use App\Entity\User;
 use App\Form\ApCatalogFilesBpType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\ApCatalogFilesBpRepository;
+use App\Repository\ApCatalogModelBpRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,20 +29,31 @@ class ApCatalogFilesBpController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="ap_catalog_files_bp_new", methods={"GET","POST"})
+     * @Route("/new/{id}", name="ap_catalog_files_bp_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, ApCatalogModelBpRepository $apCatalogModelBp): Response
     {
         $apCatalogFilesBp = new ApCatalogFilesBp();
-        $form = $this->createForm(ApCatalogFilesBpType::class, $apCatalogFilesBp);
+        $form = $this->createForm(ApCatalogFilesBpType::class, $apCatalogFilesBp, );
         $form->handleRequest($request);
-
+        $id = intval(basename("$_SERVER[REQUEST_URI]"));
         if ($form->isSubmitted() && $form->isValid()) {
+            // $apCatalogFilesBp->setFileName($apCatalogFilesBp->getName());
+            $model = $apCatalogModelBp->find($id);
+            $apCatalogFilesBp->setModel($model);
+            $imgFile = $apCatalogFilesBp->getImageFile();
+            $apCatalogFilesBp->setUser($this->getUser());
+            $apCatalogFilesBp->setCreatedAt(new \DateTime());
+            $apCatalogFilesBp->setFileSize(filesize($imgFile)/1024);
+            $fileExtension =  $imgFile->guessExtension();
+            $apCatalogFilesBp->setFileType($fileExtension);
+            
+            
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogFilesBp);
             $entityManager->flush();
 
-            return $this->redirectToRoute('ap_catalog_files_bp_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('tabs/Catalog/ap_catalog_files_bp/new.html.twig', [

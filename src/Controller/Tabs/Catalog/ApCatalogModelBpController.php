@@ -55,10 +55,36 @@ class ApCatalogModelBpController extends AbstractController
     }
 
     /**
+     * @Route("/newPrecise/{id}", name="ap_catalog_model_bp_new_precise", methods={"GET","POST"})
+     */
+    public function newWithModel(Request $request, ApCatalogCustomerBpRepository $customerBpRepository): Response
+    {
+        $apCatalogModelBp = new ApCatalogModelBp();
+        $form = $this->createForm(ApCatalogModelBpType::class, $apCatalogModelBp);
+        $form->handleRequest($request);
+        $id = intval(basename("$_SERVER[REQUEST_URI]"));
+        if ($form->isSubmitted() && $form->isValid()) {
+            $customer = $customerBpRepository->find($id);
+            $apCatalogModelBp->setCustomer($customer);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($apCatalogModelBp);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('ap_catalog_model_bp_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/new.html.twig', [
+            'ap_catalog_model_bp' => $apCatalogModelBp,
+            'form' => $form,
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="ap_catalog_model_bp_show", methods={"GET"})
      */
     public function show(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository): Response
     {
+        
         $id = $apCatalogModelBp->getId();
         $files = $ApCatalogFilesBpRepository->findAllById($id);
         return $this->render('tabs/Catalog/ap_catalog_model_bp/show.html.twig', [

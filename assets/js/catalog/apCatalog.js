@@ -8,38 +8,60 @@ import { vNotify } from '../app';
       vNotify();
     })
 
-// On importe les notifications
 
+//on import le dropdown de bootstrap (technique pour que la modale ne bloque pas le système de dropdown bootstrap)
 
-
+import 'bootstrap/js/dist/dropdown';
 
    
 import $ from 'jquery';
 
 //#endregion import
 
-
-//#region image preview form
-const inpFile = document.getElementById("ap_catalog_files_bp_imageFile_file")
-const previewContainer = document.getElementById("imagePreview")
-const previewImage = previewContainer.querySelector(".image-preview__image")
-const previewDefaultText = previewContainer.querySelector(".image-preview__default-text")
-
-inpFile.addEventListener("change", function(){
-   const file = this.files[0]
-   if(file) {
-   console.log(file);
-      const reader = new FileReader();
-
-      previewDefaultText.style.display = "none";
-      previewImage.style.display = "block";
-
-      reader.addEventListener("load", function(){
-         console.log(this);
-            previewImage.setAttribute("src", this.result);
-      });
-      reader.readAsDataURL(file);
+//#region model search
+// document.querySelector('input[list]').addEventListener('input', function(e) {
+   $('#model-suggestion-choice').on('propertychange input', function(e){
+   let input = e.target,
+       list = input.getAttribute('list'),
+       options = document.querySelectorAll('#' + list + ' option'),
+       inputValue = input.value;
+console.log(inputValue)
+   for(let i = 0; i < options.length; i++) {
+       let option = options[i];
+       if($(option).val() === inputValue) {
+         $("#answerInput-hidden").val($(option).data("value"))
+         console.log($("#answerInput-hidden").val())
+           break;
+       }
    }
-})
+});
+//#endregion model search
 
-//#endregion image preview form
+//#region customer search
+
+$('#customer-search-choice').on('propertychange input', function(e){
+  let input = e.target,
+      list = input.getAttribute('list'),
+      options = document.querySelectorAll('#' + list + ' option'),
+      inputValue = input.value;
+console.log(inputValue)
+  for(let i = 0; i < options.length; i++) {
+      let option = options[i];
+     console.log(option.innerText)
+      if($(option).val() === inputValue) {
+        $("#customerAnswerInput-hidden").val($(option).data("value"))
+        console.log($("#customerAnswerInput-hidden").val())
+          break;
+      }
+  }
+});
+
+//endregion customer search
+
+//#region folder change
+$('.foler-change i').mouseenter(function(e){
+  $(this).removeClass( "fa-folder fa-10x" ).addClass( "fa-folder-open  fa-9x" );
+}).mouseleave( function(e){
+  $(this).removeClass( "fa-folder-open fa-9x" ).addClass( "fa-folder  fa-10x" );
+})
+//#endregion folder change

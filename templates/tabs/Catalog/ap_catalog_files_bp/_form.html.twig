@@ -1,21 +1,25 @@
 {{ form_start(form) }}
-    {# {{ form_widget(form) }} #}
-        <div class="row">
 
-            {{ form_row(form.imageFile, {
-                attr: {
-                    'placeholder': 'Select an article image',
-                    'class' : 'imageUpload'
-                }
-            }) }}
-        </div>
+    <div class="row">
+        {{ form_row(form.name, { 'label': 'Nom' }) }}
+    </div>
+    {# <div class="row">
+        {{ form_row(form.model, { 'label': 'Choisir un model' }) }}
+    </div> #}
+    <div class="row">
+        {{ form_row(form.imageFile, {
+            attr: {
+                'placeholder': 'Choisir une image',
+                'class' : 'imageUpload'
+            }
+        }) }}
+    </div>
+
     <div class='image-preview' id="imagePreview">
         <img src="" alt="Image preview" class="image-preview__image">
-        <span class='image-preview__default-text'>Image preview</span>
+        <span class='image-preview__default-text'>Image</span>
     </div>
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
-<pre>
-    {{ dump(form) }}
-</pre>
+
 
