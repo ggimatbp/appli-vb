@@ -3,7 +3,8 @@
 {% block title %}Catalogue{% endblock %}
 
 {% block body %}
-    <h1>Client</h1>
+    <span class="d-flex"><h1>Client: {{ ap_catalog_customer_bp.name }}</h1> <a class="ps-3 align-self-center" href="{{ path('ap_catalog_customer_bp_edit', {'id': ap_catalog_customer_bp.id}) }}"><i class="fas fa-pencil-alt"></i></a></span>
+    
     <table class="table">
         <tbody>
             <tr>
@@ -25,7 +26,9 @@
             <li><p>Aucun résultat</p></li>
     {% endfor %}
     </ul>
-    <a href="{{ path('ap_catalog_customer_bp_index') }}">back to list</a>
-    <a href="{{ path('ap_catalog_customer_bp_edit', {'id': ap_catalog_customer_bp.id}) }}">edit</a>
+    <a class="btn" href="{{path('ap_catalog_model_bp_new_precise', {'id': ap_catalog_customer_bp.id}) }}">Nouveau model</a>
+    
+
     {{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
+     
 {% endblock %}

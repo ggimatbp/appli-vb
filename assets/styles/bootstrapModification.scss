@@ -29,3 +29,11 @@
     color: $primaryColorHoverText;
     background-color: $primaryColorHover;
 }
+
+a{
+    color: $btnPrimaryColor;
+}
+
+a:hover{
+    color:$headerColor;
+}

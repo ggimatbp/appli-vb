@@ -1,4 +1,22 @@
 
+//#region import 
+
+// On importe les notifications
+
+import { vNotify } from '../app';
+
+   $(document).ready(function () {
+      vNotify();
+    })
+
+// On importe les notifications
+
+
+   
+import $ from 'jquery';
+
+//#endregion import
+
 //#region image preview form
 const inpFile = document.getElementById("ap_catalog_files_bp_imageFile_file")
 const previewContainer = document.getElementById("imagePreview")
