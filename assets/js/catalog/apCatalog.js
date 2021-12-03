@@ -59,9 +59,9 @@ console.log(inputValue)
 //endregion customer search
 
 //#region folder change
-$('.foler-change i').mouseenter(function(e){
-  $(this).removeClass( "fa-folder fa-10x" ).addClass( "fa-folder-open  fa-9x" );
+$('.folder-change i').mouseenter(function(e){
+  $(this).removeClass( "fa-folder fa-6x" ).addClass( "fa-folder-open  fa-6x" );
 }).mouseleave( function(e){
-  $(this).removeClass( "fa-folder-open fa-9x" ).addClass( "fa-folder  fa-10x" );
+  $(this).removeClass( "fa-folder-open fa-6x" ).addClass( "fa-folder  fa-6x" );
 })
 //#endregion folder change

@@ -67,3 +67,9 @@ $('#deleteModal .delete-files-secure').each(function(){
           })
 })
   //#endregion ajax delete
+
+  //#region right click forbidden
+
+  document.addEventListener('contextmenu', event => event.preventDefault());
+
+  //#endregion

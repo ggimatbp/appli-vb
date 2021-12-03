@@ -33,6 +33,7 @@ Encore
 
     //#region catalog
     .addEntry('apCatalog', './assets/js/catalog/apCatalog.js')
+    .addEntry('apCatalogCustomerShow', './assets/js/catalog/apCatalogCustomerShow.js')
     .addEntry('apCatalogModelBpShow', './assets/js/catalog/apCatalogModelBpShow.js')
     .addEntry('apCatalogImagePreview', './assets/js/catalog/apCatalogImagePreview.js')
     //#endregion
