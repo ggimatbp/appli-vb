@@ -5,7 +5,9 @@
 
 
 {% block javascripts %}
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 	{{ encore_entry_script_tags('apCatalogModelBpShow') }}
+	
 {% endblock %}
 
 
@@ -18,13 +20,13 @@
 	<input id="hidden-data-picture-id" name="hidden-data-picture-id" type="hidden" value="">
 	<div id="allCardFromCatalogModelShowBp" class='d-flex justify-content-around flex-wrap'>
 
-		{% set loopCarroussel = 0 %}
+					{% set loopCarroussel = 0 %}
 		{% for ap_catalog_files_bp in files %}
 		{% if ap_catalog_files_bp.fileType == "pdf" %}
 			<div class="card card-design {{'card' ~ ap_catalog_files_bp.id }}">
 		
-				<span type="button" data-bs-toggle="modal" data-bs-target="#exampleModalPdf" class="d-flex justify-content-center align-items-center d-card-img-top card-pdf-vich-miniature">
-					<i class="text-danger fas fa-file-pdf fa-7x"></i>
+				<span type="button" data-bs-toggle="modal" data-id="{{ap_catalog_files_bp.id}}"  data-bs-target="{{'#exampleModalPdf' ~ ap_catalog_files_bp.id}}" class="d-flex justify-content-center align-items-center d-card-img-top card-pdf-vich-miniature">
+					<i class="p-3 text-danger fas fa-file-pdf fa-7x"></i>
 				</span>
 
 
@@ -49,25 +51,44 @@
 			</div>
 {# modal for pdf display #}
 <!-- Modal for pdf display -->
-<div class="modal fade" id="exampleModalPdf" tabindex="-1" aria-labelledby="exampleModalLabelPdf" aria-hidden="true">
+<div class="modal fade" id="{{'exampleModalPdf' ~ ap_catalog_files_bp.id}}" tabindex="-1" aria-labelledby="exampleModalLabelPdf" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen d-flex justify-content-around"> 
+	{#  #}
+	<div class="modal-content">
+	{#  #}
         {# <h5 class="modal-title" id="exampleModalLabelPdf">Modal title</h5> #}
-		
 		{# <object type="application/pdf"
     data="{{'http://docs.google.com/gview?embedded=true&url=' ~ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')  ~ '#toolbar=0&navpanes=0&scrollbar=0'}}"
     width="800px"
     height="2100px">
 </object> #}
+<input class='{{"pdfFileRoad" ~ ap_catalog_files_bp.id }}' type="hidden" data-src="{{vich_uploader_asset(ap_catalog_files_bp)}}">
+{# test #}
 
-<iframe id="pdfviewer" src="{{'http://docs.google.com/gview?embedded=true&url=' ~ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')  ~ '&amp;embedded=true'}}" frameborder="0" width="100%" height="100%"></iframe>
+    <div class="top-bar d-flex justify-content-between mt-1">
+		<span></span>
+        <button class="btn" id="{{'prev-page' ~ ap_catalog_files_bp.id }}">previous</button>
+        
+        <span class="align-items-center d-flex page-info">
+            <span class='p-1' id="{{'page-num' ~ ap_catalog_files_bp.id }}"></span> of <span class="p-1" id="{{'page-count'  ~ ap_catalog_files_bp.id }}"></span>
+        </span>
+		<button class="btn" id="{{'next-page' ~ ap_catalog_files_bp.id }}">next</button>
+		<button type="button" class="me-4 mt-1 btn-close {{"btn-close-pdf-destroy" ~ ap_catalog_files_bp.id }}" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <canvas id="{{'pdf-render' ~ ap_catalog_files_bp.id }}"></canvas>
+{# fin test #}
   		 {# <embed src="{{'http://docs.google.com/gview?embedded=true&url=' ~ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')}}" width="800px" height="2100px"  type='application/pdf'/>  #}
+{# pb avec #}
 
+{# end  #}
+		{#  #}
+		</div>
+		{#  #}
    </div> 
 </div>
 	{# <embed src="{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')}}" width="800px" height="2100px" /> #}
 		{% endif %}
 		{% endfor %}
-
 
 
 		{% for ap_catalog_files_bp in files %}

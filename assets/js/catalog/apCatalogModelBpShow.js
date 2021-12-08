@@ -18,6 +18,212 @@ import 'bootstrap/js/dist/dropdown';
 
 //#endregion import
 
+// //pdf reader
+
+//  console.log(pdfjsLib)
+
+// const pdfjsWorker = pdfjsLib.PDFWorker
+// console.log(pdfjsWorker)
+
+
+// pdfjsLib.GlobalWorkerOptions.workerSrc =
+// "pdf.js/build/pdf.worker.js";
+
+// let url =''
+
+//  $(".pdfFileRoad").each(function(index){
+//    url = $(this).data("src")
+//    console.log(url);
+//  })
+
+// //  let pdfDoc = null,
+// //     pageNum = 1,
+// //     pageIsRendering = false
+//     // pageNumIsPending = null;
+  
+//   const scale = 1.5,
+//   canvas = document.querySelector('#pdf-render'),
+//   ctx = canvas.getContext('2d');
+
+//   //render the page 
+
+//   const renderPage = num => {
+
+//   }
+
+//   //Get document
+
+//   pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
+//     pdfDoc = pdfDoc_;
+//     console.log(pdfDoc)
+//   });
+
+
+
+  // pdfjsLib.getDocument(pdfRoad)
+
+  // console.log(pdfjsLib.GlobalWorkerOptions.workerSrc)
+
+
+// // Loading a document.
+// const loadingTask = pdfjsLib.getDocument(pdfPath);
+// loadingTask.promise
+//   .then(function (pdfDocument) {
+//     // Request a first page
+//     return pdfDocument.getPage(1).then(function (pdfPage) {
+//       // Display page on the existing canvas with 100% scale.
+//       const viewport = pdfPage.getViewport({ scale: 1.0 });
+//       const canvas = document.getElementById("theCanvas");
+//       canvas.width = viewport.width;
+//       canvas.height = viewport.height;
+//       const ctx = canvas.getContext("2d");
+//       const renderTask = pdfPage.render({
+//         canvasContext: ctx,
+//         viewport,
+//       });
+//       return renderTask.promise;
+//     });
+//   })
+//   .catch(function (reason) {
+//     console.error("Error: " + reason);
+//   });
+
+
+
+
+
+
+
+
+
+
+
+$(".card-pdf-vich-miniature").each(function(){
+  $(this).click(function(){
+  let urlPdf = $(".pdfFileRoad" + $(this).data("id")).data("src");
+      let pdfDoc = null,
+  pageNum = 1,
+  pageIsRendering = false,
+  pageNumIsPending = null;
+  
+  const scale = 2,
+  canvas = document.querySelector("#pdf-render" + $(this).data("id")),
+  ctx = canvas.getContext('2d');
+  
+  //Render the page
+  let renderPage = num => {
+  pageIsRendering = true
+      // Get page
+      pdfDoc.getPage(num).then(page => {
+          // Set scale
+          const viewport = page.getViewport({ scale });
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+  
+          const renderCtx = {
+              canvasContext: ctx,
+              viewport
+          }
+  
+          page.render(renderCtx).promise.then(() => {
+              pageIsRendering = false;
+  
+              if(pageNumIsPending !== null) {
+                  renderPage(pageNumIsPending);
+                  pageNumIsPending = null;
+              }
+          })
+  
+          //output current page
+          document.querySelector('#page-num' + $(this).data("id")).textContent = num;
+      })
+   
+  }
+
+  
+//check for pages rendering 
+
+const queuRenderPage = num => {
+  if(pageIsRendering) {
+      pageNumIsPending = num;
+  }else {
+      renderPage(num);
+  }
+}
+
+//show prev page 
+
+const showPrevPage = () => {
+  if(pageNum <= 1) {
+      return;
+  }
+  pageNum--;
+  queuRenderPage(pageNum);
+}
+
+//show Next Page 
+const showNextPage = () => {
+  console.log("2")
+  console.log(pdfDoc)
+  if(pageNum >= pdfDoc.numPages) {
+      return;
+  }
+  pageNum++;
+  queuRenderPage(pageNum);
+}
+
+// Get Document
+pdfjsLib.getDocument(urlPdf).promise.then(pdfDoc_ => {
+  pdfDoc = pdfDoc_;
+
+  document.querySelector('#page-count' +  $(this).data("id") ).textContent = pdfDoc.numPages;
+console.log("1")
+// console.log(pdfDoc.numPages)
+// console.log(pageNum)
+  renderPage(pageNum)
+});
+
+
+// Button Events
+console.log("prevpage" + $(this).data("id"))
+console.log($('#prev-page' + $(this).data("id")))
+
+// $('#prev-page' + $(this).data("id")).click(showPrevPage())
+// $('#next-page' + $(this).data("id")).click(showNextPage())
+// $('#prev-page' +  $(this).data("id")).click(showPrevPage());
+document.querySelector('#prev-page' + $(this).data("id")).addEventListener('click', showPrevPage);
+document.querySelector('#next-page' + $(this).data("id")).addEventListener('click', showNextPage);
+
+
+
+
+$('.btn-close-pdf-destroy' + $(this).data("id")).click(function(){
+  // console.log(123456)
+  // pageIsRendering = false;
+  //  pdfDoc = null;
+  // pageNumIsPending = null;
+  // pageNum = 1;
+  // $(this).find($('.pdf-view #pdf-render')).remove()
+})
+//this.pdf_doc.destroy();
+
+})
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+//end pdf reader
+
 $(".btn-launch-modal").each(function(){
     $(this).unbind("click").click(function(e){
     $("#hidden-data-picture-id").val($(this).data('img-id'))
@@ -70,6 +276,8 @@ $('#deleteModal .delete-files-secure').each(function(){
 
   //#region right click forbidden
 
-  document.addEventListener('contextmenu', event => event.preventDefault());
+//!!!!!!!!!!!!!!!!a remettre en fin de test !!!!!!!!!!!!!!!!!
+
+  // document.addEventListener('contextmenu', event => event.preventDefault());
 
   //#endregion
