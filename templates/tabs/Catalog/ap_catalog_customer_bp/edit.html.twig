@@ -3,11 +3,12 @@
 {% block title %}Edit ApCatalogCustomerBp{% endblock %}
 
 {% block body %}
-    <h1>Edit ApCatalogCustomerBp</h1>
+<pre>
+    {{ dump() }}
+</pre>
+    <h1>Edition de {{ap_catalog_customer_bp.name}}</h1>
 
     {{ include('tabs/Catalog/ap_catalog_customer_bp/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('ap_catalog_customer_bp_index') }}">back to list</a>
 
     {{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
 {% endblock %}

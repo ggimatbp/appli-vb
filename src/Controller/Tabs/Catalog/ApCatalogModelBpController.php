@@ -125,4 +125,17 @@ class ApCatalogModelBpController extends AbstractController
 
         return $this->redirectToRoute('ap_catalog_model_bp_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * @Route("/pdf/{id}", name="pdf_js", methods={"GET"})
+     */
+    public function testPdfJs(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository): Response
+    {
+        
+        $id = $apCatalogModelBp->getId();
+        $files = $ApCatalogFilesBpRepository->findAllById($id);
+        return $this->render('tabs/Catalog/ap_catalog_model_bp/Testshow.html.twig', [
+            'ap_catalog_model_bp' => $apCatalogModelBp, 'files' => $files
+        ]);
+    }
 }

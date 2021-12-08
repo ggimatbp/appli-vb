@@ -12,6 +12,8 @@ use App\Repository\ApCatalogModelBpRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use LiipImagineBundleModelBinary;
+
 
 /**
  * @Route("/ap/catalog/files/bp")
@@ -42,18 +44,27 @@ class ApCatalogFilesBpController extends AbstractController
             $model = $apCatalogModelBp->find($id);
             $apCatalogFilesBp->setModel($model);
             $imgFile = $apCatalogFilesBp->getImageFile();
+            $fileExtension =  $imgFile->guessExtension();
+            //!! note a moi meme: ici on peut faire un blocage dans le cas ou file extention ne corresponde pas a ce que l'on souhaite
+
+            //test
+            
+            // $imageFileCompress = $apCatalogFilesBp->setImageFile($imgFile);;
+
+            //fin du test
             $apCatalogFilesBp->setUser($this->getUser());
             $apCatalogFilesBp->setCreatedAt(new \DateTime());
             $apCatalogFilesBp->setFileSize(filesize($imgFile)/1024);
-            $fileExtension =  $imgFile->guessExtension();
+            
             $apCatalogFilesBp->setFileType($fileExtension);
             
             
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogFilesBp);
             $entityManager->flush();
+            // imagejpeg($apCatalogFilesBp->getFileName(), , =75);
 
-            return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
+             return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('tabs/Catalog/ap_catalog_files_bp/new.html.twig', [

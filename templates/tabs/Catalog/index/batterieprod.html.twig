@@ -1,6 +1,6 @@
 
 
-    <h1>Customer index</h1>
+    <h1 class="catalog-h1">Index des clients</h1>
 <span class="d-flex justify-content-around">
     <span class="d-flex flex-column">
         <label for="customer-search-choice">Client {% if (errorsCustomer["customerId"]) is defined  %}
@@ -28,7 +28,6 @@
         <span class="d-flex">
             <input class="form-control input" list="model-suggestion-list" id="model-suggestion-choice" name="model-suggestion-choice"/>
             <datalist id="model-suggestion-list">
-
             {% for model in ap_catalog_model_bps %}
                 <option data-value="{{model.id}}" value="{{model.name}}"></option>
             {% endfor %}
@@ -46,13 +45,16 @@
 
 <span class="d-flex p-5 flex-wrap">     
     {% for ap_catalog_customer_bp in ap_catalog_customer_bps %}
+    <div style="width:120px;">
         <span class="p-2 d-flex flex-column">
-                <a class="foler-change" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}"><i class="far fa-folder fa-10x"></i></a>
-                <h4>{{ ap_catalog_customer_bp.name }}</h4>
+                <a class="folder-change" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+                <h4 class="overflow-hidden">{{ ap_catalog_customer_bp.name }}</h4>
 
                     {# <a href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}">show</a>
                     <a href="{{ path('ap_catalog_customer_bp_edit', {'id': ap_catalog_customer_bp.id}) }}">edit</a> #}
+
         </span>
+    </div>
     {% else %}
         Aucun résultat
     {% endfor %}
