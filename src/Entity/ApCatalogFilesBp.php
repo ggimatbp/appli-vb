@@ -4,14 +4,18 @@ namespace App\Entity;
 
 use App\Repository\ApCatalogFilesBpRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
 
 /**
  * @ORM\Entity(repositoryClass=ApCatalogFilesBpRepository::class)
  * @Vich\Uploadable
- */
+*/
 class ApCatalogFilesBp
 {
     /**
@@ -34,6 +38,12 @@ class ApCatalogFilesBp
     /**
      * @Vich\UploadableField(mapping="model_bp_files", fileNameProperty="fileName")
      * @var File
+     * @Assert\File(
+     * maxSize = "4M",
+     * maxSizeMessage = "Le fichier est trop lourd ({{ size }} {{ suffix }}). Maximum: {{ limit }} {{ suffix }}",
+     * mimeTypes = {"application/pdf", "application/x-pdf", "image/jp2", "image/jpg", "image/jpeg", "image/png"},
+     * mimeTypesMessage = "Upload de fichier PDF JPEG ou JPG valide"
+     * )
      */
     private $imageFile;
 
@@ -61,6 +71,16 @@ class ApCatalogFilesBp
      * @ORM\Column(type="string", length=255)
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="file")
+     */
+    private $apCatalogFilesBpHistories;
+
+    public function __construct()
+    {
+        $this->apCatalogFilesBpHistories = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -165,6 +185,36 @@ class ApCatalogFilesBp
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ApCatalogFilesBpHistory[]
+     */
+    public function getApCatalogFilesBpHistories(): Collection
+    {
+        return $this->apCatalogFilesBpHistories;
+    }
+
+    public function addApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
+    {
+        if (!$this->apCatalogFilesBpHistories->contains($apCatalogFilesBpHistory)) {
+            $this->apCatalogFilesBpHistories[] = $apCatalogFilesBpHistory;
+            $apCatalogFilesBpHistory->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
+    {
+        if ($this->apCatalogFilesBpHistories->removeElement($apCatalogFilesBpHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($apCatalogFilesBpHistory->getFile() === $this) {
+                $apCatalogFilesBpHistory->setFile(null);
+            }
+        }
 
         return $this;
     }

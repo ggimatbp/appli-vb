@@ -69,7 +69,6 @@ class ApCatalogModelBpController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogModelBp);
             $entityManager->flush();
-
             return $this->redirectToRoute('ap_catalog_model_bp_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -84,7 +83,6 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function show(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository): Response
     {
-        
         $id = $apCatalogModelBp->getId();
         $files = $ApCatalogFilesBpRepository->findAllById($id);
         return $this->render('tabs/Catalog/ap_catalog_model_bp/show.html.twig', [

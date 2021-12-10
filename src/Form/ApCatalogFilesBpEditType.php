@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Liip\ImagineBundle;
 
-class ApCatalogFilesBpType extends AbstractType
+class ApCatalogFilesBpEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -17,7 +17,7 @@ class ApCatalogFilesBpType extends AbstractType
             ->add('name')
             //->add('fileName')
             ->add('imageFile', VichFileType::class, [            
-                'required'      => true,
+                'required'      => false,
                 'allow_delete'  => false, // not mandatory, default is true
                 'download_uri' => false, // not mandatory, default is true
     ])
@@ -25,7 +25,7 @@ class ApCatalogFilesBpType extends AbstractType
             // ->add('fileSize')
             // ->add('fileType')
             //  ->add('createdAt')
-            // ->add('model')
+              ->add('model')
             //  ->add('user')
         ;
     }

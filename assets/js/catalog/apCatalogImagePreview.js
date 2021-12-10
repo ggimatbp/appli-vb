@@ -15,10 +15,20 @@ import { vNotify } from '../app';
    
 import $ from 'jquery';
 
+
+//on import le dropdown de bootstrap (technique pour que la modale ne bloque pas le système de dropdown bootstrap)
+
+import 'bootstrap/js/dist/dropdown';
+
 //#endregion import
 
 //#region image preview form
-const inpFile = document.getElementById("ap_catalog_files_bp_imageFile_file")
+let inpFile = 1
+if (document.getElementById("ap_catalog_files_bp_imageFile_file"))
+{inpFile = document.getElementById("ap_catalog_files_bp_imageFile_file")}
+if(document.getElementById("ap_catalog_files_bp_edit_imageFile_file"))
+{inpFile = document.getElementById("ap_catalog_files_bp_edit_imageFile_file")}
+ 
 const previewContainer = document.getElementById("imagePreview")
 const previewImage = previewContainer.querySelector(".image-preview__image")
 const previewDefaultText = previewContainer.querySelector(".image-preview__default-text")
