@@ -12,10 +12,11 @@
 
 
 {% block body %}
+
 	<h1 class="catalog-h1 m-2">Dossier du model de batterie: {{ ap_catalog_model_bp.name }}</h1>
 	<span class="d-flex justify-content-around">
 		<a class="m-2 btn" href="{{ path('ap_catalog_files_bp_new', {'id': ap_catalog_model_bp.id}) }}">Ajouter un document</a>
-		<span></span>
+		<a class="m-2 btn" href="{{ path('ap_catalog_model_bp_archive', {'id': ap_catalog_model_bp.id}) }}">Archiver le model</a>
 	</span>
 	<input id="hidden-data-picture-id" name="hidden-data-picture-id" type="hidden" value="">
 	<div id="allCardFromCatalogModelShowBp" class='d-flex justify-content-around flex-wrap'>
@@ -23,7 +24,7 @@
 					{% set loopCarroussel = 0 %}
 		{% for ap_catalog_files_bp in files %}
 		{% if ap_catalog_files_bp.fileType == "pdf" %}
-			<div class="card card-design {{'card' ~ ap_catalog_files_bp.id }}">
+			<div class="{% if ap_catalog_files_bp.archive == 1 %} archived {% endif %}card card-design {{'card' ~ ap_catalog_files_bp.id }}">
 		
 				<span type="button" data-bs-toggle="modal" data-id="{{ap_catalog_files_bp.id}}"  data-bs-target="{{'#exampleModalPdf' ~ ap_catalog_files_bp.id}}" class="d-flex justify-content-center align-items-center d-card-img-top card-pdf-vich-miniature">
 					<i class="p-3 text-danger fas fa-file-pdf fa-7x"></i>
@@ -44,11 +45,13 @@
 							<i class="fas fa-times"></i>
 						</span>
 					</span>
-					<p class="card-text text-end">
+					<p class="card-text d-flex justify-content-around">
+						<a class="danger" href="{{ path('ap_catalog_files_bp_archive', {'id': ap_catalog_files_bp.id}) }}"><i class="fas fa-file-archive"></i></a>
 						<small class="text-muted">{{ ap_catalog_files_bp.createdAt|format_datetime() }}</small>
 					</p>
 				</div>
 			</div>
+
 {# modal for pdf display #}
 <!-- Modal for pdf display -->
 <div class="modal fade" id="{{'exampleModalPdf' ~ ap_catalog_files_bp.id}}" tabindex="-1" aria-labelledby="exampleModalLabelPdf" aria-hidden="true">
@@ -95,7 +98,7 @@
 			{% if ap_catalog_files_bp.fileType == "pdf" %}
 			{% else %}
 			<div
-				class="card card-design {{'card' ~ ap_catalog_files_bp.id }}">
+				class="{% if ap_catalog_files_bp.archive == 1 %} archived {% endif %} card card-design {{'card' ~ ap_catalog_files_bp.id }}">
 				<span type="button" class="btn-launch-modal" data-img-id="{{ap_catalog_files_bp.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
 					<img src="{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile') | imagine_filter('miniature') }}" class="card-img-top" alt="model image upload">
 				</span>
@@ -114,7 +117,8 @@
 							<i class="fas fa-times"></i>
 						</span>
 					</span>
-					<p class="card-text text-end">
+					<p class="card-text d-flex justify-content-around">
+						<a class="danger" href="{{ path('ap_catalog_files_bp_archive', {'id': ap_catalog_files_bp.id}) }}"><i class="fas fa-file-archive"></i></a>
 						<small class="text-muted">{{ ap_catalog_files_bp.createdAt|format_datetime() }}</small>
 					</p>
 				</div>

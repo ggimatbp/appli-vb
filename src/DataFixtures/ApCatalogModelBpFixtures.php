@@ -20,6 +20,7 @@ class ApCatalogModelBpFixtures extends Fixture implements DependentFixtureInterf
             $model = new ApCatalogModelBp;
             $model->setCustomer($this->getReference('catalogCustomer_'. rand(1,9)));
             $model->setName('model'. $index);
+            $model->setArchive(0);
             $manager->persist($model);
         }
             

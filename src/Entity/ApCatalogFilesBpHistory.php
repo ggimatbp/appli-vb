@@ -18,12 +18,12 @@ class ApCatalogFilesBpHistory
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="apCatalogFilesBpHistories")
+     * @ORM\Column(type="integer")
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=apCatalogFilesBp::class, inversedBy="apCatalogFilesBpHistories")
+     * @ORM\Column(type="integer")
      */
     private $file;
 
@@ -52,24 +52,24 @@ class ApCatalogFilesBpHistory
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?int
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?int $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getFile(): ?apCatalogFilesBp
+    public function getFile(): ?int
     {
         return $this->file;
     }
 
-    public function setFile(?apCatalogFilesBp $file): self
+    public function setFile(?int $file): self
     {
         $this->file = $file;
 

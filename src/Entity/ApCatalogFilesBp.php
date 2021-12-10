@@ -27,6 +27,7 @@ class ApCatalogFilesBp
 
     /**
      * @ORM\ManyToOne(targetEntity=ApCatalogModelBp::class, inversedBy="apCatalogFilesBps")
+     * @ORM\JoinColumn(onDelete="CASCADE") 
      */
     private $model;
 
@@ -73,9 +74,14 @@ class ApCatalogFilesBp
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="file")
+     * @ORM\Column(type="boolean")
      */
-    private $apCatalogFilesBpHistories;
+    private $archive = 0;
+
+    // /**
+    //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="file")
+    //  */
+    // private $apCatalogFilesBpHistories;
 
     public function __construct()
     {
@@ -189,32 +195,44 @@ class ApCatalogFilesBp
         return $this;
     }
 
-    /**
-     * @return Collection|ApCatalogFilesBpHistory[]
-     */
-    public function getApCatalogFilesBpHistories(): Collection
+    // /**
+    //  * @return Collection|ApCatalogFilesBpHistory[]
+    //  */
+    // public function getApCatalogFilesBpHistories(): Collection
+    // {
+    //     return $this->apCatalogFilesBpHistories;
+    // }
+
+    // public function addApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
+    // {
+    //     if (!$this->apCatalogFilesBpHistories->contains($apCatalogFilesBpHistory)) {
+    //         $this->apCatalogFilesBpHistories[] = $apCatalogFilesBpHistory;
+    //         $apCatalogFilesBpHistory->setFile($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
+    // {
+    //     if ($this->apCatalogFilesBpHistories->removeElement($apCatalogFilesBpHistory)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($apCatalogFilesBpHistory->getFile() === $this) {
+    //             $apCatalogFilesBpHistory->setFile(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    public function getArchive(): ?bool
     {
-        return $this->apCatalogFilesBpHistories;
+        return $this->archive;
     }
 
-    public function addApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
+    public function setArchive(bool $archive): self
     {
-        if (!$this->apCatalogFilesBpHistories->contains($apCatalogFilesBpHistory)) {
-            $this->apCatalogFilesBpHistories[] = $apCatalogFilesBpHistory;
-            $apCatalogFilesBpHistory->setFile($this);
-        }
-
-        return $this;
-    }
-
-    public function removeApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
-    {
-        if ($this->apCatalogFilesBpHistories->removeElement($apCatalogFilesBpHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($apCatalogFilesBpHistory->getFile() === $this) {
-                $apCatalogFilesBpHistory->setFile(null);
-            }
-        }
+        $this->archive = $archive;
 
         return $this;
     }
