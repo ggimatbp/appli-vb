@@ -25,8 +25,14 @@ class ApCatalogModelBp
     /**
      * @ORM\ManyToOne(targetEntity=ApCatalogCustomerBp::class, inversedBy="apCatalogModelBps")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE") 
      */
     private $customer;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $archive = 0;
 
     public function getId(): ?int
     {
@@ -60,5 +66,17 @@ class ApCatalogModelBp
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getArchive(): ?bool
+    {
+        return $this->archive;
+    }
+
+    public function setArchive(bool $archive): self
+    {
+        $this->archive = $archive;
+
+        return $this;
     }
 }

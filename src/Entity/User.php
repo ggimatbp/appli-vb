@@ -72,9 +72,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $apCatalogFilesBps;
 
+    // /**
+    //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="user")
+    //  */
+    // private $apCatalogFilesBpHistories;
+
     public function __construct()
     {
         $this->apCatalogFilesBps = new ArrayCollection();
+        $this->apCatalogFilesBpHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -268,4 +274,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->lastname;
     }
+
+    // /**
+    //  * @return Collection|ApCatalogFilesBpHistory[]
+    //  */
+    // public function getApCatalogFilesBpHistories(): Collection
+    // {
+    //     return $this->apCatalogFilesBpHistories;
+    // }
+
+    // public function addApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
+    // {
+    //     if (!$this->apCatalogFilesBpHistories->contains($apCatalogFilesBpHistory)) {
+    //         $this->apCatalogFilesBpHistories[] = $apCatalogFilesBpHistory;
+    //         $apCatalogFilesBpHistory->setUser($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
+    // {
+    //     if ($this->apCatalogFilesBpHistories->removeElement($apCatalogFilesBpHistory)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($apCatalogFilesBpHistory->getUser() === $this) {
+    //             $apCatalogFilesBpHistory->setUser(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
 }

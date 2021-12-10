@@ -3,8 +3,10 @@
 namespace App\Controller\Tabs\Catalog;
 
 use App\Entity\ApCatalogFilesBp;
+use App\Entity\ApCatalogFilesBpHistory;
 use App\Entity\User;
 use App\Form\ApCatalogFilesBpType;
+use App\Form\ApCatalogFilesBpEditType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\ApCatalogFilesBpRepository;
@@ -12,7 +14,7 @@ use App\Repository\ApCatalogModelBpRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use LiipImagineBundleModelBinary;
+// use LiipImagineBundleModelBinary;
 
 
 /**
@@ -33,37 +35,43 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/new/{id}", name="ap_catalog_files_bp_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ApCatalogModelBpRepository $apCatalogModelBp): Response
+    public function new(EntityManagerInterface $manager, Request $request, ApCatalogModelBpRepository $apCatalogModelBp): Response
     {
         $apCatalogFilesBp = new ApCatalogFilesBp();
         $form = $this->createForm(ApCatalogFilesBpType::class, $apCatalogFilesBp, );
         $form->handleRequest($request);
         $id = intval(basename("$_SERVER[REQUEST_URI]"));
+
         if ($form->isSubmitted() && $form->isValid()) {
             // $apCatalogFilesBp->setFileName($apCatalogFilesBp->getName());
             $model = $apCatalogModelBp->find($id);
             $apCatalogFilesBp->setModel($model);
             $imgFile = $apCatalogFilesBp->getImageFile();
             $fileExtension =  $imgFile->guessExtension();
-            //!! note a moi meme: ici on peut faire un blocage dans le cas ou file extention ne corresponde pas a ce que l'on souhaite
 
-            //test
-            
-            // $imageFileCompress = $apCatalogFilesBp->setImageFile($imgFile);;
-
-            //fin du test
             $apCatalogFilesBp->setUser($this->getUser());
             $apCatalogFilesBp->setCreatedAt(new \DateTime());
             $apCatalogFilesBp->setFileSize(filesize($imgFile)/1024);
             
             $apCatalogFilesBp->setFileType($fileExtension);
+            $manager->persist($apCatalogFilesBp);
+            $this->getDoctrine()->getManager()->flush();
+            //we set history
+            $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
+            $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
+            $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
+            $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
+            $ApCatalogFilesBpHistory->setAction("create");
+            $ApCatalogFilesBpHistory->setModelName($model->getName());
+            $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
+            $manager->persist($ApCatalogFilesBpHistory);
+            //end of setting history
             
+            // $entityManager = $this->getDoctrine()->getManager();
             
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($apCatalogFilesBp);
-            $entityManager->flush();
+            // $entityManager->flush();
             // imagejpeg($apCatalogFilesBp->getFileName(), , =75);
-
+            $this->getDoctrine()->getManager()->flush();
              return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
@@ -86,15 +94,35 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_catalog_files_bp_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ApCatalogFilesBp $apCatalogFilesBp): Response
+    public function edit(EntityManagerInterface $manager, Request $request, ApCatalogFilesBp $apCatalogFilesBp ): Response
     {
-        $form = $this->createForm(ApCatalogFilesBpType::class, $apCatalogFilesBp);
+        $modelId = $apCatalogFilesBp->getModel();
+        $id = $modelId->getId();
+        $fileBefore = $apCatalogFilesBp->getImageFile();
+        $form = $this->createForm(ApCatalogFilesBpEditType::class, $apCatalogFilesBp);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $imgFile = $apCatalogFilesBp->getImageFile();
+            if($imgFile == $fileBefore){
+            }else{
+                $fileExtension =  $imgFile->guessExtension();
+                $apCatalogFilesBp->setFileType($fileExtension);
+            }
+            $manager->persist($apCatalogFilesBp);
+            $this->getDoctrine()->getManager()->flush();
+            
+            $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
+            $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
+            $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
+            $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
+            $ApCatalogFilesBpHistory->setAction("edit");
+            $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
+            $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
+            $manager->persist($ApCatalogFilesBpHistory);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('ap_catalog_files_bp_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('tabs/Catalog/ap_catalog_files_bp/edit.html.twig', [
@@ -108,13 +136,15 @@ class ApCatalogFilesBpController extends AbstractController
      */
     public function delete(Request $request, ApCatalogFilesBp $apCatalogFilesBp): Response
     {
+        $modelId = $apCatalogFilesBp->getModel();
+        $id = $modelId->getId();
         if ($this->isCsrfTokenValid('delete'.$apCatalogFilesBp->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apCatalogFilesBp);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('ap_catalog_files_bp_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
     }
 
 
@@ -131,5 +161,23 @@ class ApCatalogFilesBpController extends AbstractController
             return $this->json(["code" => 200,
             "message" => "delete"], 200);
 
+    }
+
+    /**
+     *@Route("/archive/{id}", name="ap_catalog_files_bp_archive", methods={"GET","POST"})
+     */
+    public function archive(ApCatalogFilesBp $apCatalogFilesBp): Response
+    {
+        if ($apCatalogFilesBp->getArchive() == 0 ){
+            $apCatalogFilesBp->setArchive(1);
+        }else{
+            $apCatalogFilesBp->setArchive(0);
+        }
+       $modelId = $apCatalogFilesBp->getModel()->getId();
+       $entityManager = $this->getDoctrine()->getManager();
+       $entityManager->persist($apCatalogFilesBp);
+       $entityManager->flush();
+       return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $modelId], Response::HTTP_SEE_OTHER);
+//       return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
     }
 }

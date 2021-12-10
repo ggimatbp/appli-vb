@@ -29,6 +29,11 @@ class ApCatalogCustomerBp
      */
     private $apCatalogModelBps;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $archive = 0;
+
     public function __construct()
     {
         $this->apCatalogModelBps = new ArrayCollection();
@@ -77,6 +82,18 @@ class ApCatalogCustomerBp
                 $apCatalogModelBp->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getArchive(): ?bool
+    {
+        return $this->archive;
+    }
+
+    public function setArchive(bool $archive): self
+    {
+        $this->archive = $archive;
 
         return $this;
     }

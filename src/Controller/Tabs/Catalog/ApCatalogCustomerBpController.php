@@ -40,7 +40,8 @@ class ApCatalogCustomerBpController extends AbstractController
             $entityManager->persist($apCatalogCustomerBp);
             $entityManager->flush();
 
-            return $this->redirectToRoute('ap_catalog_customer_bp_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
+            //return $this->redirectToRoute('ap_catalog_customer_bp_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('tabs/Catalog/ap_catalog_customer_bp/new.html.twig', [
@@ -73,7 +74,7 @@ class ApCatalogCustomerBpController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('ap_catalog_customer_bp_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('tabs/Catalog/ap_catalog_customer_bp/edit.html.twig', [
@@ -93,6 +94,24 @@ class ApCatalogCustomerBpController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('ap_catalog_customer_bp_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    /**
+     *@Route("/archive/{id}", name="ap_catalog_customer_bp_archive", methods={"GET","POST"})
+     */
+     public function archive(ApCatalogCustomerBp $apCatalogCustomerBp): Response
+     {
+        if($apCatalogCustomerBp->getArchive() == 0){
+        $apCatalogCustomerBp->setArchive(1);
+        }else{
+            $apCatalogCustomerBp->setArchive(0);
+        }
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($apCatalogCustomerBp);
+        $entityManager->flush();
+        return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
+     }
 }

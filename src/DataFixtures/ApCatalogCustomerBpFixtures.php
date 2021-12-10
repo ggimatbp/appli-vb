@@ -30,6 +30,7 @@ class ApCatalogCustomerBpFixtures extends Fixture
         $tablesIndex++;
         $catalogCustomer = new ApCatalogCustomerBp;
         $catalogCustomer->setName($val);
+        $catalogCustomer->setArchive(0);
         $this->addReference('catalogCustomer_' . $tablesIndex, $catalogCustomer);
         $manager->persist($catalogCustomer);
         }

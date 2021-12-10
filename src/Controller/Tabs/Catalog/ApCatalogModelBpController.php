@@ -69,8 +69,7 @@ class ApCatalogModelBpController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogModelBp);
             $entityManager->flush();
-
-            return $this->redirectToRoute('ap_catalog_model_bp_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('ap_catalog_customer_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/new.html.twig', [
@@ -84,7 +83,6 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function show(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository): Response
     {
-        
         $id = $apCatalogModelBp->getId();
         $files = $ApCatalogFilesBpRepository->findAllById($id);
         return $this->render('tabs/Catalog/ap_catalog_model_bp/show.html.twig', [
@@ -137,5 +135,23 @@ class ApCatalogModelBpController extends AbstractController
         return $this->render('tabs/Catalog/ap_catalog_model_bp/Testshow.html.twig', [
             'ap_catalog_model_bp' => $apCatalogModelBp, 'files' => $files
         ]);
+    }
+
+    /**
+     *@Route("/archive/{id}", name="ap_catalog_model_bp_archive", methods={"GET","POST"})
+     */
+    public function archive(ApCatalogModelBp $apCatalogModelBp): Response
+    {
+        if ($apCatalogModelBp->getArchive() == 0 ){
+            $apCatalogModelBp->setArchive(1);
+        }else{
+            $apCatalogModelBp->setArchive(0);
+        }
+       $customerId = $apCatalogModelBp->getCustomer()->getId();
+       $entityManager = $this->getDoctrine()->getManager();
+       $entityManager->persist($apCatalogModelBp);
+       $entityManager->flush();
+       return $this->redirectToRoute('ap_catalog_customer_bp_show', ['id' => $customerId], Response::HTTP_SEE_OTHER);
+//       return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
     }
 }
