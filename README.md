@@ -3,6 +3,7 @@
 
 composer install
 
+create env.local (connection DB)
 
 php bin/console d:f:l
 
