@@ -26,6 +26,7 @@ class ApRole
 
     /**
      * @ORM\OneToMany(targetEntity=ApAccess::class, cascade={"persist"}, mappedBy="role")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $apAccesses;
 
@@ -72,16 +73,6 @@ class ApRole
     }
 
 
-    public function addApAccess(ApAccess $apAccess): self
-    {
-        if (!$this->apAccesses->contains($apAccess)) {
-            $this->apAccesses[] = $apAccess;
-            $apAccess->setRole($this);
-        }
-
-        return $this;
-    }
-
     public function removeApAccess(ApAccess $apAccess): self
     {
         if ($this->apAccesses->removeElement($apAccess)) {
@@ -93,48 +84,6 @@ class ApRole
 
         return $this;
     }
-
-    // /**
-    //  * @return Collection|ApEmployee[]
-    //  */
-    // public function getApEmployees(): Collection
-    // {
-    //     return $this->apEmployees;
-    // }
-
-    // public function addApEmployee(ApEmployee $apEmployee): self
-    // {
-    //     if (!$this->apEmployees->contains($apEmployee)) {
-    //         $this->apEmployees[] = $apEmployee;
-    //         $apEmployee->setRole($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeApEmployee(ApEmployee $apEmployee): self
-    // {
-    //     if ($this->apEmployees->removeElement($apEmployee)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($apEmployee->getRole() === $this) {
-    //             $apEmployee->setRole(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function getJsonRole()
-    // {
-    //     return $this->JsonRole;
-    // }
-
-    // public function setJsonRole(string $name): self
-    // {
-    //     $this->JsonRole = "ROLE_$name";
-        
-    //     return $this;
-    // }
 
     /**
      * @return Collection|User[]
@@ -164,16 +113,6 @@ class ApRole
         }
 
         return $this;
-    }
-
-    public function addapAccesses(ApAccess $apAccess): void
-    {
-        $this->apAccess->add($apAccess);
-    }
-
-    public function removeApAccesses(ApAccess $apAccess): void
-    {
-        $this->tags->removeElement($apAccess);
     }
 
 }

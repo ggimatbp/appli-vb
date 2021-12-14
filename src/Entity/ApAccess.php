@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ApAccessRepository;
+use App\Repository\ApTabRepository;
 use Doctrine\ORM\Mapping as ORM;
 use phpDocumentor\Reflection\Types\Integer;
 
@@ -134,3 +135,6 @@ class ApAccess
     }
 
 }
+
+
+

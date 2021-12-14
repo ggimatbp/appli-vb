@@ -19,6 +19,15 @@ class ApTabRepository extends ServiceEntityRepository
         parent::__construct($registry, ApTab::class);
     }
 
+
+    public function findAllId()
+    {
+        return $this->createQueryBuilder('a')
+            ->select(`a.id`)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return ApTab[] Returns an array of ApTab objects
     //  */
@@ -32,18 +41,6 @@ class ApTabRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?ApTab
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
         ;
     }
     */

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ApRole{% endblock %}
+
+{% block body %}
+<div class="aprole-global-container aprole-new-role-container">
+    <h3 class="align-self-center">Créer un rôle</h1>
+
+    {{ include('tabs/manager/ap_role/_formNew.html.twig') }}
+
+{# {{ dump() }} #}
+<a class="bottom-fix btn-edit-role btn btn-ligth" href="{{ path('manager_index') }}?roleback=2">Retour</a>
+</div>
+{% endblock %}

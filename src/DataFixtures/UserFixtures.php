@@ -2,14 +2,14 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\ApRole;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use app\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
 
        private $passwordHasher;
@@ -25,6 +25,7 @@ class UserFixtures extends Fixture
     $contributor = new User();
     $contributor->setEmail('contributor@monsite.com');
     $contributor->setRoleId($this->getReference('Role_1'));
+    $contributor->setTheme(0);
     $contributor->setPassword($this->passwordHasher->hashPassword(
         $contributor,
         '123'
@@ -39,6 +40,7 @@ class UserFixtures extends Fixture
     $admin = new User();
     $admin->setEmail('admin@monsite.com');
     $admin->setRoleId($this->getReference('Role_2'));
+    $admin->setTheme(0);
     $admin->setPassword($this->passwordHasher->hashPassword(
         $admin,
         '123'

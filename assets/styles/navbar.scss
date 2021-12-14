@@ -1,3 +1,41 @@
-// .active a{
-//     color: $indigo-500 !important;
-// }
+.header1{
+    width:100%;
+    color:  $headerColor;
+    font-weight: $fontWeight;
+    border-bottom:0.2rem solid $headerColor;
+}
+
+.headerNotActive{
+    width:100%;
+    color:  $headerColor;
+    font-weight: $fontWeight;
+}
+
+.header2{
+    width:100%;
+}
+
+.nav-pills .nav-link{
+    background: none;
+     
+    border-radius: 0;
+}
+
+.nav-pills .nav-link.active
+{   border-bottom: 0.2rem solid $headerColor;
+    color: $headerColor;
+    background-color: transparent;
+}
+
+li .active {
+    // background-color:$primaryColor !important;
+    // color: white !important;
+    // font-weight: $fontWeight;
+    // border-bottom: $primaryColor !important ;
+
+}
+
+.nav-item-uniform{
+    color: black; 
+    font-weight: $fontWeight;
+}

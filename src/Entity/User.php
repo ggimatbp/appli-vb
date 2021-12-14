@@ -5,6 +5,8 @@ namespace App\Entity;
 
 use App\Entity\ApRole;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -60,6 +62,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $active;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $theme;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApCatalogFilesBp::class, mappedBy="user")
+     */
+    private $apCatalogFilesBps;
+
+    // /**
+    //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="user")
+    //  */
+    // private $apCatalogFilesBpHistories;
+
+    public function __construct()
+    {
+        $this->apCatalogFilesBps = new ArrayCollection();
+        $this->apCatalogFilesBpHistories = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,18 +118,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    // /**
-    //  * @see UserInterface
-    //  */
-    // public function getRoles(): array
-    // {
-    //     $roles = $this->roles;
-    //     // guarantee every user at least has ROLE_USER
-    //     $roles[] = 'ROLE_USER';
-
-    //     return array_unique($roles);
-    // }
-
     /**
      * @see UserInterface
      */
@@ -132,16 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             
         return $this;
         
-    }
-
-    // public function setJsonRoleUser(string $name): self
-    // {
-    //     $this->JsonRole[] = "ROLE_$name";
-        
-    //     return $this;
-    // }
-
-    
+    }  
 
     /**
      * @see PasswordAuthenticatedUserInterface
@@ -225,4 +227,81 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getTheme(): ?int
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?int $theme): self
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ApCatalogFilesBp[]
+     */
+    public function getApCatalogFilesBps(): Collection
+    {
+        return $this->apCatalogFilesBps;
+    }
+
+    public function addApCatalogFilesBp(ApCatalogFilesBp $apCatalogFilesBp): self
+    {
+        if (!$this->apCatalogFilesBps->contains($apCatalogFilesBp)) {
+            $this->apCatalogFilesBps[] = $apCatalogFilesBp;
+            $apCatalogFilesBp->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApCatalogFilesBp(ApCatalogFilesBp $apCatalogFilesBp): self
+    {
+        if ($this->apCatalogFilesBps->removeElement($apCatalogFilesBp)) {
+            // set the owning side to null (unless already changed)
+            if ($apCatalogFilesBp->getUser() === $this) {
+                $apCatalogFilesBp->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->lastname;
+    }
+
+    // /**
+    //  * @return Collection|ApCatalogFilesBpHistory[]
+    //  */
+    // public function getApCatalogFilesBpHistories(): Collection
+    // {
+    //     return $this->apCatalogFilesBpHistories;
+    // }
+
+    // public function addApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
+    // {
+    //     if (!$this->apCatalogFilesBpHistories->contains($apCatalogFilesBpHistory)) {
+    //         $this->apCatalogFilesBpHistories[] = $apCatalogFilesBpHistory;
+    //         $apCatalogFilesBpHistory->setUser($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeApCatalogFilesBpHistory(ApCatalogFilesBpHistory $apCatalogFilesBpHistory): self
+    // {
+    //     if ($this->apCatalogFilesBpHistories->removeElement($apCatalogFilesBpHistory)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($apCatalogFilesBpHistory->getUser() === $this) {
+    //             $apCatalogFilesBpHistory->setUser(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
 }

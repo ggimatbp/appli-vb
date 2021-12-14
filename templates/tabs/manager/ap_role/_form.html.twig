@@ -1,0 +1,71 @@
+
+
+{# <div class="d-flex div-edit-role-name">
+ {{ form_widget(form.name, {'attr': {'class': 'edit-role-name'}}) }}
+ <input class='btn-edit-role btn btn-ligth' type="submit" value="Soumettre le nom">
+</div> #}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center title-table1" colspan="2">Accès</th>
+                    <th class="text-center title-table1" colspan="4">Gestion des accès</th>
+                </tr>
+                <tr>
+                    <th scope = "col" class="title-table2 col-md-2">Onglet</th>
+                    <th scope = "col" class="title-table2 col-md-2">Sous-onglet</th>
+                    <th scope = "col" class="title-table2 text-center col-lg-2">Ajouter</th>
+                    <th scope = "col" class="title-table2 text-center col-lg-2">Supprimer</th>
+                    <th scope = "col" class="title-table2 text-center col-lg-2">Modifier</th>
+                    <th scope = "col" class="title-table2 text-center col-lg-2">Voir</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% for apaccess in ap_role.apaccesses %}
+            <tr {% if apaccess.tab.apTab is null %}class="onglet-color-role-table"{% endif %}>
+                
+                {% if apaccess.tab.apTab is null %}
+                   <td colspan="2" > <span class="onglet-fontsize-role-table">{{apaccess.tab.name}}</span></td>
+                   
+                {% else %}
+                   <td ></td><td><span class="sous-onglet-fontsize-role-table">{{apaccess.tab.name}}</span></td>
+                {% endif %}
+                
+                <td class ='text-center'>
+                    <a  href="{{ path('add_auth_on_click', {id: apaccess.id})}}" class="js-check" > 
+                        {% if apaccess.add == true %} 
+                            <i class="align-middle text-success far fa-check-square fa-lg"></i>
+                        {% else %} <i class="align-middle text-danger far fa-times-circle fa-lg"></i>
+                        {% endif %}
+                        
+                    </a>
+                </td>
+                <td class ='text-center'>
+                    <a  href="{{ path('delete_auth_on_click', {id: apaccess.id})}}" class="js-check">
+                        {% if apaccess.delete == true %} 
+                            <i class="align-middle text-success far fa-check-square fa-lg"></i>
+                        {% else %} <i class=" align-middle text-danger far fa-times-circle fa-lg"></i>
+                        {% endif %}</a>
+                </td>
+                <td class ='text-center'>
+                    <a  href="{{ path('edit_auth_on_click', {id: apaccess.id})}}" class="js-check">
+                        {% if apaccess.edit == true %} 
+                            <i class="align-middle text-success far fa-check-square fa-lg"></i>
+                        {% else %} <i class="align-middle text-danger far fa-times-circle fa-lg"></i>
+                        {% endif %}
+                        
+                    </a>
+                </td>
+                <td class ='text-center'>
+                    <a  href="{{ path('view_auth_on_click', {id: apaccess.id})}}" class="js-check">
+                    {% if apaccess.view == true %}
+                            <i class="align-middle text-success far fa-check-square fa-lg"></i>
+                            
+                        {% else %} <i class="align-middle text-danger far fa-times-circle fa-lg"></i>
+                        {% endif %}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+</table>
+
+

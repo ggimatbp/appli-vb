@@ -13,6 +13,7 @@ class AppRoleFixture extends Fixture
     // Création d’un utilisateur de type “contributeur” (= auteur)
     $contributor = new ApRole();
     $contributor->setName("CONTRIBUTOR");
+        
 
     $manager->persist($contributor);
     $this->addReference('Role_' . 1 , $contributor);
@@ -27,3 +28,25 @@ class AppRoleFixture extends Fixture
     $manager->flush();
     }
 }
+
+
+/*
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($apRole);
+                $allTabs = $apTabRepository->findAllId(); 
+                    foreach($allTabs as $tab){
+                        $apAccess = new ApAccess;
+                        $apAccess->setTab($tab);
+                        $apAccess->setRole($apRole);
+                        $apAccess->setView(0);
+                        $apAccess->setAdd(0);
+                        $apAccess->setEdit(0);
+                        $apAccess->setDelete(0);
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($apAccess);
+                    };
+
+                    $entityManager->flush();
+                    $id = $apRole->getId();
+*/
+

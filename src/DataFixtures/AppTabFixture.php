@@ -11,116 +11,161 @@ class AppTabFixture extends Fixture
     public const TABLES = [
         [
             'name' => 'Management',
-            'path' => 'manager',
+            'path' => 'manager_index',
+            'controlpath' => 'Manager',
             'children' => [
-                ['name' => 'employee',
-                'path' => 'employee'],
-                ['name' => 'role',
-                'path' => 'roleAndAccess'],
-            ]
+                ['name' => 'Employé',
+                'path' => 'tabs/manager/index/employee.html.twig',
+                'controlpath' => 'User'],
+                ['name' => 'Role',
+                'path' => 'tabs/manager/index/roleAndAccess.html.twig',
+                'controlpath' => 'Role']
+            ],
+        ],
+        [
+            'name' => 'Catalogue',
+            'path' => 'catalog_index',
+            'controlpath' => 'Catalog',
+            'children' => [
+                ['name' => 'Batteries-Prod',
+                'path' => 'tabs/catalog/index/batterieprod.html.twig',
+                'controlpath' => 'Bp'],
+
+                ['name' => 'Velobatterie',
+                'path' => 'tabs/catalog/index/velobatterie.html.twig',
+                'controlpath' => 'Vb'],
+            ],
+
         ],
         [
             'name' => 'Prise en Charge',
-            'path' => 'manager1',
+            'path' => 'manager_fake',
+            'controlpath' => 'spikabarou',
             'children' => [
                 [
                     'name' => 'En cours',
-                    'path' => 'manager'
+                    'path' => 'manager_fake',
+                    'controlpath' => 'spikabarou'
                 ],
                 [
                     'name' => 'Archivées',
-                    'path' => 'manager'
+                    'path' => 'manager_fake',
+                    'controlpath' => 'spikabarou'
                 ],
                 [
                     'name' => 'Admin',
-                    'path' => 'manager'
+                    'path' => 'manager_fake',
+                    'controlpath' => 'spikabarou'
                 ],
             ]
         ],
         [
-            'name' => 'prises en charge BP',
-            'path' => 'manager',
+            'name' => 'Prises en charge BP',
+            'path' => 'manager_fake',
+            'controlpath' => 'spikabarou',
             'children' => [
                 [
                     'name' => 'En cours',
-                    'path' => 'manager'
+                    'path' => 'manager_fake',
+                    'controlpath' => 'spikabarou',
                 ],
                 [
                     'name' => 'Archivées',
-                    'path' => 'manager'
+                    'path' => 'manager_fake',
+                    'controlpath' => 'spikabarou',
                 ],
                 [
                     'name' => 'Admin',
-                    'path' => 'manager'
+                    'path' => 'manager_fake',
+                    'controlpath' => 'spikabarou',
                 ]
             ]
         ],
         [
             'name' => 'Prises en Charges SAV',
-            'path' => 'manager',
+            'path' => 'manager_fake',
+            'controlpath' => 'spikabarou',
             'children' => [
                 [
                     'name' => 'Vélobatterie',
-                    'path' => 'manager'
+                    'path' => 'manager_fake',
+                    'controlpath' => 'spikabarou',
                 ],
                 [
                     'name' => 'Batteries-prod',
-                    'path' => 'manager'
+                    'path' => 'manager_fake',
+                    'controlpath' => 'spikabarou',
                 ],
             ]
         ],
         [
             'name' => 'Expedition',
-            'path' => 'manager',
+            'path' => 'manager_fake',
+            'controlpath' => 'spikabarou',
             'children' => [
-                ['name' => 'en cours',
-                'path' => 'manager'
+                ['name' => 'En cours',
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou',
             ],
                 ['name' => 'Traité',
-                'path' => 'manager'
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou',
             ],
             ]
         ],
         [
             'name' => 'Non-conformités',
-            'path' => 'manager',
+            'path' => 'manager_fake',
+            'controlpath' => 'spikabarou',
             'children' => [
-                ['name' => 'en cours',
-                'path' => 'manager'],
+                ['name' => 'En cours',
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou'],
                 ['name' => 'Archivées',
-                'path' => 'manager'],
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou'],
             ]
         ],
         [
             'name' => 'Pointage',
-            'path' => 'manager',
+            'path' => 'manager_fake',
+            'controlpath' => 'spikabarou',
             'children' => [
                 ['name' => 'Mon pointage',
-                'path' => 'manager'],
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou'],
                 ['name' => 'Demande de congés',
-                'path' => 'manager'],
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou'],
                 ['name' => 'Admin',
-                'path' => 'manager']
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou']
             ]
         ],
         [
             'name' => 'Informations',
-            'path' => 'manager',
+            'path' => 'manager_fake',
+            'controlpath' => 'spikabarou',
             'children' => [
                 ['name' => 'Ressources humaines',
-                'path' => 'manager'],
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou'],
                 ['name' => 'Qualité et sécurité',
-                'path' => 'manager'],
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou'],
             ]
         ],
         [
             'name' => 'Catalogue',
-            'path' => 'manager',
+            'path' => 'manager_fake',
+            'controlpath' => 'spikabarou',
             'children' => [
                 ['name' => 'Batteries-prod',
-                'path' => 'manager'],
-                ['name' => 'velobatterie',
-                'path' => 'manager'],
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou'],
+                ['name' => 'Velobatterie',
+                'path' => 'manager_fake',
+                'controlpath' => 'spikabarou'],
             ]
         ],
 
@@ -128,26 +173,6 @@ class AppTabFixture extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        // // création d'une tab parent
-        // $management = new ApTab();
-        // $management->setName("Management");
-        // $management->setPath("manager");
-
-        // $manager->persist($management);
-
-        // $this->addReference('Tab_' . 1 , $management);
-
-        // // Création d'une tab enfant employee
-
-        // $employee = new ApTab();
-        // $employee->setName("Employee");
-        // $employee->setPath("home");
-        // $employee->setApTab($this->getReference('Tab_1'));
-        // $manager->persist($employee);
-
-        // // Création d'une tab enfant Rôle
-
-        // $manager->flush();
 
         // Génération des catégories mères
         $tabIndex = 0;
@@ -156,6 +181,7 @@ class AppTabFixture extends Fixture
             $tab = new ApTab();
             $tab->setName($val['name']);
             $tab->setPath($val['path']);
+            $tab->setControlPath($val['controlpath']);
             $manager->persist($tab);
             $this->addReference('tab_' . $tabIndex, $tab);
             if (isset($val['children'])) {
@@ -167,12 +193,15 @@ class AppTabFixture extends Fixture
 
     private function loadChildren($tab, $children, $manager, &$tabIndex)
     {
-
+        $tabPosition = 0;
         foreach ($children as $child) {
             $tabIndex++;
+            $tabPosition++;
             $tabChild = new ApTab();
             $tabChild->setName($child['name']);
             $tabChild->setPath($child['path']);
+            $tabChild->setControlPath($child['controlpath']);
+            $tabChild->setPosition($tabPosition);
             $tabChild->setAptab($tab);
             $manager->persist($tabChild);
             $this->addReference('tab_' . $tabIndex, $tabChild);

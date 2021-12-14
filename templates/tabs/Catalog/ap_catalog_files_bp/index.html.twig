@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApCatalogFilesBp index{% endblock %}
+
+{% block body %}
+    <h1>ApCatalogFilesBp index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FileName</th>
+                <th>FileSize</th>
+                <th>FileType</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ap_catalog_files_bp in ap_catalog_files_bps %}
+        <img src="{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')}}">
+            <tr>
+                <td>{{ ap_catalog_files_bp.id }}</td>
+                <td><a style="background-image: url{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')}};"</a>{{ ap_catalog_files_bp.fileName }}</td>
+                <td><a style="background-image: url{{ ap_catalog_files_bp.fileSize }};"</a>{{ ap_catalog_files_bp.fileSize }}</td>
+                <td>{{ ap_catalog_files_bp.fileType }}</td>
+                <td>{{ ap_catalog_files_bp.createdAt ? ap_catalog_files_bp.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('ap_catalog_files_bp_show', {'id': ap_catalog_files_bp.id}) }}">show</a>
+                    <a href="{{ path('ap_catalog_files_bp_edit', {'id': ap_catalog_files_bp.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('ap_catalog_files_bp_new') }}">Create new</a>
+{% endblock %}

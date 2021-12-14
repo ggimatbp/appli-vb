@@ -20,8 +20,25 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-    .addEntry('app', './assets/app.js')
+    //#region JS entry point
 
+    //#region global
+    .addEntry('app', './assets/js/app.js')
+    //#endregion
+    
+    //#region manager
+    .addEntry('apRole', './assets/js/manager/apRole.js')
+    .addEntry('apManager', './assets/js/manager/apManager.js')
+    //#endregion manager
+
+    //#region catalog
+    .addEntry('apCatalog', './assets/js/catalog/apCatalog.js')
+    .addEntry('apCatalogCustomerShow', './assets/js/catalog/apCatalogCustomerShow.js')
+    .addEntry('apCatalogModelBpShow', './assets/js/catalog/apCatalogModelBpShow.js')
+    .addEntry('apCatalogImagePreview', './assets/js/catalog/apCatalogImagePreview.js')
+    //#endregion
+
+    //#endregion JS entry point
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
@@ -30,8 +47,8 @@ Encore
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
-    .enableSingleRuntimeChunk()
-
+    // .enableSingleRuntimeChunk()
+    .disableSingleRuntimeChunk()
     /*
      * FEATURE CONFIG
      *
@@ -69,7 +86,7 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+    .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

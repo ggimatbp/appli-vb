@@ -1,0 +1,14 @@
+{% for ap_role in ap_roles %}
+        <tr>
+
+            <td class="onglet-fontsize-role-table">{{ ap_role.name }}</td>
+            <td class="text-end" >
+                <a href="{{ path('ap_role_edit', {'id': ap_role.id}) }}" class="btn-bottom btn btn-ligth">Modifier</a>
+            </td>
+
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">Aucun résultat</td>
+        </tr>
+{% endfor %}

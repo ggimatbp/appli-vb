@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <h1>User index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Password</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Active</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.active ? 'Yes' : 'No' }}</td>
+                <td>
+                    {# <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
+                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                     <a href="{{ path('user_edit_password', {'id': user.id}) }}">edit password</a> #}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between">
+    <form method = "get" class="d-flex justify-content-around">
+
+        <select class="form-select" aria-label="Default select example" name="pageLimitNumber" placeholder="nbr de pages">
+             <option  value="">Nbr pages</option>
+            <option  value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+        </select>
+         <input type="submit" value="Subscribe!">
+
+    </form>
+        <ul class="pagination justify-content-end">
+    
+            <li class="page-item {{(page == 1) ? 'disabled' : ''}}">
+                <a class="page-link" href="?page=1&limit={{ limit }}" aria-disabled="true"><i class="fas fa-angle-double-left"></i></a>
+            </li>
+            <li class="page-item {{(page == 1) ? 'disabled' : ''}}">
+                <a class="page-link " href="?page= {{ page - 1 }}&limit={{ limit }}"><i class="fas fa-angle-left"></i></a>
+            </li>
+
+            {% set totalPages = (total / limit)|round(0, 'ceil') %}
+
+            {% for item in 1..totalPages %}
+                <li class="page-item {{ (page == item)? 'active': '' }}"> 
+                <a  class="page-link" href="?page={{ item }}&limit={{ limit }}">{{item}}</a>
+                </li>
+            {% endfor %}
+            <li>
+                <form method = "post">
+                    <input autocomplete="off" class="form-control" type ="text" name="pageNumber" id="pageNumber" placeholder="Pages recherché..."/>
+                    {# {% if errors.pageNumber1 %}
+                     {{errors.pageNumber1}}
+                      {% endif %} #}
+                </form>
+            </li>
+        
+            <li class="page-item {{(page == totalPages) ? 'disabled' : ''}}">
+                <a class="page-link " href="?page= {{ page + 1 }}&limit={{ limit }}"><i class="fas fa-angle-right"></i></a>
+            </li>
+            <li class="page-item {{(page == totalPages) ? 'disabled' : ''}}">
+                <a class="page-link" href="?page= {{ totalPages }}&limit={{ limit }}"><i class="fas fa-angle-double-right"></i></a>
+            </li>
+        </ul>
+    </div>
+    <a href="{{ path('user_new') }}">Create new</a>
+{% endblock %}

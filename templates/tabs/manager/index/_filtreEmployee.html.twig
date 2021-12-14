@@ -1,0 +1,30 @@
+<form id="form-employee-fiters">
+    <tr>
+        <th><input data-ajaxOrder="{{ (filterSession is empty ) ? '' : filterSession['ajaxOrder'] }}" data-ajaxFilterNameOrder="{{ (filterSession is empty ) ? '' : filterSession['ajaxFilterNameOrder'] }}" class="form-control employee-filter" placeholder="Id" id="filter-user-id-input" value="{{ (filterSession is empty ) ? '' : filterSession['ajaxId'] }}"></th>
+        <th><input class="form-control employee-filter" placeholder="Nom" id="filter-user-lastname-input" value="{{ (filterSession is empty ) ? '' : filterSession['ajaxLastname'] }}"></th>
+        <th><input class="form-control employee-filter" placeholder="Prénom" id="filter-user-firstname-input" value="{{ (filterSession is empty ) ? '' : filterSession['ajaxFirstname'] }}"></th>
+        <th><input class="form-control employee-filter" placeholder="Email" id="filter-user-email-input" value="{{ (filterSession is empty ) ? '' : filterSession['ajaxEmail'] }}"></th>
+        <th>
+            <select class="form-select employee-filter" name="Role" placeholder="Role" id="filter-user-role-select" >
+            {% for role in allRole %}
+           {% if loop.index == 1 %}
+           <option  value="{{ (filterSession is empty ) ? '' : filterSession['ajaxRoleId'] }}">{{ (filterSession is empty ) ? '' : filterSession['ajaxRoleName'] }}</option>
+            <option value="{{role.id}}">{{role.name}}</option>
+            {% else %}
+            <option value="{{role.id}}" >{{role.name}}</option>
+            {% endif %}
+            {% endfor %}
+            </select>
+        </th>
+        <th> 
+            <select class="form-select employee-filter" name="Role" id="filter-user-active-select">
+                <option value=""></option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+        </th>
+        <input id="hidden-input-order-and-name" type="hidden" data-ajaxOrder="{{ (filterSession is empty ) ? '' : filterSession['ajaxOrder'] }}" data-ajaxFilterNameOrder="{{ (filterSession is empty ) ? '' : filterSession['ajaxFilterNameOrder'] }}">
+        <th><button id="btn-employee-search-filter" class="btn-search"><i class="search-image fas fa-search"></i></button>
+        <button id="btn-employee-erease-filter" class="btn-search"><i class="search-image fas fa-eraser"></i></button></th>
+    </tr>
+</form>

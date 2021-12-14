@@ -1,0 +1,75 @@
+
+/*#region filter arrow ASC DESC */
+
+
+.btn-orderby-highlighted{
+color: $btnPrimaryColor;
+ zoom: 150%;
+// border: 10px solid $btnPrimaryColor;
+}
+
+.btn-orderby-overlook{
+    background-color: transparent;
+    // border: 1px solid transparent;
+    border:none;
+    transition: transform .2s;
+}
+
+.btn-orderby-overlook:hover{
+    transform: scale(1.5);
+}
+/*#endregion */
+
+/*#region bouton de recherche et gomme */
+.btn-search{
+    background:transparent;
+    border-radius: 50%;
+    color: $primaryColor;
+    transition: transform .2s;
+    border: none;
+}
+
+.btn-search:hover{
+    transform: scale(1.5);
+}
+
+ .search-image{
+    color: $primaryColor;
+}
+/*#endregion */
+
+/*#region filter input */
+
+.form-filter-input-global{
+    width:auto;
+}
+/*#endregion */
+
+/*#region array size */
+
+.array-scroll{
+    overflow: scroll;
+    overflow-y: hidden;
+    // min-width: 1000px;
+}
+
+/* hide scrollbar but allow scrolling */
+.array-scroll::-webkit-scrollbar{
+    display: none;/* for Chrome, Safari, and Opera */
+}
+
+.array-scroll {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+}
+
+.array-employee-sizer{
+    min-width: 1000px;
+}
+
+.array-role-sizer{
+    min-width:500px;
+}
+
+/*#endregion */

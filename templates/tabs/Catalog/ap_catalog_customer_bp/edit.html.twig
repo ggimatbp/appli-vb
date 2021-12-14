@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ApCatalogCustomerBp{% endblock %}
+
+{% block body %}
+<pre>
+    {{ dump() }}
+</pre>
+    <h1>Edition de {{ap_catalog_customer_bp.name}}</h1>
+
+    {{ include('tabs/Catalog/ap_catalog_customer_bp/_form.html.twig', {'button_label': 'Update'}) }}
+
+    {{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
+{% endblock %}

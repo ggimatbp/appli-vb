@@ -1,0 +1,52 @@
+/** Button **/
+.btn{
+    font-weight:$fontWeight;
+    background-color: $btnPrimaryColor;
+    color: $btnPrimaryColorText;
+    border:2px solid transparent;
+}
+
+.btn:hover{
+    color: $btnPrimaryColor;
+    background-color: $btnPrimaryColorText;
+    border: 2px solid $btnPrimaryColor;
+}
+
+/** Barre de naviguation **/
+.nav{
+    display: flex;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    flex-wrap: unset;
+}
+
+.nav-link{
+    color:black
+}
+
+.nav-link:hover{
+    color: $primaryColorHoverText;
+    background-color: $primaryColorHover;
+}
+
+a{
+    color: $btnPrimaryColor;
+}
+
+a:hover{
+    color:$headerColor;
+}
+
+
+// modal
+
+//fader time transition when you click on modal ( maybe i should only let it in )
+.fade {
+    transition: opacity 0.36s cubic-bezier(1, -1.05, 0, -0.01);
+    &:not(.show) {
+        opacity: 0;
+        transition: 0.1s;
+      }
+    // cubic-bezier(0.42, 0, 0.02, 1.21);
+}

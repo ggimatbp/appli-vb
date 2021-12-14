@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue{% endblock %}
+{% block javascripts %}
+{{ encore_entry_script_tags('apCatalogCustomerShow') }}
+{% endblock %}
+{% block body %}
+<span class="d-flex">
+    <h1 class="catalog-h1">Client: {{ ap_catalog_customer_bp.name }}</h1>
+    <a class="ps-3 align-self-center" href="{{ path('ap_catalog_customer_bp_edit', {'id': ap_catalog_customer_bp.id}) }}">
+        <i class="fas fa-pencil-alt"></i>
+    </a>
+</span>
+<span class="d-flex justify-content-around">
+    <a class="btn" href="{{path('ap_catalog_model_bp_new_precise', {'id': ap_catalog_customer_bp.id}) }}">Nouveau model</a>
+{{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
+<a class="btn" href="{{ path('ap_catalog_customer_bp_archive', {'id': ap_catalog_customer_bp.id}) }}">Archiver</a>
+</span>
+<span class="d-flex p-5 flex-wrap">
+
+    {% for model in ModelById %}
+    <div style="width:120px;">
+        <span class="p-2 d-flex flex-column"><a class="{% if model.archive == 1  %} archived {% endif %}folder-change" href="{{ path('ap_catalog_model_bp_show', {'id': model.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+        <h4 class="overflow-hidden">{{model.name}}</h4>
+        </span>
+    </div>
+    {% else %}
+        <p>Aucun résultat</p>
+    {% endfor %}
+</span>
+    
+
+
+     
+{% endblock %}

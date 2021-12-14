@@ -1,9 +1,32 @@
-// @import 'variable.scss';
+@import 'variable.scss';
+@import "~@fortawesome/fontawesome-free/css/all.css";
 @import "~bootstrap/scss/bootstrap";
-@import 'home.scss';
+@import "archive.scss";
+@import "array.scss";
+@import "bootstrapModification.scss";
+@import "card.scss";
+@import "catalog.scss";
+@import "employee.scss";
+@import "global.scss";
+@import 'manager.scss';
+@import 'modal.scss';
 @import 'navbar.scss';
+@import "notifyMessage.scss";
+@import 'pagination.scss';
+@import 'role.scss';
 @import 'tab.scss';
+@import 'uploadFile.scss';
+
 
 h1{
-color: $indigo-500;
+color: $primaryColor
 }
+
+h2{
+    color: $primaryColor
+}
+
+h3{
+    color: $primaryColor
+}
+
