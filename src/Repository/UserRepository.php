@@ -106,43 +106,52 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         #endregion filter
         #region order
         if($ajaxOrder != null){
-            if($ajaxOrder == 1)
-            {
-                if($ajaxFilterNameOrder == "email"){
-                    $query->orderBy('u.email', 'ASC');
+            $ajaxOrder == 1 ? $orderBy = 'ASC' : $orderBy = 'DESC';
+            // {
+            //     $orderBy = 'ASC';
+
+            if($ajaxFilterNameOrder == "role"){
+                $query->leftJoin('u.roleId', 'r')
+                ->orderBy('r.name',  $orderBy);
+            }elseif(isset($ajaxFilterNameOrder))
+                {
+                    $query->orderBy('u.' . $ajaxFilterNameOrder, $orderBy);
                 }
-                if($ajaxFilterNameOrder == "firstname"){
-                    $query->orderBy('u.firstname', 'ASC');
-                }
-                if($ajaxFilterNameOrder == "lastname"){
-                    $query->orderBy('u.lastname', 'ASC');
-                }
-                if($ajaxFilterNameOrder == "id"){
-                    $query->orderBy('u.id', 'ASC');
-                }
-                if($ajaxFilterNameOrder == "role"){
-                    $query->leftJoin('u.roleId', 'r')
-                    ->orderBy('r.name', 'ASC');
-                }
+                // if($ajaxFilterNameOrder == "email"){
+                //     $query->orderBy('u.email', 'ASC');
+                // }
+                // if($ajaxFilterNameOrder == "firstname"){
+                //     $query->orderBy('u.firstname', 'ASC');
+                // }
+                // if($ajaxFilterNameOrder == "lastname"){
+                //     $query->orderBy('u.lastname', 'ASC');
+                // }
+                // if($ajaxFilterNameOrder == "id"){
+                //     $query->orderBy('u.id', 'ASC');
+                // }
+
                 
-            }elseif($ajaxOrder == 0){
-                if($ajaxFilterNameOrder == "email"){
-                    $query->orderBy('u.email', 'DESC');
-                }
-                if($ajaxFilterNameOrder == "firstname"){
-                    $query->orderBy('u.firstname', 'DESC');
-                }
-                if($ajaxFilterNameOrder == "lastname"){
-                    $query->orderBy('u.lastname', 'DESC');
-                }
-                if($ajaxFilterNameOrder == "id"){
-                    $query->orderBy('u.id', 'DESC');
-                }
-                if($ajaxFilterNameOrder == "role"){
-                    $query->leftJoin('u.roleId', 'r')
-                    ->orderBy('r.name', 'DESC');
-                }
-            }
+            // }elseif($ajaxOrder == 0){
+            //     if(isset($ajaxFilterNameOrder)){
+            //         $query->orderBy('u.' . $ajaxFilterNameOrder, 'DESC');
+            //     }
+            //     // if($ajaxFilterNameOrder == "email"){
+            //     //     $query->orderBy('u.email', 'DESC');
+            //     // }
+            //     // if($ajaxFilterNameOrder == "firstname"){
+            //     //     $query->orderBy('u.firstname', 'DESC');
+            //     // }
+            //     // if($ajaxFilterNameOrder == "lastname"){
+            //     //     $query->orderBy('u.lastname', 'DESC');
+            //     // }
+            //     // if($ajaxFilterNameOrder == "id"){
+            //     //     $query->orderBy('u.id', 'DESC');
+            //     // }
+            //     if($ajaxFilterNameOrder == "role"){
+            //         $query->leftJoin('u.roleId', 'r')
+            //         ->orderBy('r.name', 'DESC');
+            //     }
+            // }
         }
         #endregion order
             $query->setFirstResult(($pages * $limit) - $limit)

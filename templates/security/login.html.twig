@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Login{% endblock %}</title>
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
@@ -16,8 +16,8 @@
     <body>
 
 {% block body %}
-<div class="aprole-global-container">
-    <form method="post">
+<div class="aprole-global-container form-container-with-title">
+    <form method="post" class="login-form">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -28,8 +28,8 @@
             </div>
         {% endif %}
     <div class="aprole-global-container">
-        <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-        <div class="aprole-global-container">
+        <h1 class="align-self-center text-center">Connexion</h1>
+        <div class="aprole-global-container form-new-name-container ">
 
             <label class="m-1" for="inputEmail">Mail</label>
             <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
@@ -39,7 +39,6 @@
             <input type="hidden" name="_csrf_token"
                 value="{{ csrf_token('authenticate') }}"
             >
-
             {#
                 Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
                 See https://symfony.com/doc/current/security/remember_me.html
@@ -50,8 +49,7 @@
                     </label>
                 </div>
             #}
-
-            <button class="m-5 btn-bottom btn-edit-role btn btn-ligth" type="submit">
+            <button class="mt-5 btn btn-ligth" type="submit">
                 Se connecter
             </button>
         </div>

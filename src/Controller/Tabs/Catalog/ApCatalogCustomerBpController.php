@@ -55,7 +55,7 @@ class ApCatalogCustomerBpController extends AbstractController
      * @Route("/{id}", name="ap_catalog_customer_bp_show", methods={"GET"})
      */
     public function show(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, $id): Response
-    { 
+    {
         $id = $apCatalogCustomerBp->getId();
         $ModelById = $apCatalogModelBpRepository->findAllById($id);
         return $this->render('tabs/Catalog/ap_catalog_customer_bp/show.html.twig', [
@@ -89,7 +89,7 @@ class ApCatalogCustomerBpController extends AbstractController
      */
     public function delete(Request $request, ApCatalogCustomerBp $apCatalogCustomerBp): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$apCatalogCustomerBp->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $apCatalogCustomerBp->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apCatalogCustomerBp);
             $entityManager->flush();
@@ -102,28 +102,27 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      *@Route("/archive/{id}", name="ap_catalog_customer_bp_archive", methods={"GET","POST"})
      */
-     public function archive(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
-     {
-        if($apCatalogCustomerBp->getArchive() == 0){
-        $apCatalogCustomerBp->setArchive(1);
-        $customerId = $apCatalogCustomerBp->getId();
-        $allModelByCustomerId = $apCatalogModelBpRepository->findAllById($customerId);
-        foreach($allModelByCustomerId as $model){
-            $model->setArchive(1);
-            $modelId = $model->getId();
-            $allFileByModelId = $apCatalogFilesBpRepository->findAllById($modelId);
-            foreach($allFileByModelId as $file){
-                $file->setArchive(1);
+    public function archive(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
+    {
+        if ($apCatalogCustomerBp->getArchive() == 0) {
+            $apCatalogCustomerBp->setArchive(1);
+            $customerId = $apCatalogCustomerBp->getId();
+            $allModelByCustomerId = $apCatalogModelBpRepository->findAllById($customerId);
+            foreach ($allModelByCustomerId as $model) {
+                $model->setArchive(1);
+                $modelId = $model->getId();
+                $allFileByModelId = $apCatalogFilesBpRepository->findAllById($modelId);
+                foreach ($allFileByModelId as $file) {
+                    $file->setArchive(1);
+                }
             }
-        }
-
-        }else{
+        } else {
             $apCatalogCustomerBp->setArchive(0);
         }
-        
+
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($apCatalogCustomerBp);
         $entityManager->flush();
         return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
-     }
+    }
 }
