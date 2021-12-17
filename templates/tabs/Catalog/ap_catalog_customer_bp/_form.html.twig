@@ -1,4 +1,6 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="form-div-edit-single p-5">
+        {{ form_widget(form.name, {'attr': {'class': 'form-new-single form-new-phone-size'}}) }}
+        <button class="form-new-phone-size btn btn-ligth">{{ button_label|default('Envoyer') }}</button>
+    </div>
 {{ form_end(form) }}

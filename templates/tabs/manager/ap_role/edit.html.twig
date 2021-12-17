@@ -8,12 +8,14 @@
 <a class="m-3 btn-edit-role btn btn-ligth" href="{{ path('manager_index') }}?roleback=2">Retour</a>
 <div class="aprole-global-container">
     <h3>Modifier un rôle</h1>
-<div class="d-flex div-edit-role-name">
-    <input class="edit-role-name" type="text" name="name" id="role-name" data-id="{{ap_role.id}}" value="{{ap_role.name}}" >
-    <button  id="role-name-btn" type='button' class='btn-bottom btn-edit-role btn btn-ligth'>Soumettre le Nom</button> 
+<div class="mb-5 mt-5 form-div-edit-single">
+    <input class="form-new-phone-size form-edit-single" type="text" name="name" id="role-name" data-id="{{ap_role.id}}" value="{{ap_role.name}}" >
+    <button  id="role-name-btn" type='button' class='form-new-phone-size btn-bottom btn-edit-role btn btn-ligth'>Modifier le Nom</button> 
 </div>
+<div class="array-scroll">
     {{ include('tabs/manager/ap_role/_form.html.twig', {'button_label': 'Update'}) }}
-        <div class="d-flex  justify-content-evenly div-edit-role-name">
+</div>
+        <div class="d-flex  justify-content-evenly form-div-edit-single">
             {{ include('tabs/manager/ap_role/_delete_form.html.twig') }}
         </div>
 </div>

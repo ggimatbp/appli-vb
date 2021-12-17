@@ -6,6 +6,7 @@ use App\Entity\ApCatalogCustomerBp;
 use App\Form\ApCatalogCustomerBpType;
 use App\Repository\ApCatalogCustomerBpRepository;
 use App\Repository\ApCatalogModelBpRepository;
+use App\Repository\ApCatalogFilesBpRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -101,10 +102,21 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      *@Route("/archive/{id}", name="ap_catalog_customer_bp_archive", methods={"GET","POST"})
      */
-     public function archive(ApCatalogCustomerBp $apCatalogCustomerBp): Response
+     public function archive(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
      {
         if($apCatalogCustomerBp->getArchive() == 0){
         $apCatalogCustomerBp->setArchive(1);
+        $customerId = $apCatalogCustomerBp->getId();
+        $allModelByCustomerId = $apCatalogModelBpRepository->findAllById($customerId);
+        foreach($allModelByCustomerId as $model){
+            $model->setArchive(1);
+            $modelId = $model->getId();
+            $allFileByModelId = $apCatalogFilesBpRepository->findAllById($modelId);
+            foreach($allFileByModelId as $file){
+                $file->setArchive(1);
+            }
+        }
+
         }else{
             $apCatalogCustomerBp->setArchive(0);
         }

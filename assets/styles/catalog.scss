@@ -2,3 +2,47 @@
     margin-block-end: 0px;
 }
 
+.catalog-search-container{
+    display: flex;
+    justify-content: space-around;
+}
+
+.catalog-customer-container-bp{
+    display: flex;
+    justify-content: space-around;
+}
+
+.catalog-grid-customer{
+    margin: $catalogFileContainerMargin;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 100px);
+    justify-content: space-between;
+    grid-gap: 20px;
+}
+
+@media (max-width: 568px){
+    .catalog-customer-container-bp{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .catalog-content-customer-container-bp{
+        margin: 5px;
+        width: 50%
+    }
+}
+
+@media (max-width: 768px){
+    .catalog-search-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .catalog-content-search-container{
+        margin: 5px;
+    }
+
+    .add-cust-catalog-bp{
+        margin-top:5px;
+    }
+}

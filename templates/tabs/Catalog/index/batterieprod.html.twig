@@ -1,8 +1,8 @@
 
 
-    <h1 class="catalog-h1">Index des clients</h1>
-<span class="d-flex justify-content-around">
-    <span class="d-flex flex-column">
+<h1 class="catalog-h1">Index des clients</h1>
+<span class="catalog-search-container">
+    <span class="catalog-content-search-container d-flex flex-column">
         <label for="customer-search-choice">Client {% if (errorsCustomer["customerId"]) is defined  %}
         <span class="text-danger">{{errorsCustomer["customerId"]}}</span>
         {% endif %}
@@ -20,8 +20,7 @@
             </form>
         </span>
     </span>
-
-    <span class="d-flex flex-column">
+    <span class="catalog-content-search-container d-flex flex-column">
         <label for="model-suggestion-choice">Model{% if (errors["modelId"]) is defined  %}
         <span class="text-danger">{{errors["modelId"]}}</span>
         {% endif %}</label>
@@ -38,21 +37,20 @@
             </form>
         </span>
     </span>
-    <span class="d-flex flex-column justify-content-end">
+    <span class="add-cust-catalog-bp d-flex flex-column justify-content-end">
         <a class="btn" href="{{ path('ap_catalog_customer_bp_new') }}">Ajouter un client</a>
     </span> 
 </span>
 
-<span class="d-flex p-5 flex-wrap">     
+{# <span class="d-flex justify-content-center p-5 flex-wrap">      #}
+<span class="catalog-grid-customer">
     {% for ap_catalog_customer_bp in ap_catalog_customer_bps %}
-    <div style="width:120px;">
-        <span class="p-2 d-flex flex-column">
+    <div >
+        <span class=" {% if ap_catalog_customer_bp.archive == 1  %} archived {% endif %} d-flex flex-column">
                 <a class="folder-change" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
                 <h4 class="overflow-hidden">{{ ap_catalog_customer_bp.name }}</h4>
-
                     {# <a href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}">show</a>
                     <a href="{{ path('ap_catalog_customer_bp_edit', {'id': ap_catalog_customer_bp.id}) }}">edit</a> #}
-
         </span>
     </div>
     {% else %}

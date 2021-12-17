@@ -1,0 +1,67 @@
+					
+		{% for ap_catalog_files_bp in files %}
+		{% if ap_catalog_files_bp.fileType == "pdf" %}
+			<div class="{% if ap_catalog_files_bp.archive == 1 %} archived {% endif %}card card-design {{'card' ~ ap_catalog_files_bp.id }}">		
+				<span type="button" data-bs-toggle="modal" data-id="{{ap_catalog_files_bp.id}}"  data-bs-target="{{'#exampleModalPdf' ~ ap_catalog_files_bp.id}}" class="d-flex justify-content-center align-items-center d-card-img-top card-pdf-vich-miniature">
+					<i class="p-3 text-danger fas fa-file-pdf fa-7x"></i>
+				</span>
+					<div class="card-body card-body-design">
+					<span class="d-flex justify-content-between">
+						<span class="">
+							<span class="card-title">{{ ap_catalog_files_bp.name }}</span>
+							{# <a href="{{ path('ap_catalog_files_bp_show', {'id': ap_catalog_files_bp.id}) }}">show</a> #}
+							<a href="{{ path('ap_catalog_files_bp_edit', {'id': ap_catalog_files_bp.id}) }}">
+								<i class="fas fa-pencil-alt"></i>
+							</a>
+						</span>
+						<!-- Button trigger delete modal -->
+						<span type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="delete-btn-files text-danger" data-file-img-id="{{ap_catalog_files_bp.id}}">
+							<i class="fas fa-times"></i>
+						</span>
+					</span>
+					<p class="card-text d-flex justify-content-around">
+						<a class="danger" href="{{ path('ap_catalog_files_bp_archive', {'id': ap_catalog_files_bp.id}) }}"><i class="fas fa-file-archive"></i></a>
+						<small class="text-muted">{{ ap_catalog_files_bp.createdAt|format_datetime() }}</small>
+					</p>
+				</div>
+			</div>
+{# modal for pdf display #}
+<!-- Modal for pdf display -->
+<div class="modal fade" id="{{'exampleModalPdf' ~ ap_catalog_files_bp.id}}" tabindex="-1" aria-labelledby="exampleModalLabelPdf" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen d-flex justify-content-around"> 
+	{#  #}
+	<div class="modal-content">
+	{#  #}
+        {# <h5 class="modal-title" id="exampleModalLabelPdf">Modal title</h5> #}
+		{# <object type="application/pdf"
+    data="{{'http://docs.google.com/gview?embedded=true&url=' ~ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')  ~ '#toolbar=0&navpanes=0&scrollbar=0'}}"
+    width="800px"
+    height="2100px">
+</object> #}
+<input class='{{"pdfFileRoad" ~ ap_catalog_files_bp.id }}' type="hidden" data-src="{{vich_uploader_asset(ap_catalog_files_bp)}}">
+{# test #}
+
+    <div class="top-bar d-flex justify-content-between mt-1">
+		<span></span>
+        <button class="btn" id="{{'prev-page' ~ ap_catalog_files_bp.id }}">previous</button>
+        
+        <span class="align-items-center d-flex page-info">
+            <span class='p-1' id="{{'page-num' ~ ap_catalog_files_bp.id }}"></span> of <span class="p-1" id="{{'page-count'  ~ ap_catalog_files_bp.id }}"></span>
+        </span>
+		<button class="btn" id="{{'next-page' ~ ap_catalog_files_bp.id }}">next</button>
+		<button type="button" class="me-4 mt-1 btn-close {{"btn-close-pdf-destroy" ~ ap_catalog_files_bp.id }}" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <canvas id="{{'pdf-render' ~ ap_catalog_files_bp.id }}"></canvas>
+{# fin test #}
+  		 {# <embed src="{{'http://docs.google.com/gview?embedded=true&url=' ~ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')}}" width="800px" height="2100px"  type='application/pdf'/>  #}
+{# pb avec #}
+
+{# end  #}
+		{#  #}
+		</div>
+		{#  #}
+   </div> 
+</div>
+	{# <embed src="{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')}}" width="800px" height="2100px" /> #}
+		{% endif %}
+		{% endfor %}

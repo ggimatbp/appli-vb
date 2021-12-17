@@ -1,0 +1,61 @@
+
+	<!-- Modal -->
+	<div class="modal  fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+			<div class="modal-content modal-content-design">
+				<div class="modal-body modal-body-design">
+          {# <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button> #}
+
+        {#region carroussel #}
+
+          <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel"   data-bs-interval="false">
+              <div class="carousel-indicators">
+                {% set loopCarrousselButton = 0 %}
+                {% for ap_catalog_files_bp in files %}
+				{% if ap_catalog_files_bp.fileType == "pdf" %}
+				{% else %}
+                  <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="{{loopCarrousselButton}}" class="{{loopCarrousselButton == 0 ? 'active' : ''}}" aria-current="{{loopCarrousselButton == 0 ? 'true' : ''}}" aria-label="{{'Slide ' ~ loopCarrousselButton}}"></button>
+                  {% set loopCarrousselButton = loopCarrousselButton + 1 %}
+				{% endif %}
+                {% endfor %}
+              </div>
+
+            <div class="carousel-inner">
+              {% for ap_catalog_files_bp in files %}
+                {% set loopCarroussel = loopCarroussel + 1 %}
+				{% if ap_catalog_files_bp.fileType == "pdf" %}
+				{% else %}
+
+                <div id="{{'active' ~ ap_catalog_files_bp.id}}" class="carousel-item" data-img-id='{{ap_catalog_files_bp.id}}'>
+                  {# <div class="modal-header modal-header-design"> #}
+                    <h5 class="modal-title modal-title-picture" id="exampleModalLabel">{{ ap_catalog_files_bp.name }}</h5>
+				  
+                  <img src="{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile') | imagine_filter('carroussel') }}" class="image-modal-design d-block w-100" alt="...">
+                  {# <div class="carousel-caption d-none d-md-block">
+                                        <h5>First slide label</h5>
+                                        <p>Some representative placeholder content for the first slide.</p>
+                                      </div> #}
+				
+                </div>
+				{% endif %}
+              {% endfor %}
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+
+              {# endregion #}
+          </div>
+					{# <div class="modal-footer">
+										        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+										        <button type="button" class="btn btn-primary">Save changes</button>
+                          </div> #}
+        </div>						     
+      </div>
+    </div>
+  </div>

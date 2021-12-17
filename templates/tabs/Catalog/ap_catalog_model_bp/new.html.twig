@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ApCatalogModelBp{% endblock %}
+{% block title %}Nouveau model BP{% endblock %}
 
 {% block body %}
-    <h1>Create new ApCatalogModelBp</h1>
-
+<span class="form-new-name-container">
+    <h3 class="align-self-center">Creer un nouveau model BP</h1>
     {{ include('tabs/Catalog/ap_catalog_model_bp/_form.html.twig') }}
-
-    <a href="{{ path('ap_catalog_model_bp_index') }}">back to list</a>
+    <a class="bottom-fix btn-edit-role btn btn-ligth" href="{{ path('ap_catalog_model_bp_index') }}">retour</a>
+</span>
 {% endblock %}

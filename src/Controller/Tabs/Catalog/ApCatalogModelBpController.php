@@ -140,10 +140,15 @@ class ApCatalogModelBpController extends AbstractController
     /**
      *@Route("/archive/{id}", name="ap_catalog_model_bp_archive", methods={"GET","POST"})
      */
-    public function archive(ApCatalogModelBp $apCatalogModelBp): Response
+    public function archive(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
     {
         if ($apCatalogModelBp->getArchive() == 0 ){
             $apCatalogModelBp->setArchive(1);
+            $modelId = $apCatalogModelBp->getId();
+           $filesbyModelId = $apCatalogFilesBpRepository->findAllById($modelId);
+           foreach($filesbyModelId as $file){
+               $file->setArchive(1);
+           }
         }else{
             $apCatalogModelBp->setArchive(0);
         }
