@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ApCatalogFilesBp{% endblock %}
+{% block title %}Nouveau document{% endblock %}
 {% block javascripts %}
 {{ encore_entry_script_tags('apCatalogImagePreview') }}
 {% endblock %}
 {% block body %}
-
-    <h1>Ajout d'un nouveau document pour Batteries-Prod</h1>
+<span class="form-container-with-title">
+    <h1 class="catalog-h1 mt-2" >Ajout d'un nouveau document pour Batteries-Prod</h1>
     {{ include('tabs/Catalog/ap_catalog_files_bp/_form.html.twig') }}
+</span>
 {% endblock %}

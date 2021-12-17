@@ -1,0 +1,34 @@
+		{% for ap_catalog_files_bp in files %}
+			{% if ap_catalog_files_bp.fileType == "pdf" %}
+			{% else %}
+			<div
+				class="{% if ap_catalog_files_bp.archive == 1 %} archived {% endif %} card card-design {{'card' ~ ap_catalog_files_bp.id }}">
+				<span type="button" class="btn-launch-modal" data-img-id="{{ap_catalog_files_bp.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+					<img src="{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile') | imagine_filter('miniature') }}" class="card-img-top" alt="model image upload">
+				</span>
+			
+				<div class="card-body card-body-design">
+					<span class="d-flex justify-content-between">
+						<span class="">
+							<span class="card-title">{{ ap_catalog_files_bp.name }}</span>
+							{# <a href="{{ path('ap_catalog_files_bp_show', {'id': ap_catalog_files_bp.id}) }}">show</a> #}
+							<a href="{{ path('ap_catalog_files_bp_edit', {'id': ap_catalog_files_bp.id}) }}">
+								<i class="fas fa-pencil-alt"></i>
+							</a>
+						</span>
+						<!-- Button trigger delete modal -->
+						<span type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="delete-btn-files text-danger" data-file-img-id="{{ap_catalog_files_bp.id}}">
+							<i class="fas fa-times"></i>
+						</span>
+					</span>
+					<p class="card-text d-flex justify-content-around">
+						<a class="danger" href="{{ path('ap_catalog_files_bp_archive', {'id': ap_catalog_files_bp.id}) }}"><i class="fas fa-file-archive"></i></a>
+						<small class="text-muted">{{ ap_catalog_files_bp.createdAt|format_datetime() }}</small>
+					</p>
+				</div>
+			</div>
+			{% endif %}
+		{% else %}
+			<span colspan="7">Pas de résultats</td>
+		{% endfor %}
+	</div>

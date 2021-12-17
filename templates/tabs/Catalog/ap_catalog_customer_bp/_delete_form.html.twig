@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('ap_catalog_customer_bp_delete', {'id': ap_catalog_customer_bp.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<form class="catalog-content-customer-container-bp" method="post" action="{{ path('ap_catalog_customer_bp_delete', {'id': ap_catalog_customer_bp.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ap_catalog_customer_bp.id) }}">
-    <button class="btn">Supprimer le client</button>
+    <button class="w-100 btn">Supprimer le client</button>
 </form>

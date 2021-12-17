@@ -1,20 +1,25 @@
+<div class="form-new-container">
 {{ form_start(form) }}
 
     <div class="row">
         {{ form_row(form.name, { 'label': 'Nom' }) }}
     </div>
     <div class="row">
-        {{ form_row(form.imageFile, {
+    {{ form_label(form.imageFile, 'Choisissez un document à transférer') }}
+        {{ form_widget(form.imageFile, {
             attr: {
-                'placeholder': 'Choisir une image',
                 'class' : 'imageUpload'
             }
         }) }}
     </div>
 
-    <div class='image-preview' id="imagePreview">
+    <div class='image-preview m-5' id="imagePreview">
         <img src="" alt="Image preview" class="image-preview__image">
         <span class='image-preview__default-text'>Image</span>
     </div>
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+        <button class="btn w-100">{{ button_label|default('Save') }}</button>
+
+
 {{ form_end(form) }}
+</div>

@@ -5,16 +5,16 @@
 {{ encore_entry_script_tags('apRole') }}
 {% endblock %}
 {% block body %}
-<div class="aprole-global-container aprole-container-with-title">
+<div class="aprole-global-container form-container-with-title">
     <h1>Créer un nouvel utilisateur</h1>
-    <div class="aprole-global-container aprole-new-container">
+    <div class="aprole-global-container form-new-container">
     {{ form_start(form) }}
     {{form_row(form.email, { 'label': 'Mail'})}}
     {{form_row(form.firstname, { 'label': 'Prenom'})}}
     {{form_row(form.lastname, { 'label': 'Nom'})}}
     {{form_row(form.active, { 'label': 'Compte actif'})}}
     {{form_row(form.roleId, { 'label': 'Role'})}}
-    <div id ="user-new-password" >{{form_row(form.plainPassword, { 'label': 'Mot de passe'})}}</div>
+    <div id ="user-new-password" >{{form_row(form.plainPassword, {'label': 'Mot de passe'})}}</div>
 
     {# générateur de mot de passe #}
     
