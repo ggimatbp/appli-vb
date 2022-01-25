@@ -6,6 +6,7 @@ namespace App\Controller\Tabs\Catalog;
 
 use App\Entity\ApCatalogModelBp;
 use App\Form\ApCatalogModelBpType;
+use App\Form\ApCatalogModelBpPreciseType;
 use App\Repository\ApCatalogCustomerBpRepository;
 use App\Repository\ApCatalogModelBpRepository;
 use App\Repository\ApCatalogFilesBpRepository;
@@ -95,7 +96,7 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function edit(Request $request, ApCatalogModelBp $apCatalogModelBp): Response
     {
-        $form = $this->createForm(ApCatalogModelBpType::class, $apCatalogModelBp);
+        $form = $this->createForm(ApCatalogModelBppreciseType::class, $apCatalogModelBp);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
