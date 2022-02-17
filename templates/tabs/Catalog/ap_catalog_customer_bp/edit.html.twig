@@ -7,8 +7,12 @@
     <h3 class='align-self-center'>Modification de {{ap_catalog_customer_bp.name}}</h1>
 
     {{ include('tabs/Catalog/ap_catalog_customer_bp/_form.html.twig', {'button_label': 'Envoyer'}) }}
-     <span class="bottom-fix btn-edit-role "> 
-        {{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
-     </span> 
+     {# <span class="bottom-fix btn-edit-role ">  #}
+   <div class="form-div-edit-single p-5">
+      {{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
+   </div>
+
+       
+     {# </span>  #}
 </span>
 {% endblock %}

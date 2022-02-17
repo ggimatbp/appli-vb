@@ -4,8 +4,8 @@
 
 {% block body %}
 <span class="form-new-name-container">
-    <h3 class="align-self-center">Creer un nouveau model BP</h1>
+    <h3 class="align-self-center">Créer un nouveau model BP</h1>
     {{ include('tabs/Catalog/ap_catalog_model_bp/_form.html.twig') }}
-    <a class="bottom-fix btn-edit-role btn btn-ligth" href="{{ path('ap_catalog_model_bp_index') }}">retour</a>
+     <a class="bottom-fix btn-edit-role btn btn-ligth" href="{{ path('ap_catalog_customer_bp_show', {'id': id_customer})  }}">retour</a>
 </span>
 {% endblock %}

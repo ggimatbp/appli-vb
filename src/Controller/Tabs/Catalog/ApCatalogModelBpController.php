@@ -76,6 +76,7 @@ class ApCatalogModelBpController extends AbstractController
         return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/new.html.twig', [
             'ap_catalog_model_bp' => $apCatalogModelBp,
             'form' => $form,
+            'id_customer' => $id
         ]);
     }
 
