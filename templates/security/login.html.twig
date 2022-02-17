@@ -1,23 +1,12 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Login{% endblock %}</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
-
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-
+{% extends 'base.html.twig' %}
+{% block title %}Login{% endblock %}
+{% block javascripts %}
+{% endblock %}
+{% block navbar %}
+{% endblock %}
 {% block body %}
-<div class="aprole-global-container form-container-with-title">
-    <form method="post" class="login-form">
+<div class="h-100">
+    <form method="post" class="login-form-with-title h-100 ">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -27,13 +16,13 @@
                 Vous êtes connécté sur le profil de {{ app.user.firstname }} {{app.user.lastname}}, <a href="{{ path('app_logout') }}">Déconnexion</a>
             </div>
         {% endif %}
-    <div class="aprole-global-container">
+    <div class="login-form-co" >
         <h1 class="align-self-center text-center">Connexion</h1>
-        <div class="aprole-global-container form-new-name-container ">
+        <div class="">
 
-            <label class="m-1" for="inputEmail">Mail</label>
-            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-            <label class="m-1" for="inputPassword">Mot de passe</label>
+            <label class="m-2" for="inputEmail">Mail</label>
+            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="input-phone form-control" autocomplete="email" required autofocus>
+            <label class="m-2" for="inputPassword">Mot de passe</label>
             <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
             <input type="hidden" name="_csrf_token"
@@ -49,13 +38,14 @@
                     </label>
                 </div>
             #}
-            <button class="mt-5 btn btn-ligth" type="submit">
+            <div class="d-flex justify-content-center">
+            <button class=" mt-5 btn btn-ligth" type="submit">
                 Se connecter
             </button>
+            </div>
         </div>
     </form>
     </div>
 </div>
  {% endblock %}
-    </body>
-</html>
+ 

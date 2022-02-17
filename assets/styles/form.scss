@@ -50,10 +50,15 @@
  }
 
  //for login form
-.login-form{
-    width:60%;
-}
+// .login-form{
+//     width:60%;
+// }
 
+.login-form-with-title{
+    display: flex;
+    justify-content: center;
+
+}
 /*#region mediaquery */
 
 

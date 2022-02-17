@@ -115,49 +115,74 @@
 
 /*#region forms*/
 
-
-@media (max-width: 568px){
-    // .div-edit-role-name{
-    //     display: flex;
-    //     flex-direction: column;
-    //     align-items: center;
-    //  }
-    //  .new-role-phone-size{
-    //      margin:5px; 
-    //      width: 263px;
-    //  }
+.login-form-co{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    width: 75%;
 }
 
-@media (min-width: 568px) { 
-    // .aprole-new-container{
-    //     padding:$gloabalPaddingContainer;
-    //     display:flex;
-    //     flex-direction: column;
-    //     justify-content: center;
-    //     width:80%;
-    // }
- }
 
-@media (min-width: 768px) { 
-    // .aprole-new-container{
-    //     padding:$gloabalPaddingContainer;
-    //     display:flex;
-    //     flex-direction: column;
-    //     justify-content: center;
-    //     width:70%;
-    // }
- }
 
-@media (min-height:720px) and ( min-width: 992px)  { 
-    // .aprole-new-container{
-    //     padding:$gloabalPaddingContainer;
-    //     height:80vh;
-    //     display:flex;
-    //     flex-direction: column;
-    //     justify-content: center;
-    //    width:500px;
-    // }
- }
+// @media (min-width: 568px) { 
+//     .login-form-co{
+//         display: flex;
+//         flex-direction: column;
+//         justify-content:center;
+//         width: 100%;
+//     }
+//  }
+@media(min-width:768px){
+    .login-form-co{
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+    }
+}
+@media(min-width:992px){
+    .login-form-co{
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+        width: 80%;
+    }
+}
+@media(min-width:1200px){
+    .login-form-co{
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+        width: 70%;
+    }
+}
+
+// @media screen and (min-width: 568px) {
+//     .login-form-co{
+//         display: flex;
+//         flex-direction: column;
+//         justify-content:center;
+//         width: 50%;
+//     }
+// }
+
+// @media screen and (min-width: 768px) { 
+//     .login-form-co{
+//         display: flex;
+//         flex-direction: column;
+//         justify-content:center;
+//         width: 100%;
+//     }
+//  }
+
+// @media (min-height:720px) and ( min-width: 992px)  { 
+//     .login-form-co{
+//         display: flex;
+//         flex-direction: column;
+//         justify-content:center;
+//         width: 95%;
+//     }
+//  }
+
 
 
 /*endregion */
