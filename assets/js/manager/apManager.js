@@ -214,7 +214,7 @@ function employeeLimitModification()
   //#region Ajax
 
 function ajaxRoleFilter(element, ajaxRoleOrder = null, ajaxRoleOrderName = null){
-
+let ajaxCsrf = $('#csrf-search-role').val();
 let ajaxFilterRoleName = $('#filter-role-lastname-input').val();
 let ajaxRolePage = element;
 let ajaxRoleLimit = $("#hidden-role-input-order-and-name").data('ajaxlimitrole');
@@ -228,6 +228,7 @@ if(ajaxRoleOrder == null)
       type: "GET",
       dataType: "json",
       data: {
+         "ajaxCsrf": ajaxCsrf,
          "ajaxFilterRoleName": ajaxFilterRoleName,
          "ajaxRoleOrder": ajaxRoleOrder,
          "ajaxRoleLimit": ajaxRoleLimit,

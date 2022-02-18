@@ -194,38 +194,42 @@ class ManagerController extends AbstractController
 
         #region Role if Ajax1
         elseif($request->get('ajax1')){
-            //get all ajax value from apmanager.js and declare them
-            $limitRole = $request->get('ajaxRoleLimit');
+            $submittedToken = $request->get('ajaxCsrf');
+                // 'search-item' is the same value used in the template to generate the token
+            if ($this->isCsrfTokenValid('search-item', $submittedToken)) {   
+                //get all ajax value from apmanager.js and declare them
+                $limitRole = $request->get('ajaxRoleLimit');
 
-            $pageRole = $request->get('ajaxRolePage');
+                $pageRole = $request->get('ajaxRolePage');
 
-            $ajaxFilterRoleName = $request->get('ajaxFilterRoleName');
-            
-            $ajaxRoleOrder = $request->get('ajaxRoleOrder');
+                $ajaxFilterRoleName = $request->get('ajaxFilterRoleName');
+                
+                $ajaxRoleOrder = $request->get('ajaxRoleOrder');
 
-            //create a new total related to ajax new filter info for pagination
-            $totalRole = $apRoleRepository->getTotalRoleAfterFilter($ajaxFilterRoleName, $ajaxRoleOrder);
+                //create a new total related to ajax new filter info for pagination
+                $totalRole = $apRoleRepository->getTotalRoleAfterFilter($ajaxFilterRoleName, $ajaxRoleOrder);
 
-            if($pageRole > ceil($totalRole/$limitRole))
-            {
-                $pageRole = ceil($totalRole/$limitRole); 
+                if($pageRole > ceil($totalRole/$limitRole))
+                {
+                    $pageRole = ceil($totalRole/$limitRole); 
+                }
+                if($pageRole < 1)
+                {
+                    $pageRole = 1;
+                }
+
+                //Put all ajax filter in Session
+                $roleFilterSession = $session->set('roleFilter', ['limitRole' => $limitRole, 'pageRole' => $pageRole, 'ajaxFilterRoleName'  => $ajaxFilterRoleName, 'ajaxRoleOrder'=>  $ajaxRoleOrder]);
+
+                //get role's results in database related to ajax filter
+                $ap_roles = $apRoleRepository->findRoleByFilterField($limitRole, $pageRole, $ajaxFilterRoleName, $ajaxRoleOrder);
+
+                //Return only new result of role and pagination 
+                return new JsonResponse([
+                'content' => $this->renderView('tabs/manager/index/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession')),
+                'content2' => $this->renderView('tabs/manager/index/_paginationRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession'))
+                ]);
             }
-            if($pageRole < 1)
-            {
-                $pageRole = 1;
-            }
-
-            //Put all ajax filter in Session
-            $roleFilterSession = $session->set('roleFilter', ['limitRole' => $limitRole, 'pageRole' => $pageRole, 'ajaxFilterRoleName'  => $ajaxFilterRoleName, 'ajaxRoleOrder'=>  $ajaxRoleOrder]);
-
-            //get role's results in database related to ajax filter
-            $ap_roles = $apRoleRepository->findRoleByFilterField($limitRole, $pageRole, $ajaxFilterRoleName, $ajaxRoleOrder);
-
-            //Return only new result of role and pagination 
-            return new JsonResponse([
-            'content' => $this->renderView('tabs/manager/index/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession')),
-            'content2' => $this->renderView('tabs/manager/index/_paginationRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession'))
-            ]);
         }
         #endregion Role if Ajax
 
