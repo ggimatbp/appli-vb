@@ -2,7 +2,12 @@
 
 <div class="aprole-global-container">
     <h1 class="management-h1">Liste des employés</h1>
-    <a class="btn-new btn-bottom btn btn-ligth" href="{{ path('user_new') }}">Ajouter un employé</a>
+  
+     {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabNameEmployee) and ap_access.add is same as(true) %}
+            <a class="btn-new btn-bottom btn btn-ligth" href="{{ path('user_new') }}">Ajouter un employé</a>
+        {% endif %}  
+    {% endfor %} 
     <div class="aprole-global-container array-scroll">
         <table class="table table-hover array-employee-sizer">
             <thead>

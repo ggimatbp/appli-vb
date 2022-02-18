@@ -21,6 +21,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ManagerController extends AbstractController
 {	
+#region constant    
+   public const TAB_EMPLOYEE = "Employé" ; 
+   public const TAB_ROLE = "Role";
+#endregion constant
+
 #region function index
     /**
      * @Route("/", name="index")
@@ -29,10 +34,13 @@ class ManagerController extends AbstractController
     {
     #region Session and pagination
         #region declare
+        $tabNameEmployee = self::TAB_EMPLOYEE;
+        $tabNameRole = self::TAB_ROLE;
+
         $ap_accesses = $apAccessRepository->findAll();
 
         //declare element's number by page
-         $limit = $request->query->get("limit", 2);
+        $limit = $request->query->get("limit", 2);
 
         $limitRole = $request->query->get("limitRole", 2);
 
@@ -144,51 +152,55 @@ class ManagerController extends AbstractController
     #region Employee if Ajax
         if($request->get('ajax')){
             //get all ajax value from apmanager.js and declare them
-            $ajaxOrder = $request->get('ajaxOrder');
+            $submittedToken = $request->get('csrfEmployeeFilter');
+            // 'search-item' is the same value used in the template to generate the token
+            if ($this->isCsrfTokenValid('search-employee-item', $submittedToken)) {
+                $ajaxOrder = $request->get('ajaxOrder');
 
-            $ajaxFilterNameOrder = $request->get('ajaxFilterNameOrder');
+                $ajaxFilterNameOrder = $request->get('ajaxFilterNameOrder');
 
-            $ajaxActive = $request->get('ajaxActive');
+                $ajaxActive = $request->get('ajaxActive');
 
-            $ajaxRoleId = $request->get('ajaxRoleId');
+                $ajaxRoleId = $request->get('ajaxRoleId');
 
-            $ajaxRoleName = $request->get('ajaxRoleName');
+                $ajaxRoleName = $request->get('ajaxRoleName');
 
-            $ajaxEmail = $request->get('ajaxEmail');
+                $ajaxEmail = $request->get('ajaxEmail');
 
-            $ajaxFirstname = $request->get('ajaxFirstname');
+                $ajaxFirstname = $request->get('ajaxFirstname');
 
-            $ajaxLastname = $request->get('ajaxLastname');
+                $ajaxLastname = $request->get('ajaxLastname');
 
-            $ajaxId = $request->get('ajaxId');
+                $ajaxId = $request->get('ajaxId');
 
-            $limit = $request->get('ajaxLimit');
+                $limit = $request->get('ajaxLimit');
 
-            $page = $request->get('ajaxPage');
+                $page = $request->get('ajaxPage');
 
-            //create a new total related to ajax new filter info for pagination
-            $total = $userRepository->getTotalUsersAfterFilters($ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId);
+                //create a new total related to ajax new filter info for pagination
+                $total = $userRepository->getTotalUsersAfterFilters($ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId);
 
-            if($page > ceil($total/$limit))
-            {
-                $page = ceil($total/$limit); 
+                if($page > ceil($total/$limit))
+                {
+                    $page = ceil($total/$limit); 
+                }
+                if($page < 1)
+                {
+                    $page = 1;
+                }
+
+                //get user's results in database related to ajax filter
+                $users = $userRepository->findUserByfilterField($limit, $page, $ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId, $ajaxOrder, $ajaxFilterNameOrder);
+
+                //Put all ajax filter in Session
+                $filterSession = $session->set('filter', ['limit' => $limit, 'page' => $page, 'ajaxActive'  => $ajaxActive, 'ajaxRoleId'=>  $ajaxRoleId, 'ajaxRoleName'=>$ajaxRoleName, 'ajaxEmail' => $ajaxEmail, 'ajaxFirstname' => $ajaxFirstname, 'ajaxLastname' => $ajaxLastname, 'ajaxId' => $ajaxId, 'ajaxOrder' => $ajaxOrder, 'ajaxFilterNameOrder' => $ajaxFilterNameOrder]);
+
+                //Return only new result of employee and pagination
+                return new JsonResponse([
+                    'content' => $this->renderView('tabs/manager/index/_filtredEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'tabNameEmployee')),
+                    'content2' =>$this->renderView('tabs/manager/index/_paginationEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'filterSession')),
+                ]);
             }
-            if($page < 1)
-            {
-                $page = 1;
-            }
-
-            //get user's results in database related to ajax filter
-            $users = $userRepository->findUserByfilterField($limit, $page, $ajaxActive, $ajaxRoleId, $ajaxEmail, $ajaxFirstname, $ajaxLastname, $ajaxId, $ajaxOrder, $ajaxFilterNameOrder);
-
-            //Put all ajax filter in Session
-            $filterSession = $session->set('filter', ['limit' => $limit, 'page' => $page, 'ajaxActive'  => $ajaxActive, 'ajaxRoleId'=>  $ajaxRoleId, 'ajaxRoleName'=>$ajaxRoleName, 'ajaxEmail' => $ajaxEmail, 'ajaxFirstname' => $ajaxFirstname, 'ajaxLastname' => $ajaxLastname, 'ajaxId' => $ajaxId, 'ajaxOrder' => $ajaxOrder, 'ajaxFilterNameOrder' => $ajaxFilterNameOrder]);
-
-            //Return only new result of employee and pagination
-            return new JsonResponse([
-                'content' => $this->renderView('tabs/manager/index/_filtredEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'session', 'filterSession')),
-                'content2' =>$this->renderView('tabs/manager/index/_paginationEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'filterSession')),
-            ]);
         }
         #endregion Employee if Ajax
 
@@ -226,7 +238,7 @@ class ManagerController extends AbstractController
 
                 //Return only new result of role and pagination 
                 return new JsonResponse([
-                'content' => $this->renderView('tabs/manager/index/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession')),
+                'content' => $this->renderView('tabs/manager/index/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'tabNameEmployee')),
                 'content2' => $this->renderView('tabs/manager/index/_paginationRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession'))
                 ]);
             }
@@ -245,7 +257,7 @@ class ManagerController extends AbstractController
         //For the dropdown role name filter
         $allRole = $apRoleRepository->findAll();
 
-        return $this->render('tabs/manager/index/index.html.twig', compact('ap_accesses','ap_roles', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole'));
+        return $this->render('tabs/manager/index/index.html.twig', compact('ap_accesses','ap_roles', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole', 'tabNameEmployee'));
         #endregion If no Ajax
     }
 

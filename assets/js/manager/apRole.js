@@ -30,7 +30,6 @@ function onClickAddAuth(e) {
   const url = this.href;
   const icone = this.querySelector('i');
   let editAccessCsrf = $('#csrf-edit-access').val();
-
   $.ajax({
     type: 'GET',
     url: url,
@@ -64,11 +63,13 @@ function onClickAddAuth(e) {
 $('#role-name-btn').unbind('click').click(function (e) {
   let roleName = $('#role-name').val();
   let roleId = $('#role-name').data('id');
+  let csrfEditName = $('#csrf-edit-name-role').val()
   $.ajax({
     url:'/ap/role/editName/' + roleId,
      type: "GET",
     dataType: "json",
     data: {
+         "csrfEditName": csrfEditName,
          "task": roleName
     },
     async: true,

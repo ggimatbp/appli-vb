@@ -11,6 +11,7 @@
 <div class="mb-5 mt-5 form-div-edit-single">
     <input class="form-new-phone-size  form-edit-single" type="text" name="name" id="role-name" data-id="{{ap_role.id}}" value="{{ap_role.name}}">
     <button  id="role-name-btn" type='button' class='form-new-phone-size btn-bottom btn-edit-role btn btn-ligth'>Modifier le Nom</button>
+    <input id="csrf-edit-name-role" type="hidden" name="token" value="{{ csrf_token('edit-name') }}"/>
 </div>
 <div class="array-scroll">
     {{ include('tabs/manager/ap_role/_form.html.twig', {'button_label': 'Update'}) }}

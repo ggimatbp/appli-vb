@@ -165,12 +165,15 @@ class ApRoleController extends AbstractController
 
     public function editotest(Request $request, ApRole $apRole, EntityManagerInterface $manager) : response
     {
-
-        $roleName = $request->get('task');
-         $apRole->setName($roleName);
-         $manager->flush();
-       return $this->json(["code" => 200,
-       "message" => "changer nom"], 200);
+        $submittedToken = $request->get('csrfEditName');
+                // 'search-item' is the same value used in the template to generate the token
+        if ($this->isCsrfTokenValid('edit-name', $submittedToken)) {
+            $roleName = $request->get('task');
+            $apRole->setName($roleName);
+            $manager->flush();
+        return $this->json(["code" => 200,
+        "message" => "changer nom"], 200);
+        }
     }
 
 }
