@@ -6,16 +6,11 @@
 {% endblock %}
 {% block body %}
 <div class="h-100">
-    <form method="post" class="login-form-with-title h-100 ">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
+    <form method="post" class="login-form-with-title h-100 ">
 
-        {% if app.user %}
-            <div class="mb-3">
-                Vous êtes connécté sur le profil de {{ app.user.firstname }} {{app.user.lastname}}, <a href="{{ path('app_logout') }}">Déconnexion</a>
-            </div>
-        {% endif %}
     <div class="login-form-co" >
         <h1 class="align-self-center text-center">Connexion</h1>
         <div class="">
@@ -43,6 +38,12 @@
                 Se connecter
             </button>
             </div>
+
+        {% if app.user %}
+            <div class="mt-5 d-flex justify-content-center mb-3">
+                Vous êtes connécté sur le profil de {{ app.user.firstname }} {{app.user.lastname}}. <a href="{{ path('app_logout') }}">&nbsp;Déconnexion?</a>
+            </div>
+        {% endif %}
         </div>
     </form>
     </div>
