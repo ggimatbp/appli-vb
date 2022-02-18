@@ -23,29 +23,38 @@ const { default: axios } = require("axios");
 
 document.querySelectorAll('a.js-check').forEach(function (link) {
   link.addEventListener('click', onClickAddAuth);
-})
-
+});
 
 function onClickAddAuth(e) {
-
   e.preventDefault();
   const url = this.href;
   const icone = this.querySelector('i');
-  axios.get(url).then(function () {
+  let editAccessCsrf = $('#csrf-edit-access').val();
 
-    if (icone.classList.contains('fa-times-circle')) {
-      vNotify().success({ text: 'Changement pris en compte.', title: 'Ajout de droit' });
-      icone.classList.replace('fa-times-circle', 'fa-check-square');
-      icone.classList.replace('text-danger', 'text-success');
-    } else {
-      vNotify().success({ text: 'Changement pris en compte.', title: 'Retrait de droit' });
-      icone.classList.replace("fa-check-square", "fa-times-circle");
-      icone.classList.replace('text-success', 'text-danger');
+  $.ajax({
+    type: 'GET',
+    url: url,
+    dataType: 'json',
+    data: {
+      editAccessCsrf: editAccessCsrf,
+    },
+    async: true,
 
-    }
-  }).catch(function () {
-    vNotify().error({ text: 'This is an error notification.', title: 'Error' });
-  })
+    success: function (response) {
+      if (icone.classList.contains('fa-times-circle')) {
+        vNotify().success({ text: 'Changement pris en compte.', title: 'Ajout de droit' });
+        icone.classList.replace('fa-times-circle', 'fa-check-square');
+        icone.classList.replace('text-danger', 'text-success');
+      } else {
+        vNotify().success({ text: 'Changement pris en compte.', title: 'Retrait de droit' });
+        icone.classList.replace('fa-check-square', 'fa-times-circle');
+        icone.classList.replace('text-success', 'text-danger');
+      }
+    },
+    error: function () {
+      vNotify().error({ text: 'This is an error notification.', title: 'Error' });
+    },
+  });
 }
 
 //#endregion ajax add/remove auth access
