@@ -14,7 +14,7 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item" href="{{ path('user_show', {'id': user.id}) }}">Voir</a></li>
                     {% for ap_access in app.user.RoleId.apAccesses %}
-                        {% if ap_access.tab.name is same as(tabNameEmployee) and ap_access.add is same as(true) %}
+                        {% if ap_access.tab.name is same as(tabNameEmployee) and ap_access.edit is same as(true) %}
                             <li><a class="dropdown-item" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a></li>
                         {% endif %}  
                     {% endfor %} 

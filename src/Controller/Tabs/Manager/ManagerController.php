@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class ManagerController extends AbstractController
 {	
 #region constant    
-   public const TAB_EMPLOYEE = "Employé" ; 
+   public const TAB_EMPLOYEE = "Employé"; 
    public const TAB_ROLE = "Role";
 #endregion constant
 
@@ -197,7 +197,7 @@ class ManagerController extends AbstractController
 
                 //Return only new result of employee and pagination
                 return new JsonResponse([
-                    'content' => $this->renderView('tabs/manager/index/_filtredEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'tabNameEmployee')),
+                    'content' => $this->renderView('tabs/manager/index/_filtredEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'tabNameEmployee', 'tabNameRole')),
                     'content2' =>$this->renderView('tabs/manager/index/_paginationEmployee.html.twig', compact('ap_accesses', 'users', 'total', 'limit', 'page', 'filterSession')),
                 ]);
             }
@@ -238,7 +238,7 @@ class ManagerController extends AbstractController
 
                 //Return only new result of role and pagination 
                 return new JsonResponse([
-                'content' => $this->renderView('tabs/manager/index/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'tabNameEmployee')),
+                'content' => $this->renderView('tabs/manager/index/_filteredRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'tabNameEmployee', 'tabNameRole')),
                 'content2' => $this->renderView('tabs/manager/index/_paginationRoleAndAccess.html.twig', compact('ap_accesses','ap_roles', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession'))
                 ]);
             }
@@ -257,7 +257,7 @@ class ManagerController extends AbstractController
         //For the dropdown role name filter
         $allRole = $apRoleRepository->findAll();
 
-        return $this->render('tabs/manager/index/index.html.twig', compact('ap_accesses','ap_roles', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole', 'tabNameEmployee'));
+        return $this->render('tabs/manager/index/index.html.twig', compact('ap_accesses','ap_roles', 'users', 'total', 'limit', 'page', 'session', 'filterSession', 'limitRole', 'pageRole', 'totalRole', 'roleFilterSession', 'allRole', 'tabNameEmployee', 'tabNameRole'));
         #endregion If no Ajax
     }
 

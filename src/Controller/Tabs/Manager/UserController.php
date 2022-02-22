@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Constraints\Length;
  */
 class UserController extends AbstractController
 {
+    public const TAB_EMPLOYEE = "Employé";
     private $myglobalvar = 'user';
     /**
      * @Route("/", name="user_index", methods={"GET"})
@@ -36,9 +37,13 @@ class UserController extends AbstractController
      */
     public function new(Request $request,  UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        // à faire pour mettre de la sécurité en back 
+        // $userId = $this->get('security.token_storage')->getToken()->getUser()->getRoleId()->getApAccesses();
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+        $tabNameEmployee = self::TAB_EMPLOYEE;
 
         if ($form->isSubmitted() && $form->isValid()) {
             $form->get('plainPassword')->getData();
@@ -62,6 +67,7 @@ class UserController extends AbstractController
         return $this->renderForm('tabs/manager/user/new.html.twig', [
             'user' => $user,
             'form' => $form,
+            'tabNameEmployee' => $tabNameEmployee,
         ]);
     }
 
@@ -70,8 +76,10 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
+        $tabNameEmployee = self::TAB_EMPLOYEE;
         return $this->render('tabs/manager/user/show.html.twig', [
             'user' => $user,
+            'tabNameEmployee' => $tabNameEmployee,
         ]);
     }
 
@@ -80,6 +88,7 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        $tabNameEmployee = self::TAB_EMPLOYEE;
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -97,6 +106,7 @@ class UserController extends AbstractController
         return $this->renderForm('tabs/manager/user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
+            'tabNameEmployee' => $tabNameEmployee
         ]);
     }
 

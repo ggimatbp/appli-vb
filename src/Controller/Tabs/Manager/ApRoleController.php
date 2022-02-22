@@ -26,6 +26,7 @@ class ApRoleController extends AbstractController
 {
 
     const BASIC_ROLE = 70;
+    public const TAB_NAME = "Role";
 
     /**
      * @Route("/", name="ap_role_index", methods={"GET"})
@@ -42,8 +43,8 @@ class ApRoleController extends AbstractController
      */
     public function new(Request $request, ApTabRepository $apTabRepository, ApRoleRepository $apRoleRepository): Response
     {
+        $tabName = self::TAB_NAME;
         $apRole = new ApRole();
-
         $form = $this->createForm(ApRoleType::class, $apRole);
         $form->handleRequest($request);
         $allRoles = $apRoleRepository->findAll();
@@ -88,6 +89,7 @@ class ApRoleController extends AbstractController
                 'ap_role' => $apRole,
                 'form' => $form,
                 'tabs' => $apTabRepository->findAll(),
+                'tabName' => $tabName
             ]);
         }
 
@@ -96,6 +98,7 @@ class ApRoleController extends AbstractController
                 'ap_role' => $apRole,
                 'form' => $form,
                 'tabs' => $apTabRepository->findAll(),
+                'tabName' => $tabName
             ]);
 
     }
@@ -117,7 +120,7 @@ class ApRoleController extends AbstractController
      */
     public function edit($id, ApRole $apRole, EntityManagerInterface $entityManager): Response
     {
-
+        $tabName = self::TAB_NAME;
          if (null === $apRole = $entityManager->getRepository(ApRole::class)->find($id)) {
             throw $this->createNotFoundException('No task found for id '.$id);
         }
@@ -131,6 +134,7 @@ class ApRoleController extends AbstractController
 
         return $this->renderForm('tabs/manager/ap_role/edit.html.twig', [
             'ap_role' => $apRole,
+            'tabName' => $tabName,
         ]);
     }
 

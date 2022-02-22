@@ -3,12 +3,15 @@
 {% block title %}New ApRole{% endblock %}
 
 {% block body %}
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
 <div class="aprole-global-container form-new-name-container">
     <h3 class="align-self-center">Créer un rôle</h1>
 
     {{ include('tabs/manager/ap_role/_formNew.html.twig') }}
 
-{# {{ dump() }} #}
 <a class="bottom-fix btn-edit-role btn btn-ligth" href="{{ path('manager_index') }}?roleback=2">Retour</a>
 </div>
+    {% endif %}
+{% endfor %}
 {% endblock %}
