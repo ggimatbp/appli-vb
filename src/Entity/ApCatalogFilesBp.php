@@ -78,6 +78,11 @@ class ApCatalogFilesBp
      */
     private $archive = 0;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=ApSectorBp::class, inversedBy="file")
+     */
+    private $relation;
+
     // /**
     //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="file")
     //  */
@@ -233,6 +238,18 @@ class ApCatalogFilesBp
     public function setArchive(bool $archive): self
     {
         $this->archive = $archive;
+
+        return $this;
+    }
+
+    public function getRelation(): ?ApSectorBp
+    {
+        return $this->relation;
+    }
+
+    public function setRelation(?ApSectorBp $relation): self
+    {
+        $this->relation = $relation;
 
         return $this;
     }

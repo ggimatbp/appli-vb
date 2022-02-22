@@ -13,7 +13,7 @@
 
 {% block body %}
 {# titre et bouton en haut de page #}
-<span class="d-flex">
+{# <span class="d-flex">
 	<h1 class="catalog-h1">Dossier du model de batterie: {{ ap_catalog_model_bp.name }}</h1>
 	{% for ap_access in app.user.RoleId.apAccesses %}
     	{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
@@ -33,7 +33,7 @@
 				<a class="m-2 btn" href="{{ path('ap_catalog_model_bp_archive', {'id': ap_catalog_model_bp.id}) }}">Archiver le model</a>
 			{% endif %}
 		{% endfor %}
-	</span>
+	</span> #}
 	<input id="hidden-data-picture-id" name="hidden-data-picture-id" type="hidden" value="">
 	<div id="allCardFromCatalogModelShowBp" class='d-flex justify-content-around flex-wrap'>
 {# fin #}

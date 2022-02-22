@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Model{% endblock %}
+
+{% block javascripts %}
+{{ encore_entry_script_tags('apCatalogCustomerShow') }}
+{% endblock %}
+
+{% block body %}
+
+    <h1>{{ap_catalog_model_bp.name}}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ap_sector_bp in ap_sector_bps %}
+            <tr>
+                <td>{{ ap_sector_bp.id }}</td>
+                <td>{{ ap_sector_bp.name }}</td>
+                <td>
+                    <a href="{{ path('ap_sector_bp_show', {'id': ap_sector_bp.id}) }}">show</a>
+                    <a href="{{ path('ap_sector_bp_edit', {'id': ap_sector_bp.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <span class="catalog-grid-customer">
+    {% for ap_sector_bp in ap_sector_bps %}
+        <span class="p-2 d-flex flex-column"><a class="folder-change" href="{{ path('ap_catalog_model_bp_show', {'id': ap_sector_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+        <h4 class="overflow-hidden">{{ap_sector_bp.name}}</h4>
+        </span>
+    </div>
+    {% else %}
+        <p>Aucun résultat</p>
+    {% endfor %}
+</span>
+
+    <a href="{{ path('ap_sector_bp_new') }}">Create new</a>
+{% endblock %}

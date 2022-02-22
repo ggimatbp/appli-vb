@@ -5,11 +5,13 @@ namespace App\Controller\Tabs\Catalog;
 
 
 use App\Entity\ApCatalogModelBp;
+use App\Entity\ApSectorBp;
 use App\Form\ApCatalogModelBpType;
 use App\Form\ApCatalogModelBpPreciseType;
 use App\Repository\ApCatalogCustomerBpRepository;
 use App\Repository\ApCatalogModelBpRepository;
 use App\Repository\ApCatalogFilesBpRepository;
+use App\Repository\ApSectorBpRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +37,18 @@ class ApCatalogModelBpController extends AbstractController
             'ap_catalog_model_bps' => $apCatalogModelBpRepository->findAll(),
             'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAll(),
             'tabName' => $tabName
+        ]);
+    }
+
+    /**
+     * @Route("/modelBySector/{id}", name="ap_sector_bp_index", methods={"GET"})
+     */
+    public function indexSectionByModel(ApCatalogModelBp $apCatalogModelBp, ApSectorBpRepository $apSectorBpRepository): Response
+    {
+        $id = $apCatalogModelBp->getId();
+        return $this->render('tabs/Catalog/ap_catalog_model_bp/index_section.html.twig', [
+            'ap_sector_bps' => $apSectorBpRepository->findSectionByModel($id),
+            'ap_catalog_model_bp' => $apCatalogModelBp,
         ]);
     }
 
@@ -93,13 +107,13 @@ class ApCatalogModelBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_model_bp_show", methods={"GET"})
      */
-    public function show(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository): Response
+    public function show(ApCatalogFilesBpRepository $ApCatalogFilesBpRepository, ApSectorBp $apSectorBp): Response
     {
         $tabName = self::TAB_BP;
-        $id = $apCatalogModelBp->getId();
-        $files = $ApCatalogFilesBpRepository->findAllById($id);
+        $id = $apSectorBp->getId();
+        $files = $ApCatalogFilesBpRepository->findFilesBySectors($id);
         return $this->render('tabs/Catalog/ap_catalog_model_bp/show.html.twig', [
-            'ap_catalog_model_bp' => $apCatalogModelBp, 'files' => $files,
+            'files' => $files,
             'tabName' => $tabName
         ]);
     }
