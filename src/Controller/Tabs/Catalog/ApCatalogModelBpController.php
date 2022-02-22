@@ -21,14 +21,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApCatalogModelBpController extends AbstractController
 {
+    #region constant
+    const TAB_BP = "Batteries-Prod";
+    #endregion
+
     /**
      * @Route("/", name="ap_catalog_model_bp_index", methods={"GET"})
      */
     public function index(ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository): Response
     {
+        $tabName = self::TAB_BP;
         return $this->render('tabs/Catalog/ap_catalog_model_bp/index.html.twig', [
             'ap_catalog_model_bps' => $apCatalogModelBpRepository->findAll(),
             'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAll(),
+            'tabName' => $tabName
         ]);
     }
 
@@ -37,6 +43,7 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $tabName = self::TAB_BP;
         $apCatalogModelBp = new ApCatalogModelBp();
         $form = $this->createForm(ApCatalogModelBpType::class, $apCatalogModelBp);
         $form->handleRequest($request);
@@ -52,6 +59,7 @@ class ApCatalogModelBpController extends AbstractController
         return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/new.html.twig', [
             'ap_catalog_model_bp' => $apCatalogModelBp,
             'form' => $form,
+            'tabName' => $tabName
         ]);
     }
 
@@ -60,6 +68,7 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function newWithModel(Request $request, ApCatalogCustomerBpRepository $customerBpRepository): Response
     {
+        $tabName = self::TAB_BP;
         $apCatalogModelBp = new ApCatalogModelBp();
         $form = $this->createForm(ApCatalogModelBpType::class, $apCatalogModelBp);
         $form->handleRequest($request);
@@ -76,6 +85,8 @@ class ApCatalogModelBpController extends AbstractController
         return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/new.html.twig', [
             'ap_catalog_model_bp' => $apCatalogModelBp,
             'form' => $form,
+            'id_customer' => $id,
+            'tabName' => $tabName
         ]);
     }
 
@@ -84,10 +95,12 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function show(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository): Response
     {
+        $tabName = self::TAB_BP;
         $id = $apCatalogModelBp->getId();
         $files = $ApCatalogFilesBpRepository->findAllById($id);
         return $this->render('tabs/Catalog/ap_catalog_model_bp/show.html.twig', [
-            'ap_catalog_model_bp' => $apCatalogModelBp, 'files' => $files
+            'ap_catalog_model_bp' => $apCatalogModelBp, 'files' => $files,
+            'tabName' => $tabName
         ]);
     }
 
@@ -96,6 +109,7 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function edit(Request $request, ApCatalogModelBp $apCatalogModelBp): Response
     {
+        $tabName = self::TAB_BP;
         $form = $this->createForm(ApCatalogModelBppreciseType::class, $apCatalogModelBp);
         $form->handleRequest($request);
 
@@ -108,6 +122,7 @@ class ApCatalogModelBpController extends AbstractController
         return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/edit.html.twig', [
             'ap_catalog_model_bp' => $apCatalogModelBp,
             'form' => $form,
+            'tabName' => $tabName
         ]);
     }
 

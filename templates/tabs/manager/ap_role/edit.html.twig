@@ -5,18 +5,23 @@
 {% block title %}Modifier un rôle{% endblock %}
 
 {% block body %}
-<a class="m-3 btn-edit-role btn btn-ligth" href="{{ path('manager_index') }}?roleback=2">Retour</a>
-<div class="aprole-global-container">
-    <h3>Modifier un rôle</h1>
-<div class="mb-5 mt-5 form-div-edit-single">
-    <input class="form-new-phone-size  form-edit-single" type="text" name="name" id="role-name" data-id="{{ap_role.id}}" value="{{ap_role.name}}">
-    <button  id="role-name-btn" type='button' class='form-new-phone-size btn-bottom btn-edit-role btn btn-ligth'>Modifier le Nom</button>
-</div>
-<div class="array-scroll">
-    {{ include('tabs/manager/ap_role/_form.html.twig', {'button_label': 'Update'}) }}
-</div>
-        <div class="d-flex  justify-content-evenly form-div-edit-single">
-            {{ include('tabs/manager/ap_role/_delete_form.html.twig') }}
-        </div>
-</div>
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+    <a class="m-3 btn-edit-role btn btn-ligth" href="{{ path('manager_index') }}?roleback=2">Retour</a>
+    <div class="aprole-global-container">
+        <h3>Modifier un rôle</h1>
+    <div class="mb-5 mt-5 form-div-edit-single">
+        <input class="form-new-phone-size  form-edit-single" type="text" name="name" id="role-name" data-id="{{ap_role.id}}" value="{{ap_role.name}}">
+        <button  id="role-name-btn" type='button' class='form-new-phone-size btn-bottom btn-edit-role btn btn-ligth'>Modifier le Nom</button>
+        <input id="csrf-edit-name-role" type="hidden" name="token" value="{{ csrf_token('edit-name') }}"/>
+    </div>
+    <div class="array-scroll">
+        {{ include('tabs/manager/ap_role/_form.html.twig', {'button_label': 'Update'}) }}
+    </div>
+            <div class="d-flex  justify-content-evenly form-div-edit-single">
+                {{ include('tabs/manager/ap_role/_delete_form.html.twig') }}
+            </div>
+    </div>
+    {% endif %}
+{% endfor %}
 {% endblock %}

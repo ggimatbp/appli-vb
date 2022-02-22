@@ -3,9 +3,13 @@
 {% block title %}Catalogue nouveau client{% endblock %}
 
 {% block body %}
-<span class="form-new-name-container">
-    <h3 class="align-self-center">Création d'un Client BP</h1>
-        {{ include('tabs/Catalog/ap_catalog_customer_bp/_form.html.twig') }}
-        <a class="bottom-fix btn btn-ligth" href="{{ path('ap_catalog_customer_bp_index') }}">retour</a>
-</span>
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+        <span class="form-new-name-container">
+            <h3 class="align-self-center">Création d'un Client BP</h1>
+                {{ include('tabs/Catalog/ap_catalog_customer_bp/_form.html.twig') }}
+                <a class="bottom-fix btn btn-ligth" href="{{ path('ap_catalog_customer_bp_index') }}">retour</a>
+        </span>
+    {% endif %}
+{% endfor %}
 {% endblock %}

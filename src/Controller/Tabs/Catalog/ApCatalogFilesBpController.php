@@ -22,11 +22,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class ApCatalogFilesBpController extends AbstractController
 {
+
+    #region constant
+    const TAB_BP = "Batteries-Prod";
+    #endregion
+
     /**
      * @Route("/", name="ap_catalog_files_bp_index", methods={"GET"})
      */
     public function index(ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
     {
+
         return $this->render('tabs/Catalog/ap_catalog_files_bp/index.html.twig', [
             'ap_catalog_files_bps' => $apCatalogFilesBpRepository->findAll(),
         ]);
@@ -37,6 +43,7 @@ class ApCatalogFilesBpController extends AbstractController
      */
     public function new(EntityManagerInterface $manager, Request $request, ApCatalogModelBpRepository $apCatalogModelBp): Response
     {
+        $tabName = self::TAB_BP;
         $apCatalogFilesBp = new ApCatalogFilesBp();
         $form = $this->createForm(ApCatalogFilesBpType::class, $apCatalogFilesBp, );
         $form->handleRequest($request);
@@ -78,6 +85,7 @@ class ApCatalogFilesBpController extends AbstractController
         return $this->renderForm('tabs/Catalog/ap_catalog_files_bp/new.html.twig', [
             'ap_catalog_files_bp' => $apCatalogFilesBp,
             'form' => $form,
+            'tabName' => $tabName,
         ]);
     }
 
@@ -86,8 +94,10 @@ class ApCatalogFilesBpController extends AbstractController
      */
     public function show(ApCatalogFilesBp $apCatalogFilesBp): Response
     {
+        $tabName = self::TAB_BP;
         return $this->render('tabs/Catalog/ap_catalog_files_bp/show.html.twig', [
             'ap_catalog_files_bp' => $apCatalogFilesBp,
+            'tabName' => $tabName,
         ]);
     }
 
@@ -96,6 +106,7 @@ class ApCatalogFilesBpController extends AbstractController
      */
     public function edit(EntityManagerInterface $manager, Request $request, ApCatalogFilesBp $apCatalogFilesBp ): Response
     {
+        $tabName = self::TAB_BP;
         $modelId = $apCatalogFilesBp->getModel();
         $id = $modelId->getId();
         $fileBefore = $apCatalogFilesBp->getImageFile();
@@ -128,6 +139,7 @@ class ApCatalogFilesBpController extends AbstractController
         return $this->renderForm('tabs/Catalog/ap_catalog_files_bp/edit.html.twig', [
             'ap_catalog_files_bp' => $apCatalogFilesBp,
             'form' => $form,
+            'tabName' => $tabName,
         ]);
     }
 

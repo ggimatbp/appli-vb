@@ -49,9 +49,12 @@
             {% endfor %}
         </tbody>
     </table>
+     {# {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabNameEmployee) and ap_access.add is same as(true) %}
+            <a class="btn-new btn-bottom btn btn-ligth" href="{{ path('user_new') }}">Ajouter un employé</a>
+        {% endif %}  
+    {% endfor %}  #}
     <a href="{{ path('ap_role_index') }}">back to list</a>
-
     <a href="{{ path('ap_role_edit', {'id': ap_role.id}) }}">edit</a>
-
     {{ include('tabs/manager/ap_role/_delete_form.html.twig') }}
 {% endblock %}

@@ -66,6 +66,7 @@
             </tr>
             {% endfor %}
         </tbody>
+        <input id="csrf-edit-access" type="hidden" name="token" value="{{ csrf_token('edit-item') }}"/>
 </table>
 
 

@@ -16,6 +16,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CatalogController extends AbstractController
 {	
+
+  #region constant
+    const TAB_BP = "Batteries-Prod";
+    const TAB_VB = "Velobatterie";
+  #endregion
+
     #region function index
 
 
@@ -24,6 +30,7 @@ class CatalogController extends AbstractController
      */
     public function index(ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
     {
+        $tabName = self::TAB_BP;
         $errors = [];
         $errorsCustomer =[];
         if (isset($_POST['btnModelValue'])){
@@ -51,6 +58,7 @@ class CatalogController extends AbstractController
             'ap_catalog_files_bps' => $apCatalogFilesBpRepository->findAll(),
             'errors' => $errors,
             'errorsCustomer' => $errorsCustomer,
+            'tabName' => $tabName,
         ]);
     }
     #endregion function index

@@ -3,12 +3,25 @@
 {% block title %}Edit ApCatalogCustomerBp{% endblock %}
 
 {% block body %}
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
 <span class="form-new-name-container">
     <h3 class='align-self-center'>Modification de {{ap_catalog_customer_bp.name}}</h1>
 
     {{ include('tabs/Catalog/ap_catalog_customer_bp/_form.html.twig', {'button_label': 'Envoyer'}) }}
-     <span class="bottom-fix btn-edit-role "> 
-        {{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
-     </span> 
+     {# <span class="bottom-fix btn-edit-role ">  #}
+    {% for ap_access in app.user.RoleId.apAccesses %}
+      {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+      <div class="form-div-edit-single p-5">
+          {{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
+      </div>
+      {% endif %}
+    {% endfor %}
+
+       
+     {# </span>  #}
 </span>
+    {% endif %}
+  {% endfor %}
+    
 {% endblock %}

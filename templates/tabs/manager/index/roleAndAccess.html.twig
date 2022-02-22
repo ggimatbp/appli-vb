@@ -1,7 +1,13 @@
 {% block tabcontent %}
 <div class="aprole-global-container">
     <h1 class="management-h1">Manager les rôles</h1>
-    <a href="{{ path('ap_role_new') }}" class="btn-new btn-bottom btn btn-ligth">Ajouter un rôle</a>
+
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabNameRole) and ap_access.add is same as(true) %}
+            <a href="{{ path('ap_role_new') }}" class="btn-new btn-bottom btn btn-ligth">Ajouter un rôle</a>
+        {% endif %}
+    {% endfor %}
+
     <div class="aprole-global-container array-scroll">
         <table class="table table-hover array-role-sizer">
             <thead>

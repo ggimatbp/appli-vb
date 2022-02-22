@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between">
             <div>
                  <span class="d-flex pagination-total-page-and-number-display">
-                    <select class="form-select" aria-label="Default select example" id="roleSelectLimitLine">
+                    <select class="form-filter-input-global form-select" aria-label="Default select example" id="roleSelectLimitLine">
  
                          {% if limitRole is defined %} 
                             {% if limitRole == 1 %}
@@ -27,7 +27,8 @@
 
                     </select>
                     <span class="p-2 d-flex align-self-center">/{{totalRole}}</span>
-                 </span> 
+                 </span>
+                  
             </div>
             <input id="hidden-val-pageRole" type="hidden" name="pageRole" value="{{pageRole}}">
             <input id="hidden-role-val-limit" type="hidden" name="limitRole" value="{{limitRole}}">

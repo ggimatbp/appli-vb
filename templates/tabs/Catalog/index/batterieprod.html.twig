@@ -37,9 +37,13 @@
             </form>
         </span>
     </span>
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
     <span class="add-cust-catalog-bp d-flex flex-column justify-content-end">
         <a class="btn" href="{{ path('ap_catalog_customer_bp_new') }}">Ajouter un client</a>
     </span> 
+    {% endif %}
+{% endfor %}
 </span>
 
 {# <span class="d-flex justify-content-center p-5 flex-wrap">      #}

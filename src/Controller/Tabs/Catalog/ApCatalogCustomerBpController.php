@@ -17,6 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ApCatalogCustomerBpController extends AbstractController
 {
+    const TAB_BP = "Batteries-Prod";
+
     /**
      * @Route("/", name="ap_catalog_customer_bp_index", methods={"GET"})
      */
@@ -32,6 +34,7 @@ class ApCatalogCustomerBpController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $tabName = self::TAB_BP;
         $apCatalogCustomerBp = new ApCatalogCustomerBp();
         $form = $this->createForm(ApCatalogCustomerBpType::class, $apCatalogCustomerBp);
         $form->handleRequest($request);
@@ -48,6 +51,7 @@ class ApCatalogCustomerBpController extends AbstractController
         return $this->renderForm('tabs/Catalog/ap_catalog_customer_bp/new.html.twig', [
             'ap_catalog_customer_bp' => $apCatalogCustomerBp,
             'form' => $form,
+            'tabName' => $tabName
         ]);
     }
 
@@ -56,11 +60,13 @@ class ApCatalogCustomerBpController extends AbstractController
      */
     public function show(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, $id): Response
     {
+        $tabName = self::TAB_BP;
         $id = $apCatalogCustomerBp->getId();
         $ModelById = $apCatalogModelBpRepository->findAllById($id);
         return $this->render('tabs/Catalog/ap_catalog_customer_bp/show.html.twig', [
             'ap_catalog_customer_bp' => $apCatalogCustomerBp,
             'ModelById' => $ModelById,
+            'tabName' => $tabName
         ]);
     }
 
@@ -69,6 +75,7 @@ class ApCatalogCustomerBpController extends AbstractController
      */
     public function edit(Request $request, ApCatalogCustomerBp $apCatalogCustomerBp): Response
     {
+        $tabName = self::TAB_BP;
         $form = $this->createForm(ApCatalogCustomerBpType::class, $apCatalogCustomerBp);
         $form->handleRequest($request);
 
@@ -81,6 +88,7 @@ class ApCatalogCustomerBpController extends AbstractController
         return $this->renderForm('tabs/Catalog/ap_catalog_customer_bp/edit.html.twig', [
             'ap_catalog_customer_bp' => $apCatalogCustomerBp,
             'form' => $form,
+            'tabName' => $tabName
         ]);
     }
 

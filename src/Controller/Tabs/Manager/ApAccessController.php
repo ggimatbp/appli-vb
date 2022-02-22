@@ -97,42 +97,52 @@ class ApAccessController extends AbstractController
      * @route("/addAuthOnClick/{id}", name="add_auth_on_click")
      */
     
-    public function addAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
+    public function addAuthOnClick(Request $request, ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        if($apAccess->getAdd() == 1)
-        {
-            $apAccess->setAdd(0);
-            $manager->flush();
+        
+        $submittedToken = $request->get('editAccessCsrf');
+        
+         if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
+            if($apAccess->getAdd() == 1)
+            {
+                $apAccess->setAdd(0);
+                $manager->flush();
+            }
+            else
+            {
+                $apAccess->setAdd(1);
+                $manager->flush();
+            }
+            return $this->json(["code" => 200,
+             "message" => "access add",
+            "status" => $apAccess->getAdd()], 200);
         }
-        else
-        {
-            $apAccess->setAdd(1);
-            $manager->flush();
-        }
-        return $this->json(["code" => 200,
-         "message" => "access add",
-        "status" => $apAccess->getAdd()], 200);
+
     }
 
     /**
      * @route("/deleteAuthOnClick/{id}", name="delete_auth_on_click")
      */
     
-    public function DeleteAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
+    public function DeleteAuthOnClick(Request $request, ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        if($apAccess->getDelete() == 1)
-        {
-            $apAccess->setDelete(0);
-            $manager->flush();
-        }
-        else
-        {
-            $apAccess->setDelete(1);
-            $manager->flush();
-        }
-        return $this->json(["code" => 200,
-        "message" => "access delete",
-        "status" => $apAccess->getDelete()], 200);
+        $submittedToken = $request->get('editAccessCsrf');
+        
+        if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
+            if($apAccess->getDelete() == 1)
+            {
+                $apAccess->setDelete(0);
+                $manager->flush();
+            }
+            else
+            {
+                $apAccess->setDelete(1);
+                $manager->flush();
+            }
+            return $this->json(["code" => 200,
+            "message" => "access delete",
+            "status" => $apAccess->getDelete()], 200);
+        }    
     }
 
 
@@ -140,43 +150,53 @@ class ApAccessController extends AbstractController
      * @route("/editAuthOnClick/{id}", name="edit_auth_on_click")
     */
 
-    public function editAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
+    public function editAuthOnClick(Request $request, ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        if($apAccess->getEdit() == 1)
+        $submittedToken = $request->get('editAccessCsrf');
+        
+        if ($this->isCsrfTokenValid('edit-item', $submittedToken))
         {
-            $apAccess->setEdit(0);
-            $manager->flush();
+            if($apAccess->getEdit() == 1)
+            {
+                $apAccess->setEdit(0);
+                $manager->flush();
+            }
+            else
+            {
+                $apAccess->setEdit(1);
+                $manager->flush();
+            }
+            return $this->json(["code" => 200,
+            "message" => "access Edit",
+            "status" => $apAccess->getEdit()],
+            200);
         }
-        else
-        {
-            $apAccess->setEdit(1);
-            $manager->flush();
-        }
-        return $this->json(["code" => 200,
-         "message" => "access Edit",
-        "status" => $apAccess->getEdit()],
-          200);
     }
 
     /**
      * @route("/viewAuthOnClick/{id}", name="view_auth_on_click")
     */
 
-    public function viewAuthOnClick(ApAccess $apAccess, EntityManagerInterface $manager) : response
+    public function viewAuthOnClick(Request $request, ApAccess $apAccess, EntityManagerInterface $manager) : response
     {
-        if($apAccess->getView() == 1)
-        {
-            $apAccess->setView(0);
-            $manager->flush();
+        $submittedToken = $request->get('editAccessCsrf');
+        
+            if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
+                if($apAccess->getView() == 1)
+                {
+                    $apAccess->setView(0);
+                    $manager->flush();
+                }
+                else
+                {
+                    $apAccess->setView(1);
+                    $manager->flush();
+                }
+                return $this->json(["code" => 200,
+                "message" => "access View",
+                "status" => $apAccess->getView()], 200);
+            }
         }
-        else
-        {
-            $apAccess->setView(1);
-            $manager->flush();
-        }
-        return $this->json(["code" => 200,
-        "message" => "access View",
-        "status" => $apAccess->getView()], 200);
-    }
+
 
 }
