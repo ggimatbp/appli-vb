@@ -25,7 +25,7 @@ class ApCatalogFilesBpEditType extends AbstractType
             // ->add('fileSize')
             // ->add('fileType')
             //  ->add('createdAt')
-              ->add('model')
+            //   ->add('model')
             //  ->add('user')
         ;
     }

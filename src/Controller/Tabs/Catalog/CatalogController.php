@@ -40,7 +40,7 @@ class CatalogController extends AbstractController
               $errors["modelId"] = "invalide";
           }elseif(count($errors) == 0 ){
             var_dump($modelId);
-            return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $modelId]);
+            return $this->redirectToRoute('ap_sector_bp_index', ['id' => $modelId]);
           }
         }
         if (isset($_POST['btnCustomerValue'])){

@@ -25,6 +25,12 @@ class ApSectorBp
     private $name;
 
     /**
+    * @ORM\Column(type="boolean")
+    */
+    private $archive = 0;
+
+
+    /**
      * @ORM\OneToMany(targetEntity=ApCatalogFilesBp::class, mappedBy="relation")
      */
     private $file;
@@ -95,6 +101,18 @@ class ApSectorBp
     public function setModel(?ApCatalogModelBp $model): self
     {
         $this->model = $model;
+
+        return $this;
+    }
+
+    public function getArchive(): ?bool
+    {
+        return $this->archive;
+    }
+
+    public function setArchive(bool $archive): self
+    {
+        $this->archive = $archive;
 
         return $this;
     }

@@ -13,7 +13,6 @@ class ApSectorBpType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('model')
         ;
     }
 
