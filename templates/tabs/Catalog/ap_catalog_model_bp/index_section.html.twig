@@ -10,7 +10,7 @@
     {% for ap_access in app.user.RoleId.apAccesses %}
     	{% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
         <div class="aprole-global-container">
-            <h1>{{ap_catalog_model_bp.name}}</h1>
+            <h1 class="catalog-h1">{{ap_catalog_model_bp.name}}</h1>
             <span class="w-100 d-flex justify-content-around">
                 <a class="m-2 btn" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_model_bp.customer.id}) }}">Retour</a>
                 {% for ap_access in app.user.RoleId.apAccesses %}
