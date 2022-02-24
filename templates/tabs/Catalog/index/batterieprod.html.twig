@@ -1,67 +1,65 @@
 
 
-<h1 class="catalog-h1">Index des clients</h1>
-<span class="catalog-search-container">
-    <span class="catalog-content-search-container d-flex flex-column">
-        <label for="customer-search-choice">Client {% if (errorsCustomer["customerId"]) is defined  %}
-        <span class="text-danger">{{errorsCustomer["customerId"]}}</span>
+<div class="aprole-global-container">
+    <h1 class="catalog-h1">Index des clients</h1>
+    <span class="catalog-search-container">
+        <span class="catalog-content-search-container d-flex flex-column">
+            <label for="customer-search-choice">Client {% if (errorsCustomer["customerId"]) is defined  %}
+            <span class="text-danger">{{errorsCustomer["customerId"]}}</span>
+            {% endif %}
+            </label>
+            <span class="d-flex">
+                <input class="form-control" list="customer-search-list" id="customer-search-choice" name="customer-search-choice"/>
+                <datalist id="customer-search-list">
+                {% for ap_catalog_customer_bp in ap_catalog_customer_bps %}
+                <option data-value="{{ap_catalog_customer_bp.id}}" value="{{ap_catalog_customer_bp.name}}"></option>
+                {% endfor %}
+                </datalist>
+                <form class="form-catalog" method="POST">
+                    <input type="hidden" data-value="" name="model-value" id="customerAnswerInput-hidden">
+                    <input class="btn" type="submit" name='btnCustomerValue' value="Rechercher">
+                </form>
+            </span>
+        </span>
+        <span class="catalog-content-search-container d-flex flex-column">
+            <label for="model-suggestion-choice">Model{% if (errors["modelId"]) is defined  %}
+            <span class="text-danger">{{errors["modelId"]}}</span>
+            {% endif %}</label>
+            <span class="d-flex">
+                <input class="form-control input" list="model-suggestion-list" id="model-suggestion-choice" name="model-suggestion-choice"/>
+                <datalist id="model-suggestion-list">
+                {% for model in ap_catalog_model_bps %}
+                    <option data-value="{{model.id}}" value="{{model.name}}"></option>
+                {% endfor %}
+                </datalist>
+                <form class="form-catalog" method="POST">
+                <input type="hidden" data-value="" name="model-value" id="answerInput-hidden">
+                <input class="btn" type="submit" name='btnModelValue' value="Rechercher">
+                </form>
+            </span>
+        </span>
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+        <span class="add-cust-catalog-bp d-flex flex-column justify-content-end">
+            <a class="btn" href="{{ path('ap_catalog_customer_bp_new') }}">Ajouter un client</a>
+        </span> 
         {% endif %}
-        </label>
-        <span class="d-flex">
-            <input class="form-control" list="customer-search-list" id="customer-search-choice" name="customer-search-choice"/>
-            <datalist id="customer-search-list">
-            {% for ap_catalog_customer_bp in ap_catalog_customer_bps %}
-            <option data-value="{{ap_catalog_customer_bp.id}}" value="{{ap_catalog_customer_bp.name}}"></option>
-            {% endfor %}
-            </datalist>
-            <form class="form-catalog" method="POST">
-                <input type="hidden" data-value="" name="model-value" id="customerAnswerInput-hidden">
-                <input class="btn" type="submit" name='btnCustomerValue' value="Rechercher">
-            </form>
-        </span>
-    </span>
-    <span class="catalog-content-search-container d-flex flex-column">
-        <label for="model-suggestion-choice">Model{% if (errors["modelId"]) is defined  %}
-        <span class="text-danger">{{errors["modelId"]}}</span>
-        {% endif %}</label>
-        <span class="d-flex">
-            <input class="form-control input" list="model-suggestion-list" id="model-suggestion-choice" name="model-suggestion-choice"/>
-            <datalist id="model-suggestion-list">
-            {% for model in ap_catalog_model_bps %}
-                <option data-value="{{model.id}}" value="{{model.name}}"></option>
-            {% endfor %}
-            </datalist>
-            <form class="form-catalog" method="POST">
-            <input type="hidden" data-value="" name="model-value" id="answerInput-hidden">
-            <input class="btn" type="submit" name='btnModelValue' value="Rechercher">
-            </form>
-        </span>
-    </span>
-{% for ap_access in app.user.RoleId.apAccesses %}
-    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
-    <span class="add-cust-catalog-bp d-flex flex-column justify-content-end">
-        <a class="btn" href="{{ path('ap_catalog_customer_bp_new') }}">Ajouter un client</a>
-    </span> 
-    {% endif %}
-{% endfor %}
-</span>
-
-{# <span class="d-flex justify-content-center p-5 flex-wrap">      #}
-<span class="catalog-grid-customer">
-    {% for ap_catalog_customer_bp in ap_catalog_customer_bps %}
-    <div >
-        <span class=" {% if ap_catalog_customer_bp.archive == 1  %} archived {% endif %} d-flex flex-column">
-                <a class="folder-change" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
-                <h4 class="overflow-hidden">{{ ap_catalog_customer_bp.name }}</h4>
-                    {# <a href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}">show</a>
-                    <a href="{{ path('ap_catalog_customer_bp_edit', {'id': ap_catalog_customer_bp.id}) }}">edit</a> #}
-        </span>
-    </div>
-    {% else %}
-        Aucun résultat
     {% endfor %}
-</span>
+    </span>
 
+    <span class="catalog-grid-customer">
+        {% for ap_catalog_customer_bp in ap_catalog_customer_bps %}
+        <div >
+            <span class=" {% if ap_catalog_customer_bp.archive == 1  %} archived {% endif %} d-flex flex-column">
+                    <a class="folder-change" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+                    <h4 class="overflow-hidden">{{ ap_catalog_customer_bp.name }}</h4>
+            </span>
+        </div>
+        {% else %}
+            Aucun résultat
+        {% endfor %}
+    </span>
+</div>
 
 
 

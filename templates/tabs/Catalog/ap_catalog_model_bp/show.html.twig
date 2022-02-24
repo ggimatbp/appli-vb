@@ -13,27 +13,30 @@
 
 {% block body %}
 {# titre et bouton en haut de page #}
-<span class="d-flex">
-	<h1 class="catalog-h1">Dossier du model de batterie: {{ ap_catalog_model_bp.name }}</h1>
-	{% for ap_access in app.user.RoleId.apAccesses %}
+  <span class="d-flex">
+	<h1 class="catalog-h1">Dossier du model de batterie: {{ ap_sector_bp.name }}</h1>
+	{# {% for ap_access in app.user.RoleId.apAccesses %}
     	{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-		<a class="ps-3 align-self-center" href="{{ path('ap_catalog_model_bp_edit', {'id': ap_catalog_model_bp.id}) }}"><i class="fas fa-pencil-alt"></i></a>
+		<a class="ps-3 align-self-center" href="{{ path('ap_catalog_model_bp_edit', {'id': ap_sector_bp.id}) }}"><i class="fas fa-pencil-alt"></i></a>
 		{% endif %}
-	{% endfor %}
+	{% endfor %} #}
 </span>
-
 	<span class="d-flex justify-content-around">
+	<a class="m-2 btn" href="{{ path('ap_sector_bp_index', {'id': ap_sector_bp.model.id}) }}">Retour</a>
 		{% for ap_access in app.user.RoleId.apAccesses %}
     		{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-				<a class="m-2 btn" href="{{ path('ap_catalog_files_bp_new', {'id': ap_catalog_model_bp.id}) }}">Ajouter un document</a>
+				<a class="m-2 btn" href="{{ path('ap_catalog_files_bp_new', {'id': ap_sector_bp.id}) }}">Ajouter un document</a>
 			{% endif %}
-		{% endfor %}
-		{% for ap_access in app.user.RoleId.apAccesses %}
+		{% endfor %} 
+		 {% for ap_access in app.user.RoleId.apAccesses %}
     		{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-				<a class="m-2 btn" href="{{ path('ap_catalog_model_bp_archive', {'id': ap_catalog_model_bp.id}) }}">Archiver le model</a>
+			<form method="POST" action="{{ path('ap_catalog_model_bp_archive_section', {'id': ap_sector_bp.id})}}" onsubmit="return confirm('Etes vous sûr de vouloir archiver ce secteur');">
+            <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_sector_bp.id) }}">
+            <button class="m-2 btn">Archiver la section</button>
+        </form> 
 			{% endif %}
-		{% endfor %}
-	</span>
+		{% endfor %} 
+	</span> 
 	<input id="hidden-data-picture-id" name="hidden-data-picture-id" type="hidden" value="">
 	<div id="allCardFromCatalogModelShowBp" class='d-flex justify-content-around flex-wrap'>
 {# fin #}
@@ -55,19 +58,10 @@
 {{ include('tabs/Catalog/ap_catalog_model_bp/modal_delete.html.twig') }}
 {# end modal delete #}
 
-
-
-
-
 		{# <a href="{{ path('ap_catalog_files_bp_new') }}">Create new</a>
 				
 				    <a href="{{ path('ap_catalog_model_bp_index') }}">back to list</a>
 				
-				    
-				
 				    {{ include('tabs/Catalog/ap_catalog_model_bp/_delete_form.html.twig') }} #}
-
-
-
 
 {% endblock %}

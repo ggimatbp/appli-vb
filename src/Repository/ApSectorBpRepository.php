@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\ApCatalogModelBp;
+use App\Entity\ApSectorBp;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ApCatalogModelBp|null find($id, $lockMode = null, $lockVersion = null)
- * @method ApCatalogModelBp|null findOneBy(array $criteria, array $orderBy = null)
- * @method ApCatalogModelBp[]    findAll()
- * @method ApCatalogModelBp[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ApSectorBp|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ApSectorBp|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ApSectorBp[]    findAll()
+ * @method ApSectorBp[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ApCatalogModelBpRepository extends ServiceEntityRepository
+class ApSectorBpRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ApCatalogModelBp::class);
+        parent::__construct($registry, ApSectorBp::class);
     }
 
     // /**
-    //  * @return ApCatalogModelBp[] Returns an array of ApCatalogModelBp objects
+    //  * @return ApSectorBp[] Returns an array of ApSectorBp objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class ApCatalogModelBpRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ApCatalogModelBp
+    public function findOneBySomeField($value): ?ApSectorBp
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')
@@ -48,13 +48,14 @@ class ApCatalogModelBpRepository extends ServiceEntityRepository
     }
     */
 
-    public function findAllById($id): array
+    public function findSectionByModel($id): array
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.customer = :id')
+            ->andWhere('a.model = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
     }
 
+    
 }
