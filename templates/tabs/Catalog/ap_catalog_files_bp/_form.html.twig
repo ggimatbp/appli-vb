@@ -1,5 +1,5 @@
 <div class="form-new-container">
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'onsubmit': 'buttonName.disabled=true; return true;' }}) }}
 
     <div class="row">
         {{ form_row(form.name, { 'label': 'Nom' }) }}
@@ -18,7 +18,7 @@
         <span class='image-preview__default-text'>Image</span>
     </div>
 
-        <button class="btn w-100">{{ button_label|default('Sauvegarder') }}</button>
+        <button class="btn w-100" name="buttonName" value="Submit">Sauvegarder</button>
 
 
 {{ form_end(form) }}

@@ -1,0 +1,38 @@
+{# {% extends 'base.html.twig' %}
+
+{% block title %}ApCatalogCaseVb index{% endblock %}
+
+{% block body %}
+    <h1>ApCatalogCaseVb index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Archive</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ap_catalog_case_vb in ap_catalog_case_vbs %}
+            <tr>
+                <td>{{ ap_catalog_case_vb.id }}</td>
+                <td>{{ ap_catalog_case_vb.name }}</td>
+                <td>{{ ap_catalog_case_vb.archive ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('ap_catalog_case_vb_show', {'id': ap_catalog_case_vb.id}) }}">show</a>
+                    <a href="{{ path('ap_catalog_case_vb_edit', {'id': ap_catalog_case_vb.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('ap_catalog_case_vb_new') }}">Create new</a>
+{% endblock %} #}
+<p>mauvaise index :(</p>

@@ -15,7 +15,7 @@
                 <option data-value="{{ap_catalog_customer_bp.id}}" value="{{ap_catalog_customer_bp.name}}"></option>
                 {% endfor %}
                 </datalist>
-                <form class="form-catalog" method="POST">
+                <form class="form-catalog" method="POST" action="{{ path('catalog_index') }}">
                     <input type="hidden" data-value="" name="model-value" id="customerAnswerInput-hidden">
                     <input class="btn" type="submit" name='btnCustomerValue' value="Rechercher">
                 </form>
@@ -32,7 +32,7 @@
                     <option data-value="{{model.id}}" value="{{model.name}}"></option>
                 {% endfor %}
                 </datalist>
-                <form class="form-catalog" method="POST">
+                <form class="form-catalog" method="POST" action="{{ path('catalog_index') }}">
                 <input type="hidden" data-value="" name="model-value" id="answerInput-hidden">
                 <input class="btn" type="submit" name='btnModelValue' value="Rechercher">
                 </form>

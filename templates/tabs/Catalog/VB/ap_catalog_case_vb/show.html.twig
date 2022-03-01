@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalog Case Vb{% endblock %}
+
+{% block body %}
+      <span class="d-flex">
+        <h1 class="catalog-h1">{{ ap_catalog_case_vb.name }}</h1>
+    </span>
+    {# <h1>ApCatalogCaseVb</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ap_catalog_case_vb.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ ap_catalog_case_vb.name }}</td>
+            </tr>
+            <tr>
+                <th>Archive</th>
+                <td>{{ ap_catalog_case_vb.archive ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table> #}
+
+    <a class="btn" href="{{ path('catalog_index') }}?roleback=2">Retour</a>
+
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+        <a class="btn" href="{{ path('ap_catalog_case_vb_edit', {'id': ap_catalog_case_vb.id}) }}">Modifier</a>
+        {% endif %}
+    {% endfor %}
+        {% for ap_access in app.user.RoleId.apAccesses %}
+            {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+            {{ include('tabs/Catalog/VB/ap_catalog_case_vb/_modal_delete.html.twig') }}
+            {% endif %}
+        {% endfor %}
+{% endblock %}
