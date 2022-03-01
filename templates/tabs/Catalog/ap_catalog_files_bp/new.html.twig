@@ -8,9 +8,9 @@
     {% for ap_access in app.user.RoleId.apAccesses %}
     	{% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
             <span class="form-container-with-title">
-                <h1 class="catalog-h1 mt-2" >Ajout d'un nouveau document pour Batteries-Prod</h1>
+                <h1 class="catalog-h1 mt-2">Ajout d'un nouveau document pour Batteries-Prod</h1>
                 {{ include('tabs/Catalog/ap_catalog_files_bp/_form.html.twig') }}
-                <span class="form-new-container">
+                <span class="">
                     <a class="btn w-100" href="{{ path('ap_catalog_model_bp_show', {'id': sector_id}) }}">Retour</a>
                 </span>
             </span>
