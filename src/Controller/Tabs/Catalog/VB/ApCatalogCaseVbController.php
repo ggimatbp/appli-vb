@@ -5,6 +5,7 @@ namespace App\Controller\Tabs\Catalog\VB;
 use App\Entity\ApCatalogCaseVb;
 use App\Form\ApCatalogCaseVbType;
 use App\Repository\ApCatalogCaseVbRepository;
+use App\Repository\ApSectorVbRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +29,17 @@ class ApCatalogCaseVbController extends AbstractController
             'ap_catalog_case_vbs' => $apCatalogCaseVbRepository->findAll(),
         ]);
     }
+
+
+    // /**
+    //  * @Route("/sectorByCase", name="sector_by_case_vb", methods={"GET"})
+    //  */
+    // public function indexSectionByCase(ApCatalogCaseVbRepository $apCatalogCaseVbRepository): Response
+    // {
+    //     return $this->render('tabs/Catalog/VB/ap_catalog_case_vb/index.html.twig', [
+    //         'ap_catalog_case_vbs' => $apCatalogCaseVbRepository->findAll(),
+    //     ]);
+    // }
     
     /**
      * @Route("/new", name="ap_catalog_case_vb_new", methods={"GET","POST"})
@@ -57,12 +69,15 @@ class ApCatalogCaseVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_case_vb_show", methods={"GET"})
      */
-    public function show(ApCatalogCaseVb $apCatalogCaseVb): Response
+    public function show(ApCatalogCaseVb $apCatalogCaseVb, ApSectorVbRepository $apSectorVbRepository): Response
     {
         $tabName = self::TAB_VB;
+        $id = $apCatalogCaseVb->getId();
+        $apSectorVbs = $apSectorVbRepository->findSectionByCase($id);
         return $this->render('tabs/Catalog/VB/ap_catalog_case_vb/show.html.twig', [
             'ap_catalog_case_vb' => $apCatalogCaseVb,
-            'tabName' => $tabName
+            'tabName' => $tabName,
+            'ap_sector_vbs' => $apSectorVbs
         ]);
     }
 

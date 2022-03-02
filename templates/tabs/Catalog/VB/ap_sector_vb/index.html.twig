@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApSectorVb index{% endblock %}
+
+{% block body %}
+    <h1>mauvaise index</h1>
+{# 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Archive</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ap_sector_vb in ap_sector_vbs %}
+            <tr>
+                <td>{{ ap_sector_vb.id }}</td>
+                <td>{{ ap_sector_vb.name }}</td>
+                <td>{{ ap_sector_vb.archive ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('ap_sector_vb_show', {'id': ap_sector_vb.id}) }}">show</a>
+                    <a href="{{ path('ap_sector_vb_edit', {'id': ap_sector_vb.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('ap_sector_vb_new') }}">Create new</a> #}
+{% endblock %}

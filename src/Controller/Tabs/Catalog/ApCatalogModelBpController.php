@@ -40,6 +40,7 @@ class ApCatalogModelBpController extends AbstractController
         ]);
     }
 
+    // model show
     /**
      * @Route("/modelBySector/{id}", name="ap_sector_bp_index", methods={"GET"})
      */
@@ -106,6 +107,7 @@ class ApCatalogModelBpController extends AbstractController
         ]);
     }
 
+    // Sector show
     /**
      * @Route("/{id}", name="ap_catalog_model_bp_show", methods={"GET"})
      */

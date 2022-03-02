@@ -99,12 +99,13 @@ class ApSectorBpController extends AbstractController
      */
     public function delete(Request $request, ApSectorBp $apSectorBp): Response
     {
+        $model = $apSectorBp->getModel();
+        $modelId = $model->getId();
         if ($this->isCsrfTokenValid('delete'.$apSectorBp->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apSectorBp);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('ap_sector_bp_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('ap_sector_bp_index', ['id' => $modelId], Response::HTTP_SEE_OTHER);
     }
 }

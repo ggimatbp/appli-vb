@@ -72,6 +72,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $apCatalogFilesBps;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApCatalogFilesVb::class, mappedBy="user")
+     */
+    private $apCatalogFilesVbs;
+
     // /**
     //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="user")
     //  */
@@ -81,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->apCatalogFilesBps = new ArrayCollection();
         $this->apCatalogFilesBpHistories = new ArrayCollection();
+        $this->apCatalogFilesVbs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -304,4 +310,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     //     return $this;
     // }
+
+    /**
+     * @return Collection|ApCatalogFilesVb[]
+     */
+    public function getApCatalogFilesVbs(): Collection
+    {
+        return $this->apCatalogFilesVbs;
+    }
+
+    public function addApCatalogFilesVb(ApCatalogFilesVb $apCatalogFilesVb): self
+    {
+        if (!$this->apCatalogFilesVbs->contains($apCatalogFilesVb)) {
+            $this->apCatalogFilesVbs[] = $apCatalogFilesVb;
+            $apCatalogFilesVb->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApCatalogFilesVb(ApCatalogFilesVb $apCatalogFilesVb): self
+    {
+        if ($this->apCatalogFilesVbs->removeElement($apCatalogFilesVb)) {
+            // set the owning side to null (unless already changed)
+            if ($apCatalogFilesVb->getUser() === $this) {
+                $apCatalogFilesVb->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }

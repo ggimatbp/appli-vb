@@ -1,0 +1,23 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#exampleModal">
+Supprimer
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="text-center modal-title" id="exampleModalLabel">⚠️Suppression du secteur⚠️</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Etes vous sûr de vouloir supprimer ce secteur?
+      </div>
+      <div class="d-flex justify-content-around modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Retour</button>
+        {{ include('tabs/Catalog/VB/ap_sector_vb/_delete_form.html.twig') }}
+      </div>
+    </div>
+  </div>
+</div>
