@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ApCatalogCaseVbRepository;
+use App\Repository\ApSectorVbRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ApCatalogCaseVbRepository::class)
+ * @ORM\Entity(repositoryClass=ApSectorVbRepository::class)
  */
-class ApCatalogCaseVb
+class ApSectorVb
 {
     /**
      * @ORM\Id
@@ -30,18 +30,17 @@ class ApCatalogCaseVb
     private $archive = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity=ApSectorVb::class, mappedBy="caseId")
+     * @ORM\ManyToOne(targetEntity=ApCatalogCaseVb::class, inversedBy="apSectorVbs")
      */
-    private $apSectorVbs;
+    private $caseId;
 
     /**
-     * @ORM\OneToMany(targetEntity=ApCatalogFilesVb::class, mappedBy="caseId")
+     * @ORM\OneToMany(targetEntity=ApCatalogFilesVb::class, mappedBy="sector")
      */
     private $apCatalogFilesVbs;
 
     public function __construct()
     {
-        $this->apSectorVbs = new ArrayCollection();
         $this->apCatalogFilesVbs = new ArrayCollection();
     }
 
@@ -74,32 +73,14 @@ class ApCatalogCaseVb
         return $this;
     }
 
-    /**
-     * @return Collection|ApSectorVb[]
-     */
-    public function getApSectorVbs(): Collection
+    public function getCaseId(): ?ApCatalogCaseVb
     {
-        return $this->apSectorVbs;
+        return $this->caseId;
     }
 
-    public function addApSectorVb(ApSectorVb $apSectorVb): self
+    public function setCaseId(?ApCatalogCaseVb $caseId): self
     {
-        if (!$this->apSectorVbs->contains($apSectorVb)) {
-            $this->apSectorVbs[] = $apSectorVb;
-            $apSectorVb->setCaseId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeApSectorVb(ApSectorVb $apSectorVb): self
-    {
-        if ($this->apSectorVbs->removeElement($apSectorVb)) {
-            // set the owning side to null (unless already changed)
-            if ($apSectorVb->getCaseId() === $this) {
-                $apSectorVb->setCaseId(null);
-            }
-        }
+        $this->caseId = $caseId;
 
         return $this;
     }
@@ -116,7 +97,7 @@ class ApCatalogCaseVb
     {
         if (!$this->apCatalogFilesVbs->contains($apCatalogFilesVb)) {
             $this->apCatalogFilesVbs[] = $apCatalogFilesVb;
-            $apCatalogFilesVb->setCaseId($this);
+            $apCatalogFilesVb->setSector($this);
         }
 
         return $this;
@@ -126,8 +107,8 @@ class ApCatalogCaseVb
     {
         if ($this->apCatalogFilesVbs->removeElement($apCatalogFilesVb)) {
             // set the owning side to null (unless already changed)
-            if ($apCatalogFilesVb->getCaseId() === $this) {
-                $apCatalogFilesVb->setCaseId(null);
+            if ($apCatalogFilesVb->getSector() === $this) {
+                $apCatalogFilesVb->setSector(null);
             }
         }
 

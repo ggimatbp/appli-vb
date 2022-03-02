@@ -1,40 +1,42 @@
-<h1 class="catalog-h1">Index des packs</h1>
-<span class="catalog-search-container">
-    <span class="catalog-content-search-container d-flex flex-column">
-        <label for="case-search-choice">Pack
-          {% if (errorsPack["packId"]) is defined  %} <span class="text-danger">{{errorsPack["packId"]}}</span>{% endif %}
-        </label>
-        <span class="d-flex">
-            <input class="form-control" list="case-search-list" id="case-search-choice" name="case-search-choice"/>
-            <datalist id="case-search-list">
-            {% for ap_catalog_case_vb in ap_catalog_case_vbs %}
-            <option data-value="{{ap_catalog_case_vb.id}}" value="{{ap_catalog_case_vb.name}}"></option>
-            {% endfor %}
-            </datalist>
-            <form class="form-catalog" method="POST" action="{{ path('catalog_index' ) }}?roleback=2">
-                <input type="hidden" data-value="" name="pack-value" id="caseAnswerInput-hidden">
-                <input class="btn" type="submit" name='btnPackValue' value="Rechercher">
-            </form>
+<div class="aprole-global-container">
+    <h1 class="catalog-h1">Index des packs</h1>
+    <span class="catalog-search-container">
+        <span class="catalog-content-search-container d-flex flex-column">
+            <label for="case-search-choice">Pack
+            {% if (errorsPack["packId"]) is defined  %} <span class="text-danger">{{errorsPack["packId"]}}</span>{% endif %}
+            </label>
+            <span class="d-flex">
+                <input class="form-control" list="case-search-list" id="case-search-choice" name="case-search-choice"/>
+                <datalist id="case-search-list">
+                {% for ap_catalog_case_vb in ap_catalog_case_vbs %}
+                <option data-value="{{ap_catalog_case_vb.id}}" value="{{ap_catalog_case_vb.name}}"></option>
+                {% endfor %}
+                </datalist>
+                <form class="form-catalog" method="POST" action="{{ path('catalog_index' ) }}?roleback=2">
+                    <input type="hidden" data-value="" name="pack-value" id="caseAnswerInput-hidden">
+                    <input class="btn" type="submit" name='btnPackValue' value="Rechercher">
+                </form>
+            </span>
+        </span>
+        {% for ap_access in app.user.RoleId.apAccesses %}
+            {% if ap_access.tab.name is same as(tabName2) and ap_access.add is same as(true) %}
+            <span class="add-cust-catalog-bp d-flex flex-column justify-content-end">
+                <a class="btn" href="{{ path('ap_catalog_case_vb_new') }}">Nouveau pack</a>
+            </span>
+            {% endif %}
+        {% endfor %}
         </span>
     </span>
-    {% for ap_access in app.user.RoleId.apAccesses %}
-        {% if ap_access.tab.name is same as(tabName2) and ap_access.add is same as(true) %}
-        <span class="add-cust-catalog-bp d-flex flex-column justify-content-end">
-            <a class="btn" href="{{ path('ap_catalog_case_vb_new') }}">Nouveau pack</a>
-        </span>
-        {% endif %}
-    {% endfor %}
+    <span class="catalog-grid-customer">
+        {% for ap_catalog_case_vb in ap_catalog_case_vbs %}
+        <div>
+            <span class=" {% if ap_catalog_case_vb.archive == 1  %} archived {% endif %} d-flex flex-column">
+                    <a class="folder-change" href="{{ path('ap_catalog_case_vb_show', {'id': ap_catalog_case_vb.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+                    <h4 class="overflow-hidden">{{ ap_catalog_case_vb.name }}</h4>
+            </span>
+        </div>
+        {% else %}
+            Aucun résultat
+        {% endfor %}
     </span>
-</span>
-<span class="catalog-grid-customer">
-    {% for ap_catalog_case_vb in ap_catalog_case_vbs %}
-    <div>
-        <span class=" {% if ap_catalog_case_vb.archive == 1  %} archived {% endif %} d-flex flex-column">
-                <a class="folder-change" href="{{ path('ap_catalog_case_vb_show', {'id': ap_catalog_case_vb.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
-                <h4 class="overflow-hidden">{{ ap_catalog_case_vb.name }}</h4>
-        </span>
-    </div>
-    {% else %}
-        Aucun résultat
-    {% endfor %}
-</span>
+</div>
