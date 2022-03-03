@@ -107,7 +107,7 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_catalog_files_bp_edit", methods={"GET","POST"})
      */
-    public function edit(EntityManagerInterface $manager, Request $request, ApCatalogFilesBp $apCatalogFilesBp ): Response
+    public function edit(EntityManagerInterface $manager, Request $request, ApCatalogFilesBp $apCatalogFilesBp,  ApSectorBpRepository $ApSectorBpRepository ): Response
     {
         $tabName = self::TAB_BP;
         $sectorId = $apCatalogFilesBp->getRelation();
@@ -118,6 +118,21 @@ class ApCatalogFilesBpController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $imgFile = $apCatalogFilesBp->getImageFile();
+            //
+            // $sector = $ApSectorBpRepository->find($sectorId);
+            // $model = $sector->getModel();
+            // $apCatalogFilesBp->setModel($model);
+            // $apCatalogFilesBp->setRelation($sector);
+            // $imgFile = $apCatalogFilesBp->getImageFile();
+            // $fileExtension =  $imgFile->guessExtension();
+
+            // $apCatalogFilesBp->setUser($this->getUser());
+            // $apCatalogFilesBp->setCreatedAt(new \DateTime());
+            // $apCatalogFilesBp->setFileSize(filesize($imgFile)/1024);
+            
+            // $apCatalogFilesBp->setFileType($fileExtension);
+
+            //
             if($imgFile == $fileBefore){
             }else{
                 $fileExtension =  $imgFile->guessExtension();

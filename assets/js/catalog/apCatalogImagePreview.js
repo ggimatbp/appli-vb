@@ -28,6 +28,11 @@ if (document.getElementById("ap_catalog_files_bp_imageFile_file"))
 {inpFile = document.getElementById("ap_catalog_files_bp_imageFile_file")}
 if(document.getElementById("ap_catalog_files_bp_edit_imageFile_file"))
 {inpFile = document.getElementById("ap_catalog_files_bp_edit_imageFile_file")}
+if (document.getElementById("ap_catalog_files_vb_imageFile_file"))
+{
+   inpFile = document.getElementById
+   ("ap_catalog_files_vb_imageFile_file")
+}
  
 const previewContainer = document.getElementById("imagePreview")
 const previewImage = previewContainer.querySelector(".image-preview__image")

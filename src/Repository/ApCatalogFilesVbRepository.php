@@ -47,4 +47,14 @@ class ApCatalogFilesVbRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findFilesBySectors($id): array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.sector = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

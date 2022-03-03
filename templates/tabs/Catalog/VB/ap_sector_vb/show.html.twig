@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ApSectorVb{% endblock %}
+{% block title %}Secteur VB{% endblock %}
+
+{% block javascripts %}
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+	{{ encore_entry_script_tags('apCatalogModelBpShow') }}
+{% endblock %}
 
 {% block body %}
     {% for ap_access in app.user.RoleId.apAccesses %}
@@ -10,17 +15,44 @@
                 <span class="d-flex justify-content-around">
                     <a class="btn" href="{{ path('ap_catalog_case_vb_show', {'id': ap_sector_vb.caseId.id }) }}">Retour</a>
                     {% for ap_access in app.user.RoleId.apAccesses %}
+                        {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                            <a class="btn" href="{{ path('ap_catalog_files_vb_new', {'id': ap_sector_vb.id }) }}">Ajouter</a>
+                        {% endif %}
+                    {% endfor %}
+                    {% for ap_access in app.user.RoleId.apAccesses %}
                         {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
                     <a class="btn" href="{{ path('ap_sector_vb_edit', {'id': ap_sector_vb.id}) }}">Modifier</a>
                         {% endif %}
                     {% endfor %}
+                    {# modal delete #}    
                     {% for ap_access in app.user.RoleId.apAccesses %}
                         {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
                             {{ include('tabs/Catalog/VB/ap_sector_vb/_modal_delete.html.twig') }}
                         {% endif %}
                     {% endfor %}
+                    {# end modal delete #}
                 </span>
             </div>
         {% endif %}
     {% endfor %}
+    <div id="allCardFromCatalogModelShowBp" class='d-flex justify-content-around flex-wrap'>
+        {# region card pdf #}
+        {% set loopCarroussel = 0 %}
+        {{ include('tabs/Catalog/VB/ap_sector_vb/_card_pdf.html.twig') }}
+        {# endregion card pdf #}
+    
+
+        {# region card for image #}
+        {{ include('tabs/Catalog/VB/ap_sector_vb/_card_img.html.twig') }}
+        {# endregion card image #}
+    </div>
+
+    {# region carroussel image modal #}
+    {{ include('tabs/Catalog/VB/ap_sector_vb/_modal_carroussel.html.twig') }}
+    {# endregion modalimg #}
+
+    {# region modal delete img #}
+    {{ include('tabs/Catalog/VB/ap_sector_vb/_modal_delete_img.html.twig') }}
+    {# endregion modale delete img #}
+
 {% endblock %}

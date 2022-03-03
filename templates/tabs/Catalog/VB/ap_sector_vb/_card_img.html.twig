@@ -1,0 +1,43 @@
+    {% for ap_catalog_file_vb in files %}
+        {% if ap_catalog_file_vb.fileType == "pdf" %}
+        {% else %}
+        <div
+            class="{% if ap_catalog_file_vb.archive == 1 %} archived {% endif %} card card-design {{'card' ~ ap_catalog_file_vb.id }}">
+            <span type="button" class="btn-launch-modal" data-img-id="{{ap_catalog_file_vb.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img src="{{ vich_uploader_asset(ap_catalog_file_vb, 'imageFile') | imagine_filter('miniature') }}" class="card-img-top" alt="model image upload">
+            </span>
+        
+            <div class="card-body card-body-design">
+                <span class="d-flex flex-column justify-content-between">
+                    
+                        <span class="d-flex justify-content-center card-title">{{ ap_catalog_file_vb.name }}</span>
+                            <span class="d-flex justify-content-around">
+                                {% for ap_access in app.user.RoleId.apAccesses %}
+                                    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                        <a href="{{ path('ap_catalog_files_vb_edit', {'id': ap_catalog_file_vb.id}) }}">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                                <!-- Button trigger delete modal -->
+                                {% for ap_access in app.user.RoleId.apAccesses %}
+                                    {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                                        <span type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="delete-btn-files text-danger" data-file-img-id="{{ap_catalog_file_vb.id}}">
+                                            <i class="fas fa-times"></i>
+                                        </span>	
+                                    {% endif %}
+                                {% endfor %}
+                        </span>
+                </span>
+                <p class="card-text d-flex justify-content-around">
+
+                    <small class="text-muted">{{ ap_catalog_file_vb.createdAt|format_datetime('short', 'short', locale='fr') }}</small>
+                        
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+        <span colspan="7">Pas de résultats</td>
+    {% endfor %}
+</div>
