@@ -4,9 +4,13 @@ namespace App\Entity;
 
 use App\Repository\ApCatalogFilesVbRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ApCatalogFilesVbRepository::class)
+ * @Vich\Uploadable
  */
 class ApCatalogFilesVb
 {
@@ -41,12 +45,24 @@ class ApCatalogFilesVb
     /**
      * @ORM\Column(type="boolean")
      */
-    private $archive;
+    private $archive = 0;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $file_name;
+
+    /**
+     * @Vich\UploadableField(mapping="model_vb_files", fileNameProperty="file_name")
+     * @var File
+     * @Assert\File(
+     * maxSize = "4M",
+     * maxSizeMessage = "Le fichier est trop lourd ({{ size }} {{ suffix }}). Maximum: {{ limit }} {{ suffix }}",
+     * mimeTypes = {"application/pdf", "application/x-pdf", "image/jp2", "image/jpg", "image/jpeg", "image/png"},
+     * mimeTypesMessage = "Upload de fichier PDF JPEG ou JPG valide"
+     * )
+     */
+    private $imageFile;
 
     /**
      * @ORM\Column(type="integer")
@@ -59,7 +75,7 @@ class ApCatalogFilesVb
     private $file_type;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime")
      */
     private $created_at;
 
@@ -133,7 +149,7 @@ class ApCatalogFilesVb
         return $this->file_name;
     }
 
-    public function setFileName(string $file_name): self
+    public function setFileName(?string $file_name): self
     {
         $this->file_name = $file_name;
 
@@ -164,15 +180,32 @@ class ApCatalogFilesVb
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
 
         return $this;
     }
+
+    public function setImageFile(?File $file_name = null)
+    {
+        $this->imageFile = $file_name;
+
+        if (null !== $file_name) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->createdAt = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
 }

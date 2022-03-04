@@ -1,42 +1,47 @@
 					
-		{% for ap_catalog_files_bp in files %}
-		{% if ap_catalog_files_bp.fileType == "pdf" %}
-			<div class="{% if ap_catalog_files_bp.archive == 1 %} archived {% endif %}card card-design {{'card' ~ ap_catalog_files_bp.id }}">		
-				<span type="button" data-bs-toggle="modal" data-id="{{ap_catalog_files_bp.id}}"  data-bs-target="{{'#exampleModalPdf' ~ ap_catalog_files_bp.id}}" class="d-flex justify-content-center align-items-center d-card-img-top card-pdf-vich-miniature">
-					<i class="p-3 text-danger fas fa-file-pdf fa-7x"></i>
+{% for ap_catalog_files_bp in files %}
+{% if ap_catalog_files_bp.fileType == "pdf" %}
+	<div class="{% if ap_catalog_files_bp.archive == 1 %} archived {% endif %}card card-design {{'card' ~ ap_catalog_files_bp.id }}">		
+		<span type="button" data-bs-toggle="modal" data-id="{{ap_catalog_files_bp.id}}"  data-bs-target="{{'#exampleModalPdf' ~ ap_catalog_files_bp.id}}" class="d-flex justify-content-center align-items-center d-card-img-top card-pdf-vich-miniature">
+			<i class="p-3 text-danger fas fa-file-pdf fa-7x"></i>
+		</span>
+			<div class="card-body card-body-design">
+			<span class="d-flex flex-column justify-content-between">
+				
+				<span class="card-title">{{ ap_catalog_files_bp.name }}</span>
+				<span class="d-flex justify-content-around">
+					{# <a href="{{ path('ap_catalog_files_bp_show', {'id': ap_catalog_files_bp.id}) }}">show</a> #}
+					{% for ap_access in app.user.RoleId.apAccesses %}
+						{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+							<a href="{{ path('ap_catalog_files_bp_edit', {'id': ap_catalog_files_bp.id}) }}">
+								<i class="fas fa-pencil-alt"></i>
+							</a>
+						{% endif %}
+					{% endfor %}
+					{% for ap_access in app.user.RoleId.apAccesses %}
+						{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+							{# <a class="danger" href="{{ path('ap_catalog_files_bp_archive', {'id': ap_catalog_files_bp.id}) }}"><i class="fas fa-file-archive"></i></a> #}
+							<form name="archive{{ap_catalog_files_bp.id}}" method="post" action="{{ path('ap_catalog_files_bp_archive', {'id': ap_catalog_files_bp.id}) }}" class="hover">
+								<input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_files_bp.id) }}">
+								<i onclick="document.forms['archive{{ap_catalog_files_bp.id}}'].submit();" class="text-danger fas fa-file-archive"></i>
+							</form>
+						{% endif %}
+					{% endfor %}
+				<!-- Button trigger delete modal -->
+					{% for ap_access in app.user.RoleId.apAccesses %}
+						{% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+							<span type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="delete-btn-files text-danger" data-file-img-id="{{ap_catalog_files_bp.id}}">
+								<i class="fas fa-times"></i>
+							</span>
+						{% endif %}
+					{% endfor %}
 				</span>
-					<div class="card-body card-body-design">
-					<span class="d-flex justify-content-between">
-						<span class="">
-							<span class="card-title">{{ ap_catalog_files_bp.name }}</span>
-							{# <a href="{{ path('ap_catalog_files_bp_show', {'id': ap_catalog_files_bp.id}) }}">show</a> #}
-								{% for ap_access in app.user.RoleId.apAccesses %}
-    								{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-										<a href="{{ path('ap_catalog_files_bp_edit', {'id': ap_catalog_files_bp.id}) }}">
-											<i class="fas fa-pencil-alt"></i>
-										</a>
-									{% endif %}
-								{% endfor %}
-						</span>
-						<!-- Button trigger delete modal -->
-						{% for ap_access in app.user.RoleId.apAccesses %}
-    						{% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-								<span type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="delete-btn-files text-danger" data-file-img-id="{{ap_catalog_files_bp.id}}">
-									<i class="fas fa-times"></i>
-								</span>
-							{% endif %}
-						{% endfor %}
-					</span>
-					<p class="card-text d-flex justify-content-around">
-						{% for ap_access in app.user.RoleId.apAccesses %}
-    						{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-								<a class="danger" href="{{ path('ap_catalog_files_bp_archive', {'id': ap_catalog_files_bp.id}) }}"><i class="fas fa-file-archive"></i></a>
-							{% endif %}
-						{% endfor %}
-						<small class="text-muted">{{ ap_catalog_files_bp.createdAt|format_datetime('short', 'short', locale='fr') }}</small>
-					</p>
-				</div>
-			</div>
+				<p class="card-text d-flex justify-content-around">
+					<small class="text-muted">{{ ap_catalog_files_bp.createdAt|format_datetime('short', 'short', locale='fr') }}</small>
+				</p>
+			</span>
+		</div>
+	</div>
 {# modal for pdf display #}
 <!-- Modal for pdf display -->
 <div class="modal fade" id="{{'exampleModalPdf' ~ ap_catalog_files_bp.id}}" tabindex="-1" aria-labelledby="exampleModalLabelPdf" aria-hidden="true">
@@ -75,5 +80,5 @@
    </div> 
 </div>
 	{# <embed src="{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')}}" width="800px" height="2100px" /> #}
-		{% endif %}
-		{% endfor %}
+	{% endif %}
+{% endfor %}

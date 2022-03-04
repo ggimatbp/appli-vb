@@ -110,27 +110,31 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      *@Route("/archive/{id}", name="ap_catalog_customer_bp_archive", methods={"GET","POST"})
      */
-    public function archive(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
+    public function archive(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository, Request $request): Response
     {
-        if ($apCatalogCustomerBp->getArchive() == 0) {
-            $apCatalogCustomerBp->setArchive(1);
-            $customerId = $apCatalogCustomerBp->getId();
-            $allModelByCustomerId = $apCatalogModelBpRepository->findAllById($customerId);
-            foreach ($allModelByCustomerId as $model) {
-                $model->setArchive(1);
-                $modelId = $model->getId();
-                $allFileByModelId = $apCatalogFilesBpRepository->findAllById($modelId);
-                foreach ($allFileByModelId as $file) {
-                    $file->setArchive(1);
+        if ($this->isCsrfTokenValid('archiver' . $apCatalogCustomerBp->getId(), $request->request->get('_token')))
+        {
+            if ($apCatalogCustomerBp->getArchive() == 0) {
+                $apCatalogCustomerBp->setArchive(1);
+                $customerId = $apCatalogCustomerBp->getId();
+                $allModelByCustomerId = $apCatalogModelBpRepository->findAllById($customerId);
+                foreach ($allModelByCustomerId as $model) {
+                    $model->setArchive(1);
+                    $modelId = $model->getId();
+                    $allFileByModelId = $apCatalogFilesBpRepository->findAllById($modelId);
+                    foreach ($allFileByModelId as $file) {
+                        $file->setArchive(1);
+                    }
                 }
+            } else {
+                $apCatalogCustomerBp->setArchive(0);
             }
-        } else {
-            $apCatalogCustomerBp->setArchive(0);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($apCatalogCustomerBp);
+            $entityManager->flush();
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($apCatalogCustomerBp);
-        $entityManager->flush();
         return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
     }
 }

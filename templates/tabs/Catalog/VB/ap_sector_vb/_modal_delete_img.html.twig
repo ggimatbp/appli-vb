@@ -1,4 +1,4 @@
-	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	<div class="modal fade" id="deleteModalVb" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				 <div class="modal-header"> 
@@ -13,7 +13,9 @@
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
 					{% for ap_access in app.user.RoleId.apAccesses %}
     					{% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-							<button type="button" data-bs-dismiss="modal" class="delete-files-secure btn btn-primary">Supprimer</button>
+                        {# delete en ajax a faire #}
+							 <button type="button" data-bs-dismiss="modal" class="delete-files-secure btn btn-primary">Supprimer</button> 
+                        {# fin delete en ajax a faire #}
 						{% endif %}
 					{% endfor %}
 				</div>

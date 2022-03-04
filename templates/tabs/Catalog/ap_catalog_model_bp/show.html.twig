@@ -7,7 +7,6 @@
 {% block javascripts %}
 <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 	{{ encore_entry_script_tags('apCatalogModelBpShow') }}
-	
 {% endblock %}
 
 
@@ -44,16 +43,17 @@
 	</span> 
 	<input id="hidden-data-picture-id" name="hidden-data-picture-id" type="hidden" value="">
 	<div id="allCardFromCatalogModelShowBp" class='d-flex justify-content-around flex-wrap'>
-{# fin #}
+		{# fin #}
 
-{# card pdf #}
-{% set loopCarroussel = 0 %}
-{{ include('tabs/Catalog/ap_catalog_model_bp/card_pdf.html.twig') }}
-{# fin card pdf #}
+		{# card pdf #}
+		{% set loopCarroussel = 0 %}
+		{{ include('tabs/Catalog/ap_catalog_model_bp/card_pdf.html.twig') }}
+		{# fin card pdf #}
 
-{# card for image #}
-{{ include('tabs/Catalog/ap_catalog_model_bp/card_image.html.twig') }}
-{# fin #}
+		{# card for image #}
+		{{ include('tabs/Catalog/ap_catalog_model_bp/card_image.html.twig') }}
+		{# fin #}
+	</div>
 
 {# carroussel image modal #}
 {{ include('tabs/Catalog/ap_catalog_model_bp/modal_carroussel.html.twig') }}

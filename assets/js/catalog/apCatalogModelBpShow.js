@@ -96,7 +96,7 @@ import 'bootstrap/js/dist/dropdown';
 
 
 
-
+//#region pdf reader
 
 $(".card-pdf-vich-miniature").each(function(){
   $(this).click(function(){
@@ -211,19 +211,10 @@ $('.btn-close-pdf-destroy' + $(this).data("id")).click(function(){
 
 })
 
+//#endregion pdf reader
 
 
-
-
-
-
-
-
-
-
-
-//end pdf reader
-
+//For show the good picture
 $(".btn-launch-modal").each(function(){
     $(this).unbind("click").click(function(e){
     $("#hidden-data-picture-id").val($(this).data('img-id'))
@@ -241,9 +232,10 @@ $('#allCardFromCatalogModelShowBp .delete-btn-files').each(function(){
 
 
 //#region ajax delete
+  //#region BP
 $('#deleteModal .delete-files-secure').each(function(){
     $(this).unbind('click').click(function (e) {
-
+            let csrf = $("#fileIdToDelete").data('token')
             let filesId =$("#fileIdToDelete").val()
             console.log(filesId)
             // let filesToDelete = $(this).parents('.card-design')
@@ -256,6 +248,41 @@ $('#deleteModal .delete-files-secure').each(function(){
                type: "GET",
               dataType: "json",
               data: {
+                   "filesId": filesId,
+                   'csrf': csrf 
+              },
+              async: true,
+              success: function ()
+              {
+                
+                vNotify().success({ text: 'Changement pris en compte.', title: 'Éléments supprimés' });
+                $(filesToDelete).remove()
+              },
+              error: function ()
+              {
+                vNotify().error({ text: 'Erreur lors de la suppression.', title: 'Erreur' });
+              }
+          });
+          })
+})
+  //#endregion BP
+  $('#deleteModalVb .delete-files-secure').each(function(){
+    $(this).unbind('click').click(function (e) {
+
+            let filesId =$("#fileIdToDelete").val()
+            let csrf = $("#fileIdToDelete").data('token')
+            // console.log(csrf)
+            // let filesToDelete = $(this).parents('.card-design')
+            let filesToDelete = $('.card' + filesId)
+            // console.log(filesToDelete)
+            //  $(this).parents('.card-design').remove();
+
+            $.ajax({
+              url:'/ap/catalog/files/vb/delete/' + filesId,
+               type: "GET",
+              dataType: "json",
+              data: {
+                   "csrf": csrf,
                    "filesId": filesId
               },
               async: true,
@@ -272,7 +299,12 @@ $('#deleteModal .delete-files-secure').each(function(){
           });
           })
 })
-  //#endregion ajax delete
+  //#region VB
+
+
+
+  //#endregion
+//#endregion ajax delete
 
   //#region right click forbidden
 

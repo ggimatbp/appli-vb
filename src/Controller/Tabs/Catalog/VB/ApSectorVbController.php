@@ -6,6 +6,7 @@ use App\Entity\ApSectorVb;
 use App\Form\ApSectorVbType;
 use App\Repository\ApCatalogCaseVbRepository;
 use App\Repository\ApSectorVbRepository;
+use App\Repository\ApCatalogFilesVbRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,12 +63,15 @@ class ApSectorVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_sector_vb_show", methods={"GET"})
      */
-    public function show(ApSectorVb $apSectorVb, ApCatalogCaseVbRepository $apCatalogCaseVbRepository): Response
+    public function show(ApSectorVb $apSectorVb, ApCatalogFilesVbRepository $apCatalogFilesVbRepository): Response
     {
         $tabName = self::TAB_VB;
+        $id = $apSectorVb->getId(); 
+        $files = $apCatalogFilesVbRepository->findFilesBySectors($id);
         // $sectorId = intval(basename("$_SERVER[REQUEST_URI]"));
         // $apCatalogCaseVbRepository->find($sectorId);
         return $this->render('tabs/Catalog/VB/ap_sector_vb/show.html.twig', [
+            'files' => $files,
             'ap_sector_vb' => $apSectorVb,
             'tabName' => $tabName
         ]);
