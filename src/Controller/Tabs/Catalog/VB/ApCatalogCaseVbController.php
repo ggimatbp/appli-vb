@@ -26,7 +26,7 @@ class ApCatalogCaseVbController extends AbstractController
      */
     public function index(ApCatalogCaseVbRepository $apCatalogCaseVbRepository): Response
     {
-        return $this->render('tabs/Catalog/VB/ap_catalog_case_vb/index.html.twig', [
+        return $this->render('tabs/Catalog/VB/ap_catalog_case_vb/google_chart.html.twig', [
             'ap_catalog_case_vbs' => $apCatalogCaseVbRepository->findAll(),
         ]);
     }
@@ -147,4 +147,5 @@ class ApCatalogCaseVbController extends AbstractController
 
         return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
     }
+
 }

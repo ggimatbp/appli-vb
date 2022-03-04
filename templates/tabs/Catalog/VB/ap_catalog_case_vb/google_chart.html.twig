@@ -1,0 +1,47 @@
+
+<html lang="fr">
+  <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-with, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Carte</title>
+         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+         
+         {# css file #}
+    <style>
+
+        #maCarte{
+            height: 99vh;
+        }
+
+    </style>
+
+  </head>
+  <body>
+        <div id="maCarte"></div>
+
+        {# javaScript file #}
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+        <script>
+        // on initialise la carte
+            var carte = L.map('maCarte').setView([46.3891410, 2.7700000], 6);
+        // on change les tuiles
+            L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; © a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            minZoom:2,
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'your.mapbox.access.token'
+        }).addTo(carte);
+
+        //marker
+        var marker = L.marker([44.0026498 , 5]).addTo(carte);
+
+        </script>
+  </body>
+</html>
+
