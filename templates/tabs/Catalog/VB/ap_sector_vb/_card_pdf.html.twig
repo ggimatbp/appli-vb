@@ -1,29 +1,32 @@
-{% for ap_catalog_files_vb in files %}
-{% if ap_catalog_files_vb.fileType == "pdf" %}
-	<div class="{% if ap_catalog_files_vb.archive == 1 %} archived {% endif %}card card-design {{'card' ~ ap_catalog_files_vb.id }}">		
-		<span type="button" data-bs-toggle="modal" data-id="{{ap_catalog_files_vb.id}}"  data-bs-target="{{'#exampleModalPdf' ~ ap_catalog_files_vb.id}}" class="d-flex justify-content-center align-items-center d-card-img-top card-pdf-vich-miniature">
+{% for ap_catalog_file_vb in files %}
+{% if ap_catalog_file_vb.fileType == "pdf" %}
+	<div class="{% if ap_catalog_file_vb.archive == 1 %} archived {% endif %}card card-design {{'card' ~ ap_catalog_file_vb.id }}">		
+		<span type="button" data-bs-toggle="modal" data-id="{{ap_catalog_file_vb.id}}"  data-bs-target="{{'#exampleModalPdf' ~ ap_catalog_file_vb.id}}" class="d-flex justify-content-center align-items-center d-card-img-top card-pdf-vich-miniature">
 			<i class="p-3 text-danger fas fa-file-pdf fa-7x"></i>
 		</span>
 		<div class="card-body card-body-design">
 			<span class="d-flex flex-column justify-content-between">
-				<span class="d-flex justify-content-center card-title">{{ ap_catalog_files_vb.name }}</span>
+				<span class="d-flex justify-content-center card-title">{{ ap_catalog_file_vb.name }}</span>
 				<span class="d-flex justify-content-around">
 					{% for ap_access in app.user.RoleId.apAccesses %}
 						{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-							<a href="{{ path('ap_catalog_files_vb_edit', {'id': ap_catalog_files_vb.id}) }}">
-								<i class="fas fa-pencil-alt"></i>
+							<a href="{{ path('ap_catalog_files_vb_edit', {'id': ap_catalog_file_vb.id}) }}">
+								<i class="text-danger fas fa-pencil-alt"></i>
 							</a>
 						{% endif %}
 					{% endfor %}
 					{% for ap_access in app.user.RoleId.apAccesses %}
 						{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-							{# <a class="danger" href="{{ path('ap_catalog_files_bp_archive', {'id': ap_catalog_files_vb.id}) }}"><i class="fas fa-file-archive"></i></a> #}
+							 <form name="archive{{ap_catalog_file_vb.id}}" method="post" action="{{ path('ap_files_vb_archive', {'id': ap_catalog_file_vb.id}) }}" class="hover">
+								<input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_file_vb.id) }}">
+								<span class="text-danger"><i onclick="document.forms['archive{{ap_catalog_file_vb.id}}'].submit();" class="fas fa-file-archive"></i></span>
+							</form> 
 						{% endif %}
 					{% endfor %}
 				<!-- Button trigger delete modal -->
 					{% for ap_access in app.user.RoleId.apAccesses %}
 						{% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-							<span type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="delete-btn-files text-danger" data-file-img-id="{{ap_catalog_files_vb.id}}">
+							<span type="button" data-bs-toggle="modal" data-bs-target="#deleteModalVb" class="delete-btn-files text-danger" data-file-img-id="{{ap_catalog_file_vb.id}}">
 								<i class="fas fa-times"></i>
 							</span>
 						{% endif %}
@@ -31,29 +34,29 @@
 
 				</span>
 				<p class="card-text d-flex justify-content-around">
-					<small class="text-muted">{{ ap_catalog_files_vb.createdAt|format_datetime('short', 'short', locale='fr') }}</small>
+					<small class="text-muted">{{ ap_catalog_file_vb.createdAt|format_datetime('short', 'short', locale='fr') }}</small>
 				</p>
 			</span>
 		</div>
 	</div>
 {# modal for pdf display #}
 <!-- Modal for pdf display -->
-        <div class="modal fade" id="{{'exampleModalPdf' ~ ap_catalog_files_vb.id}}" tabindex="-1" aria-labelledby="exampleModalLabelPdf" aria-hidden="true">
+        <div class="modal fade" id="{{'exampleModalPdf' ~ ap_catalog_file_vb.id}}" tabindex="-1" aria-labelledby="exampleModalLabelPdf" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen d-flex justify-content-around"> 
                 <div class="modal-content">
-                    <input class='{{"pdfFileRoad" ~ ap_catalog_files_vb.id }}' type="hidden" data-src="{{vich_uploader_asset(ap_catalog_files_vb)}}">
+                    <input class='{{"pdfFileRoad" ~ ap_catalog_file_vb.id }}' type="hidden" data-src="{{vich_uploader_asset(ap_catalog_file_vb)}}">
 
                     <div class="top-bar d-flex justify-content-between mt-1">
                         <span></span>
-                        <button class="btn" id="{{'prev-page' ~ ap_catalog_files_vb.id }}">Précédent</button>
+                        <button class="btn" id="{{'prev-page' ~ ap_catalog_file_vb.id }}">Précédent</button>
                 
                         <span class="align-items-center d-flex page-info">
-                            <span class='p-1' id="{{'page-num' ~ ap_catalog_files_vb.id }}"></span> sur <span class="p-1" id="{{'page-count'  ~ ap_catalog_files_vb.id }}"></span>
+                            <span class='p-1' id="{{'page-num' ~ ap_catalog_file_vb.id }}"></span> sur <span class="p-1" id="{{'page-count'  ~ ap_catalog_file_vb.id }}"></span>
                         </span>
-                        <button class="btn" id="{{'next-page' ~ ap_catalog_files_vb.id }}">Suivant</button>
-                        <button type="button" class="me-4 mt-1 btn-close {{"btn-close-pdf-destroy" ~ ap_catalog_files_vb.id }}" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button class="btn" id="{{'next-page' ~ ap_catalog_file_vb.id }}">Suivant</button>
+                        <button type="button" class="me-4 mt-1 btn-close {{"btn-close-pdf-destroy" ~ ap_catalog_file_vb.id }}" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <canvas id="{{'pdf-render' ~ ap_catalog_files_vb.id }}"></canvas>
+                    <canvas id="{{'pdf-render' ~ ap_catalog_file_vb.id }}"></canvas>
                 </div>
             </div> 
         </div>

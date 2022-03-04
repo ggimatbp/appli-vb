@@ -6,6 +6,7 @@ use App\Entity\ApCatalogCaseVb;
 use App\Form\ApCatalogCaseVbType;
 use App\Repository\ApCatalogCaseVbRepository;
 use App\Repository\ApSectorVbRepository;
+use App\Repository\ApCatalogFilesVbRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,6 +112,36 @@ class ApCatalogCaseVbController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$apCatalogCaseVb->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apCatalogCaseVb);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     *@Route("/archive/{id}", name="ap_catalog_case_vb_archive", methods={"GET","POST"})
+     */
+    public function archive(ApCatalogCaseVb $apCatalogCaseVb, ApCatalogFilesVbRepository $apCatalogFilesVbRepository, Request $request): Response
+    {
+        if ($this->isCsrfTokenValid('archiver' . $apCatalogCaseVb->getId(), $request->request->get('_token')))
+        {
+            if ($apCatalogCaseVb->getArchive() == 0) {
+                $apCatalogCaseVb->setArchive(1);
+                $caseId = $apCatalogCaseVb->getId();
+                $allFilesByCaseId = $apCatalogFilesVbRepository->findAllFileByCaseId($caseId);
+                foreach ($allFilesByCaseId as $file) {
+                    $file->setArchive(1);
+                }
+            } else {
+                $apCatalogCaseVb->setArchive(0);
+                $caseId = $apCatalogCaseVb->getId();
+                $allFilesByCaseId = $apCatalogFilesVbRepository->findAllFileByCaseId($caseId);
+                foreach ($allFilesByCaseId as $file) {
+                    $file->setArchive(0);
+                }
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($apCatalogCaseVb);
             $entityManager->flush();
         }
 

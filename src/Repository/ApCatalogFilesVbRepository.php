@@ -57,4 +57,14 @@ class ApCatalogFilesVbRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+
+    public function findAllFileByCaseId($id):array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.caseId = :id' )
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

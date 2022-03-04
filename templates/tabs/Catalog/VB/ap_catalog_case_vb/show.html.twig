@@ -15,11 +15,21 @@
                 </span>
                 <span class="d-flex justify-content-around">
                     <a class="btn" href="{{ path('catalog_index') }}?roleback=2">Retour</a>
-                    {% for ap_access in app.user.RoleId.apAccesses %}
-                        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-                        <a class="btn" href="{{ path('ap_catalog_case_vb_edit', {'id': ap_catalog_case_vb.id}) }}">Modifier</a>
-                        {% endif %}
-                    {% endfor %}
+                        {% for ap_access in app.user.RoleId.apAccesses %}
+                            {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                            <a class="btn" href="{{ path('ap_catalog_case_vb_edit', {'id': ap_catalog_case_vb.id}) }}">Modifier</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% for ap_access in app.user.RoleId.apAccesses %}
+                            {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                <form name="archive{{ap_catalog_case_vb.id}}" method="post" action="{{ path('ap_catalog_case_vb_archive', {'id': ap_catalog_case_vb.id}) }}" >
+                                    <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_case_vb.id) }}">
+                                    <button class="btn">Archiver</button>
+                                </form>
+                            {# <a class="btn" href="{{ path('ap_catalog_case_vb_archive', {'id': ap_catalog_case_vb.id}) }}">Archiver</a> #}
+                            {% endif %}
+                        {% endfor %}
+
                         {% for ap_access in app.user.RoleId.apAccesses %}
                             {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
                             {{ include('tabs/Catalog/VB/ap_catalog_case_vb/_modal_delete.html.twig') }}

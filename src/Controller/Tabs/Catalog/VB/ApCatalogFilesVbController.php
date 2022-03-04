@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @Route("/ap/catalog/files/vb")
@@ -131,4 +132,44 @@ class ApCatalogFilesVbController extends AbstractController
 
         return $this->redirectToRoute('ap_sector_vb_show', ['id', $sectorId], Response::HTTP_SEE_OTHER);
     }
+
+    /**
+     * @route("/delete/{id}", methods={"GET"})
+    */
+
+    public function ajaxDelete(ApCatalogFilesVb $apCatalogFilesVb, EntityManagerInterface $manager, Request $request) : response
+    {
+        $csrf = $request->get('csrf');
+        if ($this->isCsrfTokenValid('delete', $csrf)){
+            $manager = $this->getDoctrine()->getManager();
+            $manager->remove($apCatalogFilesVb);
+            $manager->flush();
+            return $this->json(["code" => 200,
+            "message" => "delete"], 200);
+        }
+    }
+
+
+    /**
+     *@Route("/archive/{id}", name="ap_files_vb_archive", methods={"GET","POST"})
+     */
+    public function archive(ApCatalogFilesVb $apCatalogFilesVb, Request  $request): Response
+    {   
+        $sectorId = $apCatalogFilesVb->getSector()->getId();
+        if ($this->isCsrfTokenValid('archiver'.$apCatalogFilesVb->getId(), $request->request->get('_token')))
+        {
+            if ($apCatalogFilesVb->getArchive() == 0 ){
+                $apCatalogFilesVb->setArchive(1);
+            }else{
+                $apCatalogFilesVb->setArchive(0);
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($apCatalogFilesVb);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
+    //       return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
+    }
+
 }

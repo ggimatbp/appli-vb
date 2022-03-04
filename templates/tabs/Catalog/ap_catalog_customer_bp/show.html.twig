@@ -30,7 +30,11 @@
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-                <a class="btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_customer_bp_archive', {'id': ap_catalog_customer_bp.id}) }}">Archiver</a>
+                        <form name="archive{{ap_catalog_customer_bp.id}}" method="post" action="{{ path('ap_catalog_customer_bp_archive', {'id': ap_catalog_customer_bp.id}) }}" class="hover">
+                            <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_customer_bp.id) }}">
+                                <button class="btn">Archiver</button>
+                        </form>
+                {# <a class="btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_customer_bp_archive', {'id': ap_catalog_customer_bp.id}) }}">Archiver</a> #}
                     {% endif %}
                 {% endfor %}
                 </span>

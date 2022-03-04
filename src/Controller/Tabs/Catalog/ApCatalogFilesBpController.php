@@ -182,32 +182,50 @@ class ApCatalogFilesBpController extends AbstractController
      * @route("/delete/{id}", methods={"GET"})
     */
 
-    public function editotest(ApCatalogFilesBp $apCatalogFilesBp, EntityManagerInterface $manager) : response
+    public function editotest(ApCatalogFilesBp $apCatalogFilesBp, EntityManagerInterface $manager, Request $request) : response
     {
-
+        $csrf = $request->get('csrf');
+        if ($this->isCsrfTokenValid('delete', $csrf)){
             $manager = $this->getDoctrine()->getManager();
             $manager->remove($apCatalogFilesBp);
             $manager->flush();
             return $this->json(["code" => 200,
             "message" => "delete"], 200);
+        }
+
 
     }
+
+
+    // $csrf = $request->get('csrf');
+    // if ($this->isCsrfTokenValid('delete', $csrf)){
+    //     $manager = $this->getDoctrine()->getManager();
+    //     $manager->remove($apCatalogFilesVb);
+    //     $manager->flush();
+    //     return $this->json(["code" => 200,
+    //     "message" => "delete"], 200);
+    // }
 
     /**
      *@Route("/archive/{id}", name="ap_catalog_files_bp_archive", methods={"GET","POST"})
      */
-    public function archive(ApCatalogFilesBp $apCatalogFilesBp): Response
+    public function archive(ApCatalogFilesBp $apCatalogFilesBp, Request  $request): Response
     {
-        if ($apCatalogFilesBp->getArchive() == 0 ){
-            $apCatalogFilesBp->setArchive(1);
-        }else{
-            $apCatalogFilesBp->setArchive(0);
-        }
-       $sectorId = $apCatalogFilesBp->getRelation()->getId();
-       $entityManager = $this->getDoctrine()->getManager();
-       $entityManager->persist($apCatalogFilesBp);
-       $entityManager->flush();
-       return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
-//       return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
-    }
+        $sectorId = $apCatalogFilesBp->getRelation()->getId();
+        if ($this->isCsrfTokenValid('archiver'.$apCatalogFilesBp->getId(), $request->request->get('_token')))
+            {
+                if ($apCatalogFilesBp->getArchive() == 0 ){
+                    $apCatalogFilesBp->setArchive(1);
+                }else{
+                    $apCatalogFilesBp->setArchive(0);
+                }
+                
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($apCatalogFilesBp);
+                $entityManager->flush();
+            }
+        return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
+                //return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
+    }    
+
 }
