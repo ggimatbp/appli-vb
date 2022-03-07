@@ -6,13 +6,16 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Carte</title>
          <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-         
+         <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" >
+         <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" >
+         <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" >
          {# css file #}
     <style>
 
         #maCarte{
-            height: 99vh;
+            height: 100vh;
         }
+
 
     </style>
 
@@ -20,11 +23,33 @@
   <body>
         <div id="maCarte"></div>
 
+
+        {% for pscustomer in ps_customer_repository %}
+        {% if pscustomer.dateUpd.date| format_datetime('full', 'full', locale='fr') > '2021-01-01 23:39:12' | format_datetime('full', 'full', locale='fr') %}
+        {# <pre>
+            {{ dump(pscustomer.dateUpd) }}
+        </pre> #}
+        <span data-lat="{{ pscustomer.latitude }}" data-long="{{ pscustomer.longitude }}" data-name="{{ pscustomer.company }}" data-id="{{ pscustomer.id }}"></span>
+
+        {% endif %}
+                {# <pre>
+            {{ dump(pscustomer.dateUpd.date) }}
+        </pre> #}
+                {# <a data-lat="{{ offer.contact.latitude }}" data-long="{{ offer.contact.longitude }}" data-name="{{ offer.domainName }}" data-id="{{ offer.id }}" href="#"> #}
+        {% endfor %}
         {# javaScript file #}
+        <div data-udata-dataset="545b55e1c751df52de9b6045"></div>
+        <script data-udata="https://www.data.gouv.fr/" src="https://static.data.gouv.fr/static/oembed.js" async defer></script>
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
    crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+   
         <script>
+
+
+
+
         // on initialise la carte
             var carte = L.map('maCarte').setView([46.3891410, 2.7700000], 6);
         // on change les tuiles
@@ -35,13 +60,65 @@
             id: 'mapbox/streets-v11',
             tileSize: 512,
             zoomOffset: -1,
-            accessToken: 'your.mapbox.access.token'
+            
         }).addTo(carte);
 
-        //marker
-        var marker = L.marker([44.0026498 , 5]).addTo(carte);
+        // const myCustomColour = '#583470'
+
+        // const markerHtmlStyles = `
+        // background-color: ${myCustomColour};
+        // width: 3rem;
+        // height: 3rem;
+        // display: block;
+        // left: -1.5rem;
+        // top: -1.5rem;
+        // position: relative;
+        // border-radius: 3rem 3rem 0;
+        // transform: rotate(45deg);
+        // border: 1px solid #FFFFFF`
+
+        // var myIcon = L.icon({
+        //     className: "my-custom-pin",
+        //     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+        //      iconSize: [38, 95],
+        //      iconAnchor: [22, 94],
+        //      popupAnchor: [-3, -76],
+        //     // shadowUrl: 'my-icon-shadow.png',
+        //     shadowSize: [68, 95],
+        //     shadowAnchor: [22, 94]
+        //     // html: `<span style="${markerHtmlStyles}" />`
+        // });
+
+
+            var marqueurs = L.markerClusterGroup();
+
+            const cards = document.querySelectorAll('[data-lat]');
+        cards.forEach((elem) => {
+            const marqueur = L.marker([elem.getAttribute('data-lat'), elem.getAttribute('data-long')]);
+           
+            //.addTo(carte); inutile lors de l'utilisation des marqueurs
+
+            marqueur.bindPopup(`
+  <div class="row g-0 popup-card">
+
+    <div class="">
+    
+      <div class="card-body">
+        <h6 class="card-title">${[elem.getAttribute('data-name')]}</h6>
+        <p class="card-text">${[elem.getAttribute('data-name')]}</p>
+       
+      </div>
+    </div>
+  </div>`);
+   marqueurs.addLayer(marqueur);
+  
+  });
+  carte.addLayer(marqueurs);
+
+
 
         </script>
+        
   </body>
 </html>
 
