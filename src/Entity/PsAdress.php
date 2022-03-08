@@ -132,6 +132,27 @@ class PsAdress
      */
     private $email;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $id_address;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $address1;
+
+    /**
+    * @ORM\Column(type="float", nullable=true)
+    */
+    private $latitude;
+
+    /**
+    * @ORM\Column(type="float", nullable=true)
+    */
+    private $longitude;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -409,6 +430,54 @@ class PsAdress
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getIdAddress(): ?int
+    {
+        return $this->id_address;
+    }
+
+    public function setIdAddress(int $id_address): self
+    {
+        $this->id_address = $id_address;
+
+        return $this;
+    }
+
+    public function getAddress1(): ?string
+    {
+        return $this->address1;
+    }
+
+    public function setAddress1(?string $address1): self
+    {
+        $this->address1 = $address1;
+
+        return $this;
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(?float $latitude): self
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(?float $longitude): self
+    {
+        $this->longitude = $longitude;
 
         return $this;
     }

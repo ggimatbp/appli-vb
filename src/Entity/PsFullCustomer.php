@@ -57,6 +57,13 @@ class PsFullCustomer
      */
     private $date_upd;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $idCustomer;
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +161,18 @@ class PsFullCustomer
     public function setDateUpd(?\DateTimeInterface $date_upd): self
     {
         $this->date_upd = $date_upd;
+
+        return $this;
+    }
+
+    public function getIdCustomer(): ?int
+    {
+        return $this->idCustomer;
+    }
+
+    public function setIdCustomer(?int $idCustomer): self
+    {
+        $this->idCustomer = $idCustomer;
 
         return $this;
     }

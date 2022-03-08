@@ -37,6 +37,11 @@ class PsOrder
      */
     private $date_upd;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $id_order;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class PsOrder
     public function setDateUpd(\DateTimeInterface $date_upd): self
     {
         $this->date_upd = $date_upd;
+
+        return $this;
+    }
+
+    public function getIdOrder(): ?int
+    {
+        return $this->id_order;
+    }
+
+    public function setIdOrder(int $id_order): self
+    {
+        $this->id_order = $id_order;
 
         return $this;
     }

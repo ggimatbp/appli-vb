@@ -27,6 +27,11 @@ class PsGroupLang
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $id_group;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class PsGroupLang
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getIdGroup(): ?int
+    {
+        return $this->id_group;
+    }
+
+    public function setIdGroup(?int $id_group): self
+    {
+        $this->id_group = $id_group;
 
         return $this;
     }
