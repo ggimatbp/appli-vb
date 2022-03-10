@@ -42,7 +42,6 @@ class ApCatalogCustomerBpController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogCustomerBp);
-            dd($entityManager);
             $entityManager->flush();
             
             return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);

@@ -77,10 +77,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $apCatalogFilesVbs;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Log::class, mappedBy="User")
-     */
-    private $logs;
 
     // /**
     //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="user")
@@ -347,33 +343,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Log[]
-     */
-    public function getLogs(): Collection
-    {
-        return $this->logs;
-    }
-
-    public function addLog(Log $log): self
-    {
-        if (!$this->logs->contains($log)) {
-            $this->logs[] = $log;
-            $log->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLog(Log $log): self
-    {
-        if ($this->logs->removeElement($log)) {
-            // set the owning side to null (unless already changed)
-            if ($log->getUser() === $this) {
-                $log->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 }
