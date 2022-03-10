@@ -64,7 +64,6 @@ class ApCatalogModelBpController extends AbstractController
         $apCatalogModelBp = new ApCatalogModelBp();
         $form = $this->createForm(ApCatalogModelBpType::class, $apCatalogModelBp);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogModelBp);

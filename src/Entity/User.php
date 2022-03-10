@@ -77,6 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $apCatalogFilesVbs;
 
+
     // /**
     //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="user")
     //  */
@@ -87,6 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->apCatalogFilesBps = new ArrayCollection();
         $this->apCatalogFilesBpHistories = new ArrayCollection();
         $this->apCatalogFilesVbs = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -340,4 +342,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 }
