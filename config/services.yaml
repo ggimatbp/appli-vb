@@ -25,15 +25,16 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    monolog.dbHandler:
-        class: App\Utility\DbHandler
+    # part of logging symfony see log.php/dBProcessor.php/DbHandler.php/DoctrineSubcriber.php/monolog.yaml/service.yaml 
+    # monolog.dbHandler:
+    #     class: App\Utility\DbHandler
     
-    monolog.dbProcessor:
-        class: App\Utility\DbProcessor
-        tags:
-            - {name: monolog.processor, handler: dbHandler}
+    # monolog.dbProcessor:
+    #     class: App\Utility\DbProcessor
+    #     tags:
+    #         - {name: monolog.processor, handler: dbHandler}
 
-    doctrine.doctrineSubscriber:
-        class: App\EventListener\DoctrineSubscriber
-        tags:
-            - {name: doctrine.event_subscriber}
+    # doctrine.doctrineSubscriber:
+    #     class: App\EventListener\DoctrineSubscriber
+    #     tags:
+    #         - {name: doctrine.event_subscriber}
