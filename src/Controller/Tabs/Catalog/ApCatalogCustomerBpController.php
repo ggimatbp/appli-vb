@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\GlobalHistoryService;
 
 /**
  * @Route("/ap/catalog/customer/bp")
@@ -32,7 +33,7 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      * @Route("/new", name="ap_catalog_customer_bp_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_BP;
         $apCatalogCustomerBp = new ApCatalogCustomerBp();
@@ -43,7 +44,8 @@ class ApCatalogCustomerBpController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogCustomerBp);
             $entityManager->flush();
-            
+            $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'new', ['attention']);
+
             return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
             //return $this->redirectToRoute('ap_catalog_customer_bp_index', [], Response::HTTP_SEE_OTHER);
         }
