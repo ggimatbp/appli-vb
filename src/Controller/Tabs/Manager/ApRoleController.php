@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\GlobalHistoryService;
 
 
 /**
@@ -41,7 +42,7 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/new", name="ap_role_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ApTabRepository $apTabRepository, ApRoleRepository $apRoleRepository): Response
+    public function new(Request $request, ApTabRepository $apTabRepository, ApRoleRepository $apRoleRepository, GlobalHistoryService $globalHistoryService): Response
     {
         $tabName = self::TAB_NAME;
         $apRole = new ApRole();
@@ -78,6 +79,7 @@ class ApRoleController extends AbstractController
 
                     $entityManager->flush();
                     $id = $apRole->getId();
+                    $globalHistoryService->setInHistory($apRole, 'new');
             return $this->redirect('/ap/role/' . $id . '/edit');
             }
         }elseif($sameName >= 1)
@@ -118,7 +120,7 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_role_edit", methods={"GET","POST"})
      */
-    public function edit($id, ApRole $apRole, EntityManagerInterface $entityManager): Response
+    public function edit($id, ApRole $apRole, EntityManagerInterface $entityManager, GlobalHistoryService $globalHistoryService): Response
     {
         $tabName = self::TAB_NAME;
          if (null === $apRole = $entityManager->getRepository(ApRole::class)->find($id)) {
@@ -142,7 +144,7 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/delete/{id}", name="ap_role_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApRole $apRole, UserRepository $userRepository, ApRoleRepository $apRoleRepository): Response
+    public function delete(Request $request, ApRole $apRole, UserRepository $userRepository, ApRoleRepository $apRoleRepository, GlobalHistoryService $globalHistoryService): Response
     {
         if ($this->isCsrfTokenValid('delete'.$apRole->getId(), $request->request->get('_token'))) {
 
@@ -154,6 +156,7 @@ class ApRoleController extends AbstractController
             foreach ($userArray as $user){
                 $user->setRoleId($lambdaRole);
             }
+            $globalHistoryService->setInHistory($apRole, 'delete');
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apRole);
             $entityManager->flush();
@@ -167,11 +170,12 @@ class ApRoleController extends AbstractController
      * @route("/editName/{id}", methods={"GET"})
     */
 
-    public function editotest(Request $request, ApRole $apRole, EntityManagerInterface $manager) : response
+    public function editotest(Request $request, ApRole $apRole, EntityManagerInterface $manager, GlobalHistoryService $globalHistoryService) : response
     {
         $submittedToken = $request->get('csrfEditName');
                 // 'search-item' is the same value used in the template to generate the token
         if ($this->isCsrfTokenValid('edit-name', $submittedToken)) {
+            $globalHistoryService->setInHistory($apRole, 'edit name');
             $roleName = $request->get('task');
             $apRole->setName($roleName);
             $manager->flush();

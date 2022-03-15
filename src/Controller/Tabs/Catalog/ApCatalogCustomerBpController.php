@@ -44,7 +44,7 @@ class ApCatalogCustomerBpController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogCustomerBp);
             $entityManager->flush();
-            $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'new', ['attention']);
+            $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'new');
 
             return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
             //return $this->redirectToRoute('ap_catalog_customer_bp_index', [], Response::HTTP_SEE_OTHER);
@@ -75,7 +75,7 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_catalog_customer_bp_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ApCatalogCustomerBp $apCatalogCustomerBp): Response
+    public function edit(Request $request, ApCatalogCustomerBp $apCatalogCustomerBp, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_BP;
         $form = $this->createForm(ApCatalogCustomerBpType::class, $apCatalogCustomerBp);
@@ -83,7 +83,7 @@ class ApCatalogCustomerBpController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'edit');
             return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -97,9 +97,10 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_customer_bp_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApCatalogCustomerBp $apCatalogCustomerBp): Response
+    public function delete(Request $request, ApCatalogCustomerBp $apCatalogCustomerBp, GlobalHistoryService $GlobalHistoryService): Response
     {
         if ($this->isCsrfTokenValid('delete' . $apCatalogCustomerBp->getId(), $request->request->get('_token'))) {
+            $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'delete');
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apCatalogCustomerBp);
             $entityManager->flush();
@@ -112,23 +113,28 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      *@Route("/archive/{id}", name="ap_catalog_customer_bp_archive", methods={"GET","POST"})
      */
-    public function archive(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository, Request $request): Response
+    public function archive(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository, Request $request, GlobalHistoryService $GlobalHistoryService): Response
     {
         if ($this->isCsrfTokenValid('archiver' . $apCatalogCustomerBp->getId(), $request->request->get('_token')))
         {
             if ($apCatalogCustomerBp->getArchive() == 0) {
                 $apCatalogCustomerBp->setArchive(1);
                 $customerId = $apCatalogCustomerBp->getId();
+                $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'Archive');
                 $allModelByCustomerId = $apCatalogModelBpRepository->findAllById($customerId);
                 foreach ($allModelByCustomerId as $model) {
                     $model->setArchive(1);
                     $modelId = $model->getId();
+                    $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'Child archive');
                     $allFileByModelId = $apCatalogFilesBpRepository->findAllById($modelId);
-                    foreach ($allFileByModelId as $file) {
+                    foreach ($allFileByModelId as $file) 
+                    {
                         $file->setArchive(1);
+                        $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'Grandson archive');
                     }
                 }
             } else {
+                $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'Unarchive');
                 $apCatalogCustomerBp->setArchive(0);
             }
 

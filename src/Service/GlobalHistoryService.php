@@ -32,7 +32,7 @@ class GlobalHistoryService
     // //entity name
     $className = $this->manager->getClassMetadata(get_class($object))->getName();
     $apGlobalHistory->setEntityName($className);
-
+    
         //fake
         //$apGlobalHistory->setEntityName('test');
 
