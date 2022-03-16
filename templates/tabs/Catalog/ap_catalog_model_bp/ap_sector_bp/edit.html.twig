@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier{% endblock %}
+
+{% block body %}
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+            <span class="form-new-name-container">
+                <h3 class="align-self-center catalog-h1 mt-2">Modifier {{ap_sector_bp.name}} </h3>
+                    {{ include('tabs/Catalog/ap_catalog_model_bp/ap_sector_bp/_form.html.twig', {'button_label': 'Envoyer'}) }}
+                <span class="d-flex justify-content-around form-div-edit px-5">
+                    <a class="m-2 btn" href="{{ path('ap_sector_bp_index', {'id': ap_sector_bp.model.id})  }}">Retour</a>
+                    {% for ap_access in app.user.RoleId.apAccesses %}
+                        {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                        {{ include('tabs/Catalog/ap_catalog_model_bp/_sector_modal_delete.html.twig') }}
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </span>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

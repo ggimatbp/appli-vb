@@ -31,11 +31,6 @@ class ApRole
     private $apAccesses;
 
     /**
-     * @ORM\OneToMany(targetEntity=ApEmployee::class, mappedBy="Role")
-     */
-    private $apEmployees;
-
-    /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="roleId")
      */
     private $users;

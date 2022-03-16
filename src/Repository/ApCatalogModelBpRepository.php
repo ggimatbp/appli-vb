@@ -54,7 +54,7 @@ class ApCatalogModelBpRepository extends ServiceEntityRepository
             ->andWhere('a.customer = :id')
             ->setParameter('id', $id)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
+
 }

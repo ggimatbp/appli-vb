@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ApCatalogModelBp{% endblock %}
+{% block title %}Nouveau model BP{% endblock %}
 
 {% block body %}
-    <h1>Create new ApCatalogModelBp</h1>
-
-    {{ include('tabs/Catalog/ap_catalog_model_bp/_form.html.twig') }}
-
-    <a href="{{ path('ap_catalog_model_bp_index') }}">back to list</a>
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+        <span class="form-new-name-container">
+            <h3 class="align-self-center">Créer un nouveau model BP</h3>
+            {{ include('tabs/Catalog/ap_catalog_model_bp/_form.html.twig') }}
+            <a class="bottom-fix btn-edit-role btn btn-ligth" href="{{ path('ap_catalog_customer_bp_show', {'id': id_customer})  }}">Retour</a>
+        </span>
+    {% endif %}
+{% endfor %}
 {% endblock %}

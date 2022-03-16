@@ -1,0 +1,25 @@
+
+//aprole-global-container
+.global-container{
+    padding:$gloabalPaddingContainer;
+}
+
+// form container
+
+//form-new-container
+.new-container{
+    padding:$gloabalPaddingContainer;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    width:95%;
+}
+
+//form-new-container
+.new-container{
+    padding:$gloabalPaddingContainer;
+    height: 80vh;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}

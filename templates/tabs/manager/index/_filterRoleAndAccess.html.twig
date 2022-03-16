@@ -8,4 +8,5 @@
         <button id="btn-role-erease-filter" class="btn-search"><i class="search-image fas fa-eraser"></i></button></th>
     </tr>
     <input  id="hidden-role-input-order-and-name" type="hidden" data-ajaxLimitRole="{{(roleFilterSession is empty ) ? limitRole : roleFilterSession['limitRole'] }}" data-ajaxOrderRole="{{ (roleFilterSession is empty ) ? '3' : roleFilterSession['ajaxRoleOrder'] }}" data-ajaxRoleFilterNameOrder="">
+    <input id="csrf-search-role" type="hidden" name="token" value="{{ csrf_token('search-item') }}"/>
 </form>

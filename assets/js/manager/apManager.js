@@ -25,6 +25,7 @@ import 'bootstrap/js/dist/dropdown'
 
 function ajaxFilter(element, ajaxOrder = null, ajaxFilterNameOrder = null){
 
+  let csrfEmployeeFilter = $('#csrf-search-employee').val();
   let ajaxActive = $('#filter-user-active-select').val();
   let ajaxRoleId = $('#filter-user-role-select').val();
   let ajaxEmail = $('#filter-user-email-input').val();
@@ -51,6 +52,7 @@ function ajaxFilter(element, ajaxOrder = null, ajaxFilterNameOrder = null){
       type: "GET",
       dataType: "json",
       data: {
+         "csrfEmployeeFilter": csrfEmployeeFilter,
          "ajaxActive": ajaxActive,
          "ajaxRoleId": ajaxRoleId,
          "ajaxRoleName":ajaxRoleName,
@@ -214,7 +216,7 @@ function employeeLimitModification()
   //#region Ajax
 
 function ajaxRoleFilter(element, ajaxRoleOrder = null, ajaxRoleOrderName = null){
-
+let ajaxCsrf = $('#csrf-search-role').val();
 let ajaxFilterRoleName = $('#filter-role-lastname-input').val();
 let ajaxRolePage = element;
 let ajaxRoleLimit = $("#hidden-role-input-order-and-name").data('ajaxlimitrole');
@@ -228,6 +230,7 @@ if(ajaxRoleOrder == null)
       type: "GET",
       dataType: "json",
       data: {
+         "ajaxCsrf": ajaxCsrf,
          "ajaxFilterRoleName": ajaxFilterRoleName,
          "ajaxRoleOrder": ajaxRoleOrder,
          "ajaxRoleLimit": ajaxRoleLimit,

@@ -23,29 +23,37 @@ const { default: axios } = require("axios");
 
 document.querySelectorAll('a.js-check').forEach(function (link) {
   link.addEventListener('click', onClickAddAuth);
-})
-
+});
 
 function onClickAddAuth(e) {
-
   e.preventDefault();
   const url = this.href;
   const icone = this.querySelector('i');
-  axios.get(url).then(function () {
+  let editAccessCsrf = $('#csrf-edit-access').val();
+  $.ajax({
+    type: 'GET',
+    url: url,
+    dataType: 'json',
+    data: {
+      editAccessCsrf: editAccessCsrf,
+    },
+    async: true,
 
-    if (icone.classList.contains('fa-times-circle')) {
-      vNotify().success({ text: 'Changement pris en compte.', title: 'Ajout de droit' });
-      icone.classList.replace('fa-times-circle', 'fa-check-square');
-      icone.classList.replace('text-danger', 'text-success');
-    } else {
-      vNotify().success({ text: 'Changement pris en compte.', title: 'Retrait de droit' });
-      icone.classList.replace("fa-check-square", "fa-times-circle");
-      icone.classList.replace('text-success', 'text-danger');
-
-    }
-  }).catch(function () {
-    vNotify().error({ text: 'This is an error notification.', title: 'Error' });
-  })
+    success: function (response) {
+      if (icone.classList.contains('fa-times-circle')) {
+        vNotify().success({ text: 'Changement pris en compte.', title: 'Ajout de droit' });
+        icone.classList.replace('fa-times-circle', 'fa-check-square');
+        icone.classList.replace('text-danger', 'text-success');
+      } else {
+        vNotify().success({ text: 'Changement pris en compte.', title: 'Retrait de droit' });
+        icone.classList.replace('fa-check-square', 'fa-times-circle');
+        icone.classList.replace('text-success', 'text-danger');
+      }
+    },
+    error: function () {
+      vNotify().error({ text: 'This is an error notification.', title: 'Error' });
+    },
+  });
 }
 
 //#endregion ajax add/remove auth access
@@ -55,11 +63,13 @@ function onClickAddAuth(e) {
 $('#role-name-btn').unbind('click').click(function (e) {
   let roleName = $('#role-name').val();
   let roleId = $('#role-name').data('id');
+  let csrfEditName = $('#csrf-edit-name-role').val()
   $.ajax({
     url:'/ap/role/editName/' + roleId,
      type: "GET",
     dataType: "json",
     data: {
+         "csrfEditName": csrfEditName,
          "task": roleName
     },
     async: true,

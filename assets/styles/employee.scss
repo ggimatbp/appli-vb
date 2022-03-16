@@ -1,4 +1,3 @@
-
 /*#region user show */
 .user-show-container{
     display:flex;
@@ -21,7 +20,14 @@
 .btn-user-edit-password{
     width:100%;
     margin-bottom: 1rem;
-    
 }
 
 /*#endregion */
+
+@media (max-width: 568px) { 
+    .employee-btn-show{
+        display:flex;
+        justify-content: space-between;
+        width:80%;
+    }
+}

@@ -19,7 +19,7 @@
                         <td>{{ user.email }}</td>
                     </tr>
                     <tr>
-                        <th>Roles</th>
+                        <th>Rôles</th>
                         <td>{{user.roleId.name}}</td>
                     </tr>
                     <tr>
@@ -37,10 +37,20 @@
                 </tbody>
             </table>
             </div>
-            <div class="d-flex justify-content-around employee-btn-show">
+             {% for ap_access in app.user.RoleId.apAccesses %}
+            <div class="employee-btn-show">
+                {% if ap_access.tab.name is same as(tabNameEmployee) and ap_access.edit is same as(true) %}                     
+                        <a class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>                    
+                {% endif %}
+                {% if ap_access.tab.name is same as(tabNameEmployee) and ap_access.delete is same as(true) %}
+                        {{ include('tabs/manager/user/_delete_form.html.twig') }}
+                {% endif %}
+            </div>
+            {% endfor %}  
+            {# <div class="employee-btn-show">
                 <a class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>
                 {{ include('tabs/manager/user/_delete_form.html.twig') }}
-            </div>
-
+            </div> #}
     </div>
+
 {% endblock %}

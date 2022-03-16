@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau secteur{% endblock %}
+
+{% block body %}
+   {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                <span class="form-new-name-container">
+                    <h3 class="align-self-center">Créer un nouveau secteur</h3>
+                {{ include('tabs/Catalog/ap_catalog_model_bp/ap_sector_bp/_form.html.twig') }}
+                <a class="bottom-fix btn-edit-role btn btn-ligth" href="{{ path('ap_sector_bp_index', {'id': model_id})  }}">retour</a>
+            </span>
+        {% endif %}
+    {% endfor %} 
+{% endblock %}

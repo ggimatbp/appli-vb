@@ -3,6 +3,7 @@
     color:  $headerColor;
     font-weight: $fontWeight;
     border-bottom:0.2rem solid $headerColor;
+    text-decoration: none;
 }
 
 .headerNotActive{
@@ -13,6 +14,7 @@
 
 .header2{
     width:100%;
+    text-decoration: none;
 }
 
 .nav-pills .nav-link{

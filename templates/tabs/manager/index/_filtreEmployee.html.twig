@@ -26,5 +26,6 @@
         <input id="hidden-input-order-and-name" type="hidden" data-ajaxOrder="{{ (filterSession is empty ) ? '' : filterSession['ajaxOrder'] }}" data-ajaxFilterNameOrder="{{ (filterSession is empty ) ? '' : filterSession['ajaxFilterNameOrder'] }}">
         <th><button id="btn-employee-search-filter" class="btn-search"><i class="search-image fas fa-search"></i></button>
         <button id="btn-employee-erease-filter" class="btn-search"><i class="search-image fas fa-eraser"></i></button></th>
+        <input id="csrf-search-employee" type="hidden" name="token" value="{{ csrf_token('search-employee-item') }}"/>
     </tr>
 </form>
