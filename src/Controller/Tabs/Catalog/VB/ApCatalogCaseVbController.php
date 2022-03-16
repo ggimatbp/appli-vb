@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\GlobalHistoryService;
 
 /**
  * @Route("/ap/catalog/case/vb")
@@ -45,7 +46,7 @@ class ApCatalogCaseVbController extends AbstractController
     /**
      * @Route("/new", name="ap_catalog_case_vb_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
         $apCatalogCaseVb = new ApCatalogCaseVb();
@@ -56,6 +57,7 @@ class ApCatalogCaseVbController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogCaseVb);
             $entityManager->flush();
+            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'new');
 
             return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
         }
@@ -85,7 +87,7 @@ class ApCatalogCaseVbController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_catalog_case_vb_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ApCatalogCaseVb $apCatalogCaseVb): Response
+    public function edit(Request $request, ApCatalogCaseVb $apCatalogCaseVb, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
         $form = $this->createForm(ApCatalogCaseVbType::class, $apCatalogCaseVb);
@@ -93,6 +95,7 @@ class ApCatalogCaseVbController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'edit');
 
             return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
         }
@@ -107,12 +110,14 @@ class ApCatalogCaseVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_case_vb_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApCatalogCaseVb $apCatalogCaseVb): Response
+    public function delete(Request $request, ApCatalogCaseVb $apCatalogCaseVb, GlobalHistoryService $GlobalHistoryService): Response
     {
         if ($this->isCsrfTokenValid('delete'.$apCatalogCaseVb->getId(), $request->request->get('_token'))) {
+            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'delete');   
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apCatalogCaseVb);
             $entityManager->flush();
+                     
         }
 
         return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
@@ -121,7 +126,7 @@ class ApCatalogCaseVbController extends AbstractController
     /**
      *@Route("/archive/{id}", name="ap_catalog_case_vb_archive", methods={"GET","POST"})
      */
-    public function archive(ApCatalogCaseVb $apCatalogCaseVb, ApCatalogFilesVbRepository $apCatalogFilesVbRepository, Request $request): Response
+    public function archive(ApCatalogCaseVb $apCatalogCaseVb, ApCatalogFilesVbRepository $apCatalogFilesVbRepository, Request $request, GlobalHistoryService $GlobalHistoryService): Response
     {
         if ($this->isCsrfTokenValid('archiver' . $apCatalogCaseVb->getId(), $request->request->get('_token')))
         {
@@ -129,15 +134,19 @@ class ApCatalogCaseVbController extends AbstractController
                 $apCatalogCaseVb->setArchive(1);
                 $caseId = $apCatalogCaseVb->getId();
                 $allFilesByCaseId = $apCatalogFilesVbRepository->findAllFileByCaseId($caseId);
+                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent');   
                 foreach ($allFilesByCaseId as $file) {
                     $file->setArchive(1);
+                    $GlobalHistoryService->setInHistory($file, 'archive children');   
                 }
             } else {
                 $apCatalogCaseVb->setArchive(0);
                 $caseId = $apCatalogCaseVb->getId();
                 $allFilesByCaseId = $apCatalogFilesVbRepository->findAllFileByCaseId($caseId);
+                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent');
                 foreach ($allFilesByCaseId as $file) {
                     $file->setArchive(0);
+                    $GlobalHistoryService->setInHistory($file, 'archive children');
                 }
             }
             $entityManager = $this->getDoctrine()->getManager();

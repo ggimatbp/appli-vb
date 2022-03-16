@@ -16,6 +16,7 @@ use App\Repository\ApSectorBpRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\GlobalHistoryService;
 // use LiipImagineBundleModelBinary;
 
 
@@ -43,7 +44,7 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/new/{id}", name="ap_catalog_files_bp_new", methods={"GET","POST"})
      */
-    public function new(EntityManagerInterface $manager, Request $request, ApCatalogModelBpRepository $apCatalogModelBp, ApSectorBp $apSectorBp, ApSectorBpRepository $ApSectorBpRepository): Response
+    public function new(EntityManagerInterface $manager, Request $request, ApCatalogModelBpRepository $apCatalogModelBp, ApSectorBp $apSectorBp, ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_BP;
         $apCatalogFilesBp = new ApCatalogFilesBp();
@@ -68,19 +69,21 @@ class ApCatalogFilesBpController extends AbstractController
             $manager->persist($apCatalogFilesBp);
             $this->getDoctrine()->getManager()->flush();
             //we set history
-            $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-            $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-            $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-            $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-            $ApCatalogFilesBpHistory->setAction("create");
-            $ApCatalogFilesBpHistory->setModelName($model->getName());
-            $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-            $manager->persist($ApCatalogFilesBpHistory);
+            // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
+            // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
+            // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
+            // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
+            // $ApCatalogFilesBpHistory->setAction("create");
+            // $ApCatalogFilesBpHistory->setModelName($model->getName());
+            // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
+            // $manager->persist($ApCatalogFilesBpHistory);
             // end of setting history
             // $entityManager = $this->getDoctrine()->getManager();
             // $entityManager->flush();
             // imagejpeg($apCatalogFilesBp->getFileName(), , =75);
             $this->getDoctrine()->getManager()->flush();
+            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'new');
+
              return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
         }
 
@@ -107,7 +110,7 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_catalog_files_bp_edit", methods={"GET","POST"})
      */
-    public function edit(EntityManagerInterface $manager, Request $request, ApCatalogFilesBp $apCatalogFilesBp,  ApSectorBpRepository $ApSectorBpRepository ): Response
+    public function edit(EntityManagerInterface $manager, Request $request, ApCatalogFilesBp $apCatalogFilesBp,  ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService ): Response
     {
         $tabName = self::TAB_BP;
         $sectorId = $apCatalogFilesBp->getRelation();
@@ -140,16 +143,16 @@ class ApCatalogFilesBpController extends AbstractController
             }
             $manager->persist($apCatalogFilesBp);
             $this->getDoctrine()->getManager()->flush();
-            
-            $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-            $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-            $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-            $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-            $ApCatalogFilesBpHistory->setAction("edit");
-            $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
-            $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-            $manager->persist($ApCatalogFilesBpHistory);
-            $this->getDoctrine()->getManager()->flush();
+            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'edit');
+            // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
+            // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
+            // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
+            // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
+            // $ApCatalogFilesBpHistory->setAction("edit");
+            // $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
+            // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
+            // $manager->persist($ApCatalogFilesBpHistory);
+            // $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
@@ -164,12 +167,12 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_files_bp_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApCatalogFilesBp $apCatalogFilesBp): Response
+    public function delete(Request $request, ApCatalogFilesBp $apCatalogFilesBp, GlobalHistoryService $GlobalHistoryService): Response
     {
         $relationId = $apCatalogFilesBp->getrelation();
         $id = $relationId->getId();
         if ($this->isCsrfTokenValid('delete'.$apCatalogFilesBp->getId(), $request->request->get('_token'))) {
-            
+            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'delete');
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apCatalogFilesBp);
             $entityManager->flush();
@@ -184,19 +187,20 @@ class ApCatalogFilesBpController extends AbstractController
      * @route("/delete/{id}", methods={"GET"})
     */
 
-    public function editotest(ApCatalogFilesBp $apCatalogFilesBp, EntityManagerInterface $manager, Request $request) : response
+    public function editotest(ApCatalogFilesBp $apCatalogFilesBp, EntityManagerInterface $manager, Request $request, GlobalHistoryService $GlobalHistoryService) : response
     {
         $csrf = $request->get('csrf');
         if ($this->isCsrfTokenValid('delete', $csrf)){
 
-            $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-            $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-            $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-            $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-            $ApCatalogFilesBpHistory->setAction("delete");
-            $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
-            $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-            $manager->persist($ApCatalogFilesBpHistory);
+            // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
+            // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
+            // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
+            // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
+            // $ApCatalogFilesBpHistory->setAction("delete");
+            // $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
+            // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
+            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'delete');
+            $manager->persist($apCatalogFilesBp);
             $manager->flush();
 
             // $manager = $this->getDoctrine()->getManager();
@@ -222,38 +226,40 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      *@Route("/archive/{id}", name="ap_catalog_files_bp_archive", methods={"GET","POST"})
      */
-    public function archive(ApCatalogFilesBp $apCatalogFilesBp, Request  $request): Response
+    public function archive(ApCatalogFilesBp $apCatalogFilesBp, Request  $request, GlobalHistoryService $GlobalHistoryService): Response
     {
         $sectorId = $apCatalogFilesBp->getRelation()->getId();
         if ($this->isCsrfTokenValid('archiver'.$apCatalogFilesBp->getId(), $request->request->get('_token')))
             {
                 if ($apCatalogFilesBp->getArchive() == 0 ){
                     $apCatalogFilesBp->setArchive(1);
+                    $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'archiver');
                     //historic
-                    $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-                    $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-                    $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-                    $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-                    $ApCatalogFilesBpHistory->setAction("archive");
-                    $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
-                    $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($ApCatalogFilesBpHistory);
-                    $entityManager->flush();
+                    // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
+                    // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
+                    // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
+                    // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
+                    // $ApCatalogFilesBpHistory->setAction("archive");
+                    // $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
+                    // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
+                    // $entityManager = $this->getDoctrine()->getManager();
+                    // $entityManager->persist($ApCatalogFilesBpHistory);
+                    // $entityManager->flush();
                 }else{
 
                     $apCatalogFilesBp->setArchive(0);
+                    $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'Unarchiver');
                     //historic
-                    $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-                    $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-                    $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-                    $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-                    $ApCatalogFilesBpHistory->setAction("unarchive");
-                    $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
-                    $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($ApCatalogFilesBpHistory);
-                    $entityManager->flush();
+                    // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
+                    // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
+                    // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
+                    // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
+                    // $ApCatalogFilesBpHistory->setAction("unarchive");
+                    // $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
+                    // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
+                    // $entityManager = $this->getDoctrine()->getManager();
+                    // $entityManager->persist($ApCatalogFilesBpHistory);
+                    // $entityManager->flush();
                 }
                 
                 $entityManager = $this->getDoctrine()->getManager();

@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\GlobalHistoryService;
 
 /**
  * @Route("/ap/sector/vb")
@@ -35,7 +36,7 @@ class ApSectorVbController extends AbstractController
     /**
      * @Route("/new/{id}", name="ap_sector_vb_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ApCatalogCaseVbRepository $apCatalogCaseVbRepository): Response
+    public function new(Request $request, ApCatalogCaseVbRepository $apCatalogCaseVbRepository, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
         $apSectorVb = new ApSectorVb();
@@ -48,6 +49,7 @@ class ApSectorVbController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apSectorVb);
             $entityManager->flush();
+            $GlobalHistoryService->setInHistory($apSectorVb, 'new');
 
             return $this->redirectToRoute('ap_catalog_case_vb_show', ['id' => $caseId], Response::HTTP_SEE_OTHER);
         }
@@ -80,16 +82,17 @@ class ApSectorVbController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_sector_vb_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ApSectorVb $apSectorVb): Response
+    public function edit(Request $request, ApSectorVb $apSectorVb, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
         $form = $this->createForm(ApSectorVbType::class, $apSectorVb);
         $form->handleRequest($request);
-
+        $sectorId = $apSectorVb->getId();
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $GlobalHistoryService->setInHistory($apSectorVb, 'edit');
             return $this->redirectToRoute('ap_sector_vb_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('tabs/Catalog/VB/ap_sector_vb/edit.html.twig', [
@@ -102,11 +105,12 @@ class ApSectorVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_sector_vb_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApSectorVb $apSectorVb): Response
+    public function delete(Request $request, ApSectorVb $apSectorVb, GlobalHistoryService $GlobalHistoryService): Response
     {
        $case = $apSectorVb->getCaseId();
        $caseId = $case->getId();
         if ($this->isCsrfTokenValid('delete'.$apSectorVb->getId(), $request->request->get('_token'))) {
+            $GlobalHistoryService->setInHistory($apSectorVb, 'delete');
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apSectorVb);
             $entityManager->flush();

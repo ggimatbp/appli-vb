@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\PasswordGenerator;
 use Symfony\Component\Validator\Constraints\Length;
+use App\Service\GlobalHistoryService;
 
 /**
  * @Route("/user")
@@ -35,7 +36,7 @@ class UserController extends AbstractController
     /**
      * @Route("/new", name="user_new", methods={"GET","POST"})
      */
-    public function new(Request $request,  UserPasswordEncoderInterface $passwordEncoder): Response
+    public function new(Request $request,  UserPasswordEncoderInterface $passwordEncoder, GlobalHistoryService $globalHistoryService): Response
     {
         // à faire pour mettre de la sécurité en back 
         // $userId = $this->get('security.token_storage')->getToken()->getUser()->getRoleId()->getApAccesses();
@@ -60,7 +61,7 @@ class UserController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
+            $globalHistoryService->setInHistory($user, 'new');
             return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -86,7 +87,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function edit(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder, GlobalHistoryService $globalHistoryService): Response
     {
         $tabNameEmployee = self::TAB_EMPLOYEE;
         $form = $this->createForm(UserType::class, $user);
@@ -99,7 +100,7 @@ class UserController extends AbstractController
                 $user->setNoRoles();
             }
             $this->getDoctrine()->getManager()->flush();
-
+            $globalHistoryService->setInHistory($user, 'edit');
             return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -116,7 +117,7 @@ class UserController extends AbstractController
      * @route("/editPasswordOnClick/{id}", name="edit_name_onclick")
      */
    
-    public function editPasswordOnClick(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $manager) : response
+    public function editPasswordOnClick(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $manager, GlobalHistoryService $globalHistoryService) : response
     {
         $userPassword = $request->get('task');
         $majuscule = preg_match('@[A-Z]@', $userPassword);
@@ -130,7 +131,7 @@ class UserController extends AbstractController
                 $passwordEncoder->encodePassword($user,$userPassword)
                 );
                 $manager->flush();
-                
+                $globalHistoryService->setInHistory($user, 'edit password');
                 return $this->json(["code" => 200,
                 "message" => "changer de mot de passe"], 200);
         }
@@ -150,12 +151,14 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}", name="user_delete", methods={"POST"})
      */
-    public function delete(Request $request, User $user): Response
+    public function delete(Request $request, User $user, GlobalHistoryService $globalHistoryService): Response
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $globalHistoryService->setInHistory($user, 'delete');
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
             $entityManager->flush();
+
         }
 
         return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);

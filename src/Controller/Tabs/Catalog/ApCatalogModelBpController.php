@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\GlobalHistoryService;
 
 
 /**
@@ -42,7 +43,7 @@ class ApCatalogModelBpController extends AbstractController
 
     // model show
     /**
-     * @Route("/modelBySector/{id}", name="ap_sector_bp_index", methods={"GET"})
+     * @Route("/sectorByModel/{id}", name="ap_sector_bp_index", methods={"GET"})
      */
     public function indexSectionByModel(ApCatalogModelBp $apCatalogModelBp, ApSectorBpRepository $apSectorBpRepository): Response
     {
@@ -58,7 +59,7 @@ class ApCatalogModelBpController extends AbstractController
     /**
      * @Route("/new", name="ap_catalog_model_bp_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, GlobalHistoryService $globalHistoryService): Response
     {
         $tabName = self::TAB_BP;
         $apCatalogModelBp = new ApCatalogModelBp();
@@ -68,7 +69,7 @@ class ApCatalogModelBpController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogModelBp);
             $entityManager->flush();
-
+            $globalHistoryService->setInHistory($apCatalogModelBp, 'new');
             return $this->redirectToRoute('ap_catalog_model_bp_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -82,7 +83,7 @@ class ApCatalogModelBpController extends AbstractController
     /**
      * @Route("/newPrecise/{id}", name="ap_catalog_model_bp_new_precise", methods={"GET","POST"})
      */
-    public function newWithModel(Request $request, ApCatalogCustomerBpRepository $customerBpRepository): Response
+    public function newWithModel(Request $request, ApCatalogCustomerBpRepository $customerBpRepository, GlobalHistoryService $globalHistoryService): Response
     {
         $tabName = self::TAB_BP;
         $apCatalogModelBp = new ApCatalogModelBp();
@@ -95,6 +96,7 @@ class ApCatalogModelBpController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogModelBp);
             $entityManager->flush();
+            $globalHistoryService->setInHistory($apCatalogModelBp, 'new', ['new with customer']);
             return $this->redirectToRoute('ap_catalog_customer_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
@@ -125,7 +127,7 @@ class ApCatalogModelBpController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_catalog_model_bp_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ApCatalogModelBp $apCatalogModelBp): Response
+    public function edit(Request $request, ApCatalogModelBp $apCatalogModelBp, GlobalHistoryService $globalHistoryService): Response
     {
 
         $id = $apCatalogModelBp->getId();
@@ -135,7 +137,7 @@ class ApCatalogModelBpController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $globalHistoryService->setInHistory($apCatalogModelBp, 'edit');
             return $this->redirectToRoute('ap_sector_bp_index', ['id' =>  $id], Response::HTTP_SEE_OTHER);
         }
 
@@ -149,15 +151,16 @@ class ApCatalogModelBpController extends AbstractController
     /**
      * @Route("/delete/{id}", name="ap_catalog_model_bp_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApCatalogModelBp $apCatalogModelBp, ApCatalogModelBpRepository $modelRepository): Response
+    public function delete(Request $request, ApCatalogModelBp $apCatalogModelBp, ApCatalogModelBpRepository $modelRepository, GlobalHistoryService $globalHistoryService): Response
     {
          //$customerId = $apCatalogModelBp->getCustomer();
-         
+          $globalHistoryService->setInHistory($apCatalogModelBp, 'new' ['new with customer']);
           $id = intval(basename("$_SERVER[REQUEST_URI]"));
           $model = $modelRepository->find($id);
           $customer = $model->getCustomer();
           $customerId = $customer->getId();
         if ($this->isCsrfTokenValid('delete'.$apCatalogModelBp->getId(), $request->request->get('_token'))) {
+            $globalHistoryService->setInHistory($apCatalogModelBp, 'delete');
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apCatalogModelBp);
             $entityManager->flush();
@@ -182,18 +185,21 @@ class ApCatalogModelBpController extends AbstractController
     /**
      *@Route("/archive/{id}", name="ap_catalog_model_bp_archive", methods={"GET","POST"})
      */
-    public function archive(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $apCatalogFilesBpRepository, Request  $request): Response
+    public function archive(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $apCatalogFilesBpRepository, Request  $request, GlobalHistoryService $globalHistoryService): Response
     {
         if ($this->isCsrfTokenValid('archiver'.$apCatalogModelBp->getId(), $request->request->get('_token'))) {
             if ($apCatalogModelBp->getArchive() == 0 ){
                 $apCatalogModelBp->setArchive(1);
                 $modelId = $apCatalogModelBp->getId();
-            $filesbyModelId = $apCatalogFilesBpRepository->findAllById($modelId);
+                $globalHistoryService->setInHistory($apCatalogModelBp, 'archive');
+                $filesbyModelId = $apCatalogFilesBpRepository->findAllById($modelId);
             foreach($filesbyModelId as $file){
+                $globalHistoryService->setInHistory($file, 'children archive');
                 $file->setArchive(1);
             }
             }else{
                 $apCatalogModelBp->setArchive(0);
+                $globalHistoryService->setInHistory($apCatalogModelBp, 'unarchive');
             }
             $customerId = $apCatalogModelBp->getCustomer()->getId();
             $entityManager = $this->getDoctrine()->getManager();
@@ -210,7 +216,7 @@ class ApCatalogModelBpController extends AbstractController
      *@Route("/archive/sector/{id}", name="ap_catalog_model_bp_archive_section", methods={"GET","POST"})
      */
 
-    public function archiveBySection(ApSectorBp $apSectorBp, ApSectorBpRepository $apSectorBpRepository, Request  $request, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository ):response
+    public function archiveBySection(ApSectorBp $apSectorBp, ApSectorBpRepository $apSectorBpRepository, Request  $request, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository, GlobalHistoryService $globalHistoryService ):response
     {
         $modelId = $apSectorBp->getModel()->getId();
         $sectorId = $apSectorBp->getId();
@@ -219,12 +225,15 @@ class ApCatalogModelBpController extends AbstractController
                 $apSectorBp->setArchive(1);
                 $sectorId = $apSectorBp->getId();
                 $modelId = $apSectorBp->getModel();
+                $globalHistoryService->setInHistory($apSectorBp, 'archive');
                 $filesbySectorId = $ApCatalogFilesBpRepository->findFilesBySectors($sectorId);
             foreach($filesbySectorId as $file){
                 $file->setArchive(1);
+                $globalHistoryService->setInHistory($file, 'children archive');
             }
             }else{
                 $apSectorBp->setArchive(0);
+                $globalHistoryService->setInHistory($apSectorBp, 'Unarchive');
             }
                 $modelId = $apSectorBp->getModel()->getId();
                 $entityManager = $this->getDoctrine()->getManager();

@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\GlobalHistoryService;
 
 /**
  * @Route("/ap/sector/bp")
@@ -35,7 +36,7 @@ class ApSectorBpController extends AbstractController
     /**
      * @Route("/new/{id}", name="ap_sector_bp_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ApCatalogModelBpRepository $modelRepo): Response
+    public function new(Request $request, ApCatalogModelBpRepository $modelRepo, GlobalHistoryService $globalHistoryService): Response
     {
         $tabName = self::TAB_BP;
         $apSectorBp = new ApSectorBp();
@@ -47,12 +48,12 @@ class ApSectorBpController extends AbstractController
             $apSectorBp->setModel($model);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apSectorBp);
-            $entityManager->flush();
-            
+            $entityManager->flush(); 
+            $globalHistoryService->setInHistory($apSectorBp, 'new');
             return $this->redirectToRoute('ap_sector_bp_index', ['id' => $modelId], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('ap_sector_bp/new.html.twig', [
+        return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/ap_sector_bp/new.html.twig', [
             'ap_sector_bp' => $apSectorBp,
             'form' => $form,
             'tabName' => $tabName,
@@ -75,19 +76,20 @@ class ApSectorBpController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_sector_bp_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ApSectorBp $apSectorBp): Response
+    public function edit(Request $request, ApSectorBp $apSectorBp, GlobalHistoryService $globalHistoryService): Response
     {
+
         $tabName = self::TAB_BP;
         $form = $this->createForm(ApSectorBpType::class, $apSectorBp);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $globalHistoryService->setInHistory($apSectorBp, 'edit');
             return $this->redirectToRoute('ap_sector_bp_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('ap_sector_bp/edit.html.twig', [
+        return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/ap_sector_bp/edit.html.twig', [
             'ap_sector_bp' => $apSectorBp,
             'form' => $form,
             'tabName' => $tabName
@@ -97,11 +99,12 @@ class ApSectorBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_sector_bp_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApSectorBp $apSectorBp): Response
+    public function delete(Request $request, ApSectorBp $apSectorBp, GlobalHistoryService $globalHistoryService): Response
     {
         $model = $apSectorBp->getModel();
         $modelId = $model->getId();
         if ($this->isCsrfTokenValid('delete'.$apSectorBp->getId(), $request->request->get('_token'))) {
+            $globalHistoryService->setInHistory($apSectorBp, 'delete');
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apSectorBp);
             $entityManager->flush();
