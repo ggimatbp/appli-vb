@@ -105,15 +105,19 @@ class ApSectorVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_sector_vb_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApSectorVb $apSectorVb, GlobalHistoryService $GlobalHistoryService): Response
+    public function delete(Request $request, ApSectorVb $apSectorVb, GlobalHistoryService $GlobalHistoryService, ApCatalogFilesVbRepository $files): Response
     {
        $case = $apSectorVb->getCaseId();
        $caseId = $case->getId();
+       $sectorId = $apSectorVb->getId();
+       $allFilesInSector = $files->findFilesBySectors($sectorId);
         if ($this->isCsrfTokenValid('delete'.$apSectorVb->getId(), $request->request->get('_token'))) {
-            $GlobalHistoryService->setInHistory($apSectorVb, 'delete');
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($apSectorVb);
-            $entityManager->flush();
+            if($allFilesInSector == NULL){
+                $GlobalHistoryService->setInHistory($apSectorVb, 'delete');
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($apSectorVb);
+                $entityManager->flush();
+            }
         }
         return $this->redirectToRoute('ap_catalog_case_vb_show', ['id' => $caseId], Response::HTTP_SEE_OTHER);
     }

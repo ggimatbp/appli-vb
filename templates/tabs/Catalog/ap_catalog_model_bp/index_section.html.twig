@@ -25,7 +25,7 @@
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                        {{ include('tabs/Catalog/ap_catalog_model_bp/_delete_form_show_model.html.twig') }}
+                        {{ include('tabs/Catalog/ap_catalog_model_bp/_model_modal_delete.html.twig') }}
                     {% endif %}
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}

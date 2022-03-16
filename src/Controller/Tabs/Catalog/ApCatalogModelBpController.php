@@ -151,20 +151,23 @@ class ApCatalogModelBpController extends AbstractController
     /**
      * @Route("/delete/{id}", name="ap_catalog_model_bp_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApCatalogModelBp $apCatalogModelBp, ApCatalogModelBpRepository $modelRepository, GlobalHistoryService $globalHistoryService): Response
+    public function delete(Request $request, ApCatalogModelBp $apCatalogModelBp, ApCatalogModelBpRepository $modelRepository, GlobalHistoryService $globalHistoryService, ApSectorBpRepository $sectors): Response
     {
          //$customerId = $apCatalogModelBp->getCustomer();
-          $globalHistoryService->setInHistory($apCatalogModelBp, 'new' ['new with customer']);
+
           $id = intval(basename("$_SERVER[REQUEST_URI]"));
           $model = $modelRepository->find($id);
           $customer = $model->getCustomer();
           $customerId = $customer->getId();
+          $catalogId = $apCatalogModelBp->getId();
+          $allSectorByModel = $sectors->findSectionByModel($catalogId);
         if ($this->isCsrfTokenValid('delete'.$apCatalogModelBp->getId(), $request->request->get('_token'))) {
-            $globalHistoryService->setInHistory($apCatalogModelBp, 'delete');
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($apCatalogModelBp);
-            $entityManager->flush();
-            
+            if($allSectorByModel == NULL){
+                $globalHistoryService->setInHistory($apCatalogModelBp, 'delete');
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($apCatalogModelBp);
+                $entityManager->flush();
+            }
         }
          return $this->redirectToRoute('ap_catalog_customer_bp_show', ['id' => $customerId], Response::HTTP_SEE_OTHER);
     }

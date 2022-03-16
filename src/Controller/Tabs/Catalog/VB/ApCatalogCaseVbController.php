@@ -110,14 +110,17 @@ class ApCatalogCaseVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_case_vb_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApCatalogCaseVb $apCatalogCaseVb, GlobalHistoryService $GlobalHistoryService): Response
+    public function delete(Request $request, ApCatalogCaseVb $apCatalogCaseVb, GlobalHistoryService $GlobalHistoryService, ApSectorVbRepository $sector): Response
     {
         if ($this->isCsrfTokenValid('delete'.$apCatalogCaseVb->getId(), $request->request->get('_token'))) {
-            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'delete');   
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($apCatalogCaseVb);
-            $entityManager->flush();
-                     
+            $caseId = $apCatalogCaseVb->getId();
+            $allFilesByCaseId = $sector->findSectionByCase($caseId);
+            if($allFilesByCaseId == NULL){
+                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'delete');   
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($apCatalogCaseVb);
+                $entityManager->flush();
+            }  
         }
 
         return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);

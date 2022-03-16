@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\GlobalHistoryService;
+use App\Repository\ApCatalogFilesBpRepository;
+
 
 /**
  * @Route("/ap/sector/bp")
@@ -99,15 +101,20 @@ class ApSectorBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_sector_bp_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApSectorBp $apSectorBp, GlobalHistoryService $globalHistoryService): Response
+    public function delete(Request $request, ApSectorBp $apSectorBp, GlobalHistoryService $globalHistoryService, ApCatalogFilesBpRepository $files): Response
     {
         $model = $apSectorBp->getModel();
         $modelId = $model->getId();
+        $sectorId = $apSectorBp->getId();
+        $allFilesInSector = $files->findFilesBySectors($sectorId);
+
         if ($this->isCsrfTokenValid('delete'.$apSectorBp->getId(), $request->request->get('_token'))) {
-            $globalHistoryService->setInHistory($apSectorBp, 'delete');
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($apSectorBp);
-            $entityManager->flush();
+            if( $allFilesInSector == NULL){
+                $globalHistoryService->setInHistory($apSectorBp, 'delete');
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($apSectorBp);
+                $entityManager->flush();
+            }
         }
         return $this->redirectToRoute('ap_sector_bp_index', ['id' => $modelId], Response::HTTP_SEE_OTHER);
     }
