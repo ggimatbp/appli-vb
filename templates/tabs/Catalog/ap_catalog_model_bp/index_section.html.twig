@@ -11,28 +11,28 @@
     	{% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
         <div class="aprole-global-container">
             <h1 class="catalog-h1">{{ap_catalog_model_bp.name}}</h1>
-            <span class="w-100 d-flex justify-content-around">
-                <a class="m-2 btn" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_model_bp.customer.id}) }}">Retour</a>
+            <span class="d-flex justify-content-around catalog-customer-container-bp">
+                <a class="m-2 btn catalog-content-customer-container-bp d-flex flex-column justify-content-center" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_model_bp.customer.id}) }}">Retour</a>
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
-                        <a class="m-2 btn" href="{{ path('ap_sector_bp_new', {'id': ap_catalog_model_bp.id}) }}">Créer une nouvelle section</a> 
+                        <a class="m-2 btn catalog-content-customer-container-bp" href="{{ path('ap_sector_bp_new', {'id': ap_catalog_model_bp.id}) }}">Créer une nouvelle section</a> 
                     {% endif %}
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-                <a class="m-2 btn" href="{{ path('ap_catalog_model_bp_edit', {'id': ap_catalog_model_bp.id})}}">Modifier le model</a>
+                <a class="m-2 btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_model_bp_edit', {'id': ap_catalog_model_bp.id})}}">Modifier le model</a>
                     {% endif %}
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                        {{ include('tabs/Catalog/ap_catalog_model_bp/_delete_form_show_model.html.twig') }}
+                        {{ include('tabs/Catalog/ap_catalog_model_bp/_model_modal_delete.html.twig') }}
                     {% endif %}
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                        <form method="POST" action="{{ path('ap_catalog_model_bp_archive', {'id': ap_catalog_model_bp.id})}}" onsubmit="return confirm('Etes vous sûr de vouloir archiver ce model');">
+                        <form class="catalog-content-customer-container-bp m-2" method="POST" action="{{ path('ap_catalog_model_bp_archive', {'id': ap_catalog_model_bp.id})}}" onsubmit="return confirm('Etes vous sûr de vouloir archiver ce model');">
                             <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_model_bp.id) }}">
-                            <button class="m-2 btn">Archiver le model</button>
+                            <button class="w-100 btn">Archiver le model</button>
                         </form>
                     {% endif %}
                 {% endfor %}
@@ -40,7 +40,7 @@
             
             <span class="catalog-grid-customer">
             {% for ap_sector_bp in ap_sector_bps %}
-                <span class="p-2 d-flex flex-column"><a class="folder-change" href="{{ path('ap_catalog_model_bp_show', {'id': ap_sector_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+                <span class="p-2 d-flex flex-column"><a class="{% if ap_sector_bp.archive == 1  %} archived {% endif %} folder-change" href="{{ path('ap_catalog_model_bp_show', {'id': ap_sector_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
                 <h4 class="overflow-hidden">{{ap_sector_bp.name}}</h4>
                 </span>
             {% else %}

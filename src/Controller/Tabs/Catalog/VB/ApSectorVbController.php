@@ -68,7 +68,7 @@ class ApSectorVbController extends AbstractController
     public function show(ApSectorVb $apSectorVb, ApCatalogFilesVbRepository $apCatalogFilesVbRepository): Response
     {
         $tabName = self::TAB_VB;
-        $id = $apSectorVb->getId(); 
+        $id = $apSectorVb->getId();
         $files = $apCatalogFilesVbRepository->findFilesBySectors($id);
         // $sectorId = intval(basename("$_SERVER[REQUEST_URI]"));
         // $apCatalogCaseVbRepository->find($sectorId);
@@ -91,7 +91,6 @@ class ApSectorVbController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
             $GlobalHistoryService->setInHistory($apSectorVb, 'edit');
-            return $this->redirectToRoute('ap_sector_vb_index', [], Response::HTTP_SEE_OTHER);
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId ], Response::HTTP_SEE_OTHER);
         }
 
@@ -105,16 +104,53 @@ class ApSectorVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_sector_vb_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApSectorVb $apSectorVb, GlobalHistoryService $GlobalHistoryService): Response
+    public function delete(Request $request, ApSectorVb $apSectorVb, GlobalHistoryService $GlobalHistoryService, ApCatalogFilesVbRepository $files): Response
     {
        $case = $apSectorVb->getCaseId();
        $caseId = $case->getId();
+       $sectorId = $apSectorVb->getId();
+       $allFilesInSector = $files->findFilesBySectors($sectorId);
         if ($this->isCsrfTokenValid('delete'.$apSectorVb->getId(), $request->request->get('_token'))) {
-            $GlobalHistoryService->setInHistory($apSectorVb, 'delete');
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($apSectorVb);
-            $entityManager->flush();
+            if($allFilesInSector == NULL){
+                $GlobalHistoryService->setInHistory($apSectorVb, 'delete');
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($apSectorVb);
+                $entityManager->flush();
+            }
         }
         return $this->redirectToRoute('ap_catalog_case_vb_show', ['id' => $caseId], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     *  @Route("/archive/{id}", name="ap_sector_vb_archive", methods={"GET","POST"})
+     */
+    public function archive(ApCatalogFilesVbRepository $files, Request  $request, GlobalHistoryService $GlobalHistoryService, ApSectorVb $apSectorVb): Response
+    {   
+        $sectorId = $apSectorVb->getId();
+        $allFilesInSector = $files->findFilesBySectors($sectorId);
+        if ($this->isCsrfTokenValid('archiver'. $sectorId, $request->request->get('_token')))
+        {
+            if($apSectorVb->getArchive() == 0)
+            {
+                $GlobalHistoryService->setInHistory($apSectorVb, 'Archive');
+                $apSectorVb->setArchive(1);
+                foreach($allFilesInSector as $file){
+                    if ($file->getArchive() == 0 ){
+                        $file->setArchive(1);
+                        $GlobalHistoryService->setInHistory($file, 'Archive');
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($file);
+                        $entityManager->flush();
+                    }
+                }
+            }else{
+                $GlobalHistoryService->setInHistory($apSectorVb, 'Unarchive');
+                $apSectorVb->setArchive(0);
+            }
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($apSectorVb);
+                $entityManager->flush();
+        }
+        return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
     }
 }
