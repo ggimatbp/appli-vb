@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\GlobalHistoryService;
+use Proxies\__CG__\App\Entity\ApCatalogModelBp;
 
 /**
  * @Route("/ap/catalog/customer/bp")
@@ -97,13 +98,18 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_customer_bp_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApCatalogCustomerBp $apCatalogCustomerBp, GlobalHistoryService $GlobalHistoryService): Response
+    public function delete(Request $request, ApCatalogCustomerBp $apCatalogCustomerBp, GlobalHistoryService $GlobalHistoryService, ApCatalogModelBpRepository $model): Response
     {
+
+        $customerId = $apCatalogCustomerBp->getId();
+        $allModelByCust = $model->findAllById($customerId);
         if ($this->isCsrfTokenValid('delete' . $apCatalogCustomerBp->getId(), $request->request->get('_token'))) {
-            $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'delete');
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($apCatalogCustomerBp);
-            $entityManager->flush();
+            if($allModelByCust == NULL){
+                $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'delete');
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($apCatalogCustomerBp);
+                $entityManager->flush();
+            }
         }
 
         return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);

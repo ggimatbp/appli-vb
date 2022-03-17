@@ -25,14 +25,15 @@
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                {{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
+                {{ include('tabs/Catalog/ap_catalog_customer_bp/_modal_delete.html.twig') }}
+
                     {% endif %}
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-                        <form name="archive{{ap_catalog_customer_bp.id}}" method="post" action="{{ path('ap_catalog_customer_bp_archive', {'id': ap_catalog_customer_bp.id}) }}" class="hover">
+                        <form class="catalog-content-customer-container-bp" name="archive{{ap_catalog_customer_bp.id}}" method="post" action="{{ path('ap_catalog_customer_bp_archive', {'id': ap_catalog_customer_bp.id}) }}" class="hover">
                             <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_customer_bp.id) }}">
-                                <button class="btn">Archiver</button>
+                                <button class="w-100 btn">Archiver</button>
                         </form>
                 {# <a class="btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_customer_bp_archive', {'id': ap_catalog_customer_bp.id}) }}">Archiver</a> #}
                     {% endif %}

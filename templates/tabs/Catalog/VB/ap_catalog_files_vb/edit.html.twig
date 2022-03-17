@@ -6,6 +6,10 @@
 {% endblock %}
 {% block body %}
   <span class="form-container-with-title">
+                <div class="m-5 w-100 d-flex justify-content-around">
+                <a class="btn" href="{{ path('ap_sector_vb_show', {'id': ap_catalog_files_vb.sector.id}) }}">Retour</a>
+                <div></div>
+            </div>
                 <h1 class="catalog-h1 mt-2">Modifier {{ap_catalog_files_vb.name}}</h1>
             <span class="form-new-container">
                 {{ form_start(form) }}
