@@ -9,7 +9,7 @@
           <h3 class="align-self-center">Modifier le pack {{ap_catalog_case_vb.name}}</h1>
           {{ include('tabs/Catalog/VB/ap_catalog_case_vb/_form.html.twig', {'button_label': 'Modifier'}) }}
           <span class="d-flex justify-content-around p-5">  
-              <a class="btn" href="{{ path('catalog_index') }}?roleback=2">Retour</a>
+              <a class="btn" href="{{ path('ap_catalog_case_vb_show', {'id':ap_catalog_case_vb.id}) }}">Retour</a>
               {% for ap_access in app.user.RoleId.apAccesses %}
                 {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
                   {{ include('tabs/Catalog/VB/ap_catalog_case_vb/_modal_delete.html.twig') }}

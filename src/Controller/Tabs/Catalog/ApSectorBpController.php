@@ -88,7 +88,7 @@ class ApSectorBpController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
             $globalHistoryService->setInHistory($apSectorBp, 'edit');
-            return $this->redirectToRoute('ap_sector_bp_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('ap_catalog_model_bp_show', ['id'=> $apSectorBp->getid()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('tabs/Catalog/ap_catalog_model_bp/ap_sector_bp/edit.html.twig', [
@@ -118,4 +118,6 @@ class ApSectorBpController extends AbstractController
         }
         return $this->redirectToRoute('ap_sector_bp_index', ['id' => $modelId], Response::HTTP_SEE_OTHER);
     }
+
+
 }
