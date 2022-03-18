@@ -30,7 +30,7 @@ class SecurityController extends AbstractController
     public function loginBis(): Response
     {
 
-        return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+        return $this->render('security/login2.html.twig');
     }
 
     /**
