@@ -156,7 +156,7 @@ class ManagerController extends AbstractController
             // 'search-item' is the same value used in the template to generate the token
             if ($this->isCsrfTokenValid('search-employee-item', $submittedToken)) {
                 $ajaxOrder = $request->get('ajaxOrder');
-
+                
                 $ajaxFilterNameOrder = $request->get('ajaxFilterNameOrder');
 
                 $ajaxActive = $request->get('ajaxActive');

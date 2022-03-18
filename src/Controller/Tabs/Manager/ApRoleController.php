@@ -42,7 +42,7 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/new", name="ap_role_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ApTabRepository $apTabRepository, ApRoleRepository $apRoleRepository, GlobalHistoryService $globalHistoryService): Response
+    public function new(Request $request, ApTabRepository $apTabRepository, ApRoleRepository $apRoleRepository, GlobalHistoryService $globalHistoryService, EntityManagerInterface $entityManager): Response
     {
         $tabName = self::TAB_NAME;
         $apRole = new ApRole();
@@ -62,7 +62,6 @@ class ApRoleController extends AbstractController
         {
             if ($form->isSubmitted() && $form->isValid()) {
 
-                $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($apRole);
                 $allTabs = $apTabRepository->findAllId(); 
                     foreach($allTabs as $tab){
@@ -73,7 +72,6 @@ class ApRoleController extends AbstractController
                         $apAccess->setAdd(0);
                         $apAccess->setEdit(0);
                         $apAccess->setDelete(0);
-                        $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($apAccess);
                     };
 
@@ -144,7 +142,7 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/delete/{id}", name="ap_role_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApRole $apRole, UserRepository $userRepository, ApRoleRepository $apRoleRepository, GlobalHistoryService $globalHistoryService): Response
+    public function delete(Request $request, ApRole $apRole, UserRepository $userRepository, ApRoleRepository $apRoleRepository, GlobalHistoryService $globalHistoryService, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$apRole->getId(), $request->request->get('_token'))) {
 
@@ -157,7 +155,6 @@ class ApRoleController extends AbstractController
                 $user->setRoleId($lambdaRole);
             }
             $globalHistoryService->setInHistory($apRole, 'delete');
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apRole);
             $entityManager->flush();
         }

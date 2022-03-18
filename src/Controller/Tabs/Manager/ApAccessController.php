@@ -30,14 +30,13 @@ class ApAccessController extends AbstractController
     /**
      * @Route("/new", name="ap_access_new", methods={"GET","POST"})
      */
-    public function new(Request $request, GlobalHistoryService $globalHistoryService): Response
+    public function new(Request $request, GlobalHistoryService $globalHistoryService, EntityManagerInterface $entityManager): Response
     {
         $apAccess = new ApAccess();
         $form = $this->createForm(ApAccessType::class, $apAccess, array('tabId' => $apAccess->getTab()));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apAccess);
             $entityManager->flush();
             $globalHistoryService->setInHistory($apAccess, 'new');
@@ -64,13 +63,13 @@ class ApAccessController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_access_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ApAccess $apAccess, GlobalHistoryService $globalHistoryService): Response
+    public function edit(Request $request, ApAccess $apAccess, GlobalHistoryService $globalHistoryService, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ApAccessType::class, $apAccess);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->flush();
             $globalHistoryService->setInHistory($apAccess, 'edit');
 
             return $this->redirectToRoute('ap_access_index', [], Response::HTTP_SEE_OTHER);
@@ -85,11 +84,10 @@ class ApAccessController extends AbstractController
     /**
      * @Route("/{id}", name="ap_access_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApAccess $apAccess, GlobalHistoryService $globalHistoryService): Response
+    public function delete(Request $request, ApAccess $apAccess, GlobalHistoryService $globalHistoryService, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$apAccess->getId(), $request->request->get('_token'))) {
             $globalHistoryService->setInHistory($apAccess, 'delete');
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($apAccess);
             $entityManager->flush();
         }
