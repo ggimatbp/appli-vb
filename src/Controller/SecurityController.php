@@ -25,10 +25,21 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/", name="app_bis_login")
+     */
+    public function loginBis(): Response
+    {
+
+        return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
      * @Route("/logout", name="app_logout")
      */
     public function logout()
     {
         return new RedirectResponse($this->urlGenerator->generate('app_login'));
     }
+
+
 }
