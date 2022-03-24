@@ -28,11 +28,11 @@ class AppTabFixture extends Fixture
             'controlpath' => 'Catalog',
             'children' => [
                 ['name' => 'Batteries-Prod',
-                'path' => 'tabs/catalog/index/batterieprod.html.twig',
+                'path' => 'tabs/Catalog/index/batterieprod.html.twig',
                 'controlpath' => 'Bp'],
 
                 ['name' => 'Velobatterie',
-                'path' => 'tabs/catalog/index/velobatterie.html.twig',
+                'path' => 'tabs/Catalog/index/velobatterie.html.twig',
                 'controlpath' => 'Vb'],
             ],
 
