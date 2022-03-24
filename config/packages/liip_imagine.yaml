@@ -2,20 +2,6 @@
 liip_imagine:
     # valid drivers options include "gd" or "gmagick" or "imagick"
     driver: "gd"
-        # configure resolvers
-    resolvers:
-        # setup the default resolver
-        default:
-            # use the default web path
-            web_path: ~
-    # loaders
-    loaders:
-        default:
-            filesystem:
-                data_root:
-                    - '%kernel.project_dir%/public/'
-                    - '%env(LIIP_PUBLIC_PATH)%'
-
     filter_sets:
         miniature:
             quality: 75
