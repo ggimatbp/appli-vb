@@ -94,7 +94,7 @@ class CatalogController extends AbstractController
     // $montest = intval(basename("$_SERVER[REQUEST_URI]"));
     //#endregion
 
-    return $this->render('tabs/catalog/index/index.html.twig',  [
+    return $this->render('tabs/Catalog/index/index.html.twig',  [
       //BP
       'ap_catalog_model_bps' => $apCatalogModelBpRepository->findAll(),
       'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAll(),
