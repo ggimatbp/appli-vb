@@ -4,7 +4,7 @@
         <div
             class="{% if ap_catalog_file_vb.archive == 1 %} archived {% endif %} card card-design {{'card' ~ ap_catalog_file_vb.id }}">
             <span type="button" class="btn-launch-modal" data-img-id="{{ap_catalog_file_vb.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ vich_uploader_asset(ap_catalog_file_vb, 'imageFile') | imagine_filter('miniature') }}" class="card-img-top" alt="model image upload">
+                <img src="{{ vich_uploader_asset(ap_catalog_file_vb, 'imageFile') }}" class="card-img-top" alt="model image upload">
             </span>
         
             <div class="card-body card-body-design">

@@ -83,14 +83,10 @@ class ApCatalogFilesBp
      */
     private $relation;
 
-    // /**
-    //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="file")
-    //  */
-    // private $apCatalogFilesBpHistories;
-
     public function __construct()
     {
         $this->apCatalogFilesBpHistories = new ArrayCollection();
+        $this->parent = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -253,4 +249,47 @@ class ApCatalogFilesBp
 
         return $this;
     }
+
+    public function getSon(): ?self
+    {
+        return $this->son;
+    }
+
+    public function setSon(?self $son): self
+    {
+        $this->son = $son;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getParent(): Collection
+    {
+        return $this->parent;
+    }
+
+    public function addParent(self $parent): self
+    {
+        if (!$this->parent->contains($parent)) {
+            $this->parent[] = $parent;
+            $parent->setSon($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParent(self $parent): self
+    {
+        if ($this->parent->removeElement($parent)) {
+            // set the owning side to null (unless already changed)
+            if ($parent->getSon() === $this) {
+                $parent->setSon(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

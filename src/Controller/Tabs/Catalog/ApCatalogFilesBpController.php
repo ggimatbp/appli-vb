@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\GlobalHistoryService;
+use App\Service\InterventionImage;
 // use LiipImagineBundleModelBinary;
 
 
@@ -44,7 +45,7 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/new/{id}", name="ap_catalog_files_bp_new", methods={"GET","POST"})
      */
-    public function new(EntityManagerInterface $manager, Request $request, ApCatalogModelBpRepository $apCatalogModelBp, ApSectorBp $apSectorBp, ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService): Response
+    public function new(InterventionImage $intervention , EntityManagerInterface $manager, Request $request, ApCatalogModelBpRepository $apCatalogModelBp, ApSectorBp $apSectorBp, ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_BP;
         $apCatalogFilesBp = new ApCatalogFilesBp();
@@ -60,33 +61,18 @@ class ApCatalogFilesBpController extends AbstractController
             $apCatalogFilesBp->setRelation($sector);
             $imgFile = $apCatalogFilesBp->getImageFile();
             $fileExtension =  $imgFile->guessExtension();
-
             $apCatalogFilesBp->setUser($this->getUser());
             $apCatalogFilesBp->setCreatedAt(new \DateTime());
             $apCatalogFilesBp->setFileSize(filesize($imgFile)/1024);
-            
             $apCatalogFilesBp->setFileType($fileExtension);
             $manager->persist($apCatalogFilesBp);
             $this->getDoctrine()->getManager()->flush();
-            //we set history
-            // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-            // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-            // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-            // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-            // $ApCatalogFilesBpHistory->setAction("create");
-            // $ApCatalogFilesBpHistory->setModelName($model->getName());
-            // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-            // $manager->persist($ApCatalogFilesBpHistory);
-            // end of setting history
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->flush();
-            // imagejpeg($apCatalogFilesBp->getFileName(), , =75);
-            $this->getDoctrine()->getManager()->flush();
-            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'new');
+            $intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName());
 
+            //set history
+            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'new');
              return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('tabs/Catalog/ap_catalog_files_bp/new.html.twig', [
             'ap_catalog_files_bp' => $apCatalogFilesBp,
             'form' => $form,
@@ -110,7 +96,7 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_catalog_files_bp_edit", methods={"GET","POST"})
      */
-    public function edit(EntityManagerInterface $manager, Request $request, ApCatalogFilesBp $apCatalogFilesBp,  ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService ): Response
+    public function edit(InterventionImage $intervention, EntityManagerInterface $manager, Request $request, ApCatalogFilesBp $apCatalogFilesBp,  ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService ): Response
     {
         $tabName = self::TAB_BP;
         $sectorId = $apCatalogFilesBp->getRelation();
@@ -143,6 +129,7 @@ class ApCatalogFilesBpController extends AbstractController
             }
             $manager->persist($apCatalogFilesBp);
             $this->getDoctrine()->getManager()->flush();
+            $intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName());
             $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'edit');
             // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
             // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());

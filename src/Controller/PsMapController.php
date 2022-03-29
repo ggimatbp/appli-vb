@@ -14,6 +14,7 @@ class PsMapController extends AbstractController
      */
     public function index(): Response
     {
+
         return $this->render('ps_map/index.html.twig', [
             'controller_name' => 'PsMapController',
         ]);
