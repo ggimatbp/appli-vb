@@ -25,10 +25,21 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/", name="app_bis_login")
+     */
+    public function loginBis(): Response
+    {
+
+        return $this->render('security/login2.html.twig');
+    }
+
+    /**
      * @Route("/logout", name="app_logout")
      */
     public function logout()
     {
         return new RedirectResponse($this->urlGenerator->generate('app_login'));
     }
+
+
 }

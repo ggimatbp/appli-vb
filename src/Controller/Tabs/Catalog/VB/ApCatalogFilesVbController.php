@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\GlobalHistoryService;
-
+use App\Service\InterventionImage;
 
 /**
  * @Route("/ap/catalog/files/vb")
@@ -37,7 +37,7 @@ class ApCatalogFilesVbController extends AbstractController
     /**
      * @Route("/new/{id}", name="ap_catalog_files_vb_new", methods={"GET","POST"})
      */
-    public function new(Request $request, ApSectorVbRepository $ApSectorVbRepository, GlobalHistoryService $GlobalHistoryService): Response
+    public function new(InterventionImage $intervention, Request $request, ApSectorVbRepository $ApSectorVbRepository, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
         $sectorId = intval(basename("$_SERVER[REQUEST_URI]"));
@@ -63,6 +63,7 @@ class ApCatalogFilesVbController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($apCatalogFilesVb);
             $entityManager->flush();
+            $intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName());
             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'new');
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
         }
@@ -90,7 +91,7 @@ class ApCatalogFilesVbController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_catalog_files_vb_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ApCatalogFilesVb $apCatalogFilesVb, GlobalHistoryService $GlobalHistoryService): Response
+    public function edit(InterventionImage $intervention, Request $request, ApCatalogFilesVb $apCatalogFilesVb, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
         $form = $this->createForm(ApCatalogFilesVbType::class, $apCatalogFilesVb);
@@ -108,7 +109,7 @@ class ApCatalogFilesVbController extends AbstractController
             }
             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'edit');
             $this->getDoctrine()->getManager()->flush();
-
+            $intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName());
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId ], Response::HTTP_SEE_OTHER);
         }
 
