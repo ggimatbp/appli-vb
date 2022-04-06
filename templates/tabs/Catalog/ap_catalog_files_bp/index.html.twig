@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApCatalogFilesBp index{% endblock %}
+
+{% block body %}
+    <h1>ApCatalogFilesBp index</h1>
+
+        {% for ap_catalog_files_bp in ap_catalog_files_bps %}
+        <img src="{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')}}">
+        {% else %}
+                <td colspan="7">no records found</td>
+        {% endfor %}
+
+{% endblock %}

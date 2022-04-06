@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    <div class="user-show-container">
+        <h1 class="">Utilisateur</h1>
+
+            <h4>{{user.firstname}} {{user.lastname}}</h4>
+            <div>
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th >Id</th>
+                        <td >{{ user.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Mail</th>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <th>Rôles</th>
+                        <td>{{user.roleId.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Prénom</th>
+                        <td>{{ user.firstname }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nom</th>
+                        <td>{{ user.lastname }}</td>
+                    </tr>
+                    <tr>
+                        <th>Compte actif</th>
+                        <td>{{ user.active ? 'Oui' : 'Non' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+             {% for ap_access in app.user.RoleId.apAccesses %}
+            <div class="employee-btn-show">
+                {% if ap_access.tab.name is same as(tabNameEmployee) and ap_access.edit is same as(true) %}                     
+                        <a class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>                    
+                {% endif %}
+                {% if ap_access.tab.name is same as(tabNameEmployee) and ap_access.delete is same as(true) %}
+                        {{ include('tabs/manager/user/_delete_form.html.twig') }}
+                {% endif %}
+            </div>
+            {% endfor %}  
+            {# <div class="employee-btn-show">
+                <a class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>
+                {{ include('tabs/manager/user/_delete_form.html.twig') }}
+            </div> #}
+    </div>
+
+{% endblock %}

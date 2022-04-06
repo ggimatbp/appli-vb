@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ApSectorVb{% endblock %}
+
+{% block body %}
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+        <div class="form-new-name-container">
+            <h3 class="align-self-center">Ajouter un nouveau secteur</h1>
+                {{ include('tabs/Catalog/VB/ap_sector_vb/_form.html.twig') }}
+                <a class="btn bottom-fix" href="{{ path('ap_catalog_case_vb_show', {'id': case_id }) }}">Retour</a>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

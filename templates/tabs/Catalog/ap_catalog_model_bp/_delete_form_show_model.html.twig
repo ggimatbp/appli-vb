@@ -1,0 +1,4 @@
+<form method="POST" action="{{ path('ap_catalog_model_bp_delete', {'id': ap_catalog_model_bp.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ap_catalog_model_bp.id) }}">
+    <button class="m-2 btn">Supprimer le model</button>
+</form>

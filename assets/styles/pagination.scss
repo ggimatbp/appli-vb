@@ -1,0 +1,39 @@
+
+
+.active-pagination{
+background-color: $primaryColor;
+}
+
+.disabled-pagination{
+color: red
+}
+
+
+.page-link{
+    background-color: $btnPrimaryColor;
+    border-color: $btnPrimaryColor;
+    color: $btnPrimaryColorText;
+}
+
+.page-item.active .page-link{
+    background-color: $primaryColorActive;
+    border-color: $primaryColor;
+}
+
+.page-link:hover{
+    color: $btnPrimaryColor;
+    background-color:$btnPrimaryColorText;
+    border-color: $btnPrimaryColorText;
+}
+
+.pagination-modificator{
+    margin:0;
+}
+
+.pagination-form-search{
+    border-radius: 0;
+}
+
+.pagination-total-page-and-number-display{
+    width: 90.5px;
+}

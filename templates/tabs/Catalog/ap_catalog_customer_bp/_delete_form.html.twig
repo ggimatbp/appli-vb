@@ -1,0 +1,4 @@
+<form class="catalog-content-customer-container-bp" method="post" action="{{ path('ap_catalog_customer_bp_delete', {'id': ap_catalog_customer_bp.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ap_catalog_customer_bp.id) }}">
+    <button class="w-100 btn">Supprimer le client</button>
+</form>

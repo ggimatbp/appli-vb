@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un utilisateur{% endblock %}
+{% block javascripts %}
+{{ encore_entry_script_tags('apRole') }}
+{% endblock %}
+{% block body %}
+     {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabNameEmployee) and ap_access.edit is same as(true) %}
+    <div class="aprole-global-container form-container-with-title">
+        <h1>Modifier un utilisateur</h1>
+        <div class="aprole-global-container form-new-container">
+            <h4 class="p-1 mb-3">Modification de {{user.firstname}} {{user.lastname}}</h4>
+            {{ form_start(form) }}
+            {{form_row(form.email, { 'label': 'Mail'})}}
+        {{form_row(form.firstname, { 'label': 'Prenom'})}}
+        {{form_row(form.lastname, { 'label': 'Nom'})}}
+        {{form_row(form.active, { 'label': 'Compte actif'})}}
+        {{form_row(form.roleId, { 'label': 'Role'})}}
+            <div>
+            {{ form_end(form) }}
+            <!-- Button trigger modal -->
+                <div>
+                    <button type="button" class="btn-user-edit-password btn-bottom btn-edit-role btn btn-ligth" data-bs-toggle="modal" data-bs-target="#password-modificator">
+                    Modifier le mot de passe
+                    </button>
+                </div>
+                <div class="d-flex justify-content-around mb-3">
+                    <button class="btn-bottom btn-edit-role btn btn-ligth">{{ button_label|default('Enregistrer') }}</button>
+                        {{ include('tabs/manager/user/_delete_form.html.twig') }}
+                </div>
+                {# <!-- Button trigger modal -->
+                <div class="d-flex justify-content-around">
+                    <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" data-bs-toggle="modal" data-bs-target="#password-modificator">
+                    Modifier le mot de passe
+                    </button>
+                </div> #}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="password-modificator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel">🔑 Modification du mot de passe 🔑</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+                <span>Êtes vous sûr de vouloir remplacer le mot de passe du profil de <strong>{{user.firstname}}, ceci est définitif.</strong></span>
+                <div class="d-flex justify-content-around w-100">
+                    <div class="d-flex py-3 w-100">
+                        <input placeholder="Nouveau mot de passe" class=" form-control edit-user-password" type="text" name="name" id="user-password" data-id="{{user.id}}">
+                        <button  id="passwor-modificator-btn" type='button' class='btn-edit-role btn btn-ligth' data-bs-dismiss="modal">Soumettre</button>
+                    </div>
+                        
+                </div>
+                <div class="d-flex">
+                    <input class="form-control " id="visualisation-password-generator" placeholder="Mot de passe sécurisé à générer automatiquement">
+                    <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" id="password-generator-btn">
+                    Générateur
+                    </button>
+                </div>
+            </div> 
+            <div class="modal-footer d-flex justify-content-end">         
+                <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" data-bs-dismiss="modal">Annuler</button>
+        </div>
+        </div>
+    </div>
+    </div>
+    {% endif %}  
+{% endfor %} 
+{% endblock %}

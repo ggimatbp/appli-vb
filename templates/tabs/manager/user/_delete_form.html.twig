@@ -1,0 +1,29 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn-bottom btn-edit-role btn btn-ligth" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Supprimer
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-center" id="exampleModalLabel">⚠️Suppression de compte⚠️</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <span>Êtes vous sûr de vouloir désactiver le compte de <strong>{{user.firstname}} {{user.lastname}}</strong></span>
+      </div>
+      <div class="modal-footer d-flex justify-content-around">
+
+      <form  class="btn-bottom" method="post" action="{{ path('user_delete', {'id': user.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+    <button class="btn-edit-role btn-ligth btn">Supprimer</button>
+    </form>
+        <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" data-bs-dismiss="modal">Annuler</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+

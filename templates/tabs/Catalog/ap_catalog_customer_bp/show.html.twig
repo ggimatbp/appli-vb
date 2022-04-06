@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue{% endblock %}
+{% block javascripts %}
+{{ encore_entry_script_tags('apCatalogCustomerShow') }}
+{% endblock %}
+{% block body %}
+    {% for ap_access in app.user.RoleId.apAccesses %}
+    	{% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}    
+            <div class="aprole-global-container">
+                <span class="d-flex">
+                    <h1 class="catalog-h1">Client: {{ ap_catalog_customer_bp.name }}</h1>
+                </span>
+                <span class="catalog-customer-container-bp">
+                <a class="catalog-content-customer-container-bp btn" href="{{path('catalog_index')}}">retour</a>
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                    <a class="catalog-content-customer-container-bp btn" href="{{path('ap_catalog_model_bp_new_precise', {'id': ap_catalog_customer_bp.id}) }}">Nouveau model</a>
+                    {% endif %}
+                {% endfor %}
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                    <a class="catalog-content-customer-container-bp btn" href="{{ path('ap_catalog_customer_bp_edit', {'id': ap_catalog_customer_bp.id}) }}">Modifier le client</a>
+                    {% endif %}
+                {% endfor %}
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                {{ include('tabs/Catalog/ap_catalog_customer_bp/_modal_delete.html.twig') }}
+
+                    {% endif %}
+                {% endfor %}
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                        <form class="catalog-content-customer-container-bp" name="archive{{ap_catalog_customer_bp.id}}" method="post" action="{{ path('ap_catalog_customer_bp_archive', {'id': ap_catalog_customer_bp.id}) }}" class="hover">
+                            <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_customer_bp.id) }}">
+                                <button class="w-100 btn">Archiver</button>
+                        </form>
+                {# <a class="btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_customer_bp_archive', {'id': ap_catalog_customer_bp.id}) }}">Archiver</a> #}
+                    {% endif %}
+                {% endfor %}
+                </span>
+                <span class="catalog-grid-customer">
+                    {% for model in ModelById %}
+                        <span class="p-2 d-flex flex-column"><a class="{% if model.archive == 1  %} archived {% endif %} folder-change" href="{{ path('ap_sector_bp_index', {'id': model.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+                        <h4 class="overflow-hidden">{{model.name}}</h4>
+                        </span>
+                    {% else %}
+                        <p>Aucun résultat</p>
+                    {% endfor %}
+                </span>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

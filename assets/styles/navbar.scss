@@ -1,0 +1,43 @@
+.header1{
+    width:100%;
+    color:  $headerColor;
+    font-weight: $fontWeight;
+    border-bottom:0.2rem solid $headerColor;
+    text-decoration: none;
+}
+
+.headerNotActive{
+    width:100%;
+    color:  $headerColor;
+    font-weight: $fontWeight;
+}
+
+.header2{
+    width:100%;
+    text-decoration: none;
+}
+
+.nav-pills .nav-link{
+    background: none;
+     
+    border-radius: 0;
+}
+
+.nav-pills .nav-link.active
+{   border-bottom: 0.2rem solid $headerColor;
+    color: $headerColor;
+    background-color: transparent;
+}
+
+li .active {
+    // background-color:$primaryColor !important;
+    // color: white !important;
+    // font-weight: $fontWeight;
+    // border-bottom: $primaryColor !important ;
+
+}
+
+.nav-item-uniform{
+    color: black; 
+    font-weight: $fontWeight;
+}

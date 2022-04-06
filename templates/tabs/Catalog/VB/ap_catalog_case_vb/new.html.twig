@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ApCatalogCaseVb{% endblock %}
+
+{% block body %}
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+            <span class="form-new-name-container">
+                <h3 class="align-self-center">Créer un packs</h1>
+                {{ include('tabs/Catalog/VB/ap_catalog_case_vb/_form.html.twig') }}
+                <span class="d-flex justify-content-around p-5"> 
+                    <a class="btn bottom-fix" href="{{ path('catalog_index') }}?roleback=2">retour</a>
+                    <p></p>
+                </span>
+            </span>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

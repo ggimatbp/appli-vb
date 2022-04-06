@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApCatalogCustomerBp index{% endblock %}
+
+{% block body %}
+    <h1>ApCatalogCustomerBp index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ap_catalog_customer_bp in ap_catalog_customer_bps %}
+            <tr>
+                <td>{{ ap_catalog_customer_bp.id }}</td>
+                <td>{{ ap_catalog_customer_bp.name }}</td>
+                <td>
+                    <a href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}">show</a>
+                    <a href="{{ path('ap_catalog_customer_bp_edit', {'id': ap_catalog_customer_bp.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('ap_catalog_customer_bp_new') }}">Create new</a>
+{% endblock %}

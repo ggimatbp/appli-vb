@@ -1,0 +1,8 @@
+{{ form_start(form) }}
+    {# {{ form_widget(form) }} #}
+
+    {{ dump(form) }}
+
+    {# {{form_row(form.)}} #}
+    <button class="btn">{{ button_label|default('enregistrer') }}</button>
+{{ form_end(form) }}

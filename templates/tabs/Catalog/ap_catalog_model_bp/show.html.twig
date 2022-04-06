@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue
+{% endblock %}
+
+
+{% block javascripts %}
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+	{{ encore_entry_script_tags('apCatalogModelBpShow') }}
+{% endblock %}
+
+
+{% block body %}
+{# titre et bouton en haut de page #}
+<div class="aprole-global-container">
+	<span class="d-flex">
+		<h1 class="catalog-h1">Dossier de la section: {{ ap_sector_bp.name }}, du model {{ ap_sector_bp.model.name}}</h1>
+		{# {% for ap_access in app.user.RoleId.apAccesses %}
+			{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+			<a class="ps-3 align-self-center" href="{{ path('ap_catalog_model_bp_edit', {'id': ap_sector_bp.id}) }}"><i class="fas fa-pencil-alt"></i></a>
+			{% endif %}
+		{% endfor %} #}
+	</span>
+
+		<span class="d-flex justify-content-around catalog-customer-container-bp">
+			<a class="m-2 btn catalog-content-customer-container-bp" href="{{ path('ap_sector_bp_index', {'id': ap_sector_bp.model.id}) }}">Retour</a>
+			{% for ap_access in app.user.RoleId.apAccesses %}
+				{% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+					<a class="m-2 btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_files_bp_new', {'id': ap_sector_bp.id}) }}">Ajouter un document</a>
+				{% endif %}
+			{% endfor %} 
+			{% for ap_access in app.user.RoleId.apAccesses %}
+				{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+					<a class="m-2 btn catalog-content-customer-container-bp" href="{{ path('ap_sector_bp_edit', {'id': ap_sector_bp.id}) }}">Modifier section</a>
+				{% endif %}
+			{% endfor %} 
+			{% for ap_access in app.user.RoleId.apAccesses %}
+				{% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+				{{ include('tabs/Catalog/ap_catalog_model_bp/_sector_modal_delete.html.twig') }}
+				{% endif %}
+			{% endfor %}
+			{% for ap_access in app.user.RoleId.apAccesses %}
+				{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+				<form class="catalog-content-customer-container-bp m-2" method="POST" action="{{ path('ap_catalog_model_bp_archive_section', {'id': ap_sector_bp.id})}}">
+					<input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_sector_bp.id) }}">
+					<button class="w-100 btn">Archiver la section</button>
+				</form> 
+				{% endif %}
+			{% endfor %} 
+
+		</span> 
+		<input id="hidden-data-picture-id" name="hidden-data-picture-id" type="hidden" value="">
+		<div id="allCardFromCatalogModelShowBp" class='d-flex justify-content-around flex-wrap'>
+			{# fin #}
+
+			{# card pdf #}
+			{% set loopCarroussel = 0 %}
+			{{ include('tabs/Catalog/ap_catalog_model_bp/card_pdf.html.twig') }}
+			{# fin card pdf #}
+
+			{# card for image #}
+			{{ include('tabs/Catalog/ap_catalog_model_bp/card_image.html.twig') }}
+			{# fin #}
+		</div>
+	{# carroussel image modal #}
+	{{ include('tabs/Catalog/ap_catalog_model_bp/modal_carroussel.html.twig') }}
+	{# endregion modal #}
+
+	{# modal delete #}
+	{{ include('tabs/Catalog/ap_catalog_model_bp/modal_delete.html.twig') }}
+	{# end modal delete #}
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier ApSectorVb{% endblock %}
+
+{% block body %}
+  {% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+        <span class="form-new-name-container">
+            <h3 class="align-self-center">Modifier le secteur {{ap_sector_vb.name}}</h1>
+                {{ include('tabs/Catalog/VB/ap_sector_vb/_form.html.twig', {'button_label': 'Envoyer'}) }}
+                <span class="d-flex justify-content-around p-5">
+                    <a class="btn" href="{{ path('ap_sector_vb_show', {'id': ap_sector_vb.id}) }}">Retour</a>
+                    {% for ap_access in app.user.RoleId.apAccesses %}
+                        {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                        {{ include('tabs/Catalog/VB/ap_sector_vb/_modal_delete.html.twig') }}
+                        {% endif %}
+                    {% endfor %}
+            </span>
+        </span>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

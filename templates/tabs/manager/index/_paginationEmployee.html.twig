@@ -1,0 +1,84 @@
+<tr>
+<td colspan="8">
+    <div class="d-flex justify-content-between">
+        <div>
+            <span class="d-flex pagination-total-page-and-number-display">              
+                <select class="form-filter-input-global form-select" aria-label="Default select example" id="employeeSelectLimitLine">
+                 {% if limit is defined %} 
+                    {% if limit == 1 %}
+                        <option  value=1>1</option>
+                        <option value=2>2</option>
+                        <option value=11>11</option>
+                    {% elseif limit == 2 %}
+                        <option value=2>2</option>
+                        <option  value=1>1</option>
+                        <option value=11>11</option>
+                    {% else %}
+                        <option value=11>11</option>
+                        <option  value=1>1</option>
+                        <option value=2>2</option>
+                    {% endif %}
+                 {% else %}
+                    <option  value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=11>11</option>
+                {% endif %} 
+                </select>
+                <span class="p-2 d-flex align-self-center">/{{total}}</span>
+                 </span> 
+            </span>
+        </div>
+    <input id="hidden-val-page" type="hidden" name="page" value="{{page}}">
+    <input id="hidden-val-limit" type="hidden" name="limit" value="{{limit}}">
+    <input id="hidden-val-total" type="hidden" name="total" value="{{total}}">
+    <ul id="paginator-select-id" class="pagination pagination-modificator">
+        
+                <li class="page-item {{(page == 1) ? 'disabled' : ''}}">
+                     <button class="page-link" data-limit="{{limit}}" data-page="1"><i class="fas fa-angle-double-left"></i></button>
+                </li>
+                <li class="page-item {{(page == 1) ? 'disabled' : ''}}">
+                    <button class="page-link" data-limit="{{limit}}" data-page="{{ page - 1 }}"><i class="fas fa-angle-left"></i></button>
+                </li>
+
+                {% set totalPages = (total / limit)|round(0, 'ceil') %}
+                {% if totalPages == 0 %}
+                {% set totalPages = 1 %}
+                {% endif %}
+
+                {# logique des 3 petits points #}
+                {% set maxTotalPage = totalPages %}
+                {% set minTotalPage = 1 %} 
+                {# max #}
+                {% if page < (totalPages - 3) %}
+                {% set maxTotalPage = (page + 2) %}
+                {% endif %}
+                {# min #}
+                {% if page > 3 %}
+                {% set minTotalPage = (page - 2) %}
+                <li class="page-item" ><button class="page-link" disabled>...</button></li>           
+                {% endif %}
+
+                {% for item in minTotalPage..maxTotalPage %}
+                    <li class="page-item {{ (page == item)? 'active': '' }}"> 
+                    <button class="page-link" data-limit="{{limit}}" data-page="{{ item }}">{{item}}</button>
+                    </li>
+                {% endfor %}
+
+                {% if page < (totalPages - 3) %}
+                <li class="page-item"><button class="page-link" disabled>...</button></li>
+                {% endif %}
+                <li>
+                {# faire une méthode ajax juste pour l'input #}
+                        <input autocomplete="off" class="form-control pagination-form-search" type ="text" name="pageNumber" id="pageNumber-input-search" placeholder="Page recherchée..."/>
+                </li>
+
+                <li class="page-item {{(page == totalPages) ? 'disabled' : ''}}">
+                    <button class="page-link" data-limit="{{limit}}" data-page="{{ page + 1 }}"><i class="fas fa-angle-right"></i></button>
+                </li>
+                <li class="page-item {{(page == totalPages) ? 'disabled' : ''}}">
+                    <button class="page-link" data-limit="{{limit}}" data-page="{{ totalPages }}"><i class="fas fa-angle-double-right"></i></button>
+                </li>
+            </ul>
+    </div>
+    </td>
+</tr> 

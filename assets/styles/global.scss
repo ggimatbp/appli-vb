@@ -1,0 +1,36 @@
+html{
+    height:100%;
+}
+
+body{
+ background-color: $backgroundColor;  
+ height:100% 
+}
+
+.management-h1{
+    margin-bottom: $paddingTitle;
+    margin-top: $paddingTitle;
+    font-size: 1.8rem;
+    }
+
+.catalog-h1{
+    margin-bottom: $paddingTitle;
+    margin-top: $paddingTitle;
+    font-size: 1.8rem;
+}
+
+h1{
+    color: $primaryColor
+    }
+    
+h2{
+    color: $primaryColor
+}
+    
+h3{
+    color: $primaryColor
+    }
+
+.hover{
+    cursor: pointer;
+}

@@ -1,0 +1,33 @@
+/*#region user show */
+.user-show-container{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: space-around;
+    height:80vh;
+}
+
+.employee-btn-show{
+    display:flex;
+    justify-content: space-around;
+    width:40%;
+}
+
+/*#endregion */
+
+/*#region user edit */
+
+.btn-user-edit-password{
+    width:100%;
+    margin-bottom: 1rem;
+}
+
+/*#endregion */
+
+@media (max-width: 568px) { 
+    .employee-btn-show{
+        display:flex;
+        justify-content: space-between;
+        width:80%;
+    }
+}

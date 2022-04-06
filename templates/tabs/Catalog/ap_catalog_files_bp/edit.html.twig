@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% block title %}Modifier document{% endblock %}
+{% block javascripts %}
+{{ encore_entry_script_tags('apCatalogImagePreview') }}
+{% endblock %}
+{% block body %}
+	{% for ap_access in app.user.RoleId.apAccesses %}
+    	{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+        <div class="m-5 w-100 d-flex justify-content-around">
+            <a class="btn" href="{{ path('ap_catalog_model_bp_show', {'id': ap_catalog_files_bp.relation.id}) }}">Retour</a>
+            <div></div>
+        </div>
+        <span class="form-container-with-title">
+                <h1 class="catalog-h1 mt-2">Modifier {{ap_catalog_files_bp.name}}</h1>
+
+                {# {{ include('tabs/Catalog/ap_catalog_files_bp/_form.html.twig', {'button_label': 'Update'}) }} #}
+                {# {{ include('tabs/Catalog/ap_catalog_files_bp/_form.html.twig') }} #}
+            <span class="form-new-container">
+                {{ form_start(form) }}
+                    <div class="row">
+                        {{ form_row(form.name, { 'label': 'Nom' }) }}
+                    </div>
+                    <div class="row">
+                        {# {{ form_row(form.imageFile, {
+                            attr: {
+                                'placeholder': 'Select an article image',
+                                'class' : 'imageUpload'
+                            }
+                        }) }} #}
+                        {{ form_label(form.imageFile, 'Choisissez un document à transférer') }}
+                        {{ form_widget(form.imageFile, {
+                            attr: {
+                                    'class' : 'imageUpload'
+                                }
+                            }) }}
+                    </div>
+                        
+                    <div class='image-preview' id="imagePreview">
+                        <img src="" alt="Image preview" class="image-preview__image">
+                        <span class='image-preview__default-text'><img class="img-thumbnail rounded mx-auto" src="{{ vich_uploader_asset(ap_catalog_files_bp, 'imageFile')}}"></span>
+                    </div>
+                    <div class="d-flex justify-content-around">
+                    <button class="btn">{{ button_label|default('Sauvegarder') }}</button>
+
+
+                {{ form_end(form) }} 
+            	{% for ap_access in app.user.RoleId.apAccesses %}
+    	            {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                    {{ include('tabs/Catalog/ap_catalog_files_bp/_delete_form.html.twig') }}
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </span>
+        </span>
+    {% endif %}
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{{ form_start(form) }}
+<div class="form-div-edit-single p-5">
+{{ form_widget(form.name, {'attr': {'class': 'form-new-single form-new-phone-size'}}) }}
+ <input class='form-new-phone-size  btn btn-ligth' type="submit" value="Soumettre le nom">
+</div>
+<div class="form-div-edit-single">
+    {% if error_msg is defined %}
+        <p class="alert alert-danger">{{error_msg}}</p>
+    {% endif %}
+</div>
+{{ form_end(form) }}

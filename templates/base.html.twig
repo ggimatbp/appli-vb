@@ -1,19 +1,43 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+
+        {# {% if app.user.theme == 1 %}
+            {{ encore_entry_link_tags('variableDark') }}
+        {% else %}
+            {{ encore_entry_link_tags('variable') }}
+        {% endif %} #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
-
+        {{ encore_entry_script_tags('app') }}
         {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+
+
+        {# {% if app.user %} #}
+        {# {% if app.user.active == true %}
+        Votre compte a été désactivé veuillez vous déconnectez. #}
+         {# {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a> #}
+        {# {% else %} #}
+            {% block navbar %}
+            {% include "_headerBrut.html.twig" %}
+            {% endblock %}
+            {% block tab %}{% endblock %}           
+            {% block body %}
+            {% endblock %}
+            {% block littlejavascripts %}
+            
+            {% endblock %}
+        {# {% endif %} #}
+        {# {% else %}
+
+        {% endif %} #}
     </body>
 </html>
