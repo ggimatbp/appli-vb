@@ -60,6 +60,7 @@ class ApCatalogFilesBpController extends AbstractController
             $apCatalogFilesBp->setRelation($sector);
             $imgFile = $apCatalogFilesBp->getImageFile();
             $fileExtension =  $imgFile->guessExtension();
+            //dd($fileExtension);
             $apCatalogFilesBp->setUser($this->getUser());
             $apCatalogFilesBp->setCreatedAt(new \DateTime());
             $apCatalogFilesBp->setFileSize(filesize($imgFile)/1024);
@@ -67,8 +68,7 @@ class ApCatalogFilesBpController extends AbstractController
             $manager = $doctrine->getManager();
             $manager->persist($apCatalogFilesBp);
             $manager->flush();
-            $intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName());
-
+            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName());};
             //set history
             $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'new');
              return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
@@ -130,7 +130,7 @@ class ApCatalogFilesBpController extends AbstractController
             $manager = $doctrine->getManager();
             $manager->persist($apCatalogFilesBp);
             $manager->flush();
-            $intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName());
+            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName());};
             $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'edit');
             // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
             // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());

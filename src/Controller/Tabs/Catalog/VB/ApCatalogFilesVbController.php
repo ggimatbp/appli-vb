@@ -65,7 +65,7 @@ class ApCatalogFilesVbController extends AbstractController
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogFilesVb);
             $entityManager->flush();
-            $intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName());
+            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName());};            
             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'new');
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
         }
@@ -111,7 +111,7 @@ class ApCatalogFilesVbController extends AbstractController
             }
             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'edit');
             $doctrine->getManager()->flush();
-            $intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName());
+            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName());};
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId ], Response::HTTP_SEE_OTHER);
         }
 
