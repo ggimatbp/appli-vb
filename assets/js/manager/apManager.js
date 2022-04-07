@@ -15,7 +15,7 @@ import $ from 'jquery';
 
 // On importe le dropdown bootstrap de nouveau car conflit avec modal
 
- import 'bootstrap/js/dist/dropdown'
+// import 'bootstrap/js/dist/dropdown'
 
 //#endregion import
 

@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 //on import le dropdown de bootstrap (technique pour que la modale ne bloque pas le système de dropdown bootstrap)
 
- import 'bootstrap/js/dist/dropdown';
+// import 'bootstrap/js/dist/dropdown';
 
 // On import les notifications
 

@@ -13,7 +13,7 @@ class ApCatalogModelBpPreciseType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('customer', null, ['choice_label'=>'name'])
+            ->add('customer', null, ['choice_label'=>'name', 'placeholder' => false])
         ;
     }
 
