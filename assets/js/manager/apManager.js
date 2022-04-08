@@ -207,11 +207,9 @@ function employeeLimitModification()
 
   //#endregion pagination and limit
 
-
 //#endregion employee
 
 //#region Role
-
 
   //#region Ajax
 
@@ -260,7 +258,6 @@ if(ajaxRoleOrder == null)
 
   //#endregion Ajax
 
-
   //#region order and filter
 
     //#region filter
@@ -271,7 +268,6 @@ $("#btn-role-search-filter").unbind("click").click(function(e){
 })
 
     //#endregion filter
-
 
     //#region erease filter
 

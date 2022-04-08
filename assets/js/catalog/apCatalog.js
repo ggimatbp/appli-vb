@@ -36,6 +36,7 @@ console.log(inputValue)
            break;
        }
    }
+   $('#btnModelValue').click()
 });
   //#endregion model search
 
@@ -56,6 +57,7 @@ console.log(inputValue)
           break;
       }
   }
+  $('#btnCustomerValue').click()
 });
 
   //endregion customer search
@@ -87,6 +89,7 @@ $('.folder-change i').mouseenter(function(e){
             break;
         }
     }
+    $('#btnPackValue').click()
   });
 
   //#endregion pack search

@@ -34,7 +34,7 @@
                             {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
                                 <form class="catalog-content-customer-container-bp" name="archive{{ap_catalog_case_vb.id}}" method="post" action="{{ path('ap_catalog_case_vb_archive', {'id': ap_catalog_case_vb.id}) }}" >
                                     <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_case_vb.id) }}">
-                                    <button class="w-100 btn">Archiver</button>
+                                    <button class="w-100 btn">{% if  ap_catalog_case_vb.archive == 0  %}Archiver{% else %}Désarchiver{% endif %}</button>
                                 </form>
                             {# <a class="btn" href="{{ path('ap_catalog_case_vb_archive', {'id': ap_catalog_case_vb.id}) }}">Archiver</a> #}
                             {% endif %}

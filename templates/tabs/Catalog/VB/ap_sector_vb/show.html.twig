@@ -33,7 +33,7 @@
                     {# end modal delete #}
                     <form class="catalog-content-customer-container-bp" method="POST" action="{{ path('ap_sector_vb_archive', {'id': ap_sector_vb.id})}}">
                         <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_sector_vb.id) }}">
-                        <button class="w-100 btn">Archiver</button>
+                        <button class="w-100 btn">{% if  ap_sector_vb.archive == 0  %}Archiver{% else %}Désarchiver{% endif %}</button>
                     </form> 
                 </span>
             </div>

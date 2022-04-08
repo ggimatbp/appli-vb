@@ -16,12 +16,11 @@
       <span>Êtes vous sûr de vouloir supprimer le rôle <strong>{{ap_role.name}}</strong></span>
       </div>
       <div class="modal-footer d-flex justify-content-around">
+      <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" data-bs-dismiss="modal">Annuler</button>
       <form class="btn-bottom" method="post" action="{{ path('ap_role_delete', {'id': ap_role.id}) }}">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ap_role.id) }}">
-    <button class="btn-edit-role btn-ligth btn">Supprimer</button>
-</form>
-        <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" data-bs-dismiss="modal">Annuler</button>
-
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ap_role.id) }}">
+        <button class="btn-edit-role btn-ligth btn">Supprimer</button>
+      </form>
       </div>
     </div>
   </div>
