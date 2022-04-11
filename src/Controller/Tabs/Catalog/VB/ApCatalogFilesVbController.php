@@ -62,10 +62,13 @@ class ApCatalogFilesVbController extends AbstractController
             $apCatalogFilesVb->setFileSize(filesize($imgFile)/1024);
             $apCatalogFilesVb->setFileType($fileExtension);
 
+            $width = getimagesize($imgFile)[0];
+            $height = getimagesize($imgFile)[1];
+
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogFilesVb);
             $entityManager->flush();
-            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName());};            
+            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName(), $width,  $height);};            
             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'new');
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
         }
@@ -109,9 +112,11 @@ class ApCatalogFilesVbController extends AbstractController
                 $fileExtension =  $imgFile->guessExtension();
                 $apCatalogFilesVb->setFileType($fileExtension);
             }
+            $width = getimagesize($imgFile)[0];
+            $height = getimagesize($imgFile)[1];
             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'edit');
             $doctrine->getManager()->flush();
-            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName());};
+            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName(), $width, $height);};
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId ], Response::HTTP_SEE_OTHER);
         }
 

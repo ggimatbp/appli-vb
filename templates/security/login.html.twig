@@ -5,10 +5,11 @@
 {% block navbar %}
 {% endblock %}
 {% block body %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
     <div class="h-100 d-flex justify-content-center align-item-center">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+
         <form method="post" class="d-flex align-item-center">
         <div class="white-box-login" >
             <h3 class="align-self-center text-center">Connexion</h1>
@@ -31,6 +32,7 @@
                         </label>
                     </div>
                 #}
+                <input type="hidden" name="_target_path" value="/catalog/"/>
                 <div class="d-flex justify-content-center">
                 <button class="w-100 mt-5 btn btn-ligth" type="submit">
                     Se connecter

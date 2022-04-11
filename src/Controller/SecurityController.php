@@ -29,8 +29,8 @@ class SecurityController extends AbstractController
      */
     public function loginBis(): Response
     {
-
-        return $this->render('security/login2.html.twig');
+        return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
+        //return $this->render('security/login2.html.twig');
     }
 
     /**
