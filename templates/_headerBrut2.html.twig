@@ -1,6 +1,7 @@
 
 
 {% if app.user.RoleId is defined %}
+
 {% set parentTab = 0 %}
         <div class="d-flex" onmousedown="return false" onselectstart="return false">
 					{% for apAccess in app.user.RoleId.apAccesses %}
@@ -36,14 +37,13 @@
                 {% if apAccess.tab.apTab is not null and apAccess.tab.apTab.id == parentTab %}
                 {% if app.request.attributes.get('_controller') matches "#" ~ apAccess.tab.ControlPath ~ "#" %}
                     <li class="header2 nav-item">
-                    <a class="header2 nav-item-uniform nav-link active text-center" href="{{ path(apAccess.tab.apTab.path)}}{{apAccess.tab.position ==  2 ? '?roleback=2' : '' }}" >{{ apAccess.tab.name }}</a>
+                    <a class="header2 nav-item-uniform nav-link active text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a>
                     </li>
                 {% else %}
                     <li class="header2 nav-item">
-                    <a class="header2 nav-item-uniform nav-link text-center" href="{{ path(apAccess.tab.apTab.path)}}{{apAccess.tab.position ==  2 ? '?roleback=2' : '' }}" >{{ apAccess.tab.name }}</a>
+                    <a class="header2 nav-item-uniform nav-link text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a>
                     
                     </li>
-                    {{dump(apAccess.tab.apTab.path)}} 
                   {% endif %}
                 {% endif %}
               {% endif %}
