@@ -33,16 +33,16 @@
           <ul class="nav nav-pills d-flex justify-content-around" id="pills-tab" role="tablist">
             {% for apAccess in app.user.RoleId.apAccesses %}
             {% set foo = foo + 1 %}
+
               {% if apAccess.view == true %}
                 {% if apAccess.tab.apTab is not null and apAccess.tab.apTab.id == parentTab %}
                 {% if app.request.attributes.get('_controller') matches "#" ~ apAccess.tab.ControlPath ~ "#" %}
                     <li class="header2 nav-item">
-                    <a class="header2 nav-item-uniform nav-link active text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a>
+                     <a class="header2 nav-item-uniform nav-link active text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a> 
                     </li>
                 {% else %}
                     <li class="header2 nav-item">
-                    <a class="header2 nav-item-uniform nav-link text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a>
-                    
+                     <a class="header2 nav-item-uniform nav-link text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a> 
                     </li>
                   {% endif %}
                 {% endif %}
@@ -55,11 +55,11 @@
               {% if apAccess.view == true %}
                 {% if apAccess.tab.apTab is not null and app.request.attributes.get('_route') == apAccess.tab.apTab.path %}
                 {% set showActiveTab = showActiveTab + 1 %}
-                  {% if app.request.query.get("roleback") is defined and app.request.query.get("roleback") != null %}
+                  {# {% if app.request.query.get("roleback") is defined and app.request.query.get("roleback") != null %}
                     <div class="tab-pane fade {{showActiveTab == app.request.query.get("roleback") ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div>
                   {% else %}       
                     <div class="tab-pane fade {{showActiveTab == 1 ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div>
-                  {% endif %} 
+                  {% endif %}  #}
                 {% endif %}
               {% endif %}
             {% endfor %}

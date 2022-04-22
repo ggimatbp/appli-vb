@@ -1,0 +1,24 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{section.id}}">
+  Supprimer
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal{{section.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">⚠️Suppression de la section {{section.name}}⚠️</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Etes vous sûr de vouloir supprimer cette section?
+        <p class ='text-secondary fst-italic'><small>Fonctionne uniquement si la section est vide</small></p>
+      </div>
+      <div class="d-flex justify-content-around modal-footer">
+        {{ include('tabs/information/ap_information_section/_delete_form.html.twig') }}
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle section {% endblock %}
+{% block navbar %}
+{% include "_headerBrut2.html.twig" %}
+{% endblock %}
+{% block body %}
+<span class="form-new-name-container">
+
+    <h3 class="align-self-center">Nouvelle section QSE</h3>
+
+    {{ include('tabs/information/ap_information_section/_form.html.twig') }}
+
+    <a class="bottom-fix btn btn-ligth" href="{{ path('information_qse_index') }}">Retour</a>
+</span>
+{% endblock %}

@@ -54,7 +54,7 @@ class AppTabFixture extends Fixture
                 ],
                 [
                     'name' => 'Perso',
-                    'path' => 'tabs/information/perso/index.html.twig',
+                    'path' => 'information_perso_index',
                     'controlpath' => 'Perso'
                 ],
             ]

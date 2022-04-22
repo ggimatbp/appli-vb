@@ -13,9 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PersoController extends AbstractController
 {
-
-  public const TAB_NAME = "perso";
-
+   public const TAB_NAME = "perso";
    /**
    * @Route("/", name="index")
    */
