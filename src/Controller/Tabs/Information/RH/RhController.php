@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\ApInformationSectionRepository;
+use App\Repository\ApInformationFilesRepository;
 
 /**
  * @Route("/information/rh", name="information_rh_")
@@ -21,11 +22,13 @@ class RhController extends AbstractController
    /**
    * @Route("/", name="index")
    */
-  public function index (ApInformationSectionRepository $sectionRepo)
+  public function index (ApInformationSectionRepository $sectionRepo, ApInformationFilesRepository $infoFileRepo)
   {
     $allSection = $sectionRepo->findAll();
+    $allFile = $infoFileRepo->findAll();
     return $this->render('tabs/information/rh/index.html.twig', [
-      'all_section' => $allSection
+      'all_section' => $allSection,
+      'all_file' => $allFile
   ]);
   }
 }

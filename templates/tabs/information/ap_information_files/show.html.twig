@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% block navbar %}
+{% include "_headerBrutSharedLogic.html.twig" %}
+{% endblock %}
+{% block title %}ApInformationFiles{% endblock %}
+{% block javascripts %}
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+	{{ encore_entry_script_tags('apInformation') }}
+{% endblock %}
+{% block body %}
+    <h1 class="text-center">{{ file.Name }}</h1>
+
+<!--  pdf display -->
+
+<input class="pdfFileRoad" type="hidden" data-src="{{vich_uploader_asset(file)}}">
+{# test #}
+
+    <div class="top-bar d-flex justify-content-around mt-1">
+
+        <button class="btn" id="prev-page">Précédent</button>
+        
+        <span class="align-items-center d-flex page-info">
+            <span class='p-1' id="page-num"></span> sur <span class="p-1" id="page-count"></span>
+        </span>
+		<button class="btn" id="next-page">Suivant</button>
+    </div>
+    <span class="h-70 d-flex justify-content-around">
+    <canvas id="pdf-render"></canvas>
+    </span>
+        <div class="top-bar d-flex justify-content-around mt-1">
+
+        <button class="btn" id="prev-page">Précédent</button>
+        
+        <span class="align-items-center d-flex page-info">
+            <span class='p-1' id="page-num"></span> sur <span class="p-1" id="page-count"></span>
+        </span>
+		<button class="btn" id="next-page">Suivant</button>
+    </div>
+    {% if file.section.state == 1 %}
+    <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
+    {% else %}
+    <a class="btn" href="{{ path('information_qse_index') }}">Retour</a>
+    {% endif %}
+    <a class="btn" href="{{ path('information_files_edit', {'id': file.id}) }}">Modifier</a>
+
+    {{ include('tabs/information/ap_information_files/_modal_delete.html.twig') }}
+{% endblock %}

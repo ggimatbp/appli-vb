@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block title %}Information{% endblock %}
+{% block navbar %}
+{% include "_headerBrutSharedLogic.html.twig" %}
+{% endblock %}
+
+
+{% block body %}
+    <h1>Create new ApInformationFiles</h1>
+
+    {{ include('tabs/information/ap_information_files/_form.html.twig') }}
+
+    <a href="{{ path('information_files_index') }}">back to list</a>
+{% endblock %}

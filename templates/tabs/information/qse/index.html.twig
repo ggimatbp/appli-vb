@@ -11,10 +11,6 @@
   <div class="row mt-3">
     <div class="col-4 mx-3">
       <div class="list-group" id="list-tab" role="tablist">
-        {# <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">Home</a>
-        <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Profile</a>
-        <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" href="#list-messages" role="tab" aria-controls="list-messages">Messages</a>
-        <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings" role="tab" aria-controls="list-settings">Settings</a> #}
           {% set loop_qse = 0 %}
     {% for section in all_section %}
 
@@ -33,36 +29,54 @@
         {% set loop_qse = loop_qse + 1 %}
           <div class="tab-pane fade show {{ loop_qse == 1 ? 'active' : '' }}" id="list-{{section.id}}" role="tabpanel" aria-labelledby="list-home-list">
             <ul>
-              <li>{{section.id}}{{section.name}}</li>
-              <li>{{section.id}}{{section.name}}</li>
-              <li>{{section.id}}{{section.name}}</li>
-              <li>{{section.id}}{{section.name}}</li>
-              <li>{{section.id}}{{section.name}}</li>
+              {% for file in all_file %}
+                {% if file.section.id == section.id and file.archive == 0 %}
+                  <li class="d-flex"> 
+                    <span class="">
+                      {{file.name}}
+                      <small class="text-muted">
+                        {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
+                      </small>
+                    </span>
+                      <a class="btn" href="{{ path('information_files_show', {'id': file.id}) }}">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                      <a class="btn" href="{{ path('information_files_edit', {'id': file.id}) }}">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <form  name="archive{{file.id}}" method="post" action="{{ path('information_files_archive', {'id': file.id}) }}" class="hover">
+                          <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ file.id) }}">
+                          <button class="btn"><i class="far fa-file-archive"></i></button>
+                      </form>
+                    {{ include('tabs/information/ap_information_files/_modal_delete.html.twig' , {'button_label': '<i class="fas fa-trash-alt"></i>'}) }}
+                    <!-- Button trigger modal -->
+                  </li>
+                {% endif %}
+              {% endfor %}
             </ul>
             <div class="d-flex justify-content-around">
-              <a class="btn" href="{{ path('information_section_edit', {'id': section.id}) }}">modifier</a>
-              {{ include('tabs/information/ap_information_section/_delete_form.html.twig') }}
+              <a class="btn" href="{{ path('information_files_new', {'id': section.id}) }}">Nouveau document</a>
+              <a class="btn" href="{{ path('information_section_edit', {'id': section.id}) }}">Modifier</a>
+              {# {{ include('tabs/information/ap_information_section/_modal_delete.html.twig') }} #}
+
+              <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{section.id}}">
+                Supprimer
+              </button>
               <form class="catalog-content-customer-container-bp" name="archive{{section.id}}" method="post" action="{{ path('information_section_archive', {'id': section.id}) }}" class="hover">
                   <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ section.id) }}">
                   <button class="w-100 btn">Archiver</button>
               </form>
+
             </div>
           </div>
         {% endif %}
       {% endfor %}
-
-        {# <div class="tab-pane fade show active" id="list-1" role="tabpanel" aria-labelledby="list-home-list">
-        document de politique sur l'envirronement au travail edit et delete ici
-        <a></a>
-        </div>
-        <div class="tab-pane fade" id="list-2" role="tabpanel" aria-labelledby="list-profile-list">2</div>
-        <div class="tab-pane fade" id="list-3" role="tabpanel" aria-labelledby="list-messages-list">3</div>
-        <div class="tab-pane fade" id="list-4" role="tabpanel" aria-labelledby="list-settings-list">4</div>  #}
       </div>
     </div>
   </div>
 
   {# archiver #}
+
   <h3 class="mt-3">Archive</h3>
 
 
@@ -70,16 +84,12 @@
   <div class="row mt-3">
     <div class="col-4 mx-3">
       <div class="list-group" id="list-tab" role="tablist">
-        {# <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">Home</a>
-        <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Profile</a>
-        <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" href="#list-messages" role="tab" aria-controls="list-messages">Messages</a>
-        <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings" role="tab" aria-controls="list-settings">Settings</a> #}
           {% set loop_qse = 0 %}
     {% for section in all_section %}
 
-    {% if section.state == 2 and section.archive == 1 %}
+    {% if section.state == 2 %}
       {% set loop_qse = loop_qse + 1 %}
-        <a class="list-group-item list-group-item-action {{ loop_qse == 1 ? 'active' : '' }} " id="list-home-{{section.id}}" data-bs-toggle="list" href="#list-{{section.id}}" role="tab" aria-controls="list-home"> {{section.name}}</a>
+        <a class="list-group-item list-group-item-action {{ loop_qse == 1 ? 'active' : '' }} " id="list-home-{{section.id}}" data-bs-toggle="list" href="#list-archive-{{section.id}}" role="tab" aria-controls="list-home"> {{section.name}}</a>
       {% endif %}
     {% endfor %}
       </div>
@@ -88,19 +98,40 @@
       <div class="tab-content" id="nav-tabContent">
   {% set loop_qse = 0 %}
     {% for section in all_section %}
-      {% if section.state == 2 and section.archive == 1 %}
+      {% if section.state == 2 %}
         {% set loop_qse = loop_qse + 1 %}
-          <div class="tab-pane fade show {{ loop_qse == 1 ? 'active' : '' }}" id="list-{{section.id}}" role="tabpanel" aria-labelledby="list-home-list">
+          <div class="tab-pane fade show {{ loop_qse == 1 ? 'active' : '' }}" id="list-archive-{{section.id}}" role="tabpanel" aria-labelledby="list-home-list">
             <ul>
-              <li>{{section.id}}{{section.name}}</li>
-              <li>{{section.id}}{{section.name}}</li>
-              <li>{{section.id}}{{section.name}}</li>
-              <li>{{section.id}}{{section.name}}</li>
-              <li>{{section.id}}{{section.name}}</li>
-              </ul>
+              {% for file in all_file %}
+                {% if file.section.id == section.id and file.archive == 1 %}
+                  <li class="d-flex">
+                    {{file.name}}
+                    <small class="text-muted">
+                      {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
+                    </small>
+                    <a class="btn" href="{{ path('information_files_show', {'id': file.id}) }}">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <a class="btn" href="{{ path('information_files_edit', {'id': file.id}) }}">
+                      <i class="fas fa-edit"></i>
+                    </a> 
+                    <form  name="archive{{file.id}}" method="post" action="{{ path('information_files_archive', {'id': file.id}) }}" class="hover">
+                        <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ file.id) }}">
+                        <button class="btn"><i class="far fa-file-archive"></i></button>
+                    </form>
+                    {{ include('tabs/information/ap_information_files/_modal_delete.html.twig') }}
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
             <div class="d-flex  justify-content-around">
               <a class="btn" href="{{ path('information_section_edit', {'id': section.id}) }}">modifier</a>
-              {{ include('tabs/information/ap_information_section/_delete_form.html.twig') }}
+              {# {{ include('tabs/information/ap_information_section/_modal_delete.html.twig') }} #}
+
+              <!-- Button trigger modal -->
+              <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{section.id}}">
+                Supprimer
+              </button>
               <form class="catalog-content-customer-container-bp" name="archive{{section.id}}" method="post" action="{{ path('information_section_archive', {'id': section.id}) }}" class="hover">
                   <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ section.id) }}">
                   <button class="w-100 btn">Désarchiver</button>
@@ -109,15 +140,13 @@
           </div>
         {% endif %}
       {% endfor %}
+      {% for section in all_section %}
+        {% if section.state == 2 %}
+          {{ include('tabs/information/ap_information_section/_modal_delete.html.twig') }}
+        {% endif %}
+      {% endfor %}
 
-        {# <div class="tab-pane fade show active" id="list-1" role="tabpanel" aria-labelledby="list-home-list">
-        document de politique sur l'envirronement au travail edit et delete ici
-        <a></a>
-        </div>
-        <div class="tab-pane fade" id="list-2" role="tabpanel" aria-labelledby="list-profile-list">2</div>
-        <div class="tab-pane fade" id="list-3" role="tabpanel" aria-labelledby="list-messages-list">3</div>
-        <div class="tab-pane fade" id="list-4" role="tabpanel" aria-labelledby="list-settings-list">4</div>  #}
-      </div>
+       </div>
     </div>
   </div>
 </div>

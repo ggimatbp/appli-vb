@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ApInformationSectionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class ApInformationSection
      * @ORM\Column(type="boolean")
      */
     private $archive = 0;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApInformationFiles::class, mappedBy="Section")
+     */
+    private $apInformationFiles;
+
+    public function __construct()
+    {
+        $this->apInformationFiles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +81,36 @@ class ApInformationSection
     public function setArchive(bool $archive): self
     {
         $this->archive = $archive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApInformationFiles>
+     */
+    public function getApInformationFiles(): Collection
+    {
+        return $this->apInformationFiles;
+    }
+
+    public function addApInformationFile(ApInformationFiles $apInformationFile): self
+    {
+        if (!$this->apInformationFiles->contains($apInformationFile)) {
+            $this->apInformationFiles[] = $apInformationFile;
+            $apInformationFile->setSection($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApInformationFile(ApInformationFiles $apInformationFile): self
+    {
+        if ($this->apInformationFiles->removeElement($apInformationFile)) {
+            // set the owning side to null (unless already changed)
+            if ($apInformationFile->getSection() === $this) {
+                $apInformationFile->setSection(null);
+            }
+        }
 
         return $this;
     }
