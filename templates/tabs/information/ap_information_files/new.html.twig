@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Information{% endblock %}
+{% block navbar %}
+{% include "_headerBrutSharedLogic.html.twig" %}
+{% endblock %}
+
+
+{% block body %}
+    <div class=" m-5 w-100 d-flex justify-content-around">
+        {% if state == 1 %}
+        <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
+        {% else %}
+        <a class="btn" href="{{ path('information_qse_index') }}">Retour</a>
+        {% endif %}
+        <div></div>
+    </div>
+    <span class="form-container-with-title">
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+            <h1 class="catalog-h1 mt-2">Ajout d'un document</h1>
+                {{ include('tabs/information/ap_information_files/_form.html.twig') }}
+        {% endif %}
+    {% endfor %}
+    </span>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle catégotrie{% endblock %}
+{% block navbar %}
+{% include "_headerBrut2.html.twig" %}
+{% endblock %}
+{% block body %}
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+        <span class="form-new-name-container">
+        <h3 class="align-self-center">Nouvelle catégotrie RH</h3>
+        {{ include('tabs/information/ap_information_parent_section/_form.html.twig') }}
+    {% endif %}
+{% endfor %}
+        <a class="btn bottom-fix btn-light" href="{{ path('information_rh_index') }}">Retour</a>
+    </span>
+{% endblock %}

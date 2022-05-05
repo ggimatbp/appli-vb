@@ -54,3 +54,46 @@ a:hover{
       }
     // cubic-bezier(0.42, 0, 0.02, 1.21);
 }
+
+.list-group-item.active{
+    background-color: $btnPrimaryColor;
+    color: $btnPrimaryColorText; 
+}
+
+.list-group-item {
+    background-color: white;
+    color: $btnPrimaryColorText;
+}
+
+.list-group-item-action {
+    width: 100%; // For `<button>`s (anchors become 100% by default though)
+    color: black;
+    text-align: inherit; // For `<button>`s (anchors inherit)
+    border: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  
+    // Hover state
+    &:hover{
+        z-index: 1; // Place hover/focus items above their siblings for proper border styling
+        color:  $btnPrimaryColor;
+        text-decoration: none;
+        background-color: $btnPrimaryColorText;
+    }
+    &:focus {
+      z-index: 1; // Place hover/focus items above their siblings for proper border styling
+      color:   $btnPrimaryColorText;
+      text-decoration: none;
+      background-color:$btnPrimaryColor;
+    //  s border: 2px solid $btnPrimaryColor
+    }
+  
+    &:active {
+      color: white;
+      background-color:black;
+    }
+  }
+
+  .list-group-item-action:active{
+    color: white;
+    background-color:$btnPrimaryColor;
+  }

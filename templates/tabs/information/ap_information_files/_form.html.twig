@@ -1,0 +1,31 @@
+{# {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }} #}
+<div class="form-new-container">
+{{ form_start(form, {'attr': {'onsubmit': 'buttonName.disabled=true; return true;' }}) }}
+
+    <div class="row">
+        {{ form_row(form.Name, { 'label': 'Nom' }) }}
+    </div>
+    
+    <div class="row">
+    {{ form_label(form.imageFile, 'Choisissez un document à transférer') }}
+        {{ form_widget(form.imageFile, {
+            attr: {
+                'class' : 'imageUpload'
+            }
+        }) }}
+    </div>
+ {#
+    <div class='image-preview m-5' id="imagePreview">
+        <img src="" alt="Image preview" class="image-preview__image">
+        <span class='image-preview__default-text'>Image</span>
+    </div>
+    #} 
+    <div class="m-5 d-flex justify-content-around">
+        <button class="btn w-100" name="buttonName" value="Submit">Sauvegarder</button>
+    </div> 
+
+{{ form_end(form) }}
+</div>

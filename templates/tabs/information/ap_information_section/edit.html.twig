@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ApInformationSection{% endblock %}
+{% block navbar %}
+{% include "_headerBrutSharedLogic.html.twig" %}
+{% endblock %}
+{% block body %}
+<span class="form-new-name-container">
+    <h3 class='align-self-center'>Modifier la section: {{section.name}}</h3>
+
+    {{ include('tabs/information/ap_information_section/_form.html.twig', {'button_label': 'Envoyer'}) }}
+    <div class="d-flex justify-content-around form-div-edit-single p-5">
+    {% if section.state == 1 %}
+        <a class="bottom-fix btn btn-ligth" href="{{ path('information_rh_index') }}">Retour</a>
+    {% else %}
+        <a class="bottom-fix btn btn-ligth" href="{{ path("information_qse_index") }}">Retour</a>
+    {% endif %}
+        {{ include('tabs/information/ap_information_section/_modal_delete.html.twig') }}
+    </div>
+</span>
+{% endblock %}

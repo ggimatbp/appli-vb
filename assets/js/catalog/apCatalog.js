@@ -22,22 +22,29 @@ import $ from 'jquery';
 
   //#region model search
 // document.querySelector('input[list]').addEventListener('input', function(e) {
+
    $('#model-suggestion-choice').on('propertychange input', function(e){
    let input = e.target,
        list = input.getAttribute('list'),
        options = document.querySelectorAll('#' + list + ' option'),
        inputValue = input.value;
-console.log(inputValue)
    for(let i = 0; i < options.length; i++) {
        let option = options[i];
        if($(option).val() === inputValue) {
          $("#answerInput-hidden").val($(option).data("value"))
-         console.log($("#answerInput-hidden").val())
+
            break;
        }
    }
-   $('#btnModelValue').click()
+
+// $('#model-suggestion-choice').onchange =   $('#btnModelValue').trigger()
+
+
 });
+
+$('#model-suggestion-choice').on('change', function(e){
+  $('#btnModelValue').trigger("click")
+})
   //#endregion model search
 
   //#region customer search
@@ -47,18 +54,26 @@ $('#customer-search-choice').on('propertychange input', function(e){
       list = input.getAttribute('list'),
       options = document.querySelectorAll('#' + list + ' option'),
       inputValue = input.value;
-console.log(inputValue)
+
   for(let i = 0; i < options.length; i++) {
       let option = options[i];
-     console.log(option.innerText)
+
       if($(option).val() === inputValue) {
         $("#customerAnswerInput-hidden").val($(option).data("value"))
-        console.log($("#customerAnswerInput-hidden").val())
           break;
       }
   }
-  $('#btnCustomerValue').click()
+  // $('#btnCustomerValue').click()
+
+  // $('#customer-search-choice').keydown(function(event){
+  //   if (event.keyCode === 13) {
+  //   $('#btnCustomerValue').trigger("click")
+  //   }})
 });
+
+$('#customer-search-choice').on('change', function(e){
+  $('#btnCustomerValue').trigger("click")
+})
 
   //endregion customer search
 
@@ -74,23 +89,33 @@ $('.folder-change i').mouseenter(function(e){
 //#region veloBatterie
   //#region pack search
 
-  $('#case-search-choice').on('propertychange input', function(e){
+  $('#case-search-choice').on('click input', function(e){
     let input = e.target,
         list = input.getAttribute('list'),
         options = document.querySelectorAll('#' + list + ' option'),
         inputValue = input.value;
-  console.log(inputValue)
     for(let i = 0; i < options.length; i++) {
         let option = options[i];
-       console.log(option.innerText)
         if($(option).val() === inputValue) {
           $("#caseAnswerInput-hidden").val($(option).data("value"))
-          console.log($("#caseAnswerInput-hidden").val())
             break;
         }
     }
-    $('#btnPackValue').click()
+    // $('#btnPackValue').click()
+    // $('#case-search-choice').on('select'(function(event){
+
+    //   $('#btnPackValue').trigger()
+    // }
+    // ))
+    // $('#case-search-choice').keydown(function(event){
+    //   if (event.keyCode === 13 || on('click')) {
+    //   $('#btnPackValue').trigger()
+    //   }})
   });
+
+  $('#case-search-choice').on('change', function(e){
+    $('#btnPackValue').trigger("click")
+  })
 
   //#endregion pack search
 //#endregion velobatterie
