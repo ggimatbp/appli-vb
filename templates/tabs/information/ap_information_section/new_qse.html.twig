@@ -5,12 +5,17 @@
 {% include "_headerBrut2.html.twig" %}
 {% endblock %}
 {% block body %}
-<span class="form-new-name-container">
-
-    <h3 class="align-self-center">Nouvelle section QSE</h3>
-
-    {{ include('tabs/information/ap_information_section/_form.html.twig') }}
-
-    <a class="bottom-fix btn btn-ligth" href="{{ path('information_qse_index') }}">Retour</a>
-</span>
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
+        <span class="form-new-name-container">
+            {% for ap_access in app.user.RoleId.apAccesses %}
+                {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                <h3 class="align-self-center">Nouvelle section QSE</h3>
+                {{ include('tabs/information/ap_information_section/_form.html.twig') }}
+                {% endif %}
+            {% endfor %}
+            <a class="bottom-fix btn btn-ligth" href="{{ path('information_qse_index') }}">Retour</a>
+        </span>
+    {% endif %}
+{% endfor %}
 {% endblock %}

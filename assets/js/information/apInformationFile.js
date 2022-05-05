@@ -25,9 +25,10 @@ import $ from 'jquery';
     pageIsRendering = false,
     pageNumIsPending = null;
     
-    const scale = 2,
+    const scale = 1.7,
     canvas = document.querySelector("#pdf-render"),
     ctx = canvas.getContext('2d');
+    let scaleize = 1;
     
     //Render the page
     let renderPage = num => {
@@ -36,8 +37,8 @@ import $ from 'jquery';
         pdfDoc.getPage(num).then(page => {
             // Set scale
             const viewport = page.getViewport({ scale });
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+            canvas.height = viewport.height * scaleize;
+            canvas.width = viewport.width * scaleize;
     
             const renderCtx = {
                 canvasContext: ctx,
@@ -52,11 +53,11 @@ import $ from 'jquery';
                     pageNumIsPending = null;
                 }
             })
-    
             //output current page
-            document.querySelector('#page-num').textContent = num;
+            // document.querySelector('#page-num').textContent = num;
+            let pageNumeroo = document.querySelectorAll('.page-num');
+            pageNumeroo.forEach(element => element.innerText = num);
         })
-     
     }
   
     
@@ -82,8 +83,6 @@ import $ from 'jquery';
   
   //show Next Page 
   const showNextPage = () => {
-    console.log("2")
-    console.log(pdfDoc)
     if(pageNum >= pdfDoc.numPages) {
         return;
     }
@@ -95,29 +94,31 @@ import $ from 'jquery';
   pdfjsLib.getDocument(urlPdf).promise.then(pdfDoc_ => {
     pdfDoc = pdfDoc_;
   
-    document.querySelector('#page-count').textContent = pdfDoc.numPages;
-  console.log("1")
-  // console.log(pdfDoc.numPages)
-  // console.log(pageNum)
-    renderPage(pageNum)
+     let TotalpagesNumber = document.querySelectorAll('.page-count');
+     TotalpagesNumber.forEach(element => element.textContent = pdfDoc.numPages)
+      renderPage(pageNum) 
   });
   
   
-  // Button Events
-  console.log("prevpage")
-  console.log($('#prev-page'))
-  
+  // Button Events  
   // $('#prev-page' + $(this).data("id")).click(showPrevPage())
   // $('#next-page' + $(this).data("id")).click(showNextPage())
   // $('#prev-page' +  $(this).data("id")).click(showPrevPage());
-  document.querySelector('#prev-page').addEventListener('click', showPrevPage);
-  document.querySelector('#next-page').addEventListener('click', showNextPage);
+  // document.querySelectorAll('.prev-page').addEventListener('click', showPrevPage);
+  let previousPage = document.querySelectorAll('.prev-page');
+
+  previousPage.forEach(element => element.addEventListener('click', showPrevPage));
+  
+  // document.querySelector('#next-page').addEventListener('click', showNextPage);
+
+  let nextPage = document.querySelectorAll('.next-page');
+
+  nextPage.forEach(element => element.addEventListener('click', showNextPage));
   
   
   
   
   $('.btn-close-pdf-destroy').click(function(){
-    // console.log(123456)
     // pageIsRendering = false;
     //  pdfDoc = null;
     // pageNumIsPending = null;

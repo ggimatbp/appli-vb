@@ -45,6 +45,18 @@ class ApInformationSectionRepository extends ServiceEntityRepository
         }
     }
 
+
+    public function findAllInfoSectorsByParent($id): array
+    {
+        return $this->createQueryBuilder('a')
+        ->andWhere('a.parentSection = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
+    
     // /**
     //  * @return ApInformationSection[] Returns an array of ApInformationSection objects
     //  */

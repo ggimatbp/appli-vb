@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\GlobalHistoryService;
+use App\Repository\ApInformationParentSectionRepository;
 
 
 /**
@@ -18,6 +19,12 @@ use App\Service\GlobalHistoryService;
  */
 class ApInformationSectionController extends AbstractController
 {
+
+    public const TAB_QSE = "QSE";
+    public const TAB_RH = "RH";
+    public const TAB_REF_QSE ="Qse";
+    public const TAB_REF_RH ="Rh";
+
     /**
      * @Route("/", name="information_section_index", methods={"GET"})
      */
@@ -30,15 +37,18 @@ class ApInformationSectionController extends AbstractController
     }
 
     /**
-     * @Route("/new/rh", name="information_section_new_rh", methods={"GET", "POST"})
+     * @Route("/new/rh/{id}", name="information_section_new_rh", methods={"GET", "POST"})
      */
-    public function newRh(Request $request, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService): Response
+    public function newRh(Request $request, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService, ApInformationParentSectionRepository $parentRepo): Response
     {
         $apInformationSection = new ApInformationSection();
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
         $form->handleRequest($request);
-
+        $parentId = intval(basename("$_SERVER[REQUEST_URI]"));
+        $tabName = self::TAB_RH;
         if ($form->isSubmitted() && $form->isValid()) {
+            $parent = $parentRepo->find($parentId);
+            $apInformationSection->setParentSection($parent);
             $apInformationSection->setState(1);
             $apInformationSectionRepository->add($apInformationSection);
             $globalHistoryService->setInHistory($apInformationSection, 'new rh');
@@ -48,19 +58,23 @@ class ApInformationSectionController extends AbstractController
         return $this->renderForm('tabs/information/ap_information_section/new_rh.html.twig', [
             'ap_information_section' => $apInformationSection,
             'form' => $form,
+            'tabName' => $tabName
         ]);
     }
 
     /**
-     * @Route("/new/qse", name="information_section_new_qse", methods={"GET", "POST"})
+     * @Route("/new/qse/{id}", name="information_section_new_qse", methods={"GET", "POST"})
      */
-    public function newQse(Request $request, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService): Response
+    public function newQse(Request $request, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService, ApInformationParentSectionRepository $parentRepo): Response
     {
         $apInformationSection = new ApInformationSection();
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
         $form->handleRequest($request);
-
+        $parentId = intval(basename("$_SERVER[REQUEST_URI]"));
+        $tabName = self::TAB_QSE;
         if ($form->isSubmitted() && $form->isValid()) {
+            $parent = $parentRepo->find($parentId);
+            $apInformationSection->setParentSection($parent);
             $apInformationSection->setState(2);
             $apInformationSectionRepository->add($apInformationSection);
             $globalHistoryService->setInHistory($apInformationSection, 'new qse');
@@ -70,16 +84,7 @@ class ApInformationSectionController extends AbstractController
         return $this->renderForm('tabs/information/ap_information_section/new_qse.html.twig', [
             'ap_information_section' => $apInformationSection,
             'form' => $form,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="information_section_show", methods={"GET"})
-     */
-    public function show(ApInformationSection $apInformationSection): Response
-    {
-        return $this->render('tabs/information/ap_information_section/show.html.twig', [
-            'ap_information_section' => $apInformationSection,
+            'tabName' => $tabName
         ]);
     }
 
@@ -90,9 +95,15 @@ class ApInformationSectionController extends AbstractController
     {
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
         $form->handleRequest($request);
-
+        $state = $apInformationSection->getState();
+        if($state == 1){
+            $tabName = self::TAB_RH;
+            $actual_tab = self::TAB_REF_RH;
+        }else{
+            $tabName = self::TAB_QSE;
+            $actual_tab = self::TAB_REF_QSE;
+        }
         if ($form->isSubmitted() && $form->isValid()) {
-            $state = $apInformationSection->getState();
             $apInformationSectionRepository->add($apInformationSection);
             $globalHistoryService->setInHistory($apInformationSection, 'edit');
 
@@ -106,6 +117,8 @@ class ApInformationSectionController extends AbstractController
         return $this->renderForm('tabs/information/ap_information_section/edit.html.twig', [
             'section' => $apInformationSection,
             'form' => $form,
+            'tabName' => $tabName,
+            'actual_tab' => $actual_tab
         ]);
     }
 
@@ -130,31 +143,5 @@ class ApInformationSectionController extends AbstractController
             }
     }
 
-    /**
-     * @Route("/{id}/archive", name="information_section_archive", methods={"POST"})
-     */
-    public function archive(Request $request, ApInformationSection $apInformationSection, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService): Response
-    {
-        $state = $apInformationSection->getState();
-        if ($this->isCsrfTokenValid('archiver'.$apInformationSection->getId(), $request->request->get('_token'))) {
-            
-            if($apInformationSection->getArchive() == 1 ){
-                $apInformationSection->setArchive(0);
-                $globalHistoryService->setInHistory($apInformationSection, 'Archive');
 
-            }else{
-                $apInformationSection->setArchive(1);
-                $globalHistoryService->setInHistory($apInformationSection, 'Unarchive');
-
-            }
-            
-            $apInformationSectionRepository->add($apInformationSection);
-        }
-        if($state === 1 ){
-            return $this->redirectToRoute('information_rh_index', [], Response::HTTP_SEE_OTHER);
-        }else{
-            return $this->redirectToRoute('information_qse_index', [], Response::HTTP_SEE_OTHER);
-        }
-        
-    }
 }

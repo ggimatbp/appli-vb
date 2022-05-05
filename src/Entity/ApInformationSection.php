@@ -30,14 +30,14 @@ class ApInformationSection
     private $state;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $archive = 0;
-
-    /**
      * @ORM\OneToMany(targetEntity=ApInformationFiles::class, mappedBy="Section")
      */
     private $apInformationFiles;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=ApInformationParentSection::class, inversedBy="apInformationSections")
+     */
+    private $parentSection;
 
     public function __construct()
     {
@@ -73,18 +73,6 @@ class ApInformationSection
         return $this;
     }
 
-    public function getArchive(): ?bool
-    {
-        return $this->archive;
-    }
-
-    public function setArchive(bool $archive): self
-    {
-        $this->archive = $archive;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, ApInformationFiles>
      */
@@ -111,6 +99,18 @@ class ApInformationSection
                 $apInformationFile->setSection(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getParentSection(): ?ApInformationParentSection
+    {
+        return $this->parentSection;
+    }
+
+    public function setParentSection(?ApInformationParentSection $parentSection): self
+    {
+        $this->parentSection = $parentSection;
 
         return $this;
     }

@@ -1,0 +1,4 @@
+<form class="d-flex" method="post" action="{{ path('information_parent_section_delete', {'id': parent.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ parent.id) }}">
+    <button class="align-self-center btn">Supprimer</button>
+</form>

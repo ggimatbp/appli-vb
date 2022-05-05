@@ -20,8 +20,10 @@ class ApInformationFilesController extends AbstractController
 {
 
     #region constant
-    const TAB_RH = "Rh";
-    const TAB_QSE = "Qse";
+    public const TAB_RH = "RH";
+    public const TAB_QSE = "QSE";
+    public const TAB_REF_QSE ="Qse";
+    public const TAB_REF_RH ="Rh";
     #endregion
 
     /**
@@ -52,15 +54,18 @@ class ApInformationFilesController extends AbstractController
         $form = $this->createForm(ApInformationFilesType::class, $apInformationFile);
         $form->handleRequest($request);
         $sectionId = intval(basename("$_SERVER[REQUEST_URI]"));
-
+        $section = $sectionRepository->find($sectionId);
+        $state = $section->getState();
         if($sectionRepository->find($sectionId)->getState() == 1)
             {
-                $actualTab = self::TAB_RH;
+                $tabName = self::TAB_RH;
+                $actual_tab = self::TAB_REF_RH;
             }else{
-                $actualTab = self::TAB_QSE;
+                $tabName = self::TAB_QSE;
+                $actual_tab = self::TAB_REF_QSE;
             }
         if ($form->isSubmitted() && $form->isValid()) {
-            $section = $sectionRepository->find($sectionId);
+            
             $apInformationFile->setSection($section);
             $imgFile = $apInformationFile->getImageFile();
             
@@ -84,7 +89,9 @@ class ApInformationFilesController extends AbstractController
         return $this->renderForm('tabs/information/ap_information_files/new.html.twig', [
             'ap_information_file' => $apInformationFile,
             'form' => $form,
-            'actual_tab' => $actualTab
+            'tabName' => $tabName,
+            'state' => $state,
+            'actual_tab' => $actual_tab
         ]);
     }
 
@@ -96,13 +103,16 @@ class ApInformationFilesController extends AbstractController
     {
         $sectionState = $apInformationFile->getSection()->getState();
         if ($sectionState == 1){
-            $actualTab = self::TAB_RH;
+            $tabName = self::TAB_RH;
+            $actual_tab = self::TAB_REF_RH;
         }else{
-            $actualTab = self::TAB_QSE;
+            $tabName = self::TAB_QSE;
+            $actual_tab = self::TAB_REF_QSE;
         }
         return $this->render('tabs/information/ap_information_files/show.html.twig', [
             'file' => $apInformationFile,
-            'actual_tab' => $actualTab
+            'tabName' => $tabName,
+            'actual_tab' => $actual_tab
         ]);
     }
 
@@ -113,11 +123,13 @@ class ApInformationFilesController extends AbstractController
     {
         $form = $this->createForm(ApInformationFilesType::class, $apInformationFile);
         $form->handleRequest($request);
-        $sectionState = $apInformationFile->getSection()->getState();
-        if ($sectionState == 1){
-            $actualTab = self::TAB_RH;
+        $state = $apInformationFile->getSection()->getState();
+        if ($state == 1){
+            $tabName = self::TAB_RH;
+            $actual_tab = self::TAB_REF_RH;
         }else{
-            $actualTab = self::TAB_QSE;
+            $tabName = self::TAB_QSE;
+            $actual_tab = self::TAB_REF_QSE;
         }
         
 
@@ -125,7 +137,7 @@ class ApInformationFilesController extends AbstractController
             $apInformationFilesRepository->add($apInformationFile);
             $globalHistoryService->setInHistory($apInformationFile, 'edit');
 
-            if ($sectionState == 1){
+            if ($state == 1){
                 return $this->redirectToRoute('information_rh_index', [], Response::HTTP_SEE_OTHER);
             }else{
                 return $this->redirectToRoute('information_qse_index', [], Response::HTTP_SEE_OTHER);
@@ -135,7 +147,9 @@ class ApInformationFilesController extends AbstractController
         return $this->renderForm('tabs/information/ap_information_files/edit.html.twig', [
             'ap_information_file' => $apInformationFile,
             'form' => $form,
-            'actual_tab' => $actualTab
+            'tabName' => $tabName,
+            'actual_tab' => $actual_tab,
+            'state' => $state
         ]);
     }
 
