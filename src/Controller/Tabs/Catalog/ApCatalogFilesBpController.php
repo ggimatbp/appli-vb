@@ -60,18 +60,20 @@ class ApCatalogFilesBpController extends AbstractController
             $apCatalogFilesBp->setRelation($sector);
             $imgFile = $apCatalogFilesBp->getImageFile();
             $fileExtension =  $imgFile->guessExtension();
+            //dd($fileExtension);
             $apCatalogFilesBp->setUser($this->getUser());
             $apCatalogFilesBp->setCreatedAt(new \DateTime());
             $apCatalogFilesBp->setFileSize(filesize($imgFile)/1024);
             $apCatalogFilesBp->setFileType($fileExtension);
             $manager = $doctrine->getManager();
+            $width = getimagesize($imgFile)[0];
+            $height = getimagesize($imgFile)[1];
             $manager->persist($apCatalogFilesBp);
             $manager->flush();
-            $intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName());
-
+            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName(), $width, $height);};
             //set history
             $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'new');
-             return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm('tabs/Catalog/ap_catalog_files_bp/new.html.twig', [
             'ap_catalog_files_bp' => $apCatalogFilesBp,
@@ -127,10 +129,12 @@ class ApCatalogFilesBpController extends AbstractController
                 $fileExtension =  $imgFile->guessExtension();
                 $apCatalogFilesBp->setFileType($fileExtension);
             }
+            $width = getimagesize($imgFile)[0];
+            $height = getimagesize($imgFile)[1];
             $manager = $doctrine->getManager();
             $manager->persist($apCatalogFilesBp);
             $manager->flush();
-            $intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName());
+            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName(), $width, $height);};
             $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'edit');
             // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
             // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());

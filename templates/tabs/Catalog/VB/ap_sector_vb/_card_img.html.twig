@@ -3,8 +3,8 @@
         {% else %}
         <div
             class="{% if ap_catalog_file_vb.archive == 1 %} archived {% endif %} card card-design {{'card' ~ ap_catalog_file_vb.id }}">
-            <span type="button" class="btn-launch-modal" data-img-id="{{ap_catalog_file_vb.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ vich_uploader_asset(ap_catalog_file_vb, 'imageFile') }}" class="card-img-top" alt="model image upload">
+            <span type="button" class="catalog-card-img btn-launch-modal" data-img-id="{{ap_catalog_file_vb.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img style="object-fit: cover" src="{{ vich_uploader_asset(ap_catalog_file_vb, 'imageFile') }}" class="h-100 catalog-img" alt="model image upload">
             </span>
         
             <div class="card-body card-body-design">
@@ -15,7 +15,7 @@
                                 {% for ap_access in app.user.RoleId.apAccesses %}
                                     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
                                         <a href="{{ path('ap_catalog_files_vb_edit', {'id': ap_catalog_file_vb.id}) }}">
-                                            <i class="text-danger fas fa-pencil-alt"></i>
+                                            <i class="primary-color fas fa-pencil-alt"></i>
                                         </a>
                                     {% endif %}
                                 {% endfor %}
@@ -23,7 +23,7 @@
                                     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
                                         <form name="archive{{ap_catalog_file_vb.id}}" method="post" action="{{ path('ap_files_vb_archive', {'id': ap_catalog_file_vb.id}) }}" class="hover">
                                             <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_file_vb.id) }}">
-                                            <span class="text-danger"><i onclick="document.forms['archive{{ap_catalog_file_vb.id}}'].submit();" class="fas fa-file-archive"></i></span>
+                                            <span class="primary-color"><i onclick="document.forms['archive{{ap_catalog_file_vb.id}}'].submit();" class="fas fa-file-archive"></i></span>
                                         </form>
                                         {#<a class="danger" href="{{ path('ap_files_vb_archive', {'id': ap_catalog_file_vb.id}) }}"><i class="fas fa-file-archive"></i></a>  #}
                                     {% endif %}
@@ -31,7 +31,7 @@
                                 <!-- Button trigger delete modal -->
                                 {% for ap_access in app.user.RoleId.apAccesses %}
                                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                                        <span type="button" data-bs-toggle="modal" data-bs-target="#deleteModalVb" class="delete-btn-files text-danger" data-file-img-id="{{ap_catalog_file_vb.id}}">
+                                        <span type="button" data-bs-toggle="modal" data-bs-target="#deleteModalVb" class="delete-btn-files primary-color" data-file-img-id="{{ap_catalog_file_vb.id}}">
                                             <i class="fas fa-times"></i>
                                         </span>	
                                     {% endif %}

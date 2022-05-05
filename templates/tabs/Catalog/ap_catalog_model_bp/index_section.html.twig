@@ -30,9 +30,9 @@
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                        <form class="catalog-content-customer-container-bp m-2" method="POST" action="{{ path('ap_catalog_model_bp_archive', {'id': ap_catalog_model_bp.id})}}" onsubmit="return confirm('Etes vous sûr de vouloir archiver ce model');">
+                        <form class="catalog-content-customer-container-bp m-2" method="POST" action="{{ path('ap_catalog_model_bp_archive', {'id': ap_catalog_model_bp.id})}}">
                             <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_model_bp.id) }}">
-                            <button class="w-100 btn">Archiver le model</button>
+                            <button class="w-100 btn">{% if ap_catalog_model_bp.archive == 0  %}Archiver le model{% else %}Désarchiver le model{% endif %}</button>
                         </form>
                     {% endif %}
                 {% endfor %}

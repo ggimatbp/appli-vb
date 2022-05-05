@@ -121,6 +121,7 @@ class ApRoleController extends AbstractController
     public function edit($id, ApRole $apRole, ManagerRegistry $entityManager, GlobalHistoryService $globalHistoryService): Response
     {
         $tabName = self::TAB_NAME;
+
          if (null === $apRole = $entityManager->getRepository(ApRole::class)->find($id)) {
             throw $this->createNotFoundException('No task found for id '.$id);
         }
@@ -168,18 +169,34 @@ class ApRoleController extends AbstractController
      * @route("/editName/{id}", methods={"GET"})
     */
 
-    public function editotest(Request $request, ApRole $apRole, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService) : response
+    public function editotest(Request $request, ApRole $apRole, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService, ApRoleRepository $apRoleRepository) : response
     {
         $submittedToken = $request->get('csrfEditName');
-                // 'search-item' is the same value used in the template to generate the token
-        if ($this->isCsrfTokenValid('edit-name', $submittedToken)) {
-            $globalHistoryService->setInHistory($apRole, 'edit name');
-            $roleName = $request->get('task');
-            $apRole->setName($roleName);
-            $manager = $doctrine->getManager();
-            $manager->flush();
-        return $this->json(["code" => 200,
-        "message" => "changer nom"], 200);
+        // 'search-item' is the same value used in the template to generate the token
+        $allRoles = $apRoleRepository->findAll();
+        $roleName = $request->get('task');
+        $oldName = $apRole->getName();
+        $sameName = 0;
+        if(!($oldName == "ADMIN")){
+            foreach($allRoles as $oneRole){
+                $oneRoleName = $oneRole->getName();    
+                if(strtoupper($roleName) == $oneRoleName)
+                {
+                    $sameName += 1;
+                }
+            }
+            if($sameName == 0)
+            {
+                if ($this->isCsrfTokenValid('edit-name', $submittedToken)) {
+                    $globalHistoryService->setInHistory($apRole, 'edit name');
+                    ;
+                    $apRole->setName($roleName);
+                    $manager = $doctrine->getManager();
+                    $manager->flush();
+                return $this->json(["code" => 200,
+                "message" => "changer nom"], 200);
+                }
+            }
         }
     }
 

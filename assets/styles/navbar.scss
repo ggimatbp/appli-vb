@@ -4,17 +4,20 @@
     font-weight: $fontWeight;
     border-bottom:0.2rem solid $headerColor;
     text-decoration: none;
+    user-select:none;
 }
 
 .headerNotActive{
     width:100%;
     color:  $headerColor;
     font-weight: $fontWeight;
+    user-select:none;
 }
 
 .header2{
     width:100%;
     text-decoration: none;
+    user-select:none;
 }
 
 .nav-pills .nav-link{

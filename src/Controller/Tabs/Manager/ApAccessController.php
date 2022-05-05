@@ -20,83 +20,83 @@ class ApAccessController extends AbstractController
     /**
      * @Route("/", name="ap_access_index", methods={"GET"})
      */
-    public function index(ApAccessRepository $apAccessRepository): Response
-    {
-        return $this->render('ap_access/index.html.twig', [
-            'ap_accesses' => $apAccessRepository->findAll(),
-        ]);
-    }
+    // public function index(ApAccessRepository $apAccessRepository): Response
+    // {
+    //     return $this->render('ap_access/index.html.twig', [
+    //         'ap_accesses' => $apAccessRepository->findAll(),
+    //     ]);
+    // }
 
     /**
      * @Route("/new", name="ap_access_new", methods={"GET","POST"})
      */
-    public function new(Request $request, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
-    {
-        $apAccess = new ApAccess();
-        $form = $this->createForm(ApAccessType::class, $apAccess, array('tabId' => $apAccess->getTab()));
-        $form->handleRequest($request);
+    // public function new(Request $request, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
+    // {
+    //     $apAccess = new ApAccess();
+    //     $form = $this->createForm(ApAccessType::class, $apAccess, array('tabId' => $apAccess->getTab()));
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($apAccess);
-            $entityManager->flush();
-            $globalHistoryService->setInHistory($apAccess, 'new');
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager = $doctrine->getManager();
+    //         $entityManager->persist($apAccess);
+    //         $entityManager->flush();
+    //         $globalHistoryService->setInHistory($apAccess, 'new');
 
-            return $this->redirectToRoute('ap_access_index', [], Response::HTTP_SEE_OTHER);
-        }
+    //         return $this->redirectToRoute('ap_access_index', [], Response::HTTP_SEE_OTHER);
+    //     }
 
-        return $this->renderForm('ap_access/new.html.twig', [
-            'ap_access' => $apAccess,
-            'form' => $form,
-        ]);
-    }
+    //     return $this->renderForm('ap_access/new.html.twig', [
+    //         'ap_access' => $apAccess,
+    //         'form' => $form,
+    //     ]);
+    // }
 
     /**
      * @Route("/{id}", name="ap_access_show", methods={"GET"})
      */
-    public function show(ApAccess $apAccess): Response
-    {
-        return $this->render('ap_access/show.html.twig', [
-            'ap_access' => $apAccess,
-        ]);
-    }
+    // public function show(ApAccess $apAccess): Response
+    // {
+    //     return $this->render('ap_access/show.html.twig', [
+    //         'ap_access' => $apAccess,
+    //     ]);
+    // }
 
     /**
      * @Route("/{id}/edit", name="ap_access_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ApAccess $apAccess, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
-    {
-        $form = $this->createForm(ApAccessType::class, $apAccess);
-        $form->handleRequest($request);
+    // public function edit(Request $request, ApAccess $apAccess, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
+    // {
+    //     $form = $this->createForm(ApAccessType::class, $apAccess);
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $doctrine->getManager();
-            $entityManager->flush();
-            $globalHistoryService->setInHistory($apAccess, 'edit');
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager = $doctrine->getManager();
+    //         $entityManager->flush();
+    //         $globalHistoryService->setInHistory($apAccess, 'edit');
 
-            return $this->redirectToRoute('ap_access_index', [], Response::HTTP_SEE_OTHER);
-        }
+    //         return $this->redirectToRoute('ap_access_index', [], Response::HTTP_SEE_OTHER);
+    //     }
 
-        return $this->renderForm('ap_access/edit.html.twig', [
-            'ap_access' => $apAccess,
-            'form' => $form,
-        ]);
-    }
+    //     return $this->renderForm('ap_access/edit.html.twig', [
+    //         'ap_access' => $apAccess,
+    //         'form' => $form,
+    //     ]);
+    // }
 
     /**
      * @Route("/{id}", name="ap_access_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApAccess $apAccess, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$apAccess->getId(), $request->request->get('_token'))) {
-            $globalHistoryService->setInHistory($apAccess, 'delete');
-            $entityManager = $doctrine->getManager();
-            $entityManager->remove($apAccess);
-            $entityManager->flush();
-        }
+    // public function delete(Request $request, ApAccess $apAccess, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
+    // {
+    //     if ($this->isCsrfTokenValid('delete'.$apAccess->getId(), $request->request->get('_token'))) {
+    //         $globalHistoryService->setInHistory($apAccess, 'delete');
+    //         $entityManager = $doctrine->getManager();
+    //         $entityManager->remove($apAccess);
+    //         $entityManager->flush();
+    //     }
 
-        return $this->redirectToRoute('ap_access_index', [], Response::HTTP_SEE_OTHER);
-    }
+    //     return $this->redirectToRoute('ap_access_index', [], Response::HTTP_SEE_OTHER);
+    // }
     
     /**
      * @route("/addAuthOnClick/{id}", name="add_auth_on_click")
@@ -107,23 +107,25 @@ class ApAccessController extends AbstractController
         
         $submittedToken = $request->get('editAccessCsrf');
         $manager = $doctrine->getManager();
-        
-         if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
-            if($apAccess->getAdd() == 1)
-            {
-                $globalHistoryService->setInHistory($apAccess, 'add edit unauth');
-                $apAccess->setAdd(0);
-                $manager->flush();
+        $roleName = $apAccess->getRole()->getName();
+        if(!($roleName == "ADMIN")){
+            if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
+                if($apAccess->getAdd() == 1)
+                {
+                    $globalHistoryService->setInHistory($apAccess, 'add edit unauth');
+                    $apAccess->setAdd(0);
+                    $manager->flush();
+                }
+                else
+                {
+                    $globalHistoryService->setInHistory($apAccess, 'add edit auth');
+                    $apAccess->setAdd(1);
+                    $manager->flush();
+                }
+                return $this->json(["code" => 200,
+                "message" => "access add",
+                "status" => $apAccess->getAdd()], 200);
             }
-            else
-            {
-                $globalHistoryService->setInHistory($apAccess, 'add edit auth');
-                $apAccess->setAdd(1);
-                $manager->flush();
-            }
-            return $this->json(["code" => 200,
-             "message" => "access add",
-            "status" => $apAccess->getAdd()], 200);
         }
 
     }
@@ -136,23 +138,26 @@ class ApAccessController extends AbstractController
     {
         $submittedToken = $request->get('editAccessCsrf');
         $manager = $doctrine->getManager();
-        if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
-            if($apAccess->getDelete() == 1)
-            {
-                $globalHistoryService->setInHistory($apAccess, 'delete edit unauth');
-                $apAccess->setDelete(0);
-                $manager->flush();
+        $roleName = $apAccess->getRole()->getName();
+        if(!($roleName == "ADMIN")){
+            if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
+                if($apAccess->getDelete() == 1)
+                {
+                    $globalHistoryService->setInHistory($apAccess, 'delete edit unauth');
+                    $apAccess->setDelete(0);
+                    $manager->flush();
+                }
+                else
+                {
+                    $globalHistoryService->setInHistory($apAccess, 'delete edit auth');
+                    $apAccess->setDelete(1);
+                    $manager->flush();
+                }
+                return $this->json(["code" => 200,
+                "message" => "access delete",
+                "status" => $apAccess->getDelete()], 200);
             }
-            else
-            {
-                $globalHistoryService->setInHistory($apAccess, 'delete edit auth');
-                $apAccess->setDelete(1);
-                $manager->flush();
-            }
-            return $this->json(["code" => 200,
-            "message" => "access delete",
-            "status" => $apAccess->getDelete()], 200);
-        }    
+        }   
     }
 
 
@@ -164,24 +169,27 @@ class ApAccessController extends AbstractController
     {
         $submittedToken = $request->get('editAccessCsrf');
         $manager = $doctrine->getManager();
-        if ($this->isCsrfTokenValid('edit-item', $submittedToken))
-        {
-            if($apAccess->getEdit() == 1)
+        $roleName = $apAccess->getRole()->getName();
+        if(!($roleName == "ADMIN")){
+            if ($this->isCsrfTokenValid('edit-item', $submittedToken))
             {
-                $globalHistoryService->setInHistory($apAccess, 'edition edit unauth');
-                $apAccess->setEdit(0);
-                $manager->flush();
+                if($apAccess->getEdit() == 1)
+                {
+                    $globalHistoryService->setInHistory($apAccess, 'edition edit unauth');
+                    $apAccess->setEdit(0);
+                    $manager->flush();
+                }
+                else
+                {
+                    $globalHistoryService->setInHistory($apAccess, 'edition edit unauth');
+                    $apAccess->setEdit(1);
+                    $manager->flush();
+                }
+                return $this->json(["code" => 200,
+                "message" => "access Edit",
+                "status" => $apAccess->getEdit()],
+                200);
             }
-            else
-            {
-                $globalHistoryService->setInHistory($apAccess, 'edition edit unauth');
-                $apAccess->setEdit(1);
-                $manager->flush();
-            }
-            return $this->json(["code" => 200,
-            "message" => "access Edit",
-            "status" => $apAccess->getEdit()],
-            200);
         }
     }
 
@@ -193,6 +201,8 @@ class ApAccessController extends AbstractController
     {
         $submittedToken = $request->get('editAccessCsrf');
         $manager = $doctrine->getManager();
+        $roleName = $apAccess->getRole()->getName();
+        if(!($roleName == "ADMIN")){
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
                 if($apAccess->getView() == 1)
                 {
@@ -211,6 +221,5 @@ class ApAccessController extends AbstractController
                 "status" => $apAccess->getView()], 200);
             }
         }
-
-
+    }
 }

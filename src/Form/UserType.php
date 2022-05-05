@@ -17,7 +17,7 @@ class UserType extends AbstractType
             ->add('firstname')
             ->add('lastname')
             ->add('active')
-            ->add('roleId', null, ['choice_label'=>'name'])
+            ->add('roleId', null, ['choice_label'=>'name', 'placeholder' => false])
         ;
     }
 

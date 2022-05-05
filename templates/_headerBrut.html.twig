@@ -2,11 +2,11 @@
 
 {% if app.user.RoleId is defined %}
 {% set parentTab = 0 %}
-        <div class="d-flex">
+        <div class="d-flex" onmousedown="return false" onselectstart="return false">
 					{% for apAccess in app.user.RoleId.apAccesses %}
 						{% if apAccess.view == true %}
 							{% if apAccess.tab.apTab is null %}
-                    <a class=" nav-link 
+                    <a class=" nav-link text-center  
                         {% if app.request.attributes.get('_controller') matches "#" ~ apAccess.tab.ControlPath ~ "#" %}
                         {% set parentTab = apAccess.tab.id %}
                           header1

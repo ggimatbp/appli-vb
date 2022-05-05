@@ -40,7 +40,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('roleId', null, ['choice_label'=>'name'])
+            ->add('roleId', null, ['choice_label'=>'name', 'placeholder' => false])
 
         ;
     }
