@@ -15,7 +15,7 @@ class ApAccessFixtures extends Fixture implements DependentFixtureInterface
         // $manager->persist($product);
         $tabIndex=0;
         //change $i max each time you advance in a new module project and change the tabs route name fixture
-        for($i = 1; $i <=6 ; $i++){
+        for($i = 1; $i <=10 ; $i++){
             $tabIndex++;
             $access = new ApAccess();
             $access->setRole($this->getReference('Role_2'));

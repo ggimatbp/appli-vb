@@ -1,0 +1,26 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{file.id}}">
+  {{ button_label|default( 'Supprimer')|raw }}
+    {# <i class="fas fa-trash-alt"></i> #}
+</button>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal{{file.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">⚠️Suppression de le fichier {{file.name}}⚠️</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Etes vous sûr de vouloir supprimer ce fichier? 🤔
+      </div>
+      <div class="d-flex justify-content-around modal-footer">
+        <form method="post" action="{{ path('information_files_delete', {'id': file.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ file.id) }}">
+            <button class="btn">Suprimer</button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>

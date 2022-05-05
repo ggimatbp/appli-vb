@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% block title %}Information
+{% endblock %}
+{% block navbar %}
+	{% include "_headerBrut2.html.twig" %}
+{% endblock %}
+{% block body %}
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
+			<div class="aprole-global-container">
+				<h1 class="m-1">
+					Information RH
+				</h1>
+				<div class="aprole-global-container">
+					{{ include('tabs/information/rh/current.html.twig') }}
+					{% for ap_access in app.user.RoleId.apAccesses %}
+						{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+							{{ include('tabs/information/rh/archive.html.twig') }}
+						{% endif %}
+					{% endfor %}
+					{% for section in all_section %}
+						{% if section.state == 1 %}
+						{% for ap_access in app.user.RoleId.apAccesses %}
+							{% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+								{{ include('tabs/information/ap_information_section/_modal_delete.html.twig') }}
+							{% endif %}
+						{% endfor %}
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
+	{% endfor %}	
+{% endblock %}

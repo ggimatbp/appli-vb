@@ -50,6 +50,10 @@ Encore
     .addEntry('apCatalogImagePreview', './assets/js/catalog/apCatalogImagePreview.js')
     //#endregion
 
+    //#region information
+    .addEntry('apInformation', './assets/js/information/apInformationFile.js')
+    //#endregion
+
     //#endregion JS entry point
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

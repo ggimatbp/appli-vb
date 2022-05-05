@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block navbar %}
+{% include "_headerBrutSharedLogic.html.twig" %}
+{% endblock %}
+
+{% block title %}Edit ApInformationParentSection{% endblock %}
+
+{% block body %}
+
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+            <span class="form-new-name-container">
+                <h3 class="align-self-center">Modifier {{parent.name}}</h3>
+                {{ include('tabs/information/ap_information_parent_section/_form.html.twig', {'button_label': 'Modifier'}) }}
+                <div class="d-flex justify-content-around form-div-edit-single p-5">
+                    {% if parent.state == 1 %}
+                        <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
+                    {% else %}
+                        <a class="btn" href="{{ path("information_qse_index") }}">Retour</a>
+                    {% endif %}
+                    {% for ap_access in app.user.RoleId.apAccesses %}
+                        {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                            {{ include('tabs/information/ap_information_parent_section/_delete_form.html.twig') }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </span>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+
+{# <div class="d-flex justify-content-around form-div-edit-single p-5">
+          <a class="btn" href="/ap/catalog/customer/bp/179">Retour</a>
+          <form class="catalog-content-customer-container-bp" method="post" action="/ap/catalog/customer/bp/179">
+    <input type="hidden" name="_token" value="3ec8235c.x-HtngwK542741i9v09npVDDg_xRz1cCD95TXsHd05M.j5OD701MrtiOrQCK6wohzyepwpg8oxZYao86MYXopL6FtrzZWXK-3YyyLw">
+    <button class="w-100 btn">Supprimer le client</button>
+</form>
+
+      </div> #}

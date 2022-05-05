@@ -1,0 +1,65 @@
+<div class="d-flex mx-3">
+    <div class="w-25 d-flex flex-wrap">
+        <div class="w-100 list-group" id="list-tab" role="tablist">
+            {% set loop_rh = 0 %}
+            {% set fileEmpty = 0 %}
+            {% for section in all_section  %}
+                {% if section.state == 1 and section.parentSection.id == parent.id %}
+                    {% for file in all_file %}
+                        {% if file.section.id == section.id and file.archive == 0 %}
+                            {% set fileEmpty = fileEmpty + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if fileEmpty == 0 %}
+                    {% else %}
+                        {% set fileEmpty = 0 %}
+                        {% set loop_rh = loop_rh + 1 %}
+                        <a class="list-group-item list-group-item-action {{ loop_rh == 1 ? 'active' : '' }} " id="list-home-{{section.id}}" data-bs-toggle="list" href="#list-{{section.id}}" role="tab" aria-controls="list-home">
+                            {{section.name}}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="w-75 tablist-custom-output mx-3">
+        <div class="tab-content" id="nav-tabContent">
+            {% set loop_rh = 0 %}
+            {% set fileEmpty = 0 %}
+            {% for section in all_section %}
+                {% if section.state == 1 and section.parentSection.id == parent.id %}
+                    {% for file in all_file %}
+                        {% if file.section.id == section.id and file.archive == 0 %}
+                            {% set fileEmpty = fileEmpty + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if fileEmpty == 0 %}
+                        {% else %}
+                            {% set fileEmpty = 0 %}
+                            {% set loop_rh = loop_rh + 1 %}
+                            <div class="tab-pane fade show {{ loop_rh == 1 ? 'active' : '' }}" id="list-{{section.id}}" role="tabpanel" aria-labelledby="list-home-list">
+                                <ul>
+                                    {{ include('tabs/information/rh/file.html.twig') }}
+                                </ul>
+                                <div class="d-flex">
+                                    {% for ap_access in app.user.RoleId.apAccesses %}
+                                        {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                                            <span class="mx-3 align-self-center">
+                                                <a class=" btn" href="{{ path('information_files_new', {'id': section.id}) }}">Nouveau document</a>
+                                            </span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for ap_access in app.user.RoleId.apAccesses %}
+                                        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                            <span class="mx-3 align-self-center">
+                                                <a class="btn" href="{{ path('information_section_edit', {'id': section.id}) }}">Modifier</a>
+                                            </span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

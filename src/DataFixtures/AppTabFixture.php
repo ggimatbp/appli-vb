@@ -38,24 +38,24 @@ class AppTabFixture extends Fixture
 
         ],
         [
-            'name' => 'Prise en Charge',
-            'path' => 'manager_fake',
-            'controlpath' => 'spikabarou',
+            'name' => 'Information',
+            'path' => 'information_index',
+            'controlpath' => 'Information',
             'children' => [
                 [
-                    'name' => 'En cours',
-                    'path' => 'manager_fake',
-                    'controlpath' => 'spikabarou'
+                    'name' => 'RH',
+                    'path' => 'information_rh_index',
+                    'controlpath' => 'Rh'
                 ],
                 [
-                    'name' => 'Archivées',
-                    'path' => 'manager_fake',
-                    'controlpath' => 'spikabarou'
+                    'name' => 'QSE',
+                    'path' => 'information_qse_index',
+                    'controlpath' => 'Qse'
                 ],
                 [
-                    'name' => 'Admin',
-                    'path' => 'manager_fake',
-                    'controlpath' => 'spikabarou'
+                    'name' => 'Perso',
+                    'path' => 'information_perso_index',
+                    'controlpath' => 'Perso'
                 ],
             ]
         ],

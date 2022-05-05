@@ -67,6 +67,7 @@ class ApCatalogFilesVbController extends AbstractController
 
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogFilesVb);
+            dd($apCatalogFilesVb);
             $entityManager->flush();
             if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName(), $width,  $height);};            
             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'new');
