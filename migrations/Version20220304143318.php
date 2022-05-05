@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220425122438 extends AbstractMigration
+final class Version20220304143318 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20220425122438 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE ap_information_files ADD file_name VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE ps_customer ADD latitude VARCHAR(255) DEFAULT NULL, ADD longitude VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE ap_information_files DROP file_name');
+        $this->addSql('ALTER TABLE ps_customer DROP latitude, DROP longitude');
     }
 }
