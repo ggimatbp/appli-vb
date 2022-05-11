@@ -5,23 +5,23 @@
             <span class="d-flex pagination-total-page-and-number-display">              
                 <select class="form-filter-input-global form-select" aria-label="Default select example" id="employeeSelectLimitLine">
                  {% if limit is defined %} 
-                    {% if limit == 1 %}
-                        <option  value=1>1</option>
-                        <option value=2>2</option>
-                        <option value=11>11</option>
-                    {% elseif limit == 2 %}
-                        <option value=2>2</option>
-                        <option  value=1>1</option>
-                        <option value=11>11</option>
+                    {% if limit == 10 %}
+                        <option  value=10>10</option>
+                        <option value=20>20</option>
+                        <option value=30>30</option>
+                    {% elseif limit == 20 %}
+                        <option value=20>20</option>
+                        <option  value=10>10</option>
+                        <option value=30>30</option>
                     {% else %}
-                        <option value=11>11</option>
-                        <option  value=1>1</option>
-                        <option value=2>2</option>
+                        <option value=50>50</option>
+                        <option  value=10>10</option>
+                        <option value=20>20</option>
                     {% endif %}
                  {% else %}
-                    <option  value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=11>11</option>
+                    <option  value=10>10</option>
+                    <option value=20>20</option>
+                    <option value=50>50</option>
                 {% endif %} 
                 </select>
                 <span class="p-2 d-flex align-self-center">/{{total}}</span>

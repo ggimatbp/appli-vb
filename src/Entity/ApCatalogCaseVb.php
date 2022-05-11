@@ -130,7 +130,6 @@ class ApCatalogCaseVb
                 $apCatalogFilesVb->setCaseId(null);
             }
         }
-
         return $this;
     }
 }
