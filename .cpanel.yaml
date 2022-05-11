@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/sysz5561/appli-vb
+    - /bin/cp -R * $DEPLOYPATH
