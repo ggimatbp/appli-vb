@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/sysz5561/public_html/
-    - /bin/cp -R /home/sysz5561/appli-vb/public/index.php $DEPLOYPATH
+    - /bin/cp -R /home/sysz5561/appli-vb/appli-vb $DEPLOYPATH
