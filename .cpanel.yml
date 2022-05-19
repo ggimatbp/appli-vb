@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/sysz5561/public_html/
+    - /bin/cp -R /home/sysz5561/test/appli-vb/public/uploads $DEPLOYPATH
