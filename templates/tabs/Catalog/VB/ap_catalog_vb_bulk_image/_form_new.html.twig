@@ -1,0 +1,27 @@
+<div class="form-new-container">
+{{ form_start(form, {'attr': {'onsubmit': 'buttonName.disabled=true; return true;' }}) }}
+
+    <div class="row">
+        {{ form_row(form.name, { 'label': 'Nom' }) }}
+    </div>
+    <div class="row">
+        {{ form_row(form.miniature, { 'label': 'Cette image doit elle être la miniature du dossier?' }) }}
+    </div>
+    <div class="row">
+    {{ form_label(form.imageFile, 'Choisissez un document à transférer') }}
+        {{ form_widget(form.imageFile, {
+            attr: {
+                'class' : 'imageUpload'
+            }
+        }) }}
+    </div>
+
+    <div class='image-preview m-5' id="imagePreview">
+        <img src="" alt="Image preview" class="image-preview__image">
+        <span class='image-preview__default-text'>Image</span>
+    </div>
+
+        <button class="btn w-100" name="buttonName" value="Submit">Sauvegarder</button>
+
+{{ form_end(form) }}
+</div>

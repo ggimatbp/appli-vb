@@ -1,7 +1,3 @@
-{# {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }} #}
 <div class="form-new-container">
 {{ form_start(form, {'attr': {'onsubmit': 'buttonName.disabled=true; return true;' }}) }}
 
@@ -17,12 +13,11 @@
             }
         }) }}
     </div>
- {#
-    <div class='image-preview m-5' id="imagePreview">
-        <img src="" alt="Image preview" class="image-preview__image">
-        <span class='image-preview__default-text'>Image</span>
+
+    <div>
+        <input type="checkbox" id="parapher" name ="parapher">
+        <label for="parapher">lu et approuvé</label>
     </div>
-    #} 
     <div class="m-5 d-flex justify-content-around">
         <button class="btn w-100" name="buttonName" value="Submit">Sauvegarder</button>
     </div> 

@@ -56,7 +56,7 @@ class ApCatalogFilesVb
      * @Vich\UploadableField(mapping="model_vb_files", fileNameProperty="file_name")
      * @var File
      * @Assert\File(
-     * maxSize = "4M",
+     * maxSize = "10M",
      * maxSizeMessage = "Le fichier est trop lourd ({{ size }} {{ suffix }}). Maximum: {{ limit }} {{ suffix }}",
      * mimeTypes = {"application/pdf", "application/x-pdf", "image/jp2", "image/jpg", "image/jpeg", "image/png"},
      * mimeTypesMessage = "Upload de fichier PDF JPEG ou JPG valide"
@@ -78,6 +78,11 @@ class ApCatalogFilesVb
      * @ORM\Column(type="datetime")
      */
     private $created_at;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     public function getId(): ?int
     {
@@ -206,6 +211,18 @@ class ApCatalogFilesVb
     public function getImageFile(): ?File
     {
         return $this->imageFile;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
 }

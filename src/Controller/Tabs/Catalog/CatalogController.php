@@ -97,13 +97,13 @@ class CatalogController extends AbstractController
     return $this->render('tabs/Catalog/index/index.html.twig',  [
       //BP
       'ap_catalog_model_bps' => $apCatalogModelBpRepository->findAll(),
-      'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAll(),
+      'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAllOrderName(),
       'ap_catalog_files_bps' => $apCatalogFilesBpRepository->findAll(),
       'errors' => $errors,
       'errorsCustomer' => $errorsCustomer,
       'tabName' => $tabName,
       //VB
-      'ap_catalog_case_vbs' => $apCatalogCaseVbRepository->findAll(),
+      'ap_catalog_case_vbs' => $apCatalogCaseVbRepository->findAllOrderName(),
       'tabName2' => $tabName2,
       'errorsPack' => $errorsPack,
     ]);

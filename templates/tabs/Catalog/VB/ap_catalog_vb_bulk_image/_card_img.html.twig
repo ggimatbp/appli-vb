@@ -1,0 +1,50 @@
+{% for bulk_image in files %}
+    {% if bulk_image.fileType == "pdf" %}
+    {% else %}
+    <div
+        class="{% if bulk_image.archive == 1 %} archived {% endif %} card card-design {{'card' ~ bulk_image.id }}">
+        <span type="button" class="catalog-card-img btn-launch-modal" data-img-id="{{bulk_image.id}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <img style="object-fit: cover" src="{{ vich_uploader_asset(bulk_image, 'imageFile') }}" class="h-100 catalog-img" alt="model image upload">
+        </span>
+    
+        <div class="card-body card-body-design">
+            <span class="d-flex flex-column justify-content-between">
+                
+                    <span class="d-flex justify-content-center card-title">{{ bulk_image.name }}</span>
+                        <span class="d-flex justify-content-around">
+                            {% for ap_access in app.user.RoleId.apAccesses %}
+                                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                    <a href="{{ path('catalog_vb_bulk_image_edit', {'id': bulk_image.id}) }}">
+                                        <i class="primary-color fas fa-pencil-alt"></i>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                                {% for ap_access in app.user.RoleId.apAccesses %}
+                                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                    <form name="archive_bulk_{{bulk_image.id}}" method="post" action="{{ path('catalog_vb_bulk_image_archive', {'id': bulk_image.id}) }}" class="hover">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ bulk_image.id) }}">
+                                        <span class="primary-color"><i onclick="document.forms['archive_bulk_{{bulk_image.id}}'].submit();" class="fas fa-file-archive"></i></span>
+                                    </form>
+                                {% endif %}
+                            {% endfor %} 
+                            <!-- Button trigger delete modal -->
+                            {% for ap_access in app.user.RoleId.apAccesses %}
+                                {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                                    <span type="button" data-bs-toggle="modal" data-bs-target="#deleteModalVb" class="delete-btn-files primary-color" data-file-img-id="{{bulk_image.id}}">
+                                        <i class="fas fa-times"></i>
+                                    </span>	
+                                {% endif %}
+                            {% endfor %}
+                    </span>
+            </span>
+            <p class="card-text d-flex justify-content-around">
+
+                <small class="text-muted">{{ bulk_image.createdAt|format_datetime('short', 'short', locale='fr') }}</small>
+                    
+            </p>
+        </div>
+    </div>
+    {% endif %}
+{% else %}
+    <span colspan="7">Pas de résultats</td>
+{% endfor %}

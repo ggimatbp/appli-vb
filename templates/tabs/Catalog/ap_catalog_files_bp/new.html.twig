@@ -8,7 +8,7 @@
 
     {% for ap_access in app.user.RoleId.apAccesses %}
     	{% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
-            <div class="m-5 w-100 d-flex justify-content-around">
+            <div class="my-5 w-100 d-flex justify-content-around">
                 <a class="btn" href="{{ path('ap_catalog_model_bp_show', {'id': sector_id}) }}">Retour</a>
                 <div></div>
             </div>

@@ -77,6 +77,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $apCatalogFilesVbs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApInformationParapher::class, mappedBy="User")
+     */
+    private $apInformationParaphers;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApCatalogVbBulkImage::class, mappedBy="user")
+     */
+    private $apCatalogVbBulkImages;
+
 
     // /**
     //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="user")
@@ -89,6 +99,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->apCatalogFilesBpHistories = new ArrayCollection();
         $this->apCatalogFilesVbs = new ArrayCollection();
         $this->logs = new ArrayCollection();
+        $this->apInformationParaphers = new ArrayCollection();
+        $this->apCatalogVbBulkImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -337,6 +349,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($apCatalogFilesVb->getUser() === $this) {
                 $apCatalogFilesVb->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApInformationParapher>
+     */
+    public function getApInformationParaphers(): Collection
+    {
+        return $this->apInformationParaphers;
+    }
+
+    public function addApInformationParapher(ApInformationParapher $apInformationParapher): self
+    {
+        if (!$this->apInformationParaphers->contains($apInformationParapher)) {
+            $this->apInformationParaphers[] = $apInformationParapher;
+            $apInformationParapher->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApInformationParapher(ApInformationParapher $apInformationParapher): self
+    {
+        if ($this->apInformationParaphers->removeElement($apInformationParapher)) {
+            // set the owning side to null (unless already changed)
+            if ($apInformationParapher->getUser() === $this) {
+                $apInformationParapher->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApCatalogVbBulkImage>
+     */
+    public function getApCatalogVbBulkImages(): Collection
+    {
+        return $this->apCatalogVbBulkImages;
+    }
+
+    public function addApCatalogVbBulkImage(ApCatalogVbBulkImage $apCatalogVbBulkImage): self
+    {
+        if (!$this->apCatalogVbBulkImages->contains($apCatalogVbBulkImage)) {
+            $this->apCatalogVbBulkImages[] = $apCatalogVbBulkImage;
+            $apCatalogVbBulkImage->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApCatalogVbBulkImage(ApCatalogVbBulkImage $apCatalogVbBulkImage): self
+    {
+        if ($this->apCatalogVbBulkImages->removeElement($apCatalogVbBulkImage)) {
+            // set the owning side to null (unless already changed)
+            if ($apCatalogVbBulkImage->getUser() === $this) {
+                $apCatalogVbBulkImage->setUser(null);
             }
         }
 

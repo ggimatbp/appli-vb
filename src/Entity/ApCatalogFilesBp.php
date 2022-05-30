@@ -40,7 +40,7 @@ class ApCatalogFilesBp
      * @Vich\UploadableField(mapping="model_bp_files", fileNameProperty="fileName")
      * @var File
      * @Assert\File(
-     * maxSize = "4M",
+     * maxSize = "10M",
      * maxSizeMessage = "Le fichier est trop lourd ({{ size }} {{ suffix }}). Maximum: {{ limit }} {{ suffix }}",
      * mimeTypes = {"application/pdf", "application/x-pdf", "image/jp2", "image/jpg", "image/jpeg", "image/png"},
      * mimeTypesMessage = "Upload de fichier PDF JPEG ou JPG valide"

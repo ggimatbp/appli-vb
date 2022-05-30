@@ -33,7 +33,11 @@
                     {% endif %}
                 {% endfor %}
             </div>
-            {{ include('tabs/information/qse/sectionArchived.html.twig') }}
+            {% for ap_access in app.user.RoleId.apAccesses %}
+                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                {{ include('tabs/information/qse/sectionArchived.html.twig') }}
+                {% endif %}
+            {% endfor %}
         {% endif %}
     {% else %}
         <p>Pas de parent</p>

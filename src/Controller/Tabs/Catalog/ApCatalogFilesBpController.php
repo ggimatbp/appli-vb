@@ -106,45 +106,32 @@ class ApCatalogFilesBpController extends AbstractController
         $fileBefore = $apCatalogFilesBp->getImageFile();
         $form = $this->createForm(ApCatalogFilesBpEditType::class, $apCatalogFilesBp);
         $form->handleRequest($request);
+        $ifNewImage = false;
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $imgFile = $apCatalogFilesBp->getImageFile();
-            //
-            // $sector = $ApSectorBpRepository->find($sectorId);
-            // $model = $sector->getModel();
-            // $apCatalogFilesBp->setModel($model);
-            // $apCatalogFilesBp->setRelation($sector);
-            // $imgFile = $apCatalogFilesBp->getImageFile();
-            // $fileExtension =  $imgFile->guessExtension();
-
-            // $apCatalogFilesBp->setUser($this->getUser());
-            // $apCatalogFilesBp->setCreatedAt(new \DateTime());
-            // $apCatalogFilesBp->setFileSize(filesize($imgFile)/1024);
-            
-            // $apCatalogFilesBp->setFileType($fileExtension);
-
-            //
             if($imgFile == $fileBefore){
             }else{
+                $ifNewImage = true;
                 $fileExtension =  $imgFile->guessExtension();
                 $apCatalogFilesBp->setFileType($fileExtension);
+                
+                if($fileExtension == "pdf"){}else{
+                    $width = getimagesize($imgFile)[0];
+                    $height = getimagesize($imgFile)[1];                   
+                };  
             }
-            $width = getimagesize($imgFile)[0];
-            $height = getimagesize($imgFile)[1];
+            // dd($apCatalogFilesBp);
             $manager = $doctrine->getManager();
             $manager->persist($apCatalogFilesBp);
             $manager->flush();
-            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName(), $width, $height);};
             $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'edit');
-            // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-            // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-            // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-            // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-            // $ApCatalogFilesBpHistory->setAction("edit");
-            // $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
-            // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-            // $manager->persist($ApCatalogFilesBpHistory);
-            // $this->getDoctrine()->getManager()->flush();
+
+            if($ifNewImage == true){
+                if($fileExtension == "pdf"){}else{
+                    $intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName(), $width, $height);
+                };
+            }
 
             return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
@@ -155,6 +142,8 @@ class ApCatalogFilesBpController extends AbstractController
             'tabName' => $tabName,
         ]);
     }
+
+
 
     /**
      * @Route("/{id}", name="ap_catalog_files_bp_delete", methods={"POST"})
