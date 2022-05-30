@@ -16,6 +16,8 @@ use App\Repository\ApInformationFilesRepository;
 class InformationController extends AbstractController
 {
 
+  public const TAB_INF = "Information";
+
    /**
    * @Route("/", name="index")
    */
@@ -25,12 +27,13 @@ class InformationController extends AbstractController
     $recentQseFiles = $apInformationFilesRepository->findRecentQseFiles();
     $lastRhFile = $apInformationFilesRepository->findLastRhFiles();
     $lastQseFile = $apInformationFilesRepository->findLastQseFiles();
-
+    $tabName = self::TAB_INF;
     return $this->render('tabs/information/index.html.twig', [
       'rh_files' => $recentRhFiles,
       'qse_files' => $recentQseFiles,
       'rh_file' => $lastRhFile,
-      'qse_file' => $lastQseFile
+      'qse_file' => $lastQseFile,
+      'tabName' => $tabName,
   ]);
   }
 }
