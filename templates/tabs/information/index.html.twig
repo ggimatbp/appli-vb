@@ -5,7 +5,7 @@
 {% endblock %}
 {% block body %}
 {% for ap_access in app.user.RoleId.apAccesses %}
-    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
         <div class="aprole-global-container">
             <h1>Information récentes</h1>
             <div class="row mt-3">
