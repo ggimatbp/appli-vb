@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApInformationParapher{% endblock %}
+
+{% block body %}
+    <h1>ApInformationParapher</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ap_information_parapher.id }}</td>
+            </tr>
+            <tr>
+                <th>DateTime</th>
+                <td>{{ ap_information_parapher.dateTime ? ap_information_parapher.dateTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{ ap_information_parapher.state ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ap_information_parapher_index') }}">back to list</a>
+
+    <a href="{{ path('app_ap_information_parapher_edit', {'id': ap_information_parapher.id}) }}">edit</a>
+
+    {{ include('ap_information_parapher/_delete_form.html.twig') }}
+{% endblock %}

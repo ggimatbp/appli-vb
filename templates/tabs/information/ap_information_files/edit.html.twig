@@ -5,60 +5,54 @@
 {% block title %}Modification de document{% endblock %}
 
 {% block body %}
-<div class=" m-5 w-100 d-flex justify-content-around">
-    {% if state == 1 %}
-        <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
-    {% else %}
-        <a class="btn" href="{{ path('information_qse_index') }}">Retour</a>
-    {% endif %}
-    <div></div>
-</div>
-<span class="form-container-with-title">
-    {% for ap_access in app.user.RoleId.apAccesses %}
-        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-            <h1 class="catalog-h1 mt-2">Modification du document: {{ap_information_file.name}}</h1>
-            {# {{ include('tabs/information/ap_information_files/_form.html.twig', {'button_label': 'Modifier'}) }} #}
-
-                {# {{ include('tabs/Catalog/ap_catalog_files_bp/_form.html.twig', {'button_label': 'Update'}) }} #}
-                {# {{ include('tabs/Catalog/ap_catalog_files_bp/_form.html.twig') }} #}
-            <span class="form-new-container">
-                {{ form_start(form) }}
-                    <div class="row">
-                        {{ form_row(form.Name, { 'label': 'Nom' }) }}
-                    </div>
-                    <div class="row">
-                        {# {{ form_row(form.imageFile, {
-                            attr: {
-                                'placeholder': 'Select an article image',
-                                'class' : 'imageUpload'
-                            }
-                        }) }} #}
-                        {{ form_label(form.imageFile, 'Choisissez un document à transférer') }}
-                        {{ form_widget(form.imageFile, {
-                            attr: {
-                                    'class' : 'imageUpload'
-                                }
-                            }) }}
-                    </div>
-                        
-
-                    <div class="d-flex justify-content-around">
-                    <button class="m-3 btn">{{ button_label|default('Sauvegarder') }}</button>
-
-
-                {{ form_end(form) }} 
-
-
-{#  #}
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+        <div class=" my-5 w-100 d-flex justify-content-around">
+            {% if state == 1 %}
+                <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
+            {% else %}
+                <a class="btn" href="{{ path('information_qse_index') }}">Retour</a>
+            {% endif %}
+            <div></div>
+        </div>
+        <span class="form-container-with-title">
             {% for ap_access in app.user.RoleId.apAccesses %}
-                {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                    <span class="m-3">
-                        {{ include('tabs/information/ap_information_files/_delete_form.html.twig') }}
-                    </span>
+                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                    <h1 class="catalog-h1 mt-2">Modification du document: {{ap_information_file.name}}</h1>
+
+                    <span class="form-new-container">
+                        {{ form_start(form) }}
+                            <div class="row">
+                                {{ form_row(form.Name, { 'label': 'Nom' }) }}
+                            </div>
+                            <div class="row">
+
+                                {{ form_label(form.imageFile, 'Choisissez un document à transférer') }}
+                                {{ form_widget(form.imageFile, {
+                                    attr: {
+                                            'class' : 'imageUpload'
+                                        }
+                                    }) }}
+                            </div>
+                                
+
+                            <div class="d-flex justify-content-around">
+                            <button class="m-3 btn">{{ button_label|default('Sauvegarder') }}</button>
+
+
+                        {{ form_end(form) }} 
+
+                    {% for ap_access in app.user.RoleId.apAccesses %}
+                        {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                            <span class="m-3">
+                                {{ include('tabs/information/ap_information_files/_delete_form.html.twig') }}
+                            </span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
                 {% endif %}
             {% endfor %}
-        </div>
-        {% endif %}
-    {% endfor %}
-</span>
+        </span>
+    {% endif %}
+{% endfor %}
 {% endblock %}

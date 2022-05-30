@@ -12,6 +12,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ApInformationSectionRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Service\GlobalHistoryService;
+use App\Entity\ApInformationParapher;
+use App\Repository\UserRepository;
+use App\Repository\ApInformationParapherRepository;
+
+
 
 /**
  * @Route("/information/files")
@@ -48,7 +53,7 @@ class ApInformationFilesController extends AbstractController
     /**
      * @Route("/new/{id}", name="information_files_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, ApInformationSectionRepository $sectionRepository, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService): Response
+    public function new(Request $request, ApInformationSectionRepository $sectionRepository, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService, UserRepository $userRepo): Response
     {
         $apInformationFile = new ApInformationFiles();
         $form = $this->createForm(ApInformationFilesType::class, $apInformationFile);
@@ -65,7 +70,7 @@ class ApInformationFilesController extends AbstractController
                 $actual_tab = self::TAB_REF_QSE;
             }
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $apInformationFile->setSection($section);
             $imgFile = $apInformationFile->getImageFile();
             
@@ -77,13 +82,29 @@ class ApInformationFilesController extends AbstractController
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apInformationFile);
            // dd($apInformationFile);
-            $entityManager->flush();
+           $entityManager->flush();
             $globalHistoryService->setInHistory($apInformationFile, 'new');
+            if(isset($_POST['parapher']))
+            {
+                $allUser = $userRepo->findAll();
+
+                foreach($allUser as $user){
+
+                    $apInformationParapher = new ApInformationParapher();
+                    $apInformationParapher->setFileId($apInformationFile);
+                    $apInformationParapher->setUser($user);
+                    $entityManager->persist($apInformationParapher);
+                }
+
+            }
+            $entityManager->flush();
+
             if($section->getState() === 2){
                 return $this->redirectToRoute('information_qse_index', [], Response::HTTP_SEE_OTHER);
             }else{
                 return $this->redirectToRoute('information_rh_index', [], Response::HTTP_SEE_OTHER);
             }
+         
         }
 
         return $this->renderForm('tabs/information/ap_information_files/new.html.twig', [
@@ -99,8 +120,12 @@ class ApInformationFilesController extends AbstractController
     /**
      * @Route("/{id}", name="information_files_show", methods={"GET"})
      */
-    public function show(ApInformationFiles $apInformationFile): Response
+    public function show(ApInformationFiles $apInformationFile, ApInformationParapherRepository $apInformationParapherRepo): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+        $fileToParaph = $apInformationParapherRepo->findByUserAndFile($user, $apInformationFile);
+
         $sectionState = $apInformationFile->getSection()->getState();
         if ($sectionState == 1){
             $tabName = self::TAB_RH;
@@ -112,7 +137,8 @@ class ApInformationFilesController extends AbstractController
         return $this->render('tabs/information/ap_information_files/show.html.twig', [
             'file' => $apInformationFile,
             'tabName' => $tabName,
-            'actual_tab' => $actual_tab
+            'actual_tab' => $actual_tab,
+            'parapher' => $fileToParaph
         ]);
     }
 
@@ -194,5 +220,29 @@ class ApInformationFilesController extends AbstractController
         }else{
             return $this->redirectToRoute('information_qse_index', [], Response::HTTP_SEE_OTHER);
         }
+    }
+
+    /**
+    * @route("/parapher/{id}", methods={"GET"})
+    */
+
+    public function parapher(Request $request,GlobalHistoryService $globalHistoryService, ApInformationParapherRepository $apInformationParapherRepo) : response
+    {
+        $submittedToken = $request->get('editCsrf');
+        // 'search-item' is the same value used in the template to generate the token
+
+        $parapherId = $request->get('id');
+        $parapher = $apInformationParapherRepo->find($parapherId);
+            if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
+                $globalHistoryService->setInHistory($parapher, 'read and approved');
+                $parapher->setState(1);
+                $parapher->setDateTime(new \DateTime());
+                $apInformationParapherRepo->add($parapher);
+
+
+            return $this->json(["code" => 200,
+            "message" => "Lu et approuvé"], 200);
+            }
+
     }
 }

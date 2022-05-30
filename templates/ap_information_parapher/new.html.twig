@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ApInformationParapher{% endblock %}
+
+{% block body %}
+    <h1>Create new ApInformationParapher</h1>
+
+    {{ include('ap_information_parapher/_form.html.twig') }}
+
+    <a href="{{ path('app_ap_information_parapher_index') }}">back to list</a>
+{% endblock %}

@@ -39,10 +39,16 @@ class ApCatalogCaseVb
      */
     private $apCatalogFilesVbs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApCatalogVbBulkImage::class, mappedBy="caseIs")
+     */
+    private $apCatalogVbBulkImages;
+
     public function __construct()
     {
         $this->apSectorVbs = new ArrayCollection();
         $this->apCatalogFilesVbs = new ArrayCollection();
+        $this->apCatalogVbBulkImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,6 +136,36 @@ class ApCatalogCaseVb
                 $apCatalogFilesVb->setCaseId(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApCatalogVbBulkImage>
+     */
+    public function getApCatalogVbBulkImages(): Collection
+    {
+        return $this->apCatalogVbBulkImages;
+    }
+
+    public function addApCatalogVbBulkImage(ApCatalogVbBulkImage $apCatalogVbBulkImage): self
+    {
+        if (!$this->apCatalogVbBulkImages->contains($apCatalogVbBulkImage)) {
+            $this->apCatalogVbBulkImages[] = $apCatalogVbBulkImage;
+            $apCatalogVbBulkImage->setCaseIs($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApCatalogVbBulkImage(ApCatalogVbBulkImage $apCatalogVbBulkImage): self
+    {
+        if ($this->apCatalogVbBulkImages->removeElement($apCatalogVbBulkImage)) {
+            // set the owning side to null (unless already changed)
+            if ($apCatalogVbBulkImage->getCaseIs() === $this) {
+                $apCatalogVbBulkImage->setCaseIs(null);
+            }
+        }
+
         return $this;
     }
 }

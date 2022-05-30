@@ -7,6 +7,7 @@ use App\Form\ApCatalogCaseVbType;
 use App\Repository\ApCatalogCaseVbRepository;
 use App\Repository\ApSectorVbRepository;
 use App\Repository\ApCatalogFilesVbRepository;
+use App\Repository\ApCatalogVbBulkImageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,16 +34,6 @@ class ApCatalogCaseVbController extends AbstractController
         ]);
     }
 
-
-    // /**
-    //  * @Route("/sectorByCase", name="sector_by_case_vb", methods={"GET"})
-    //  */
-    // public function indexSectionByCase(ApCatalogCaseVbRepository $apCatalogCaseVbRepository): Response
-    // {
-    //     return $this->render('tabs/Catalog/VB/ap_catalog_case_vb/index.html.twig', [
-    //         'ap_catalog_case_vbs' => $apCatalogCaseVbRepository->findAll(),
-    //     ]);
-    // }
     
     /**
      * @Route("/new", name="ap_catalog_case_vb_new", methods={"GET","POST"})
@@ -73,15 +64,17 @@ class ApCatalogCaseVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_case_vb_show", methods={"GET"})
      */
-    public function show(ApCatalogCaseVb $apCatalogCaseVb, ApSectorVbRepository $apSectorVbRepository): Response
+    public function show(ApCatalogCaseVb $apCatalogCaseVb, ApSectorVbRepository $apSectorVbRepository, ApCatalogVbBulkImageRepository $bulkImageRepository): Response
     {
         $tabName = self::TAB_VB;
         $id = $apCatalogCaseVb->getId();
         $apSectorVbs = $apSectorVbRepository->findSectionByCase($id);
+        $bulkImage = $bulkImageRepository->findByCase($id);
         return $this->render('tabs/Catalog/VB/ap_catalog_case_vb/show.html.twig', [
             'ap_catalog_case_vb' => $apCatalogCaseVb,
             'tabName' => $tabName,
-            'ap_sector_vbs' => $apSectorVbs
+            'ap_sector_vbs' => $apSectorVbs,
+            'files' => $bulkImage
         ]);
     }
 
@@ -160,5 +153,7 @@ class ApCatalogCaseVbController extends AbstractController
 
         return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
     }
+
+    
 
 }

@@ -11,15 +11,6 @@
 {% for ap_access in app.user.RoleId.apAccesses %}
     {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
                 
-{# test #}
-
-<!-- Button trigger modal -->
-{# <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button> #}
-
-{# <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> #}
   <div class="modal-dialog modal-fullscreen d-flex justify-content-around">
     <div class="modal-content">
       <div class="modal-header top-bar d-flex justify-content-around mt-1">
@@ -46,18 +37,18 @@
 
         <input class="pdfFileRoad" type="hidden" data-src="{{vich_uploader_asset(file)}}">
 
-            {# <div class="top-bar d-flex justify-content-around mt-1">
-
-                <button class="btn prev-page">Précédent</button>
-                
-                <span class="align-items-center d-flex page-info">
-                    <span class='p-1 page-num'></span> sur <span class="p-1 page-count"></span>
-                </span>
-                <button class="btn next-page" >Suivant</button>
-            </div> #}
             <span class="d-flex justify-content-around">
             <canvas id="pdf-render"></canvas>
             </span>
+
+            {% if parapher is not null and parapher.state == 0 %}
+
+            <div data-id = "{{parapher.id}}" class="my-2 button-on-hold btn " name="parapher" id="btnParapher">Lu et approuvé <i id="parapher-check" class="fas fa-false"></i></div>
+
+            {% elseif parapher is not null and parapher.state == 1 %}
+             <div class="my-2 button-success">lu et approuvé <i class="fas fa-check"></i></div> 
+            {% endif %}
+
             <div class="d-flex justify-content-between">
             {% if file.section.state == 1 %}
             <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
@@ -75,47 +66,11 @@
                 {% endif %}
             {% endfor %}
             </div>
-                {# <div class="top-bar d-flex justify-content-around mt-1">
-
-                <button class="btn prev-page">Précédent</button>
-                
-                <span class="align-items-center d-flex page-info">
-                    <span class='p-1 page-num' ></span> sur <span class="p-1 page-count" ></span>
-                </span>
-                <button class="btn next-page" >Suivant</button>
-            </div> #}
+            <input id="csrf-edit" data-state="{% if parapher.state is defined %}{{parapher.state}}{% else %}{% endif %}"  type="hidden" name="token" value="{{ csrf_token('edit-item') }}"/>
       </div>
     </div>
   </div>
 </div>
-
-{# fin du test #}
-
-        <!--  pdf display -->
-{# 
-        <input class="pdfFileRoad" type="hidden" data-src="{{vich_uploader_asset(file)}}">
-
-            <div class="top-bar d-flex justify-content-around mt-1">
-
-                <button class="btn prev-page">Précédent</button>
-                
-                <span class="align-items-center d-flex page-info">
-                    <span class='p-1 page-num'></span> sur <span class="p-1 page-count"></span>
-                </span>
-                <button class="btn next-page" >Suivant</button>
-            </div>
-            <span class="d-flex justify-content-around">
-            <canvas id="pdf-render"></canvas>
-            </span>
-                <div class="top-bar d-flex justify-content-around mt-1">
-
-                <button class="btn prev-page">Précédent</button>
-                
-                <span class="align-items-center d-flex page-info">
-                    <span class='p-1 page-num' ></span> sur <span class="p-1 page-count" ></span>
-                </span>
-                <button class="btn next-page" >Suivant</button>
-            </div> #}
         {% endif %}
     {% endfor %}
 {% endblock %}

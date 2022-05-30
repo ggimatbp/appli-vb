@@ -1,55 +1,85 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Catalog Case Vb{% endblock %}
+{% block title %}Catalog Case Vb
+{% endblock %}
 
 {% block javascripts %}
-{{ encore_entry_script_tags('apCatalogCustomerShow') }}
+    {{ encore_entry_script_tags('apCatalogModelBpShow') }}
+	{{ encore_entry_script_tags('apCatalogCustomerShow') }}
 {% endblock %}
 
 {% block body %}
-    {% for ap_access in app.user.RoleId.apAccesses %}
-        {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
-            <div class="aprole-global-container">
-                <span class="d-flex">
-                    <h1 class="catalog-h1">{{ ap_catalog_case_vb.name }}</h1>
-                </span>
-                <span class="d-flex justify-content-around catalog-customer-container-bp">
-                    <a class="btn catalog-content-customer-container-bp" href="{{ path('catalog_index') }}?roleback=2">Retour</a>
-                        {% for ap_access in app.user.RoleId.apAccesses %}
-                            {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
-                                <a class="btn catalog-content-customer-container-bp" href="{{ path('ap_sector_vb_new', {'id': ap_catalog_case_vb.id}) }}">Nouveau secteur</a>
-                            {% endif %}
-                        {% endfor %}
-                        {% for ap_access in app.user.RoleId.apAccesses %}
-                            {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-                            <a class="btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_case_vb_edit', {'id': ap_catalog_case_vb.id}) }}">Modifier</a>
-                            {% endif %}
-                        {% endfor %}
-                        {% for ap_access in app.user.RoleId.apAccesses %}
-                            {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                                {{ include('tabs/Catalog/VB/ap_catalog_case_vb/_modal_delete.html.twig') }}
-                            {% endif %}
-                        {% endfor %}
-                        {% for ap_access in app.user.RoleId.apAccesses %}
-                            {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-                                <form class="catalog-content-customer-container-bp" name="archive{{ap_catalog_case_vb.id}}" method="post" action="{{ path('ap_catalog_case_vb_archive', {'id': ap_catalog_case_vb.id}) }}" >
-                                    <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_case_vb.id) }}">
-                                    <button class="w-100 btn">{% if  ap_catalog_case_vb.archive == 0  %}Archiver{% else %}Désarchiver{% endif %}</button>
-                                </form>
-                            {# <a class="btn" href="{{ path('ap_catalog_case_vb_archive', {'id': ap_catalog_case_vb.id}) }}">Archiver</a> #}
-                            {% endif %}
-                        {% endfor %}
-                </span>
-                <span class="catalog-grid-customer">
-                {% for ap_sector_vb in ap_sector_vbs %}
-                        <span class="p-2 d-flex flex-column"><a class="{% if ap_sector_vb.archive == 1  %} archived {% endif %} folder-change" href="{{ path('ap_sector_vb_show', {'id': ap_sector_vb.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
-                            <h4 class="overflow-hidden">{{ap_sector_vb.name}}</h4>
-                        </span>
-                    {% else %}
-                        <p>Aucun résultat</p>
-                {% endfor %}
-                </span>
-            </div>
-        {% endif %}
-    {% endfor %}
+	{% for ap_access in app.user.RoleId.apAccesses %}
+		{% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
+			<div class="aprole-global-container">
+				<span class="d-flex">
+					<h1 class="catalog-h1">{{ ap_catalog_case_vb.name }}</h1>
+				</span>
+				<span class="d-flex justify-content-around catalog-customer-container-bp">
+					<a class="btn catalog-content-customer-container-bp" href="{{ path('catalog_index') }}?roleback=2">Retour</a>
+					{% for ap_access in app.user.RoleId.apAccesses %}
+						{% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+							<a class="btn catalog-content-customer-container-bp" href="{{ path('ap_sector_vb_new', {'id': ap_catalog_case_vb.id}) }}">Nouveau secteur</a>
+						{% endif %}
+					{% endfor %}
+					{% for ap_access in app.user.RoleId.apAccesses %}
+						{% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+							<a class="btn catalog-content-customer-container-bp" href="{{ path('catalog_vb_bulk_image_new', {'id': ap_catalog_case_vb.id}) }}">Nouveau fichier</a>
+						{% endif %}
+					{% endfor %}
+					{% for ap_access in app.user.RoleId.apAccesses %}
+						{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+							<a class="btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_case_vb_edit', {'id': ap_catalog_case_vb.id}) }}">Modifier</a>
+						{% endif %}
+					{% endfor %}
+					{% for ap_access in app.user.RoleId.apAccesses %}
+						{% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+							{{ include('tabs/Catalog/VB/ap_catalog_case_vb/_modal_delete.html.twig') }}
+						{% endif %}
+					{% endfor %}
+					{% for ap_access in app.user.RoleId.apAccesses %}
+						{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+							<form class="catalog-content-customer-container-bp" name="archive{{ap_catalog_case_vb.id}}" method="post" action="{{ path('ap_catalog_case_vb_archive', {'id': ap_catalog_case_vb.id}) }}">
+								<input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_case_vb.id) }}">
+								<button class="w-100 btn">
+									{% if  ap_catalog_case_vb.archive == 0  %}Archiver{% else %}Désarchiver
+									{% endif %}
+								</button>
+							</form>
+							{# <a class="btn" href="{{ path('ap_catalog_case_vb_archive', {'id': ap_catalog_case_vb.id}) }}">Archiver</a> #}
+						{% endif %}
+					{% endfor %}
+				</span>
+				<span class="catalog-grid-customer">
+					{% for ap_sector_vb in ap_sector_vbs %}
+						<span class="p-2 d-flex flex-column">
+							<a class="{% if ap_sector_vb.archive == 1 %} archived {% endif %} folder-change" href="{{ path('ap_sector_vb_show', {'id': ap_sector_vb.id}) }}">
+								<i class="fas fa-folder fa-6x"></i>
+							</a>
+							<h4 class="overflow-hidden">{{ap_sector_vb.name}}</h4>
+						</span>
+					{% else %}
+						<p>Aucun résultat de secteur</p>
+					{% endfor %}
+
+
+				</span>
+
+			</div>
+		{% endif %}
+	{% endfor %}
+
+	{# region add bulck image #}
+<div id="allCardFromCatalogModelShowBp" class='d-flex justify-content-around flex-wrap'>    
+	{# region card image #}
+	{% set loopCarroussel = 0 %}
+	{{ include('tabs/Catalog/VB/ap_catalog_vb_bulk_image/_card_img.html.twig') }}
+	{# endregion card image #}
+</div>
+	{# regioncarroussel #}
+{{ include('tabs/Catalog/VB/ap_catalog_vb_bulk_image/_modal_carroussel.html.twig') }}
+	{# endregionCarroussel #}
+{{ include('tabs/Catalog/VB/ap_catalog_vb_bulk_image/_modal_delete_img.html.twig') }}
+	{# end region bulk image #}
 {% endblock %}
+

@@ -231,8 +231,12 @@ $('#allCardFromCatalogModelShowBp .delete-btn-files').each(function(){
 })
 
 
+
 //#region ajax delete
   //#region BP
+
+
+
 $('#deleteModal .delete-files-secure').each(function(){
     $(this).unbind('click').click(function (e) {
             let csrf = $("#fileIdToDelete").data('token')
@@ -244,8 +248,9 @@ $('#deleteModal .delete-files-secure').each(function(){
             //  $(this).parents('.card-design').remove();
 
             $.ajax({
-              url:'/ap/catalog/files/bp/delete/' + filesId,
-               type: "GET",
+              url: '/ap/catalog/files/bp/delete/' + filesId,
+
+              type: "GET",
               dataType: "json",
               data: {
                    "filesId": filesId,
@@ -266,6 +271,22 @@ $('#deleteModal .delete-files-secure').each(function(){
           })
 })
   //#endregion BP
+
+  //#region vb
+  
+    //#region road choice
+    let loc = $("#fileIdToDelete").data('localisation')
+    let route = "pensez_a_modifier_le_JS"
+    if(loc == "case"){
+      //bulk image
+      route = '/ap/catalog/vb/bulk/image/delete/'
+    } else {
+      // file vb
+      route = '/ap/catalog/files/vb/delete/'
+    }
+   //#endregion road choice
+
+
   $('#deleteModalVb .delete-files-secure').each(function(){
     $(this).unbind('click').click(function (e) {
 
@@ -274,11 +295,12 @@ $('#deleteModal .delete-files-secure').each(function(){
             // console.log(csrf)
             // let filesToDelete = $(this).parents('.card-design')
             let filesToDelete = $('.card' + filesId)
-            // console.log(filesToDelete)
+             console.log(route + filesId)
+             console.log($("#fileIdToDelete").val())
             //  $(this).parents('.card-design').remove();
 
             $.ajax({
-              url:'/ap/catalog/files/vb/delete/' + filesId,
+              url: route + filesId,
                type: "GET",
               dataType: "json",
               data: {
@@ -299,7 +321,7 @@ $('#deleteModal .delete-files-secure').each(function(){
           });
           })
 })
-  //#region VB
+
 
 
 

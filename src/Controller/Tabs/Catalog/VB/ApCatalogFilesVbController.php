@@ -4,6 +4,7 @@ namespace App\Controller\Tabs\Catalog\VB;
 
 use App\Entity\ApCatalogFilesVb;
 use App\Form\ApCatalogFilesVbType;
+use App\Form\ApCatalogFilesVbEditType;
 use App\Repository\ApCatalogFilesVbRepository;
 use App\Repository\ApSectorVbRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -67,7 +68,6 @@ class ApCatalogFilesVbController extends AbstractController
 
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogFilesVb);
-            dd($apCatalogFilesVb);
             $entityManager->flush();
             if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName(), $width,  $height);};            
             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'new');
@@ -100,24 +100,43 @@ class ApCatalogFilesVbController extends AbstractController
     public function edit(InterventionImage $intervention, Request $request, ApCatalogFilesVb $apCatalogFilesVb, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
     {
         $tabName = self::TAB_VB;
-        $form = $this->createForm(ApCatalogFilesVbType::class, $apCatalogFilesVb);
-        $form->handleRequest($request);
         $sector = $apCatalogFilesVb->getSector();
         $sectorId = $sector->getId();
-        $fileBefore = $apCatalogFilesVb->getImageFile();
-
+        $form = $this->createForm(ApCatalogFilesVbEditType::class, $apCatalogFilesVb);
+        $form->handleRequest($request);
+        $ifNewImage = false;
+        // dd($form);
         if ($form->isSubmitted() && $form->isValid()) {
+            $fileBefore = $apCatalogFilesVb->getImageFile();
             $imgFile = $apCatalogFilesVb->getImageFile();
-            if($imgFile == $fileBefore){
-            }else{
+            if($imgFile != NULL)
+            {            
                 $fileExtension =  $imgFile->guessExtension();
                 $apCatalogFilesVb->setFileType($fileExtension);
             }
-            $width = getimagesize($imgFile)[0];
-            $height = getimagesize($imgFile)[1];
-            $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'edit');
-            $doctrine->getManager()->flush();
-            if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName(), $width, $height);};
+
+            $manager = $doctrine->getManager();
+            if($imgFile == $fileBefore){
+            }else{
+                $ifNewImage = true;
+
+                dd($$fileExtension);
+                if($fileExtension == "pdf"){}else{
+                    $width = getimagesize($imgFile)[0];
+                    $height = getimagesize($imgFile)[1];                   
+                };  
+            }
+
+            $apCatalogFilesVb->setUpdatedAt(new \DateTime());
+            $manager->persist($apCatalogFilesVb);
+            $manager->flush();
+             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'edit');
+
+            if($ifNewImage == true){
+                if($fileExtension == "pdf"){}else{
+                    $intervention->resizeCatalogBpCarroussel($apCatalogFilesVb->getFileName(), $width, $height);
+                };
+            }
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId ], Response::HTTP_SEE_OTHER);
         }
 
@@ -136,15 +155,14 @@ class ApCatalogFilesVbController extends AbstractController
     {
         $sector = $apCatalogFilesVb->getSector();
         $sectorId = $sector->getId();
-
+        dd($sectorId);
         if ($this->isCsrfTokenValid('delete'.$apCatalogFilesVb->getId(), $request->request->get('_token'))) {
             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'delete');
             $entityManager = $doctrine->getManager();
             $entityManager->remove($apCatalogFilesVb);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('ap_sector_vb_show', ['id', $sectorId], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId ], Response::HTTP_SEE_OTHER);
     }
 
     /**

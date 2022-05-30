@@ -72,6 +72,16 @@ class ApInformationFiles
      */
     private $Archive = 0;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApInformationParapher::class, mappedBy="fileId")
+     */
+    private $apInformationParaphers;
+
+    public function __construct()
+    {
+        $this->apInformationParaphers = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -173,6 +183,36 @@ class ApInformationFiles
     public function setArchive(bool $Archive): self
     {
         $this->Archive = $Archive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApInformationParapher>
+     */
+    public function getApInformationParaphers(): Collection
+    {
+        return $this->apInformationParaphers;
+    }
+
+    public function addApInformationParapher(ApInformationParapher $apInformationParapher): self
+    {
+        if (!$this->apInformationParaphers->contains($apInformationParapher)) {
+            $this->apInformationParaphers[] = $apInformationParapher;
+            $apInformationParapher->setFileId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApInformationParapher(ApInformationParapher $apInformationParapher): self
+    {
+        if ($this->apInformationParaphers->removeElement($apInformationParapher)) {
+            // set the owning side to null (unless already changed)
+            if ($apInformationParapher->getFileId() === $this) {
+                $apInformationParapher->setFileId(null);
+            }
+        }
 
         return $this;
     }

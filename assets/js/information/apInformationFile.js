@@ -57,6 +57,11 @@ import $ from 'jquery';
             // document.querySelector('#page-num').textContent = num;
             let pageNumeroo = document.querySelectorAll('.page-num');
             pageNumeroo.forEach(element => element.innerText = num);
+            if(pageNum == pdfDoc.numPages && $('#csrf-edit').data('state') == 0)
+            {
+              document.getElementById('btnParapher').classList.replace('button-on-hold', 'btn');
+              document.getElementById('btnParapher').addEventListener('click', onClickAddParapher);
+            }
         })
     }
   
@@ -89,18 +94,20 @@ import $ from 'jquery';
     pageNum++;
     queuRenderPage(pageNum);
   }
-  
+
   // Get Document
   pdfjsLib.getDocument(urlPdf).promise.then(pdfDoc_ => {
     pdfDoc = pdfDoc_;
   
      let TotalpagesNumber = document.querySelectorAll('.page-count');
      TotalpagesNumber.forEach(element => element.textContent = pdfDoc.numPages)
-      renderPage(pageNum) 
+      renderPage(pageNum)
+
   });
   
+
   
-  // Button Events  
+
   // $('#prev-page' + $(this).data("id")).click(showPrevPage())
   // $('#next-page' + $(this).data("id")).click(showNextPage())
   // $('#prev-page' +  $(this).data("id")).click(showPrevPage());
@@ -117,7 +124,6 @@ import $ from 'jquery';
   
   
   
-  
   $('.btn-close-pdf-destroy').click(function(){
     // pageIsRendering = false;
     //  pdfDoc = null;
@@ -129,5 +135,40 @@ import $ from 'jquery';
   
   
   //#endregion pdf reader
+
+  //#region form
+    //#region parapher
+
+
+
+
+    function onClickAddParapher(e) {
+        e.preventDefault();
+        let editCsrf = $('#csrf-edit').val();
+        let parapherId = $('#btnParapher').data('id');
+        $.ajax({
+          type: 'GET',
+          url: '/information/files/parapher/' + parapherId,
+          dataType: 'json',
+          data: {
+            "editCsrf": editCsrf,
+            "parapherId": parapherId,
+          },
+          async: true,
+      
+          success: function (response) {
+          vNotify().success({ text: 'Ce document a été lu et approuvé.', title: 'Validé' });
+              // icone.classList.replace('fa-times-circle', 'fa-check-square');
+              // icone.classList.replace('text-danger', 'text-success');
+              document.getElementById('btnParapher').classList.replace('btn', 'button-success');
+              document.getElementById('parapher-check').classList.replace('fa-false', 'fa-check');
+          },
+          error: function () {
+            vNotify().error({ text: 'Vous allez commettre une terrible erreur !', title: 'Erreur' });
+          },
+        });
+      }
+    //#endregion
+  //#endregion
 
 

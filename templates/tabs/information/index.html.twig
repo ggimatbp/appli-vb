@@ -4,88 +4,92 @@
 {% include "_headerBrut2.html.twig" %}
 {% endblock %}
 {% block body %}
-<div class="aprole-global-container">
-    <h1>Information récentes</h1>
-    <div class="row mt-3">
-        <div class="col-4 mx-3">
-            <div class="list-group" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">RH</a>
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+        <div class="aprole-global-container">
+            <h1>Information récentes</h1>
+            <div class="row mt-3">
+                <div class="col-4 mx-3">
+                    <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">RH</a>
+                    </div>
+                </div>
+                <div class="col-7 tablist-custom-output">
+                    <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                        <ul>                    
+                            {% for file in rh_files %}
+                            <li>
+                                {{file.name}}
+                                <small class="text-muted">
+                                    {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
+                                </small>
+                                <a class="btn" href="{{ path('information_files_show', {'id': file.id}) }}">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </li>
+                            {% else %}
+                                {% if rh_file is empty %}
+                                    <li>Aucune information</li>
+                                {% else %}
+                                <li>
+                                    {{rh_file.name}}
+                                    <small class="text-muted">
+                                        {{rh_file.createdAt|format_datetime('full', 'short', locale='fr')}}
+                                    </small>
+                                    <a class="btn" href="{{ path('information_files_show', {'id': rh_file.id}) }}">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-7 tablist-custom-output">
-            <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                <ul>                    
-                    {% for file in rh_files %}
-                    <li>
-                        {{file.name}}
-                        <small class="text-muted">
-                            {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
-                        </small>
-                        <a class="btn" href="{{ path('information_files_show', {'id': file.id}) }}">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                    </li>
-                    {% else %}
-                        {% if rh_file is empty %}
-                            <li>Aucune information</li>
-                        {% else %}
-                        <li>
-                            {{rh_file.name}}
-                            <small class="text-muted">
-                                {{rh_file.createdAt|format_datetime('full', 'short', locale='fr')}}
-                            </small>
-                            <a class="btn" href="{{ path('information_files_show', {'id': rh_file.id}) }}">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="row mt-3">
-        <div class="col-4 mx-3">
-            <div class="list-group" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">QSE</a>
-            </div>
-        </div>
-        <div class="col-7 tablist-custom-output">
-            <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-            <ul>
-                {% for file in qse_files %}
-                <li>
-                    {{file.name}}
-                    <small class="text-muted">
-                        {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
-                    </small>
-                    <a class="btn" href="{{ path('information_files_show', {'id': file.id}) }}">
-                        <i class="fas fa-eye"></i>
-                    </a>
-                </li>
-                {% else %}
-                    {% if qse_file is empty %}
-                        <li>Aucune information</li>
-                    {% else %}
+            <div class="row mt-3">
+                <div class="col-4 mx-3">
+                    <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">QSE</a>
+                    </div>
+                </div>
+                <div class="col-7 tablist-custom-output">
+                    <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                    <ul>
+                        {% for file in qse_files %}
                         <li>
-                            {{qse_file.name}}
+                            {{file.name}}
                             <small class="text-muted">
-                                {{qse_file.createdAt|format_datetime('full', 'short', locale='fr')}}
+                                {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
                             </small>
-                            <a class="btn" href="{{ path('information_files_show', {'id': qse_file.id}) }}">
+                            <a class="btn" href="{{ path('information_files_show', {'id': file.id}) }}">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </li>
-                    {% endif %}
-                {% endfor %}
-                </ul>
-            </div>
+                        {% else %}
+                            {% if qse_file is empty %}
+                                <li>Aucune information</li>
+                            {% else %}
+                                <li>
+                                    {{qse_file.name}}
+                                    <small class="text-muted">
+                                        {{qse_file.createdAt|format_datetime('full', 'short', locale='fr')}}
+                                    </small>
+                                    <a class="btn" href="{{ path('information_files_show', {'id': qse_file.id}) }}">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    {% endif %}
+{% endfor %}
 {% endblock %}

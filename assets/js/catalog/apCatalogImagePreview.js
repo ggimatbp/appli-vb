@@ -20,7 +20,7 @@ import $ from 'jquery';
 
 // import 'bootstrap/js/dist/dropdown';
 
-//#endregion import
+//#endregion import  ap_catalog_vb_bulk_image_imageFile_file
 
 //#region image preview form
 let inpFile = 1
@@ -28,10 +28,21 @@ if (document.getElementById("ap_catalog_files_bp_imageFile_file"))
 {inpFile = document.getElementById("ap_catalog_files_bp_imageFile_file")}
 if(document.getElementById("ap_catalog_files_bp_edit_imageFile_file"))
 {inpFile = document.getElementById("ap_catalog_files_bp_edit_imageFile_file")}
+
+if (document.getElementById("ap_catalog_vb_bulk_image_imageFile_file"))
+{inpFile = document.getElementById("ap_catalog_vb_bulk_image_imageFile_file")}
+if(document.getElementById("ap_catalog_vb_bulk_image_edit_imageFile_file"))
+{inpFile = document.getElementById("ap_catalog_vb_bulk_image_edit_imageFile_file")}
+
 if (document.getElementById("ap_catalog_files_vb_imageFile_file"))
 {
    inpFile = document.getElementById
    ("ap_catalog_files_vb_imageFile_file")
+}
+if (document.getElementById("ap_catalog_files_vb_edit_imageFile_file"))
+{
+   inpFile = document.getElementById
+   ("ap_catalog_files_vb_edit_imageFile_file")
 }
  
 const previewContainer = document.getElementById("imagePreview")
