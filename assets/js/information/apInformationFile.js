@@ -57,10 +57,18 @@ import $ from 'jquery';
             // document.querySelector('#page-num').textContent = num;
             let pageNumeroo = document.querySelectorAll('.page-num');
             pageNumeroo.forEach(element => element.innerText = num);
-            if(pageNum == pdfDoc.numPages && $('#csrf-edit').data('state') == 0)
+            if(pageNum == pdfDoc.numPages)
             {
-              document.getElementById('btnParapher').classList.replace('button-on-hold', 'btn');
-              document.getElementById('btnParapher').addEventListener('click', onClickAddParapher);
+              if($('#csrf-edit').data('signature-state') == 0)
+              {
+                document.getElementById('btnSignature').classList.replace('button-on-hold', 'btn');
+                document.getElementById('btnSignature').addEventListener('click', onClickAddSignature);
+              }
+              if($('#csrf-edit').data('parapher-state') == 0)
+              {
+                document.getElementById('btnParapher').classList.replace('button-on-hold', 'btn');
+                document.getElementById('btnParapher').addEventListener('click', onClickAddParapher);
+              }
             }
         })
     }
@@ -137,11 +145,42 @@ import $ from 'jquery';
   //#endregion pdf reader
 
   //#region form
+
+      //#region viewed
+      function onClickAddViewed() {
+
+        let editCsrf = $('#csrf-edit').val();
+        let viewedId = $('#csrf-edit').data('viewed-id');
+        $.ajax({
+          type: 'GET',
+          url: '/information/files/viewed/' + viewedId,
+          dataType: 'json',
+          data: {
+            "editCsrf": editCsrf,
+            "viewedId": viewedId,
+          },
+          async: true,
+      
+          success: function (response) {
+          vNotify().success({ text: 'Ce document a été vue.', title: 'Vue' });
+              // icone.classList.replace('fa-times-circle', 'fa-check-square');
+              // icone.classList.replace('text-danger', 'text-success');
+              // document.getElementById('btnViewed').classList.replace('btn', 'button-success');
+              // document.getElementById('viewed-check').classList.replace('fa-false', 'fa-check');
+          },
+          error: function () {
+            vNotify().error({ text: 'Vous allez commettre une terrible erreur !', title: 'Erreur' });
+          },
+        });
+      }
+      if($('#csrf-edit').data('viewed-state') == 0)
+      {
+        onClickAddViewed();
+      }
+  
+      //#endregion viewed
+
     //#region parapher
-
-
-
-
     function onClickAddParapher(e) {
         e.preventDefault();
         let editCsrf = $('#csrf-edit').val();
@@ -168,7 +207,38 @@ import $ from 'jquery';
           },
         });
       }
-    //#endregion
+    //#endregion parapher
+    //#region signature
+    function onClickAddSignature(e) {
+      e.preventDefault();
+      let editCsrf = $('#csrf-edit').val();
+      let signatureId = $('#btnSignature').data('id');
+      $.ajax({
+        type: 'GET',
+        url: '/information/files/signature/' + signatureId,
+        dataType: 'json',
+        data: {
+          "editCsrf": editCsrf,
+          "signatureId": signatureId,
+        },
+        async: true,
+    
+        success: function (response) {
+        vNotify().success({ text: 'Ce document a été signé.', title: 'Validé' });
+            // icone.classList.replace('fa-times-circle', 'fa-check-square');
+            // icone.classList.replace('text-danger', 'text-success');
+            document.getElementById('btnSignature').classList.replace('btn', 'button-success');
+            document.getElementById('signature-check').classList.replace('fa-false', 'fa-check');
+        },
+        error: function () {
+          vNotify().error({ text: 'Vous allez commettre une terrible erreur !', title: 'Erreur' });
+        },
+      });
+    }
+
+
+    //#endregion signature
+
   //#endregion
 
 

@@ -40,14 +40,30 @@
             <span class="d-flex justify-content-around">
             <canvas id="pdf-render"></canvas>
             </span>
-
+            {# parapher #}
             {% if parapher is not null and parapher.state == 0 %}
-
-            <div data-id = "{{parapher.id}}" class="my-2 button-on-hold btn " name="parapher" id="btnParapher">Lu et approuvé <i id="parapher-check" class="fas fa-false"></i></div>
-
+                <div data-id = "{{parapher.id}}" class="my-2 button-on-hold btn " name="parapher" id="btnParapher">Lu et approuvé <i id="parapher-check" class="fas fa-false"></i>
+                </div>
             {% elseif parapher is not null and parapher.state == 1 %}
-             <div class="my-2 button-success">lu et approuvé <i class="fas fa-check"></i></div> 
+                <div class="my-2 button-success">
+                    lu et approuvé <i class="fas fa-check"></i>
+                </div>
             {% endif %}
+            {# end parapher #}
+
+            {# signature #}
+            {% if signature is not null and signature.state == 0 %}
+                <div data-id = "{{signature.id}}" class="my-2 button-on-hold btn " name="signature" id="btnSignature">signature <i id="signature-check" class="fas fa-false"></i>
+                </div>
+            {% elseif signature is not null and signature.state == 1 %}
+                <div class="my-2 button-success">
+                    signature <i class="fas fa-check"></i>
+                </div>
+            {% endif %}
+            {# end signature #}
+
+
+
 
             <div class="d-flex justify-content-between">
             {% if file.section.state == 1 %}
@@ -66,7 +82,7 @@
                 {% endif %}
             {% endfor %}
             </div>
-            <input id="csrf-edit" data-state="{% if parapher.state is defined %}{{parapher.state}}{% else %}{% endif %}"  type="hidden" name="token" value="{{ csrf_token('edit-item') }}"/>
+            <input id="csrf-edit" data-viewed-id="{% if viewed.state is defined %}{{viewed.id}}{% else %}{% endif %}" data-viewed-state="{% if viewed.state is defined %}{{viewed.state}}{% else %}2{% endif %}" data-signature-state="{% if signature.state is defined %}{{signature.state}}{% else %}2{% endif %}"  data-parapher-state="{% if parapher.state is defined %}{{parapher.state}}{% else %}2{% endif %}"  type="hidden" name="token" value="{{ csrf_token('edit-item') }}"/>
       </div>
     </div>
   </div>

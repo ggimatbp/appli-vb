@@ -22,11 +22,24 @@ class QseController extends AbstractController
    */
   public function index (ApInformationSectionRepository $sectionRepo, ApInformationFilesRepository $infoFileRepo, ApInformationParentSectionRepository $parentSectionRepo )
   {
+
     $tabName = self::TAB_NAME;
     $allSection = $sectionRepo->findAll();
-    $allFile = $infoFileRepo->findAll();
+
     $allParentSection = $parentSectionRepo->findAll();
-    // $tabName = self::TAB_NAME;
+    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+    $user = $this->getUser();
+    $accesses = $this->getUser()->getRoleId()->getApAccesses();
+    foreach ($accesses as $access) {
+      if($access->getTab()->getName() == $tabName ){
+        if($access->getDelete() == false){
+          $allFile = $infoFileRepo->findAllFilesByUserView($user);
+        }elseif($access->getDelete() == true){
+          $allFile = $infoFileRepo->findAll();
+        }
+      }
+
+    }
     return $this->render('tabs/information/qse/index.html.twig', [
       'all_section' => $allSection,
       'all_file' => $allFile,

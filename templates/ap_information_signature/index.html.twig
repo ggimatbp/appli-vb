@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApInformationSignature index{% endblock %}
+
+{% block body %}
+    <h1>ApInformationSignature index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DateTime</th>
+                <th>State</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ap_information_signature in ap_information_signatures %}
+            <tr>
+                <td>{{ ap_information_signature.id }}</td>
+                <td>{{ ap_information_signature.dateTime ? ap_information_signature.dateTime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ ap_information_signature.state ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_ap_information_signature_show', {'id': ap_information_signature.id}) }}">show</a>
+                    <a href="{{ path('app_ap_information_signature_edit', {'id': ap_information_signature.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ap_information_signature_new') }}">Create new</a>
+{% endblock %}
