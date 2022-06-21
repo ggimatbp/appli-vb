@@ -15,6 +15,14 @@
     width:95%;
 }
 
+.form-new-container-image{
+    padding:$gloabalPaddingContainer;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    width:95%;
+}
+
 //second container use for one input form
 .form-new-single{
     font-size: 1.5rem;
@@ -87,10 +95,26 @@
         justify-content: center;
         width:80%;
     }
+
+    .form-new-container-image{
+        padding:$gloabalPaddingContainer;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        width:80%;
+    }
  }
 
 @media (min-width: 768px) { 
     .form-new-container{
+        padding:$gloabalPaddingContainer;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        width:70%;
+    }
+
+    .form-new-container-image{
         padding:$gloabalPaddingContainer;
         display:flex;
         flex-direction: column;
@@ -107,6 +131,13 @@
         flex-direction: column;
         justify-content: center;
        width:500px;
+    }
+    .form-new-container-image{
+        padding:$gloabalPaddingContainer;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        width:500px;
     }
  }
 

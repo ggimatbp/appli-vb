@@ -20,6 +20,24 @@
     grid-gap: 20px;
 }
 
+.catalog-grid-packs{
+    margin: $catalogFileContainerMargin;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 300px);
+    justify-content: space-between;
+    grid-gap: 20px;
+}
+
+.catalog-hover-zoom{
+    transition: transform .2s;
+}
+
+.catalog-hover-zoom:hover{
+    -ms-transform: scale(1.2); /* IE 9 */
+    -webkit-transform: scale(1.2); /* Safari 3-8 */
+    transform: scale(1.2);
+}
+
 @media (max-width: 568px){
     .catalog-customer-container-bp{
         display: flex;

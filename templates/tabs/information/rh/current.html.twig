@@ -1,0 +1,49 @@
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+        <a class="btn" href="{{ path('information_parent_section_new_rh') }}">Nouvelle Catégorie</a>
+    {% endif %}
+{% endfor %}
+<div class="aprole-global-container">
+    {% set loop_rh = 0 %}
+    {% set fileEmpty = 0 %}
+    {% for parent in all_parent_section %}
+        {% if parent.state == 1 %}
+            {% for section in all_section  %}
+                {% if section.state == 1 and section.parentSection.id == parent.id %}
+                    {% for file in all_file %}
+                        {% if file.section.id == section.id and file.archive == 0 %}
+                            {% set fileEmpty = fileEmpty + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+            {% if fileEmpty == 0 %}
+            {% else %}
+                {% set fileEmpty = 0 %}
+                {% set loop_rh = loop_rh + 1 %}
+                    <h3 class="m-3">{{parent.name}}</h3>
+                    <div class="d-flex">
+                        {# {{ include('tabs/information/ap_information_parent_section/_delete_form.html.twig') }} #}
+                        {% for ap_access in app.user.RoleId.apAccesses %}
+                            {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                <a class="m-3 btn" href="{{ path('information_parent_section_edit', {'id': parent.id}) }}">Modifier</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% for ap_access in app.user.RoleId.apAccesses %}
+                            {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                            <a class="m-3 btn" href="{{ path('information_section_new_rh', {'id': parent.id}) }}">
+                                Nouvelle section
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+            {% endif %}
+            {# faire un includes #}
+            {{ include('tabs/information/rh/section.html.twig') }}
+            {# fin de l'include #}
+        {% endif %}
+    {% else %}
+        <p>Pas de parent</p>
+    {% endfor %}
+</div>

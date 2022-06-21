@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ApInformationSignature{% endblock %}
+
+{% block body %}
+    <h1>Create new ApInformationSignature</h1>
+
+    {{ include('ap_information_signature/_form.html.twig') }}
+
+    <a href="{{ path('app_ap_information_signature_index') }}">back to list</a>
+{% endblock %}

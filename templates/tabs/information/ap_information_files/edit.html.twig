@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+{% block navbar %}
+{% include "_headerBrutSharedLogic.html.twig" %}
+{% endblock %}
+{% block title %}Modification de document{% endblock %}
+{% block javascripts %}
+	{{ encore_entry_script_tags('apInformationForm') }}
+{% endblock %}
+{% block body %}
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+        <div class=" my-5 w-100 d-flex justify-content-around">
+            {% if state == 1 %}
+                <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
+            {% else %}
+                <a class="btn" href="{{ path('information_qse_index') }}">Retour</a>
+            {% endif %}
+            <div></div>
+        </div>
+        <span class="form-container-with-title">
+            {% for ap_access in app.user.RoleId.apAccesses %}
+                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                    <h1 class="catalog-h1 mt-2">Modification du document: {{ap_information_file.name}}</h1>
+
+                    <span class="form-new-container">
+                        {{ form_start(form) }}
+                            <div class="row">
+                                {{ form_row(form.Name, { 'label': 'Nom' }) }}
+                            </div>
+                            <div class="row">
+
+                                {{ form_label(form.imageFile, 'Choisissez un document pour écraser l\'ancien') }}
+                                {{ form_widget(form.imageFile, {
+                                    attr: {
+                                            'class' : 'imageUpload'
+                                        }
+                                    }) }}
+                            </div>
+                                
+        <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="parapher" name ="parapher" 
+        {% if paraphers != [] %}
+            checked
+        {% endif %}
+        >
+        <label class="form-check-label" for="parapher">lu et approuvé</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="signature" name ="signature"
+        {% if signatures != [] %}
+            checked
+        {% endif %}
+        >
+        <label class="form-check-label" for="signature">signature</label>
+    </div>donc entretienmaintenant
+
+{# accordion target #}
+
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <strong>Qui doit voir ce fichier?</strong>
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+ 
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="user-id-all" name ="user-all" >
+                        <label class="form-check-label" for="user">Tout le monde</label>
+                    </div>
+                    <div class="catalog-grid-customer">
+
+                        {% for user in users %}
+                            <div class="form-target-check-user form-check">
+                                <input data-id="{{user.id}}" class="form-check-input" type="checkbox" id="user-id-{{user.id}}" name ="user"
+                                    {% for oldUser in oldUsers  %}
+                                        {% if oldUser == user.id %}
+                                            checked
+                                        {% endif %}
+
+                                    {% endfor %}
+                                 >
+                                <label class="form-check-label" for="user">{{user.firstname}} {{user.lastname}}</label>
+                            </div>
+                        {% endfor %}
+                        <input id="choseUsers" name="choseUsers" type="hidden" value="" data-users="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{# end accordion target #}
+
+                            <div class="d-flex justify-content-around">
+                            <button class="m-3 btn">{{ button_label|default('Sauvegarder') }}</button>
+
+
+                        {{ form_end(form) }} 
+
+                    {% for ap_access in app.user.RoleId.apAccesses %}
+                        {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                            <span class="m-3">
+                                {{ include('tabs/information/ap_information_files/_delete_form.html.twig') }}
+                            </span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </span>
+    {% endif %}
+{% endfor %}
+{% endblock %}

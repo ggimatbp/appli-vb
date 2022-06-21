@@ -1,0 +1,55 @@
+<div class="d-flex">
+    <div class="w-25 d-flex flex-wrap">
+        <div class="w-100 list-group" id="list-tab" role="tablist">
+            {% set loop_qse = 0 %}
+            {% for section in all_section %}
+                {% if section.state == 2 and section.parentSection.id == parent.id %}
+                    {% set loop_qse = loop_qse + 1 %}
+                    <a class="list-group-item list-group-item-action {{ loop_qse == 1 ? 'active' : '' }} " id="list-home-{{section.id}}" data-bs-toggle="list" href="#list-archive-{{section.id}}" role="tab" aria-controls="list-home">
+                        {{section.name}}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="w-75 tablist-custom-output mx-3">
+        <div class="tab-content" id="nav-tabContent">
+            {% set loop_qse = 0 %}
+            {% for section in all_section %}
+                {% if section.state == 2 and section.parentSection.id == parent.id %}
+                    {% set loop_qse = loop_qse + 1 %}
+                    <div class=" tab-pane fade show {{ loop_qse == 1 ? 'active' : '' }}" id="list-archive-{{section.id}}" role="tabpanel" aria-labelledby="list-home-list">
+                        <ul>
+                            {{ include('tabs/information/qse/fileArchived.html.twig') }}
+                        </ul>
+                        <div class="d-flex">
+                            {% for ap_access in app.user.RoleId.apAccesses %}
+                                {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                                    <span class="mx-3 align-self-center">
+                                        <a class="btn" href="{{ path('information_files_new', {'id': section.id}) }}">Nouveau document</a>
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
+                            {% for ap_access in app.user.RoleId.apAccesses %}
+                                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                    <span class="mx-3 align-self-center">
+                                        <a class="btn" href="{{ path('information_section_edit', {'id': section.id}) }}">Modifier</a>
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
+                            {% for ap_access in app.user.RoleId.apAccesses %}
+                                {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                                    <span class="mx-3 align-self-center">
+                                        <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#exampleSectionModal{{section.id}}">
+                                        Supprimer
+                                        </button>
+                                    </span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {# fin de l'include #}
+        </div>
+    </div>
+</div>

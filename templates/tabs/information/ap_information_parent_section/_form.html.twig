@@ -1,0 +1,6 @@
+{{ form_start(form, {'attr': {'onsubmit': 'buttonName.disabled=true; return true;'}}) }}
+<div class="form-div-edit-single p-5">
+    {{ form_widget(form.name, {'attr': {'class': 'form-new-single form-new-phone-size' }}) }}
+    <button class="btn-ligth form-new-phone-size btn" name="buttonName" value="Submit">{{ button_label|default('Envoyer') }}</button>
+</div>
+{{ form_end(form) }}

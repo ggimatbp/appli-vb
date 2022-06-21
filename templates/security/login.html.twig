@@ -8,14 +8,14 @@
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
-    <div class="h-100 d-flex justify-content-center align-item-center">
-
-        <form method="post" class="d-flex align-item-center">
-        <div class="white-box-login" >
-            <h3 class="align-self-center text-center">Connexion</h1>
-            <div class="">
+    <div class="modal-dialog modal-dialog-centered modal-xs d-flex justify-content-around">
+        <div class="modal-content">
+        <form method="post" class="d-flex flex-column justify-content-center my-5">
+        {# <div class="white-box-login"> #}
+            <h3 class="align-self-center">Connexion</h1>
+            <div class="w-75 align-self-center">
                 <label class="m-2" for="inputEmail">Mail</label>
-                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="input-phone form-control" autocomplete="email" required autofocus>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
                 <label class="m-2" for="inputPassword">Mot de passe</label>
                 <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
@@ -46,7 +46,8 @@
             {% endif %}
             </div>
         </form>
-        </div>
+        {# </div> #}
+    </div>
     </div>
  {% endblock %}
  

@@ -4,6 +4,9 @@
     <div class="row">
         {{ form_row(form.name, { 'label': 'Nom' }) }}
     </div>
+    {% for error in form.vars.errors.form.getErrors(true) %}
+            <p class="alert alert-danger">{{ error.message }}</p>
+    {% endfor %}
     <div class="row">
     {{ form_label(form.imageFile, 'Choisissez un document à transférer') }}
         {{ form_widget(form.imageFile, {

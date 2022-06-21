@@ -35,6 +35,15 @@ class ApCatalogCustomerBpRepository extends ServiceEntityRepository
         ;
     }
     */
+    
+    public function findAllOrderName()
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     
     // public function findAllById($id): ?ApCatalogCustomerBp

@@ -6,23 +6,23 @@
                     <select class="form-filter-input-global form-select" aria-label="Default select example" id="roleSelectLimitLine">
  
                          {% if limitRole is defined %} 
-                            {% if limitRole == 1 %}
+                            {% if limitRole == 10 %}
                             <option  value="">{{limitRole}}</option>
-                            <option value=2>2</option>
-                            <option value=8>8</option>
-                        {% elseif limitRole == 2 %}
+                            <option value=20>20</option>
+                            <option value=30>30</option>
+                        {% elseif limitRole == 20 %}
                             <option value="">{{limitRole}}</option>
-                            <option  value=1>1</option>
-                            <option value=8>8</option>
+                            <option  value=10>10</option>
+                            <option value=30>30</option>
                         {% else %}
                             <option value="">{{limitRole}}</option>
-                            <option  value=1>1</option>
-                            <option value=2>2</option>
+                            <option  value=10>10</option>
+                            <option value=20>20</option>
                         {% endif %}
                     {% else %}
-                        <option  value=1>1</option>
-                        <option value=2>2</option>
-                        <option value=8>8</option>
+                        <option  value=10>10</option>
+                        <option value=20>20</option>
+                        <option value=30>30</option>
                     {% endif %}
 
                     </select>

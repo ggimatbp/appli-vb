@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ApInformationSignature{% endblock %}
+
+{% block body %}
+    <h1>Edit ApInformationSignature</h1>
+
+    {{ include('ap_information_signature/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_ap_information_signature_index') }}">back to list</a>
+
+    {{ include('ap_information_signature/_delete_form.html.twig') }}
+{% endblock %}

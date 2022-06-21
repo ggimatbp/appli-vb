@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ApInformationParapher{% endblock %}
+
+{% block body %}
+    <h1>Edit ApInformationParapher</h1>
+
+    {{ include('ap_information_parapher/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_ap_information_parapher_index') }}">back to list</a>
+
+    {{ include('ap_information_parapher/_delete_form.html.twig') }}
+{% endblock %}

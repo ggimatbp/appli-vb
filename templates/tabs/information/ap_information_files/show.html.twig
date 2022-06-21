@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+{% block navbar %}
+{# {% include "_headerBrutSharedLogic.html.twig" %} #}
+{% endblock %}
+{% block title %}ApInformationFiles{% endblock %}
+{% block javascripts %}
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+	{{ encore_entry_script_tags('apInformation') }}
+{% endblock %}
+{% block body %}
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
+                
+  <div class="modal-dialog modal-fullscreen d-flex justify-content-around">
+    <div class="modal-content">
+      <div class="modal-header top-bar d-flex justify-content-around mt-1">
+
+        <div class="w-100 top-bar d-flex justify-content-around mt-1">
+        
+            <button class="btn prev-page">Précédent</button>
+            <span class="align-items-center d-flex page-info">
+                <span class='p-1 page-num'></span> sur <span class="p-1 page-count"></span>
+            </span>
+
+            <button class="btn next-page" >Suivant</button>
+        </div>
+        {# <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> #}
+        {% if file.section.state == 1 %}
+
+            <a class="btn-close" href="{{ path('information_rh_index') }}"></a>
+        {% else %}
+            <a class="btn-close" href="{{ path('information_qse_index') }}"></a>
+        {% endif %}
+        
+      </div>
+      <div class="modal-body">
+
+        <input class="pdfFileRoad" type="hidden" data-src="{{vich_uploader_asset(file)}}">
+
+            <span class="d-flex justify-content-around">
+            <canvas id="pdf-render"></canvas>
+            </span>
+            {# parapher #}
+            {% if parapher is not null and parapher.state == 0 %}
+                <div data-id = "{{parapher.id}}" class="my-2 button-on-hold btn " name="parapher" id="btnParapher">Lu et approuvé <i id="parapher-check" class="fas fa-false"></i>
+                </div>
+            {% elseif parapher is not null and parapher.state == 1 %}
+                <div class="my-2 button-success">
+                    lu et approuvé <i class="fas fa-check"></i>
+                </div>
+            {% endif %}
+            {# end parapher #}
+
+            {# signature #}
+            {% if signature is not null and signature.state == 0 %}
+                <div data-id = "{{signature.id}}" class="my-2 button-on-hold btn " name="signature" id="btnSignature">signature <i id="signature-check" class="fas fa-false"></i>
+                </div>
+            {% elseif signature is not null and signature.state == 1 %}
+                <div class="my-2 button-success">
+                    signature <i class="fas fa-check"></i>
+                </div>
+            {% endif %}
+            {# end signature #}
+
+
+
+
+            <div class="d-flex justify-content-between">
+            {% if file.section.state == 1 %}
+            <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
+            {% else %}
+            <a class="btn" href="{{ path('information_qse_index') }}">Retour</a>
+            {% endif %}
+            {% for ap_access in app.user.RoleId.apAccesses %}
+                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                    <a class="btn" href="{{ path('information_files_edit', {'id': file.id}) }}">Modifier</a>
+                {% endif %}
+            {% endfor %}
+            {% for ap_access in app.user.RoleId.apAccesses %}
+                {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                    {{ include('tabs/information/ap_information_files/_modal_delete.html.twig') }}
+                {% endif %}
+            {% endfor %}
+            </div>
+            <input id="csrf-edit" data-viewed-id="{% if viewed.state is defined %}{{viewed.id}}{% else %}{% endif %}" data-viewed-state="{% if viewed.state is defined %}{{viewed.state}}{% else %}2{% endif %}" data-signature-state="{% if signature.state is defined %}{{signature.state}}{% else %}2{% endif %}"  data-parapher-state="{% if parapher.state is defined %}{{parapher.state}}{% else %}2{% endif %}"  type="hidden" name="token" value="{{ csrf_token('edit-item') }}"/>
+      </div>
+    </div>
+  </div>
+</div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

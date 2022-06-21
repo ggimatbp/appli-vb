@@ -1,0 +1,80 @@
+<div class="d-flex">
+    <div class="w-25 d-flex flex-wrap">
+        <div class="w-100 list-group" id="list-tab" role="tablist">
+            {% set loop_qse = 0 %}
+            {% set fileEmpty = 0 %}
+            {% for section in all_section  %}
+                {% if section.state == 2 and section.parentSection.id == parent.id %}
+                    {% for file in all_file %}
+                        {% if file.section.id == section.id and file.archive == 0 %}
+                            {% set fileEmpty = fileEmpty + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if fileEmpty == 0 %}
+                    {% else %}
+                        {% set fileEmpty = 0 %}
+                        {% set loop_qse = loop_qse + 1 %}
+                        <a class="list-group-item list-group-item-action {{ loop_qse == 1 ? 'active' : '' }} " id="list-home-{{section.id}}" data-bs-toggle="list" href="#list-{{section.id}}" role="tab" aria-controls="list-home">
+                            {{section.name}}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="w-75 tablist-custom-output mx-3">
+        <div class="tab-content" id="nav-tabContent">
+            {% set loop_qse = 0 %}
+            {% set fileEmpty = 0 %}
+            {% for section in all_section %}
+                {% if section.state == 2 and section.parentSection.id == parent.id %}
+                    {% for file in all_file %}
+                        {% if file.section.id == section.id and file.archive == 0 %}
+                            {% set fileEmpty = fileEmpty + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if fileEmpty == 0 %}
+                        {% else %}
+                            {% set fileEmpty = 0 %}
+                            {% set loop_qse = loop_qse + 1 %}
+                            <div class="tab-pane fade show {{ loop_qse == 1 ? 'active' : '' }}" id="list-{{section.id}}" role="tabpanel" aria-labelledby="list-home-list">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nom</th>
+                                            <th scope="col">Voir</th>
+                                            <th scope="col">Edition</th>
+                                            <th scope="col">Archiver</th>
+                                            <th scope="col">Supprimer</th>
+                                            <th scope="col">Vue</th>
+                                            <th scope="col">Parapher</th>
+                                            <th scope="col">Signature</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{ include('tabs/information/qse/file.html.twig') }}
+                                    </tbody>
+                                </table>
+
+                                <div class="d-flex">
+                                    {% for ap_access in app.user.RoleId.apAccesses %}
+                                        {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                                            <span class="mx-3 align-self-center">
+                                                <a class=" btn" href="{{ path('information_files_new', {'id': section.id}) }}">Nouveau document</a>
+                                            </span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for ap_access in app.user.RoleId.apAccesses %}
+                                        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                            <span class="mx-3 align-self-center">
+                                                <a class="btn" href="{{ path('information_section_edit', {'id': section.id}) }}">Modifier</a>
+                                            </span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

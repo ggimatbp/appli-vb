@@ -36,6 +36,14 @@ class ApCatalogCaseVbRepository extends ServiceEntityRepository
     }
     */
 
+    public function findAllOrderName()
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     /*
     public function findOneBySomeField($value): ?ApCatalogCaseVb
     {

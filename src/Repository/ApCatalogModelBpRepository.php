@@ -19,22 +19,18 @@ class ApCatalogModelBpRepository extends ServiceEntityRepository
         parent::__construct($registry, ApCatalogModelBp::class);
     }
 
-    // /**
-    //  * @return ApCatalogModelBp[] Returns an array of ApCatalogModelBp objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return ApCatalogModelBp[] Returns an array of ApCatalogModelBp objects
+     */
+
+    public function findAllOrderName()
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+            ->orderBy('a.name', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?ApCatalogModelBp

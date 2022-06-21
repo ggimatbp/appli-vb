@@ -1,14 +1,3 @@
-{# {% extends 'base.html.twig' %}
-
-{% block title %}New ApCatalogFilesVb{% endblock %}
-
-{% block body %}
-    <h1>Create new ApCatalogFilesVb</h1>
-
-    {{ include('tabs/Catalog/VB/ap_catalog_files_vb/_form.html.twig') }}
-
-    <a href="{{ path('ap_catalog_files_vb_index') }}">back to list</a>
-{% endblock %} #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Nouveau document{% endblock %}
@@ -19,16 +8,13 @@
 
     {% for ap_access in app.user.RoleId.apAccesses %}
     	{% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
-            <div class="m-5 w-100 d-flex justify-content-around">
+            <div class="my-5 w-100 d-flex justify-content-around">
                 <a class="btn" href="{{ path('ap_sector_vb_show', {'id': sector_id}) }}">Retour</a>
                 <div></div>
             </div>
             <span class="form-container-with-title">
                 <h1 class="catalog-h1 mt-2">Ajout d'un nouveau document pour Velobatterie</h1>
                  {{ include('tabs/Catalog/VB/ap_catalog_files_vb/_form_new.html.twig') }} 
-                {# <span class="">
-                    <a class="btn w-100" href="{{ path('ap_sector_vb_show', {'id': sector_id}) }}">Retour</a>
-                </span> #}
             </span>
         {% endif %}
     {% endfor %}

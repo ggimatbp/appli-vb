@@ -1,0 +1,45 @@
+<div class="m-3">
+    <h2 class="">Archive et section sans fichiers</h2>
+    {# parent section #}
+    {% for ap_access in app.user.RoleId.apAccesses %}
+        {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+            <a class="btn" href="{{ path('information_parent_section_new_rh') }}">Nouvelle Catégorie</a>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class="aprole-global-container">
+    {% for parent in all_parent_section %}
+        {% if parent.state == 1 %}
+            <h3 class="m-3">{{parent.name}}</h3>
+            <div class="d-flex">
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                        <a class="m-3 btn" href="{{ path('information_section_new_rh', {'id': parent.id}) }}">
+                            Nouvelle section
+                        </a>
+                    {% endif %}
+                {% endfor %}
+                    <a class="btn m-3" href="{{ path('information_parent_section_edit', {'id': parent.id}) }}">Modifier</a>
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                        {{ include('tabs/information/ap_information_parent_section/_modal_delete.html.twig') }}
+                    {% endif %}
+                {% endfor %}
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                        <button type="button" class="btn align-self-center" data-bs-toggle="modal" data-bs-target="#exampleParentSectionModal{{parent.id}}">
+                            Supprimer
+                        </button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% for ap_access in app.user.RoleId.apAccesses %}
+                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                    {{ include('tabs/information/rh/sectionArchived.html.twig') }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        <p>Pas de parent</p>
+    {% endfor %}
+</div>

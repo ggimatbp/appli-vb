@@ -6,6 +6,7 @@
 parameters:
     model_bp_files: /uploads/models
     model_vb_files: /uploads/modelsVb
+    information_files: /uploads/information
 services:
     # default configuration for services in *this* file
     _defaults:

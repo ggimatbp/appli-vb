@@ -27,14 +27,60 @@
         {% endfor %}
         </span>
     </span>
-    <span class="catalog-grid-customer">
+    <span class="catalog-grid-packs">
         {% for ap_catalog_case_vb in ap_catalog_case_vbs %}
-        <div>
-            <span class=" {% if ap_catalog_case_vb.archive == 1  %} archived {% endif %} d-flex flex-column">
-                    <a class="folder-change" href="{{ path('ap_catalog_case_vb_show', {'id': ap_catalog_case_vb.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+            {% set loopMiniature = 0 %}
+                {% for apCatalogVbBulkImage in ap_catalog_case_vb.apCatalogVbBulkImages %}
+                    {% if apCatalogVbBulkImage.miniature == 1 %}       
+                    {% set loopMiniature =  loopMiniature + 1 %}
+                        {# <a class="folder-change" href="{{ path('ap_catalog_case_vb_show', {'id': ap_catalog_case_vb.id}) }}">
+                            <img style="object-fit: cover" src="{{ vich_uploader_asset(apCatalogVbBulkImage, 'imageFile') }}" class="catalog-hover-zoom h-100 catalog-img" alt="model image upload">
+                            <h4 class="overflow-hidden">{{ ap_catalog_case_vb.name }}</h4>
+                        </a> #}
+                    {% endif %}
+                {% endfor %}
+            {% if loopMiniature == 1 %}
+                {% for apCatalogVbBulkImage in ap_catalog_case_vb.apCatalogVbBulkImages %}
+                    {% if apCatalogVbBulkImage.miniature == 1 %}       
+                        {# <a class="{% if ap_catalog_case_vb.archive == 1  %} archived {% endif %} folder-change" href="{{ path('ap_catalog_case_vb_show', {'id': ap_catalog_case_vb.id}) }}">
+                            <img style="object-fit: cover" src="{{ vich_uploader_asset(apCatalogVbBulkImage, 'imageFile') }}" class="catalog-hover-zoom h-100 catalog-img" alt="model image upload">
+                            <h4 class="overflow-hidden">{{ ap_catalog_case_vb.name }}</h4>
+                        </a> #}
+                        <div class="{% if  ap_catalog_case_vb.archive == 1 %} archived {% endif %} card card-design {{'card' ~ apCatalogVbBulkImage.id }}">
+                        <a  href="{{ path('ap_catalog_case_vb_show', {'id': ap_catalog_case_vb.id}) }}">
+                            <span class="catalog-card-img btn-launch-modal" data-img-id="{{apCatalogVbBulkImage.id}}">
+                                <img style="object-fit: cover" src="{{ vich_uploader_asset(apCatalogVbBulkImage, 'imageFile') }}" class="h-100 catalog-img catalog-hover-zoom" alt="model image upload">
+                            </span>
+                        </a>
+                        <div class="card-body card-body-design">
+                            <span class="d-flex flex-column justify-content-between">
+                                <span class="d-flex justify-content-center card-title">{{ ap_catalog_case_vb.name }}</span>
+                            </span>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+
+                <div class="{% if  ap_catalog_case_vb.archive == 1 %} archived {% endif %} card card-design {{'card' ~ ap_catalog_case_vb.id }}">
+                    <a  href="{{ path('ap_catalog_case_vb_show', {'id': ap_catalog_case_vb.id}) }}">
+                        <span class="catalog-card-img btn-launch-modal" data-img-id="{{ap_catalog_case_vb.id}}">
+                            {# <img style="object-fit: cover" src="" class="h-100 catalog-img catalog-hover-zoom" alt="model image upload"> #}
+                            <p class="p-5"> Aucune image n'est mise en avant pour ce pack </p>
+                        </span>
+                    </a>
+
+                    <div class="card-body card-body-design">
+                        <span class="d-flex flex-column justify-content-between">
+                                <span class="d-flex justify-content-center card-title">{{ ap_catalog_case_vb.name }}</span>
+                        </span>
+                    </div>
+                </div>
+                    {# <a class="folder-change {% if ap_catalog_case_vb.archive == 1  %} archived {% endif %}" href="{{ path('ap_catalog_case_vb_show', {'id': ap_catalog_case_vb.id}) }}">
+                    <img style="object-fit: cover" src="" class="catalog-hover-zoom h-100 catalog-img" alt="model image upload">
                     <h4 class="overflow-hidden">{{ ap_catalog_case_vb.name }}</h4>
-            </span>
-        </div>
+                    </a> #}
+            {% endif %}
         {% else %}
             Aucun résultat
         {% endfor %}
