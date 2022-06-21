@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\ApInformationParapher;
+use App\Entity\ApInformationSignature;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ApInformationParapher|null find($id, $lockMode = null, $lockVersion = null)
- * @method ApInformationParapher|null findOneBy(array $criteria, array $orderBy = null)
- * @method ApInformationParapher[]    findAll()
- * @method ApInformationParapher[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ApInformationSignature|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ApInformationSignature|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ApInformationSignature[]    findAll()
+ * @method ApInformationSignature[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ApInformationParapherRepository extends ServiceEntityRepository
+class ApInformationSignatureRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ApInformationParapher::class);
+        parent::__construct($registry, ApInformationSignature::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(ApInformationParapher $entity, bool $flush = true): void
+    public function add(ApInformationSignature $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -37,7 +37,7 @@ class ApInformationParapherRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(ApInformationParapher $entity, bool $flush = true): void
+    public function remove(ApInformationSignature $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -45,46 +45,46 @@ class ApInformationParapherRepository extends ServiceEntityRepository
         }
     }
 
-
     public function findByUserAndFile($user, $file)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.User = :userid')
+            ->andWhere('a.user = :userid')
             ->setParameter('userid', $user)
-            ->andWhere('a.fileId = :fileId')
+            ->andWhere('a.file = :fileId')
             ->setParameter('fileId', $file)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
 
-    public function findByFileAndState($file, $state)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.state = :state')
-            ->setParameter('state', $state)
-            ->andWhere('a.fileId = :fileId')
-            ->setParameter('fileId', $file)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
     public function findByFile($file)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.fileId = :fileId')
+            ->andWhere('a.file = :fileId')
             ->setParameter('fileId', $file)
             ->getQuery()
             ->getResult()
         ;
     }
-
-    
-
-    
+    // /**
+    //  * @return ApInformationSignature[] Returns an array of ApInformationSignature objects
+    //  */
     /*
-    public function findOneBySomeField($value): ?ApInformationParapher
+    public function findByExampleField($value)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('a.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    */
+
+    /*
+    public function findOneBySomeField($value): ?ApInformationSignature
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')

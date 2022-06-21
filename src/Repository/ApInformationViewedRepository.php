@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\ApInformationParapher;
+use App\Entity\ApInformationViewed;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ApInformationParapher|null find($id, $lockMode = null, $lockVersion = null)
- * @method ApInformationParapher|null findOneBy(array $criteria, array $orderBy = null)
- * @method ApInformationParapher[]    findAll()
- * @method ApInformationParapher[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ApInformationViewed|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ApInformationViewed|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ApInformationViewed[]    findAll()
+ * @method ApInformationViewed[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ApInformationParapherRepository extends ServiceEntityRepository
+class ApInformationViewedRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ApInformationParapher::class);
+        parent::__construct($registry, ApInformationViewed::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(ApInformationParapher $entity, bool $flush = true): void
+    public function add(ApInformationViewed $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -37,7 +37,7 @@ class ApInformationParapherRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(ApInformationParapher $entity, bool $flush = true): void
+    public function remove(ApInformationViewed $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -49,42 +49,44 @@ class ApInformationParapherRepository extends ServiceEntityRepository
     public function findByUserAndFile($user, $file)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.User = :userid')
+            ->andWhere('a.user = :userid')
             ->setParameter('userid', $user)
-            ->andWhere('a.fileId = :fileId')
+            ->andWhere('a.file = :fileId')
             ->setParameter('fileId', $file)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
 
-    public function findByFileAndState($file, $state)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.state = :state')
-            ->setParameter('state', $state)
-            ->andWhere('a.fileId = :fileId')
-            ->setParameter('fileId', $file)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
     public function findByFile($file)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.fileId = :fileId')
+            ->andWhere('a.file = :fileId')
             ->setParameter('fileId', $file)
             ->getQuery()
             ->getResult()
         ;
     }
 
-    
-
-    
+    // /**
+    //  * @return ApInformationViewed[] Returns an array of ApInformationViewed objects
+    //  */
     /*
-    public function findOneBySomeField($value): ?ApInformationParapher
+    public function findByExampleField($value)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('a.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    */
+
+    /*
+    public function findOneBySomeField($value): ?ApInformationViewed
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')

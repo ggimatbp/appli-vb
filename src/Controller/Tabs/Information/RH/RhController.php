@@ -29,6 +29,19 @@ class RhController extends AbstractController
     $allSection = $sectionRepo->findAll();
     $allFile = $infoFileRepo->findAll();
     $allParentSection = $parentSectionRepo->findAll();
+
+    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+    $user = $this->getUser();
+    $accesses = $this->getUser()->getRoleId()->getApAccesses();
+    foreach ($accesses as $access) {
+      if($access->getTab()->getName() == $tabName ){
+        if($access->getDelete() == false){
+          $allFile = $infoFileRepo->findAllFilesByUserView($user);
+        }elseif($access->getDelete() == true){
+          $allFile = $infoFileRepo->findAll();
+        }
+      }
+    }
     return $this->render('tabs/information/rh/index.html.twig', [
       'all_section' => $allSection,
       'all_file' => $allFile,

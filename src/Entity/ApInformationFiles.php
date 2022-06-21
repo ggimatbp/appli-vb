@@ -77,9 +77,21 @@ class ApInformationFiles
      */
     private $apInformationParaphers;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApInformationSignature::class, mappedBy="file")
+     */
+    private $apInformationSignatures;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApInformationViewed::class, mappedBy="file")
+     */
+    private $apInformationVieweds;
+
     public function __construct()
     {
         $this->apInformationParaphers = new ArrayCollection();
+        $this->apInformationSignatures = new ArrayCollection();
+        $this->apInformationVieweds = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -211,6 +223,66 @@ class ApInformationFiles
             // set the owning side to null (unless already changed)
             if ($apInformationParapher->getFileId() === $this) {
                 $apInformationParapher->setFileId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApInformationSignature>
+     */
+    public function getApInformationSignatures(): Collection
+    {
+        return $this->apInformationSignatures;
+    }
+
+    public function addApInformationSignature(ApInformationSignature $apInformationSignature): self
+    {
+        if (!$this->apInformationSignatures->contains($apInformationSignature)) {
+            $this->apInformationSignatures[] = $apInformationSignature;
+            $apInformationSignature->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApInformationSignature(ApInformationSignature $apInformationSignature): self
+    {
+        if ($this->apInformationSignatures->removeElement($apInformationSignature)) {
+            // set the owning side to null (unless already changed)
+            if ($apInformationSignature->getFile() === $this) {
+                $apInformationSignature->setFile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApInformationViewed>
+     */
+    public function getApInformationVieweds(): Collection
+    {
+        return $this->apInformationVieweds;
+    }
+
+    public function addApInformationViewed(ApInformationViewed $apInformationViewed): self
+    {
+        if (!$this->apInformationVieweds->contains($apInformationViewed)) {
+            $this->apInformationVieweds[] = $apInformationViewed;
+            $apInformationViewed->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApInformationViewed(ApInformationViewed $apInformationViewed): self
+    {
+        if ($this->apInformationVieweds->removeElement($apInformationViewed)) {
+            // set the owning side to null (unless already changed)
+            if ($apInformationViewed->getFile() === $this) {
+                $apInformationViewed->setFile(null);
             }
         }
 

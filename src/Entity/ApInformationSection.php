@@ -31,6 +31,7 @@ class ApInformationSection
 
     /**
      * @ORM\OneToMany(targetEntity=ApInformationFiles::class, mappedBy="Section")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $apInformationFiles;
 

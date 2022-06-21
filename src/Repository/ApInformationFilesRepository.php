@@ -104,6 +104,16 @@ class ApInformationFilesRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findAllFilesByUserView($user)
+    {
+        return $this->createQueryBuilder('a')
+        ->join('a.apInformationVieweds', 'b')
+        ->where('b.user = :user')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getResult();
+    }
+
     // /**
     //  * @return ApInformationFiles[] Returns an array of ApInformationFiles objects
     //  */

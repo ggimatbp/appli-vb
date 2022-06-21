@@ -87,6 +87,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $apCatalogVbBulkImages;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ApInformationSignature::class, mappedBy="user")
+     */
+    private $apInformationSignatures;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ApInformationViewed::class, mappedBy="user")
+     */
+    private $apInformationVieweds;
+
 
     // /**
     //  * @ORM\OneToMany(targetEntity=ApCatalogFilesBpHistory::class, mappedBy="user")
@@ -101,6 +111,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->logs = new ArrayCollection();
         $this->apInformationParaphers = new ArrayCollection();
         $this->apCatalogVbBulkImages = new ArrayCollection();
+        $this->apInformationSignatures = new ArrayCollection();
+        $this->apInformationVieweds = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -409,6 +421,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($apCatalogVbBulkImage->getUser() === $this) {
                 $apCatalogVbBulkImage->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApInformationSignature>
+     */
+    public function getApInformationSignatures(): Collection
+    {
+        return $this->apInformationSignatures;
+    }
+
+    public function addApInformationSignature(ApInformationSignature $apInformationSignature): self
+    {
+        if (!$this->apInformationSignatures->contains($apInformationSignature)) {
+            $this->apInformationSignatures[] = $apInformationSignature;
+            $apInformationSignature->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApInformationSignature(ApInformationSignature $apInformationSignature): self
+    {
+        if ($this->apInformationSignatures->removeElement($apInformationSignature)) {
+            // set the owning side to null (unless already changed)
+            if ($apInformationSignature->getUser() === $this) {
+                $apInformationSignature->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApInformationViewed>
+     */
+    public function getApInformationVieweds(): Collection
+    {
+        return $this->apInformationVieweds;
+    }
+
+    public function addApInformationViewed(ApInformationViewed $apInformationViewed): self
+    {
+        if (!$this->apInformationVieweds->contains($apInformationViewed)) {
+            $this->apInformationVieweds[] = $apInformationViewed;
+            $apInformationViewed->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApInformationViewed(ApInformationViewed $apInformationViewed): self
+    {
+        if ($this->apInformationVieweds->removeElement($apInformationViewed)) {
+            // set the owning side to null (unless already changed)
+            if ($apInformationViewed->getUser() === $this) {
+                $apInformationViewed->setUser(null);
             }
         }
 

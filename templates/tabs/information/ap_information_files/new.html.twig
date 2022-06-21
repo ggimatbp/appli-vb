@@ -3,11 +3,13 @@
 {% block navbar %}
 {% include "_headerBrutSharedLogic.html.twig" %}
 {% endblock %}
-
+{% block javascripts %}
+	{{ encore_entry_script_tags('apInformationForm') }}
+{% endblock %}
 
 {% block body %}
 {% for ap_access in app.user.RoleId.apAccesses %}
-    {% if ap_access.tab.name is same as(tabName) and ap_access.new is same as(true) %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
     <div class=" my-5 w-100 d-flex justify-content-around">
         {% if state == 1 %}
         <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>

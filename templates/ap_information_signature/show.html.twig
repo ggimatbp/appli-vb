@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ApInformationSignature{% endblock %}
+
+{% block body %}
+    <h1>ApInformationSignature</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ap_information_signature.id }}</td>
+            </tr>
+            <tr>
+                <th>DateTime</th>
+                <td>{{ ap_information_signature.dateTime ? ap_information_signature.dateTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{ ap_information_signature.state ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ap_information_signature_index') }}">back to list</a>
+
+    <a href="{{ path('app_ap_information_signature_edit', {'id': ap_information_signature.id}) }}">edit</a>
+
+    {{ include('ap_information_signature/_delete_form.html.twig') }}
+{% endblock %}
