@@ -2,23 +2,23 @@
 
 {% if app.user.RoleId is defined %}
 {% set parentTab = 0 %}
-        <div class="d-flex" onmousedown="return false" onselectstart="return false">
+        <div class="d-flex flex-column header-vertical sticky-top fixed-top" onmousedown="return false" onselectstart="return false">
 					{% for apAccess in app.user.RoleId.apAccesses %}
 						{% if apAccess.view == true %}
 							{% if apAccess.tab.apTab is null %}
-                    <a class=" nav-link text-center  
+                    <a title="{{apAccess.tab.name}}" class="my-3 btn-header1 nav-link text-center  
                         {% if app.request.attributes.get('_controller') matches "#" ~ apAccess.tab.ControlPath ~ "#" %}
                         {% set parentTab = apAccess.tab.id %}
                           header1
                         {% else %} 
                         headerNotActive
                         {% endif %}
-                    active" aria-current="page" href="{{path (apAccess.tab.path)}}">{{apAccess.tab.name}}</a>
+                    active" aria-current="page" href="{{path (apAccess.tab.path)}}"><i class="{{apAccess.tab.icon}}"></i></a>
                 {% endif %}
              {% endif %}
 					{% endfor %}
-            <div class="dropstart">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropend my-3">
+                <button  title="Déconnexion" class="btn w-100 btn btn-header1 dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-user"></i>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -28,7 +28,7 @@
               </ul>
              </div>
         </div>
-          {% set foo = 0 %}
+          {# {% set foo = 0 %}
           <ul class="nav nav-pills d-flex justify-content-around" id="pills-tab" role="tablist">
             {% for apAccess in app.user.RoleId.apAccesses %}
             {% set foo = foo + 1 %}
@@ -61,6 +61,6 @@
                 {% endif %}
               {% endif %}
             {% endfor %}
-          </div>
+          </div> #}
 				{% endif %}
 

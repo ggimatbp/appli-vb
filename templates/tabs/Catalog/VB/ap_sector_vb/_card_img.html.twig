@@ -15,7 +15,7 @@
                                 {% for ap_access in app.user.RoleId.apAccesses %}
                                     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
                                         <a href="{{ path('ap_catalog_files_vb_edit', {'id': ap_catalog_file_vb.id}) }}">
-                                            <i class="primary-color fas fa-pencil-alt"></i>
+                                            <i class="color-edit fas fa-pencil-alt"></i>
                                         </a>
                                     {% endif %}
                                 {% endfor %}
@@ -23,7 +23,7 @@
                                     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
                                         <form name="archive{{ap_catalog_file_vb.id}}" method="post" action="{{ path('ap_files_vb_archive', {'id': ap_catalog_file_vb.id}) }}" class="hover">
                                             <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_catalog_file_vb.id) }}">
-                                            <span class="primary-color"><i onclick="document.forms['archive{{ap_catalog_file_vb.id}}'].submit();" class="fas fa-file-archive"></i></span>
+                                            <span class="color-archive"><i onclick="document.forms['archive{{ap_catalog_file_vb.id}}'].submit();" class="fas fa-file-archive"></i></span>
                                         </form>
                                         {#<a class="danger" href="{{ path('ap_files_vb_archive', {'id': ap_catalog_file_vb.id}) }}"><i class="fas fa-file-archive"></i></a>  #}
                                     {% endif %}
@@ -31,7 +31,7 @@
                                 <!-- Button trigger delete modal -->
                                 {% for ap_access in app.user.RoleId.apAccesses %}
                                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                                        <span type="button" data-bs-toggle="modal" data-bs-target="#deleteModalVb" class="delete-btn-files primary-color" data-file-img-id="{{ap_catalog_file_vb.id}}">
+                                        <span type="button" data-bs-toggle="modal" data-bs-target="#deleteModalVb" class="delete-btn-files color-delete" data-file-img-id="{{ap_catalog_file_vb.id}}">
                                             <i class="fas fa-times"></i>
                                         </span>	
                                     {% endif %}

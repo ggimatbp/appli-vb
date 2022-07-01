@@ -6,7 +6,7 @@
             <td class="text-end" >
             {% for ap_access in app.user.RoleId.apAccesses %}
                 {% if ap_access.tab.name is same as(tabNameRole) and ap_access.edit is same as(true) %}
-                <a href="{{ path('ap_role_edit', {'id': ap_role.id}) }}" class="btn-bottom btn btn-ligth">Modifier</a>
+                <a href="{{ path('ap_role_edit', {'id': ap_role.id}) }}" class="btn-bottom btn btn-ligth btn-edit">Modifier</a>
                 {% endif %}
             {% endfor %}
             </td>

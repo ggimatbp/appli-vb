@@ -1,4 +1,4 @@
 <form method="post" action="{{ path('ap_catalog_files_vb_delete', {'id': ap_catalog_files_vb.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ap_catalog_files_vb.id) }}">
-    <button class="btn">Supprimer</button>
+    <button class="btn btn-delete">Supprimer</button>
 </form>

@@ -2,44 +2,131 @@
 {% for file in all_file %}
     {% if file.section.id == section.id and file.archive == 1 %}
         {% set file_count = file_count + 1 %}
-        <li class="d-flex justify-content-between my-1">
-            <span class="align-self-center">
-                {{file.name}}
-                <small class="text-muted">
-                    {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
-                </small>
-            </span>
+        <tr class="">
+            <td class="">
+                <span class=""  style="white-space: nowrap;">
+                    {{file.name}}
+                    <small class="text-muted">
+                        {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
+                    </small>
+                </span>
+            </td>
             <span class="d-flex">
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
-                        <span class="mx-3">
-                            <a class="btn mx-3" href="{{ path('information_files_show', {'id': file.id}) }}">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        </span>
+                        <td class="text-center">
+                            <span class="mx-3">
+                                <a title="Afficher le document: {{file.name}}" class="btn btn-view mx-3" href="{{ path('information_files_show', {'id': file.id}) }}">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </span>
+                        </td>
                     {% endif %}
                 {% endfor %}
-                <span class="mx-3">
-                    <a class="btn" href="{{ path('information_files_edit', {'id': file.id}) }}">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                </span>
-                <form name="archive{{file.id}}" method="post" action="{{ path('information_files_archive', {'id': file.id}) }}" class="hover mx-3">
-                    <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ file.id) }}">
-                    <button class="btn">
-                        <i class="far fa-file-archive"></i>
-                    </button>
-                </form>
                 {% for ap_access in app.user.RoleId.apAccesses %}
-                    {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                        <span class="mx-3">
-                            {{ include('tabs/information/ap_information_files/_modal_delete.html.twig', {'button_label': '<i class="fas fa-trash-alt"></i>'}) }}
-                        </span>
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
+                        <td class="text-center">
+                            <span class="mx-3">
+                                <a  title="Modifier le document: {{file.name}}" class="btn btn-edit" href="{{ path('information_files_edit', {'id': file.id}) }}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </span>
+                        </td>
                     {% endif %}
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-                    <span class="mx-3">
+                    <td class="text-center">
+                        <form  title="Archiver le document: {{file.name}}"  name="archive{{file.id}}" method="post" action="{{ path('information_files_archive', {'id': file.id}) }}" class="hover mx-3">
+                            <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ file.id) }}">
+                            <button class="btn btn-archive">
+                                <i class="far fa-file-archive"></i>
+                            </button>
+                        </form>
+                    </td>
+                    {% endif %}
+                {% endfor %}
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                        <td>
+                            <span class="h-100 mx-3" title="Supprimer le document: {{file.name}}">
+                                {{ include('tabs/information/ap_information_files/_modal_delete.html.twig', {'button_label': '<i class="fas fa-trash-alt"></i>'}) }}
+                            </span>
+                        </td>
+                    {% endif %}
+                {% endfor %}
+
+{# viewed #}
+
+        {% for ap_access in app.user.RoleId.apAccesses %}
+            {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                <td class="">
+                    <span class="mx-3 d-flex justify-content-center flex-direction-row">
+                        {% set totalNumberViewed = 0 %}
+                        {% set totalNumberViewedTrue = 0 %}
+                        {% set totalNumberViewedFalse = 0 %}
+                        {% for viewed in file.apInformationVieweds %}
+                            {% set totalNumberViewed = totalNumberViewed + 1 %}
+                            {% if viewed.state == true  %}
+                                {% set totalNumberViewedTrue = totalNumberViewedTrue + 1 %}
+                            {% elseif viewed.state == false %}
+                                {% set totalNumberViewedFalse = totalNumberViewedFalse + 1 %}
+                            {% endif %}
+                        {% endfor %}                       
+                        {% if totalNumberViewed > 0 %}
+                            {% if totalNumberViewedFalse == 0 %}
+                            
+                            <button title="Taux de personnes ayant vue le document" type="button" class="btn btn-lambda " data-bs-toggle="modal" data-bs-target="#viewedModal{{file.id}}"> 100% </button>
+                        
+                            {% elseif totalNumberViewedFalse > 0 %}
+                            {% set percentViewed = (totalNumberViewedTrue / totalNumberViewed) * 100 %}
+                            {# button trigger modal #}
+                            <button title="Taux de personnes ayant vue le document" type="button" class="btn btn-lambda" data-bs-toggle="modal" data-bs-target="#viewedModal{{file.id}}"> {{percentViewed|round}}% </button>
+                            {% endif %}
+                        {# modal #}
+                        <div class="modal fade" id="viewedModal{{file.id}}" tabindex="-1" aria-labelledby="viewedModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewedModalLabel">Utilisateurs ayant vue le fichier</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <ul>
+                                    {% if totalNumberViewedFalse > 0 %}
+                                    <h6>À faire</h6>
+                                    {% endif  %}
+                                        {% for viewed in file.apInformationVieweds %}
+                                            {% if viewed.state == 0 %}
+                                            <li class="text-danger">{{viewed.user.firstname}} {{viewed.user.lastname}}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% if totalNumberViewedTrue > 0 %}
+                                    <h6>Fait</h6>
+                                    {% endif %}
+                                        {% for viewed in file.apInformationVieweds %}
+                                            {% if viewed.state == 1 %}
+                                            <li class="text-success">{{viewed.user.firstname}} {{viewed.user.lastname}}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        {% else %}
+                        <div class="btn btn-lambda">N/A</div>
+                        {% endif %}
+                    </span>
+                </td>
+            {% endif %}
+        {% endfor %}
+
+                {# parapher #}
+            {% for ap_access in app.user.RoleId.apAccesses %}
+                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                <td class="">
+                    <span class="mx-3 d-flex justify-content-center flex-direction-row">
                         {% set totalNumberParapher = 0 %}
                         {% set totalNumberParapherTrue = 0 %}
                         {% set totalNumberParapherFalse = 0 %}
@@ -51,34 +138,102 @@
                                 {% set totalNumberParapherFalse = totalNumberParapherFalse + 1 %}
                             {% endif %}
                         {% endfor %}
-                        {% if totalNumberParapherFalse > 0 %}
-                        {% set percentParapher = (totalNumberParapherTrue * totalNumberParapherFalse / totalNumberParapher) * 100 %}
+                        {% if totalNumberParapher > 0 %}
+                            {% if totalNumberParapherFalse > 0 %}
+                                {% set percentParapher = (totalNumberParapherTrue / totalNumberParapher) * 100 %}
+                                {# button trigger modal #}
+                                <button title="Taux de personnes ayant paraphé le document" type="button" class="btn btn-lambda" data-bs-toggle="modal" data-bs-target="#parapherModal{{file.id}}"> {{percentParapher|round}}% </button>
+                                {# modal #}
+                            {% elseif totalNumberParapherFalse == 0 %}
+                                    <button title="Taux de personnes ayant paraphé le document" type="button" class="btn btn-lambda" data-bs-toggle="modal" data-bs-target="#parapherModal{{file.id}}"> 100% </button>
+                            {% endif %}
+                            <div class="modal fade text-left" id="parapherModal{{file.id}}" tabindex="-1" aria-labelledby="parapherModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="parapherModalLabel">Paraphé par utilisateur</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul>
+                                        {% if totalNumberParapherFalse > 0 %}
+                                        <h6>À faire</h6>
+                                        {% endif  %}
+                                            {% for parapher in file.apInformationParaphers %}
+                                                {% if parapher.state == 0 %}
+                                                <li class="text-danger">{{parapher.user.firstname}} {{parapher.user.lastname}}</li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% if totalNumberParapherTrue > 0 %}
+                                        <h6>Fait</h6>
+                                        {% endif %}
+                                            {% for parapher in file.apInformationParaphers %}
+                                                {% if parapher.state == 1 %}
+                                                <li class="text-success">{{parapher.user.firstname}} {{parapher.user.lastname}}</li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                        {% else %}
+                            <div class="btn btn-lambda">N/A</div>
+                        {% endif %}
+                    </span>
+                </td>
+                {% endif %}
+            {% endfor %}
+
+
+            {# signature #}
+            {% for ap_access in app.user.RoleId.apAccesses %}
+                {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                <td class="">
+                    <span class="mx-3 d-flex justify-content-center flex-direction-row">
+                        {% set totalNumberSignature = 0 %}
+                        {% set totalNumberSignatureTrue = 0 %}
+                        {% set totalNumberSignatureFalse = 0 %}
+                        {% for signature in file.apInformationSignatures %}
+                            {% set totalNumberSignature = totalNumberSignature + 1 %}
+                            {% if signature.state == true  %}
+                                {% set totalNumberSignatureTrue = totalNumberSignatureTrue + 1 %}
+                            {% elseif signature.state == false %}
+                                {% set totalNumberSignatureFalse = totalNumberSignatureFalse + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if totalNumberSignature > 0 %}
+                        {% if totalNumberSignatureFalse > 0 %}
+                        {% set percentSignature = (totalNumberSignatureTrue / totalNumberSignature) * 100 %}
                         {# button trigger modal #}
-                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#parapherModal{{file.id}}"> {{percentParapher}} % </button>
+                            <button title="Taux de personnes ayant signé le document" type="button" class="btn btn-lambda" data-bs-toggle="modal" data-bs-target="#signatureModal{{file.id}}"> {{percentSignature|round}}% </button>
                         {# modal #}
-                        <div class="modal fade" id="parapherModal{{file.id}}" tabindex="-1" aria-labelledby="parapherModalLabel" aria-hidden="true">
+                        {% elseif totalNumberSignatureFalse == 0 %}
+                            <button title="Taux de personnes ayant signé le document" type="button" class="btn btn-lambda" data-bs-toggle="modal" data-bs-target="#signatureModal{{file.id}}">100%</button>
+                        {% endif %}
+                        <div class="modal fade text-left" id="signatureModal{{file.id}}" tabindex="-1" aria-labelledby="signatureModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="parapherModalLabel">Lu et signé par utilisateur</h5>
+                                    <h5 class="modal-title" id="signatureModalLabel">Signé</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <ul>
-                                    {% if totalNumberParapherFalse > 0 %}
+                                    {% if totalNumberSignatureFalse > 0 %}
                                     <h6>À faire</h6>
                                     {% endif  %}
-                                        {% for parapher in file.apInformationParaphers %}
-                                            {% if parapher.state == 0 %}
-                                            <li class="text-danger">{{parapher.user.firstname}}{{parapher.user.lastname}}</li>
+                                        {% for signature in file.apInformationSignatures %}
+                                            {% if signature.state == 0 %}
+                                            <li class="text-danger">{{signature.user.firstname}} {{signature.user.lastname}}</li>
                                             {% endif %}
                                         {% endfor %}
-                                    {% if totalNumberParapherTrue > 0 %}
+                                    {% if totalNumberSignatureTrue > 0 %}
                                     <h6>Fait</h6>
                                     {% endif %}
-                                        {% for parapher in file.apInformationParaphers %}
-                                            {% if parapher.state == 1 %}
-                                            <li class="text-success">{{parapher.user.firstname}}{{parapher.user.lastname}}</li>
+                                        {% for signature in file.apInformationSignatures %}
+                                            {% if signature.state == 1 %}
+                                            <li class="text-success">{{signature.user.firstname}} {{signature.user.lastname}}</li>
                                             {% endif %}
                                         {% endfor %}
                                     </ul>
@@ -86,18 +241,28 @@
                                 </div>
                             </div>
                             </div>
+                            
                         {% else %}
-                        <div class="btn">N/A</div>
+                        <div class="btn btn-lambda">N/A</div>
                         {% endif %}
                     </span>
-                    {% endif %}
-                {% endfor %}
-            </span>
-        </li>
+                </td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% if file_count == 0 %}
+            <tr>
+                <td class="">
+                    <p>Pas de document</p>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        {% endif %}
     {% endif %}
 {% endfor %}
-{% if file_count == 0 %}
-    <p class="pb-5">Pas de document</p>
-{% elseif file_count == 1 %}
-    <p class="pb-5"></p>
-{% endif %}

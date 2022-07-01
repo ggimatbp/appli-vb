@@ -1,8 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_login.html.twig' %}
 {% block title %}Login{% endblock %}
 {% block javascripts %}
 {% endblock %}
 {% block navbar %}
+{% endblock %}
+{% block tab %}
 {% endblock %}
 {% block body %}
     {% if error %}
@@ -34,7 +36,7 @@
                 #}
                 <input type="hidden" name="_target_path" value="/catalog/"/>
                 <div class="d-flex justify-content-center">
-                <button class="w-100 mt-5 btn btn-ligth" type="submit">
+                <button class="w-100 mt-5 btn btn-ligth btn-lambda" type="submit">
                     Se connecter
                 </button>
                 </div>

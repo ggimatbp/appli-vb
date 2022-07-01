@@ -46,7 +46,8 @@ class RhController extends AbstractController
       'all_section' => $allSection,
       'all_file' => $allFile,
       'all_parent_section' => $allParentSection,
-      'tabName' => $tabName
+      'tabName' => $tabName,
+      'actual_user' => $user,
   ]);
   }
 }

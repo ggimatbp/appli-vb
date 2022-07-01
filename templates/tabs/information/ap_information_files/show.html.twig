@@ -1,6 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_login.html.twig' %}
 {% block navbar %}
 {# {% include "_headerBrutSharedLogic.html.twig" %} #}
+{% endblock %}
+{% block tab %}
 {% endblock %}
 {% block title %}ApInformationFiles{% endblock %}
 {% block javascripts %}
@@ -17,12 +19,12 @@
 
         <div class="w-100 top-bar d-flex justify-content-around mt-1">
         
-            <button class="btn prev-page">Précédent</button>
+            <button class="btn btn-lambda prev-page">Précédent</button>
             <span class="align-items-center d-flex page-info">
                 <span class='p-1 page-num'></span> sur <span class="p-1 page-count"></span>
             </span>
 
-            <button class="btn next-page" >Suivant</button>
+            <button class="btn btn-lambda next-page" >Suivant</button>
         </div>
         {# <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> #}
         {% if file.section.state == 1 %}
@@ -42,7 +44,7 @@
             </span>
             {# parapher #}
             {% if parapher is not null and parapher.state == 0 %}
-                <div data-id = "{{parapher.id}}" class="my-2 button-on-hold btn " name="parapher" id="btnParapher">Lu et approuvé <i id="parapher-check" class="fas fa-false"></i>
+                <div data-id = "{{parapher.id}}" class="my-2 button-on-hold btn btn-lambda" name="parapher" id="btnParapher">Lu et approuvé <i id="parapher-check" class="fas fa-false"></i>
                 </div>
             {% elseif parapher is not null and parapher.state == 1 %}
                 <div class="my-2 button-success">
@@ -53,7 +55,7 @@
 
             {# signature #}
             {% if signature is not null and signature.state == 0 %}
-                <div data-id = "{{signature.id}}" class="my-2 button-on-hold btn " name="signature" id="btnSignature">signature <i id="signature-check" class="fas fa-false"></i>
+                <div data-id = "{{signature.id}}" class="my-2 button-on-hold btn btn-lambda" name="signature" id="btnSignature">signature <i id="signature-check" class="fas fa-false"></i>
                 </div>
             {% elseif signature is not null and signature.state == 1 %}
                 <div class="my-2 button-success">
@@ -67,13 +69,13 @@
 
             <div class="d-flex justify-content-between">
             {% if file.section.state == 1 %}
-            <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
+            <a class="btn btn-lambda" href="{{ path('information_rh_index') }}">Retour</a>
             {% else %}
-            <a class="btn" href="{{ path('information_qse_index') }}">Retour</a>
+            <a class="btn btn-lambda" href="{{ path('information_qse_index') }}">Retour</a>
             {% endif %}
             {% for ap_access in app.user.RoleId.apAccesses %}
                 {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-                    <a class="btn" href="{{ path('information_files_edit', {'id': file.id}) }}">Modifier</a>
+                    <a class="btn btn-edit" href="{{ path('information_files_edit', {'id': file.id}) }}">Modifier</a>
                 {% endif %}
             {% endfor %}
             {% for ap_access in app.user.RoleId.apAccesses %}

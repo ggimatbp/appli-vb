@@ -1,3 +1,18 @@
+
+.btn-lambda{
+    font-weight:$fontWeight;
+    background-color: $btnPrimaryColor;
+    color: $btnPrimaryColorText;
+    border:2px solid transparent;
+}
+
+.btn-lambda:hover{
+    color: $btnPrimaryColor;
+    background-color: $btnPrimaryColorText;
+    border: 2px solid $btnPrimaryColor;
+}
+
+
 .button-success{
     font-weight:$fontWeight;
     background-color: $successColor;
@@ -20,4 +35,94 @@
 .button-on-hold{
 opacity: 0.3;
 cursor: not-allowed  !important;
+}
+
+.btn-view{
+    font-weight:$fontWeight;
+    background-color: $viewColor;
+    color: white;
+    // border:2px solid transparent;
+    // border-radius: 0.25rem;
+    // display: inline-block;
+}
+
+.btn-view:hover{
+    color: $viewColor;
+    background-color: white;
+    // border: 2px solid $btnPrimaryColor;
+    // border-radius: 0.25rem;
+    // display: inline-block;
+}
+
+.btn-create{
+    font-weight:$fontWeight;
+    background-color: $createColor;
+    color: $btnPrimaryColorText;
+}
+
+.btn-create:hover{
+    color: $createColor;
+    background-color: $btnPrimaryColorText;
+}
+
+.btn-edit{
+    font-weight:$fontWeight;
+    background-color: $editColor;
+    color: $btnPrimaryColorText;
+}
+
+.btn-edit:hover{
+    color: $editColor;
+    background-color: $btnPrimaryColorText;
+}
+
+.btn-archive{
+    font-weight:$fontWeight;
+    background-color: $archiveColor;
+    color: $btnPrimaryColorText;
+}
+
+.btn-archive:hover{
+    color: $archiveColor;
+    background-color: $btnPrimaryColorText;
+}
+
+.btn-delete{
+    font-weight:$fontWeight;
+    background-color: $deleteColor;
+    color: $btnPrimaryColorText;
+}
+
+.btn-delete:hover{
+    color: $deleteColor;
+    background-color: $btnPrimaryColorText;
+}
+
+.btn-user-header{
+    font-weight:$fontWeight;
+    background-color: $btnPrimaryColor;
+    color: white;
+    border-radius: 0;
+    border: none;
+    height: 100%;
+}
+
+.btn-user-header:hover{
+    background-color: white;
+    color:  $btnPrimaryColor;
+
+}
+
+.btn-header1{
+    font-weight:$fontWeight;
+    background-color: $header1BackgroundColor;
+    color: $btnPrimaryColorText;
+    border:2px solid transparent;
+    border-radius:0.25rem;
+}
+
+.btn-header1:hover{
+    color: $header1BackgroundColor;
+    background-color: white;
+    border: 2px solid $header1BackgroundColor;
 }

@@ -14,14 +14,14 @@
                 </datalist>
                 <form class="form-catalog" method="POST" action="{{ path('catalog_index' ) }}?roleback=2">
                     <input type="hidden" data-value="" name="pack-value" id="caseAnswerInput-hidden">
-                    <input id="btnPackValue" class="btn" type="submit" name='btnPackValue' value="Rechercher">
+                    <input id="btnPackValue" class="btn btn-lambda " type="submit" name='btnPackValue' value="Rechercher">
                 </form>
             </span>
         </span>
         {% for ap_access in app.user.RoleId.apAccesses %}
             {% if ap_access.tab.name is same as(tabName2) and ap_access.add is same as(true) %}
             <span class="add-cust-catalog-bp d-flex flex-column justify-content-end">
-                <a class="btn" href="{{ path('ap_catalog_case_vb_new') }}">Nouveau pack</a>
+                <a class="btn btn-create " href="{{ path('ap_catalog_case_vb_new') }}">Nouveau pack</a>
             </span>
             {% endif %}
         {% endfor %}

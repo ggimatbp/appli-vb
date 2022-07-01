@@ -240,6 +240,7 @@ if(ajaxRoleOrder == null)
       
       success: function (response)
       {
+        console.log(response.content);
         $("#content-role-filtered").empty();
         $("#content-role-filtered").append(response.content);
         $("#pagination-role-filtered").empty();

@@ -1,5 +1,5 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal{{file.id}}">
+<button type="button" class="h-100 btn btn-delete" data-bs-toggle="modal" data-bs-target="#exampleModal{{file.id}}">
   {{ button_label|default( 'Supprimer')|raw }}
     {# <i class="fas fa-trash-alt"></i> #}
 </button>
@@ -17,9 +17,9 @@
       <div class="d-flex justify-content-around modal-footer">
         <form method="post" action="{{ path('information_files_delete', {'id': file.id}) }}">
             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ file.id) }}">
-            <button class="btn">Suprimer</button>
+            <button class="btn btn-delete">Suprimer</button>
         </form>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-lambda" data-bs-dismiss="modal">Annuler</button>
       </div>
     </div>
   </div>

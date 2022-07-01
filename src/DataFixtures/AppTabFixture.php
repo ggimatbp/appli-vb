@@ -8,6 +8,7 @@ use App\Entity\ApTab;
 
 class AppTabFixture extends Fixture
 {
+    // instruction Icons will not be generated please do not forget to add them directly inside the BDD
     public const TABLES = [
         [
             'name' => 'Management',

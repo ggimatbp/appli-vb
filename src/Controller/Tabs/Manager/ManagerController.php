@@ -40,9 +40,9 @@ class ManagerController extends AbstractController
         $ap_accesses = $apAccessRepository->findAll();
 
         //declare element's number by page
-        $limit = $request->query->get("limit", 2);
+        $limit = $request->query->get("limit", 10);
 
-        $limitRole = $request->query->get("limitRole", 2);
+        $limitRole = $request->query->get("limitRole", 10);
 
         //get page number
         $pageRole = (int)$request->query->get("pageRole", 2);
