@@ -3,24 +3,37 @@ html{
 }
 
 body{
- background-color: $backgroundColor;  
- height:100% 
+ background-color: $backgroundColor;   
 }
 
-.management-h1{
-    margin-bottom: $paddingTitle;
-    margin-top: $paddingTitle;
-    font-size: 1.8rem;
-    }
-
-.catalog-h1{
-    margin-bottom: $paddingTitle;
-    margin-top: $paddingTitle;
-    font-size: 1.8rem;
+.all-content{
+    max-width: 2000px;
 }
+// .management-h1{
+//     margin-bottom: $paddingTitle;
+//     margin-top: $paddingTitle;
+//     font-size: 1.8rem;
+//     }
+
+// .catalog-h1{
+//     // margin-bottom: $paddingTitle;
+//     // margin-top: $paddingTitle;
+//     font-size: 1.8rem;
+//     background-color: white;
+//     border-bottom: 0.25rem black solid;
+//     border-radius: 0rem 1rem 1rem 0rem;
+//     border-top: 0.25rem black solid;
+//     border-right: 0.25rem black solid;
+//     margin-left: -0.5rem;
+//     padding-right: 0.5rem;
+//     padding-left: 0.5rem;
+// }
 
 h1{
-    color: $primaryColor
+    margin-top: $paddingTitle/2;
+    font-size: 1.5rem !important; 
+    color: $primaryColor;
+    margin-bottom: $paddingTitle/4;
     }
     
 h2{
@@ -36,5 +49,31 @@ h3{
 }
 
 .primary-color{
-color: #f3a700;
+    color: #f3a700;
 }
+
+.color-create{
+    color:$createColor;
+}
+
+.color-edit{
+    color: $editColor;
+}
+
+.color-archive{
+    color:$archiveColor
+}
+
+.color-delete{
+    color: $deleteColor;
+}
+
+.color-view{
+    color: $viewColor;
+}
+
+.color-header1{
+    color: $header1BackgroundColor
+}
+
+

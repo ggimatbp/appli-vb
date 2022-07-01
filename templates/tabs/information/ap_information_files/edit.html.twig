@@ -2,6 +2,9 @@
 {% block navbar %}
 {% include "_headerBrutSharedLogic.html.twig" %}
 {% endblock %}
+{% block tab %}
+{% include "_subHeaderBrutSharedLogic.html.twig" %}
+{% endblock %}
 {% block title %}Modification de document{% endblock %}
 {% block javascripts %}
 	{{ encore_entry_script_tags('apInformationForm') }}
@@ -11,9 +14,9 @@
     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
         <div class=" my-5 w-100 d-flex justify-content-around">
             {% if state == 1 %}
-                <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
+                <a class="btn btn-lambda" href="{{ path('information_rh_index') }}">Retour</a>
             {% else %}
-                <a class="btn" href="{{ path('information_qse_index') }}">Retour</a>
+                <a class="btn btn-lambda" href="{{ path('information_qse_index') }}">Retour</a>
             {% endif %}
             <div></div>
         </div>
@@ -52,7 +55,7 @@
         {% endif %}
         >
         <label class="form-check-label" for="signature">signature</label>
-    </div>donc entretienmaintenant
+    </div>
 
 {# accordion target #}
 
@@ -95,7 +98,7 @@
 {# end accordion target #}
 
                             <div class="d-flex justify-content-around">
-                            <button class="m-3 btn">{{ button_label|default('Sauvegarder') }}</button>
+                            <button class="m-3 btn btn-create">{{ button_label|default('Sauvegarder') }}</button>
 
 
                         {{ form_end(form) }} 

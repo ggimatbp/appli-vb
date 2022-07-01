@@ -18,20 +18,28 @@
         {% block javascripts %}
         {% endblock %}
     </head>
-    <body>
+    <body class="d-flex w-100 justify-content-center">
+        <div class="d-flex w-100 all-content">
         {# {% if app.user %} #}
         {# {% if app.user.active == true %}
         Votre compte a été désactivé veuillez vous déconnectez. #}
          {# {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a> #}
         {# {% else %} #}
+            <div class="header-vertical-container"> 
             {% block navbar %}
             {% include "_headerBrut.html.twig" %}
             {% endblock %}
-            {% block tab %}{% endblock %}           
-            {% block body %}
-            {% endblock %}
+            </div>
+             <div class="content-container"> 
+                {% block tab %}
+                {% include "_subHeaderBrut.html.twig" %}
+                {% endblock %}           
+                {% block body %}
+                {% endblock %}
+             </div> 
             {% block littlejavascripts %}    
             {% endblock %}
+        </div>
         {# {% endif %} #}
         {# {% else %}
 

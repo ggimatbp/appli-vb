@@ -13,7 +13,7 @@
     {% for ap_access in app.user.RoleId.apAccesses %}
       {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
       <div class="d-flex justify-content-around form-div-edit-single p-5">
-          <a class="btn" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}">Retour</a>
+          <a class="btn btn-lambda" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}">Retour</a>
           {{ include('tabs/Catalog/ap_catalog_customer_bp/_delete_form.html.twig') }}
       </div>
       {% endif %}

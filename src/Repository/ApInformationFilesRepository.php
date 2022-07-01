@@ -60,6 +60,7 @@ class ApInformationFilesRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
         ->join('a.Section', 'b')
         ->where('b.state = 1')
+        ->andWhere('a.Archive = 0')
         ->andWhere('date_diff( CURRENT_DATE() , a.createdAt) < 7')
         ->orderBy('a.createdAt', 'desc')
         ->getQuery()
@@ -72,6 +73,7 @@ class ApInformationFilesRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
         ->join('a.Section', 'b')
         ->where('b.state = 2')
+        ->andWhere('a.Archive = 0')
         ->andWhere('date_diff( CURRENT_DATE() , a.createdAt) < 7')
         ->orderBy('a.createdAt', 'desc')
         ->getQuery()
@@ -85,6 +87,7 @@ class ApInformationFilesRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
         ->join('a.Section', 'b')
         ->where('b.state = 1')
+        ->andWhere('a.Archive = 0')
         ->orderBy('a.createdAt', 'desc')
         ->setMaxResults(1)
         ->getQuery()
@@ -97,12 +100,86 @@ class ApInformationFilesRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
         ->join('a.Section', 'b')
         ->where('b.state = 2')
+        ->andWhere('a.Archive = 0')
         ->orderBy('a.createdAt', 'desc')
         ->setMaxResults(1)
         ->getQuery()
         ->getOneOrNullResult()
         ;
     }
+/*
+*! info recent by user
+#region infor ecent by user
+*/
+public function findRecentRhFilesByUserView($user): array
+{
+    return $this->createQueryBuilder('a')
+    ->join('a.Section', 'b')
+    ->join('a.apInformationVieweds', 'c')
+    ->where('b.state = 1')
+    ->andWhere('a.Archive = 0')
+    ->andWhere('date_diff( CURRENT_DATE() , a.createdAt) < 14')
+    ->andWhere('c.user = :user')
+    ->setParameter('user', $user)
+    ->orderBy('a.createdAt', 'desc')
+    ->getQuery()
+    ->getResult()
+    ;
+}
+
+public function findRecentQseFilesByUserView($user): array
+{
+    return $this->createQueryBuilder('a')
+    ->join('a.Section', 'b')
+    ->join('a.apInformationVieweds', 'c')
+    ->where('b.state = 2')
+    ->andWhere('a.Archive = 0')
+    ->andWhere('date_diff( CURRENT_DATE() , a.createdAt) < 14')
+    ->andWhere('c.user = :user')
+    ->setParameter('user', $user)
+    ->orderBy('a.createdAt', 'desc')
+    ->getQuery()
+    ->getResult()
+    ;
+}
+
+
+public function findLastRhFilesByUserView($user)
+{
+    return $this->createQueryBuilder('a')
+    ->join('a.Section', 'b')
+    ->join('a.apInformationVieweds', 'c')
+    ->where('b.state = 1')
+    ->andWhere('a.Archive = 0')
+    ->andWhere('c.user = :user')
+    ->setParameter('user', $user)
+    ->orderBy('a.createdAt', 'desc')
+    ->setMaxResults(1)
+    ->getQuery()
+    ->getOneOrNullResult();
+    ;
+}
+
+public function findLastQseFilesByUserView($user)
+{
+    return $this->createQueryBuilder('a')
+    ->join('a.Section', 'b')
+    ->join('a.apInformationVieweds', 'c')
+    ->where('b.state = 2')
+    ->andWhere('a.Archive = 0')
+    ->andWhere('c.user = :user')
+    ->setParameter('user', $user)
+    ->orderBy('a.createdAt', 'desc')
+    ->setMaxResults(1)
+    ->getQuery()
+    ->getOneOrNullResult()
+    ;
+}
+/*
+*! fin info recent by user
+#endregion
+*/
+
 
     public function findAllFilesByUserView($user)
     {

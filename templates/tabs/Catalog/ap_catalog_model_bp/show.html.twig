@@ -23,15 +23,15 @@
 	</span>
 
 		<span class="d-flex justify-content-around catalog-customer-container-bp">
-			<a class="m-2 btn catalog-content-customer-container-bp" href="{{ path('ap_sector_bp_index', {'id': ap_sector_bp.model.id}) }}">Retour</a>
+			<a class="m-2 btn btn-lambda catalog-content-customer-container-bp" href="{{ path('ap_sector_bp_index', {'id': ap_sector_bp.model.id}) }}">Retour</a>
 			{% for ap_access in app.user.RoleId.apAccesses %}
 				{% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
-					<a class="m-2 btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_files_bp_new', {'id': ap_sector_bp.id}) }}">Ajouter un document</a>
+					<a class="m-2 btn btn-create catalog-content-customer-container-bp" href="{{ path('ap_catalog_files_bp_new', {'id': ap_sector_bp.id}) }}">Ajouter un document</a>
 				{% endif %}
 			{% endfor %} 
 			{% for ap_access in app.user.RoleId.apAccesses %}
 				{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-					<a class="m-2 btn catalog-content-customer-container-bp" href="{{ path('ap_sector_bp_edit', {'id': ap_sector_bp.id}) }}">Modifier section</a>
+					<a class="m-2 btn  btn-edit catalog-content-customer-container-bp" href="{{ path('ap_sector_bp_edit', {'id': ap_sector_bp.id}) }}">Modifier section</a>
 				{% endif %}
 			{% endfor %} 
 			{% for ap_access in app.user.RoleId.apAccesses %}
@@ -43,7 +43,7 @@
 				{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
 				<form class="catalog-content-customer-container-bp m-2" method="POST" action="{{ path('ap_catalog_model_bp_archive_section', {'id': ap_sector_bp.id})}}">
 					<input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_sector_bp.id) }}">
-					<button class="w-100 btn">{% if ap_sector_bp.archive == 0  %}Archiver la section{% else %}Désarchiver la section{% endif %}</button>
+					<button class="w-100 btn btn-archive">{% if ap_sector_bp.archive == 0  %}Archiver la section{% else %}Désarchiver la section{% endif %}</button>
 				</form> 
 				{% endif %}
 			{% endfor %} 

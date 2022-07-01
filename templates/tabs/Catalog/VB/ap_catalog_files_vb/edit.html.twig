@@ -8,7 +8,7 @@
     {% for ap_access in app.user.RoleId.apAccesses %}
     	{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
         <div class="my-5 w-100 d-flex justify-content-around">
-            <a class="btn" href="{{ path('ap_sector_vb_show', {'id': ap_catalog_files_vb.sector.id}) }}">Retour</a>
+            <a class="btn btn-lambda" href="{{ path('ap_sector_vb_show', {'id': ap_catalog_files_vb.sector.id}) }}">Retour</a>
             <div></div>
         </div>
         <span class="form-container-with-title">
@@ -34,7 +34,7 @@
                         <span class='image-preview__default-text'><img class="img-thumbnail rounded mx-auto" src="{{ vich_uploader_asset(ap_catalog_files_vb, 'imageFile')}}"></span>
                     </div>
                     <div class="d-flex justify-content-around">
-                    <button class="btn">{{ button_label|default('Sauvegarder') }}</button>
+                    <button class="btn btn-create">{{ button_label|default('Sauvegarder') }}</button>
                 {{ form_end(form) }} 
             	{% for ap_access in app.user.RoleId.apAccesses %}
     	            {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}

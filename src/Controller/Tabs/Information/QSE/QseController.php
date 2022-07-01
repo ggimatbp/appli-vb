@@ -30,6 +30,7 @@ class QseController extends AbstractController
     $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     $user = $this->getUser();
     $accesses = $this->getUser()->getRoleId()->getApAccesses();
+    
     foreach ($accesses as $access) {
       if($access->getTab()->getName() == $tabName ){
         if($access->getDelete() == false){
@@ -38,13 +39,13 @@ class QseController extends AbstractController
           $allFile = $infoFileRepo->findAll();
         }
       }
-
     }
     return $this->render('tabs/information/qse/index.html.twig', [
       'all_section' => $allSection,
       'all_file' => $allFile,
       'all_parent_section' => $allParentSection,
-      'tabName' => $tabName
+      'tabName' => $tabName,
+      'actual_user' => $user,
   ]);
   }
 }

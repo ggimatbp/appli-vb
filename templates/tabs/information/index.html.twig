@@ -1,95 +1,184 @@
 {% extends 'base.html.twig' %}
-{% block title %}Information{% endblock %}
+{% block title %}Information
+{% endblock %}
 {% block navbar %}
-{% include "_headerBrut2.html.twig" %}
+	{% include "_headerBrut2.html.twig" %}
+{% endblock %}
+{% block tab %}
+	{% include "_subHeaderBrut2.html.twig" %}
 {% endblock %}
 {% block body %}
-{% for ap_access in app.user.RoleId.apAccesses %}
-    {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
-        <div class="aprole-global-container">
-            <h1>Information récentes</h1>
-            <div class="row mt-3">
-                <div class="col-4 mx-3">
-                    <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">RH</a>
-                    </div>
-                </div>
-                <div class="col-7 tablist-custom-output">
-                    <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                        <ul>                    
-                            {% for file in rh_files %}
-                            <li>
-                                {{file.name}}
-                                <small class="text-muted">
-                                    {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
-                                </small>
-                                <a class="btn" href="{{ path('information_files_show', {'id': file.id}) }}">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </li>
-                            {% else %}
-                                {% if rh_file is empty %}
-                                    <li>Aucune information</li>
-                                {% else %}
-                                <li>
-                                    {{rh_file.name}}
-                                    <small class="text-muted">
-                                        {{rh_file.createdAt|format_datetime('full', 'short', locale='fr')}}
-                                    </small>
-                                    <a class="btn" href="{{ path('information_files_show', {'id': rh_file.id}) }}">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </li>
-                                {% endif %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    </div>
-                </div>
-            </div>
+	<div class="aprole-global-container">
+		<h1>Information récentes</h1>
+		<div class="my-3 d-flex flex-column array-scroll">
+			<div class="cd-flex flex-wrap ">
+				<div class="list-group flex-row" id="list-tab" role="tablist">
+					<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">RH</a>
+				</div>
+			</div>
+			<div class="tablist-custom-output">
+				<div class="tab-content array-scroll" id="nav-tabContent">
+					<div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                    {% for ap_access in app.user.RoleId.apAccesses %}
+					    {% if ap_access.tab.name is same as(tabNameRh) and ap_access.view is same as(true) %}
+						<table class="table table-striped table-hover">
+							<thead>
+								<tr>
+									<th scope="col" class="">Nom</th>
+									<th scope="col" class="text-center">Voir</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for file in rh_files %}
 
-            <div class="row mt-3">
-                <div class="col-4 mx-3">
-                    <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">QSE</a>
-                    </div>
-                </div>
-                <div class="col-7 tablist-custom-output">
-                    <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                    <ul>
-                        {% for file in qse_files %}
-                        <li>
-                            {{file.name}}
-                            <small class="text-muted">
-                                {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
-                            </small>
-                            <a class="btn" href="{{ path('information_files_show', {'id': file.id}) }}">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        </li>
-                        {% else %}
-                            {% if qse_file is empty %}
-                                <li>Aucune information</li>
-                            {% else %}
-                                <li>
-                                    {{qse_file.name}}
-                                    <small class="text-muted">
-                                        {{qse_file.createdAt|format_datetime('full', 'short', locale='fr')}}
-                                    </small>
-                                    <a class="btn" href="{{ path('information_files_show', {'id': qse_file.id}) }}">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                        </ul>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-{% endfor %}
-{% endblock %}
+									{% set notViewed = 0 %}
+									{% for view in file.apInformationVieweds %}
+										{% if actual_user == view.user and view.state == 0 %}
+											{% set notViewed = 1 %}
+										{% endif %}
+									{% endfor %}
+									<tr>
+										<td class="{{ (notViewed == 1) ? 'fw-bold' : '' }}">
+											{{file.name}}
+											<small class="text-muted">
+												{{file.createdAt|format_datetime('full', 'short', locale='fr')}}
+											</small>
+										</td>
+										<td class="text-center">
+											<a class="btn btn-view" href="{{ path('information_files_show', {'id': file.id}) }}">
+												<i class="fas fa-eye"></i>
+											</a>
+										</td>
+									{% else %}
+										{% if rh_file is empty %}
+											<td>Aucune information</td>
+										{% else %}
+											<td>
+												{{rh_file.name}}
+												<small class="text-muted">
+													{{rh_file.createdAt|format_datetime('full', 'short', locale='fr')}}
+												</small>
+												<a class="btn btn-view" href="{{ path('information_files_show', {'id': rh_file.id}) }}">
+													<i class="fas fa-eye"></i>
+												</a>
+											</td>
+										{% endif %}
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+                        {% endif %}
+                    {% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="my-3 d-flex flex-column array-scroll">
+			<div class="cd-flex flex-wrap ">
+				<div class="list-group flex-row" id="list-tab" role="tablist">
+					<a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">QSE</a>
+				</div>
+			</div>
+			<div class="tablist-custom-output">
+				<div class="tab-content array-scroll" id="nav-tabContent">
+					<div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                    {% for ap_access in app.user.RoleId.apAccesses %}
+					    {% if ap_access.tab.name is same as(tabNameQse) and ap_access.view is same as(true) %}
+						<table class="table table-striped table-hover">
+							<thead>
+								<tr>
+									<th scope="col" class="">Nom</th>
+									<th scope="col" class="text-center">Voir</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for file in qse_files %}
+									{% set notViewed = 0 %}
+									{% for view in file.apInformationVieweds %}
+										{% if actual_user == view.user and view.state == 0 %}
+											{% set notViewed = 1 %}
+										{% endif %}
+									{% endfor %}
+									<tr>
+										<td class="{{ (notViewed == 1) ? 'fw-bold' : '' }}">
+											{{file.name}}
+											<small class="text-muted">
+												{{file.createdAt|format_datetime('full', 'short', locale='fr')}}
+											</small>
+										</td>
+										<td class="text-center">
+											<a class="btn btn-view" href="{{ path('information_files_show', {'id': file.id}) }}">
+												<i class="fas fa-eye"></i>
+											</a>
+										</td>
+									{% else %}
+										{% if qse_file is empty %}
+											<td>Aucune information</td>
+										{% else %}
+											<td>
+												{{qse_file.name}}
+												<small class="text-muted">
+													{{qse_file.createdAt|format_datetime('full', 'short', locale='fr')}}
+												</small>
+												<a class="btn btn-view" href="{{ path('information_files_show', {'id': qse_file.id}) }}">
+													<i class="fas fa-eye"></i>
+												</a>
+											</td>
+										{% endif %}
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+                        {% endif %}
+                    {% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+		{# 
+						            <div class="row mt-3">
+						                <div class="col-4 mx-3">
+						                    <div class="list-group" id="list-tab" role="tablist">
+						                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">QSE</a>
+						                    </div>
+						                </div>
+						                <div class="col-7 tablist-custom-output">
+						                    <div class="tab-content" id="nav-tabContent">
+						                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+						                    <ul>
+						                        {% for file in qse_files %}
+						                        <li>
+						                            {{file.name}}
+						                            <small class="text-muted">
+						                                {{file.createdAt|format_datetime('full', 'short', locale='fr')}}
+						                            </small>
+						                            <a class="btn btn-view" href="{{ path('information_files_show', {'id': file.id}) }}">
+						                                <i class="fas fa-eye"></i>
+						                            </a>
+						                        </li>
+						                        {% else %}
+						                            {% if qse_file is empty %}
+						                                <li>Aucune information</li>
+						                            {% else %}
+						                                <li>
+						                                    {{qse_file.name}}
+						                                    <small class="text-muted">
+						                                        {{qse_file.createdAt|format_datetime('full', 'short', locale='fr')}}
+						                                    </small>
+						                                    <a class="btn btn-view" href="{{ path('information_files_show', {'id': qse_file.id}) }}">
+						                                        <i class="fas fa-eye"></i>
+						                                    </a>
+						                                </li>
+						                            {% endif %}
+						                        {% endfor %}
+						                        </ul>
+						                    </div>
+						                    </div>
+						                </div>
+						            </div>
+						        </div> #}
+		{# {% endif %}
+				{% endfor %} #}
+	{% endblock %}
+

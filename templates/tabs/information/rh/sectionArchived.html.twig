@@ -1,50 +1,104 @@
-<div class="d-flex mx-3">
-    <div class="w-25 d-flex flex-wrap">
-        <div class="w-100 list-group" id="list-tab" role="tablist">
-            {% set loop_rh = 0 %}
+<div class="d-flex flex-column array-scroll">
+    <div class="d-flex flex-wrap">
+        <div class="list-group flex-row" id="list-tab" role="tablist">
+            {% set loop_qse = 0 %}
             {% for section in all_section %}
                 {% if section.state == 1 and section.parentSection.id == parent.id %}
-                    {% set loop_rh = loop_rh + 1 %}
-                    <a class="list-group-item list-group-item-action {{ loop_rh == 1 ? 'active' : '' }} " id="list-home-{{section.id}}" data-bs-toggle="list" href="#list-archive-{{section.id}}" role="tab" aria-controls="list-home">
-                        {{section.name}}</a>
+                    {% set loop_qse = loop_qse + 1 %}
+                    <a class="list-group-item list-group-item-action {{ loop_qse == 1 ? 'active' : '' }} " id="list-home-{{section.id}}" data-bs-toggle="list" href="#list-archive-{{section.id}}" role="tab" aria-controls="list-home">
+                        {{section.name}}
+                        {% for ap_access in app.user.RoleId.apAccesses %}
+                            {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                <a title='Modifier la section: {{section.name}}' class="btn btn-edit" href="{{ path('information_section_edit', {'id': section.id}) }}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                        {% for ap_access in app.user.RoleId.apAccesses %}
+                            {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                                <span class="align-self-center">
+                                    <button title="Supprimer la section: {{section.name}}" type="button" class="btn btn-delete " data-bs-toggle="modal" data-bs-target="#exampleSectionModal{{section.id}}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </span>
+                                {% endif %}
+                            {% endfor %}
+                    </a>
                 {% endif %}
             {% endfor %}
+            {% for ap_access in app.user.RoleId.apAccesses %}
+                {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                    <a title='Créer une nouvelle section' href="{{ path('information_section_new_rh', {'id': parent.id}) }}" class="btn btn-create">
+                    <i class="fa-solid fa-square-plus"></i></a>
+                {% endif %}
+            {% endfor %}
+
         </div>
     </div>
-    <div class="w-75 tablist-custom-output mx-3">
-        <div class="tab-content" id="nav-tabContent">
-            {% set loop_rh = 0 %}
+    <div class="tablist-custom-output">
+        <div class="tab-content array-scroll" id="nav-tabContent">
+            {% set loop_qse = 0 %}
             {% for section in all_section %}
                 {% if section.state == 1 and section.parentSection.id == parent.id %}
-                    {% set loop_rh = loop_rh + 1 %}
-                    <div class=" tab-pane fade show {{ loop_rh == 1 ? 'active' : '' }}" id="list-archive-{{section.id}}" role="tabpanel" aria-labelledby="list-home-list">
-                        <ul>
-                            {{ include('tabs/information/rh/fileArchived.html.twig') }}
-                        </ul>
+                    {% set loop_qse = loop_qse + 1 %}
+                    <div class=" tab-pane fade show {{ loop_qse == 1 ? 'active' : '' }}" id="list-archive-{{section.id}}" role="tabpanel" aria-labelledby="list-home-list">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="">Nom</th>
+                                    <th scope="col" class="text-center">Voir</th>
+                                    {% for ap_access in app.user.RoleId.apAccesses %}
+                                        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                            <th scope="col" class="text-center">Edition</th>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for ap_access in app.user.RoleId.apAccesses %}
+                                        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                            <th scope="col" class="text-center">Archiver</th>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for ap_access in app.user.RoleId.apAccesses %}
+                                        {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                                            <th scope="col" class="text-center">Supprimer</th>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for ap_access in app.user.RoleId.apAccesses %}
+                                        {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                                            <th scope="col" class="text-center">Vue</th>
+                                            <th scope="col" class="text-center">Parapher</th>
+                                            <th scope="col" class="text-center">Signature</th>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ include('tabs/information/rh/fileArchived.html.twig') }}
+                            </tbody>
+                        </table>
                         <div class="d-flex">
                             {% for ap_access in app.user.RoleId.apAccesses %}
                                 {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
                                     <span class="mx-3 align-self-center">
-                                        <a class="btn" href="{{ path('information_files_new', {'id': section.id}) }}">Nouveau document</a>
+                                        <a class="btn btn-create" href="{{ path('information_files_new', {'id': section.id}) }}"><i class="fa-solid fa-square-plus"></i></a>
                                     </span>
                                 {% endif %}
                             {% endfor %}
-                            {% for ap_access in app.user.RoleId.apAccesses %}
+                            {# {% for ap_access in app.user.RoleId.apAccesses %}
                                 {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
                                     <span class="mx-3 align-self-center">
-                                        <a class="btn" href="{{ path('information_section_edit', {'id': section.id}) }}">Modifier</a>
+                                        <a class="btn btn-edit" href="{{ path('information_section_edit', {'id': section.id}) }}">Modifier</a>
                                     </span>
                                 {% endif %}
-                            {% endfor %}
-                            {% for ap_access in app.user.RoleId.apAccesses %}
+                            {% endfor %} #}
+                            {# {% for ap_access in app.user.RoleId.apAccesses %}
                                 {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
                                     <span class="mx-3 align-self-center">
-                                        <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#exampleSectionModal{{section.id}}">
+                                        <button type="button" class="btn btn-delete " data-bs-toggle="modal" data-bs-target="#exampleSectionModal{{section.id}}">
                                         Supprimer
                                         </button>
                                     </span>
                                 {% endif %}
-                            {% endfor %}
+                            {% endfor %} #}
                         </div>
                     </div>
                 {% endif %}

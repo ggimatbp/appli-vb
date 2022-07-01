@@ -4,6 +4,10 @@
 {% include "_headerBrutSharedLogic.html.twig" %}
 {% endblock %}
 
+{% block tab %}
+    {% include "_subHeaderBrutSharedLogic.html.twig" %}
+{% endblock %}
+
 {% block title %}Edit ApInformationParentSection{% endblock %}
 
 {% block body %}
@@ -15,9 +19,9 @@
                 {{ include('tabs/information/ap_information_parent_section/_form.html.twig', {'button_label': 'Modifier'}) }}
                 <div class="d-flex justify-content-around form-div-edit-single p-5">
                     {% if parent.state == 1 %}
-                        <a class="btn" href="{{ path('information_rh_index') }}">Retour</a>
+                        <a class="btn btn-lambda" href="{{ path('information_rh_index') }}">Retour</a>
                     {% else %}
-                        <a class="btn" href="{{ path("information_qse_index") }}">Retour</a>
+                        <a class="btn btn-lambda" href="{{ path("information_qse_index") }}">Retour</a>
                     {% endif %}
                     {% for ap_access in app.user.RoleId.apAccesses %}
                         {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}

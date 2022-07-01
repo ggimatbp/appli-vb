@@ -13,15 +13,15 @@
             <div class="aprole-global-container">
                 <h1>{{ap_sector_vb.name}}</h1>
                 <span class="d-flex justify-content-around justify-content-around catalog-customer-container-bp">
-                    <a class="btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_case_vb_show', {'id': ap_sector_vb.caseId.id }) }}">Retour</a>
+                    <a class="btn btn-lambda catalog-content-customer-container-bp" href="{{ path('ap_catalog_case_vb_show', {'id': ap_sector_vb.caseId.id }) }}">Retour</a>
                     {% for ap_access in app.user.RoleId.apAccesses %}
                         {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
-                            <a class="btn catalog-content-customer-container-bp" href="{{ path('ap_catalog_files_vb_new', {'id': ap_sector_vb.id }) }}">Ajouter</a>
+                            <a class="btn btn-create catalog-content-customer-container-bp" href="{{ path('ap_catalog_files_vb_new', {'id': ap_sector_vb.id }) }}">Ajouter</a>
                         {% endif %}
                     {% endfor %}
                     {% for ap_access in app.user.RoleId.apAccesses %}
                         {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-                    <a class="btn catalog-content-customer-container-bp" href="{{ path('ap_sector_vb_edit', {'id': ap_sector_vb.id}) }}">Modifier</a>
+                    <a class="btn btn-edit catalog-content-customer-container-bp" href="{{ path('ap_sector_vb_edit', {'id': ap_sector_vb.id}) }}">Modifier</a>
                         {% endif %}
                     {% endfor %}
                     {# modal delete #}    
@@ -33,7 +33,7 @@
                     {# end modal delete #}
                     <form class="catalog-content-customer-container-bp" method="POST" action="{{ path('ap_sector_vb_archive', {'id': ap_sector_vb.id})}}">
                         <input type="hidden" name="_token" value="{{ csrf_token('archiver' ~ ap_sector_vb.id) }}">
-                        <button class="w-100 btn">{% if  ap_sector_vb.archive == 0  %}Archiver{% else %}Désarchiver{% endif %}</button>
+                        <button class="w-100 btn btn-archive">{% if  ap_sector_vb.archive == 0  %}Archiver{% else %}Désarchiver{% endif %}</button>
                     </form> 
                 </span>
             </div>

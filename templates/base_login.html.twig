@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+
+        {# {% if app.user.theme == 1 %}
+            {{ encore_entry_link_tags('variableDark') }}
+        {% else %}
+            {{ encore_entry_link_tags('variable') }}
+        {% endif %} #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+        {{ encore_entry_script_tags('app') }}
+        {% block javascripts %}
+        {% endblock %}
+    </head>
+    <body class="d-flex w-100 justify-content-center height-inherit">
+        <div class="d-flex w-100 all-content align-center">
+        {# {% if app.user %} #}
+        {# {% if app.user.active == true %}
+        Votre compte a été désactivé veuillez vous déconnectez. #}
+         {# {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a> #}
+        {# {% else %} #}
+
+            {% block navbar %}
+            {% include "_headerBrut.html.twig" %}
+            {% endblock %}
+
+             <div class="w-100"> 
+                {% block tab %}
+                {% include "_subHeaderBrut.html.twig" %}
+                {% endblock %}           
+                {% block body %}
+                {% endblock %}
+             </div> 
+            {% block littlejavascripts %}    
+            {% endblock %}
+        </div>
+        {# {% endif %} #}
+        {# {% else %}
+
+        {% endif %} #}
+    </body>
+</html>

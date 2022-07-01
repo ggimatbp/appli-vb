@@ -1,25 +1,53 @@
 <div class="m-3">
-    <h2 class="">Archive et section sans fichiers</h2>
+    <h4 class="text-center">Archive et section sans fichiers</h2>
     {# parent section #}
-    {% for ap_access in app.user.RoleId.apAccesses %}
-        {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
-            <a class="btn" href="{{ path('information_parent_section_new_qse') }}">Nouvelle Catégorie</a>
-        {% endif %}
-    {% endfor %}
 </div>
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+        <a class="btn btn-create" href="{{ path('information_parent_section_new_qse') }}">Nouvelle Catégorie</a>
+    {% endif %}
+{% endfor %}
 <div class="aprole-global-container">
     {% for parent in all_parent_section %}
         {% if parent.state == 2 %}
-            <h3 class="m-3">{{parent.name}}</h3>
-            <div class="d-flex">
+            <h3 class="m-3">{{parent.name}}
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+                        <a title="Modifier la catégorie: {{parent.name}}" class="btn btn-edit" href="{{ path('information_parent_section_edit', {'id': parent.id}) }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+                {# {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
+                        <a title="Créer une nouvelle catégorie" href="{{ path('information_parent_section_new_qse') }}" class="btn btn-create">
+                            <i class="fa-solid fa-square-plus"></i>
+                        </a>
+                    {% endif %}
+                {% endfor %} #}
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                        <button title='Supprimer la section: {{parent.name}}' type="button" class="btn align-self-center btn-delete" data-bs-toggle="modal" data-bs-target="#exampleParentSectionModal{{parent.id}}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    {% endif %}
+                {% endfor %}
+
+            </h3>
+                {% for ap_access in app.user.RoleId.apAccesses %}
+                    {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
+                        {{ include('tabs/information/ap_information_parent_section/_modal_delete.html.twig') }}
+                    {% endif %}
+                {% endfor %}
+            {# <div class="d-flex">
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
-                        <a class="m-3 btn" href="{{ path('information_section_new_qse', {'id': parent.id}) }}">
+                        <a class="m-3 btn btn-create" href="{{ path('information_section_new_qse', {'id': parent.id}) }}">
                             Nouvelle section
                         </a>
                     {% endif %}
                 {% endfor %}
-                    <a class="btn m-3" href="{{ path('information_parent_section_edit', {'id': parent.id}) }}">Modifier</a>
+                    <a class="btn m-3 btn-edit" href="{{ path('information_parent_section_edit', {'id': parent.id}) }}">Modifier</a>
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
                         {{ include('tabs/information/ap_information_parent_section/_modal_delete.html.twig') }}
@@ -27,12 +55,12 @@
                 {% endfor %}
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
-                        <button type="button" class="btn align-self-center" data-bs-toggle="modal" data-bs-target="#exampleParentSectionModal{{parent.id}}">
+                        <button type="button" class="btn align-self-center btn-delete" data-bs-toggle="modal" data-bs-target="#exampleParentSectionModal{{parent.id}}">
                             Supprimer
                         </button>
                     {% endif %}
                 {% endfor %}
-            </div>
+            </div> #}
             {% for ap_access in app.user.RoleId.apAccesses %}
                 {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
                 {{ include('tabs/information/qse/sectionArchived.html.twig') }}

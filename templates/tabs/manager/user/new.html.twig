@@ -23,7 +23,7 @@
         <label class="p-1">Générateur de mot de passe</label>
         <span class="d-flex">
           <input class="w-100 form-control " id="visualisation-password-generator" placeholder="Mot de passe sécurisé à générer automatiquement">
-          <button type="button" class="btn-bottom btn-edit-role btn btn-ligth" id="password-generator-btn">
+          <button type="button" class="btn-bottom btn-edit-role btn btn-ligth btn-lambda" id="password-generator-btn">
             Générateur
           </button>
         </span>
@@ -32,7 +32,7 @@
       <div class="aprole-global-container">
       <div class="d-flex">
           {# <a class="btn-bottom btn-edit-role btn btn-ligth" href="{{ path('manager_index') }}">Retour</a> #}
-          <button class="btn-bottom btn-edit-role btn btn-ligth">{{ button_label|default('Enregistrer') }}</button>
+          <button class="btn-bottom btn-edit-role btn btn-ligth btn-create">{{ button_label|default('Enregistrer') }}</button>
       </div>
   </div>
   {{ form_end(form) }}
