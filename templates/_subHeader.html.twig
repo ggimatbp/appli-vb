@@ -48,10 +48,10 @@
                 {% if apAccess.tab.apTab is not null and app.request.attributes.get('_route') == apAccess.tab.apTab.path %}
                 {% set showActiveTab = showActiveTab + 1 %}                         
                   {% if app.request.query.get("roleback") is defined and app.request.query.get("roleback") != null %}
-                    <div class="tab-pane fade {{showActiveTab == app.request.query.get("roleback") ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div>
+                    <div class="global-zoom tab-pane fade {{showActiveTab == app.request.query.get("roleback") ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div>
 
                   {% else %}                  
-                     <div class="tab-pane fade {{showActiveTab == 1 ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div> 
+                     <div  class="global-zoom tab-pane fade {{showActiveTab == 1 ? 'show active' : '' }}" id="pills-{{ apAccess.tab.name }}" role="tabpanel" aria-labelledby="pills-{{ apAccess.tab.name }}">{% include apAccess.tab.path %}</div> 
                   {% endif %} 
                 {% endif %}
               {% endif %}

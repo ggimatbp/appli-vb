@@ -31,6 +31,10 @@
 
 }
 
+.header2:first-child{
+    border-left: none;
+}
+
 .nav-pills .nav-link{
     background: none;
      
@@ -58,6 +62,26 @@
     background-color:$header1BackgroundColor;
     position: sticky;
     height:100vh;
+}
+
+.nav-info{
+    background-color:$header1BackgroundColor;
+    color: white;
+
+}
+
+.nav-info-active{
+    border-bottom: 0.2rem solid black;
+    background-color: white;
+    color: black;
+}
+
+.info-content-hide{
+    display:none
+}
+
+.info-content-visible{
+    display:block;
 }
 
 .header-vertical-container{

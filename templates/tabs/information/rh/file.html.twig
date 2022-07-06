@@ -106,7 +106,7 @@
                                         <h6>À faire</h6>
                                         {% endif  %}
                                             {% for viewed in file.apInformationVieweds %}
-                                                {% if viewed.state == 0 %}
+                                                {% if viewed.state is same as 0 %}
                                                 <li class="text-danger">{{viewed.user.firstname}} {{viewed.user.lastname}}</li>
                                                 {% endif %}
                                             {% endfor %}

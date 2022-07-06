@@ -1,29 +1,45 @@
 {% extends 'base.html.twig' %}
 {% block title %}Information
 {% endblock %}
+{% block javascripts %}
+	{{ encore_entry_script_tags('apInformationRh') }}
+{% endblock %}
 {% block navbar %}
 	{% include "_headerBrut2.html.twig" %}
 {% endblock %}
 {% block tab %}
 	{% include "_subHeaderBrut2.html.twig" %}
 {% endblock %}
+
 {% block body %}
     {% for ap_access in app.user.RoleId.apAccesses %}
         {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
 			<div class="aprole-global-container">
 				{# <h1 class="m-1">
 					Information QSE
-				</h1>				 #}
+				</h1>
+				
+				#}
+		{% for ap_access in app.user.RoleId.apAccesses %}
+			{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+				<span class="d-flex">
+						<div id="currentFile" class="mx-3 btn nav-link nav-info nav-info-active" data-idcontent="currentFileContent"> Fichiers courants</div>
+						<div id="archiveFile" class=" mx-3 btn nav-link nav-info" data-idcontent="archivedFileContent">Fichiers archivés</div>
+				</span>
+			{% endif %}
+		{% endfor %}
 				<div class="aprole-global-container">
-					{{ include('tabs/information/rh/current.html.twig') }}
-					
-					{% for ap_access in app.user.RoleId.apAccesses %}
-						{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
-							<hr>
-							{{ include('tabs/information/rh/archive.html.twig') }}
-						{% endif %}
-					{% endfor %}
-					{% for section in all_section %}
+					<div id="currentFileContent" class="info-content-hide info-content-visible">
+						{{ include('tabs/information/rh/current.html.twig') }}
+					</div>	
+					<div id="archivedFileContent" class="info-content-hide">
+						{% for ap_access in app.user.RoleId.apAccesses %}
+							{% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
+								{{ include('tabs/information/rh/archive.html.twig') }}
+							{% endif %}
+						{% endfor %}
+					</div>
+					{# {% for section in all_section %}
 						{% if section.state == 1 %}
 						{% for ap_access in app.user.RoleId.apAccesses %}
 							{% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
@@ -31,7 +47,7 @@
 							{% endif %}
 						{% endfor %}
 						{% endif %}
-					{% endfor %}
+					{% endfor %} #}
 				</div>
 			</div>
 		{% endif %}

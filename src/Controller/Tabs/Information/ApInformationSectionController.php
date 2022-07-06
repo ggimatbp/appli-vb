@@ -37,18 +37,18 @@ class ApInformationSectionController extends AbstractController
     }
 
     /**
-     * @Route("/new/rh/{id}", name="information_section_new_rh", methods={"GET", "POST"})
+     * @Route("/new/rh", name="information_section_new_rh", methods={"GET", "POST"})
      */
     public function newRh(Request $request, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService, ApInformationParentSectionRepository $parentRepo): Response
     {
         $apInformationSection = new ApInformationSection();
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
         $form->handleRequest($request);
-        $parentId = intval(basename("$_SERVER[REQUEST_URI]"));
+        // $parentId = intval(basename("$_SERVER[REQUEST_URI]"));
         $tabName = self::TAB_RH;
         if ($form->isSubmitted() && $form->isValid()) {
-            $parent = $parentRepo->find($parentId);
-            $apInformationSection->setParentSection($parent);
+            // $parent = $parentRepo->find($parentId);
+            $apInformationSection->setParentSection(Null);
             $apInformationSection->setState(1);
             $apInformationSectionRepository->add($apInformationSection);
             $globalHistoryService->setInHistory($apInformationSection, 'new rh');
