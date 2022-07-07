@@ -63,6 +63,7 @@ class ApCatalogVbBulkImageRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.caseIs = :case')
             ->setParameter('case', $caseId)
+            ->orderBy('a.name', 'ASC')
             ->getQuery()
             ->getResult()
         ;

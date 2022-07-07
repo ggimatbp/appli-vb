@@ -53,6 +53,7 @@ class ApCatalogFilesVbRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.sector = :id')
             ->setParameter('id', $id)
+            ->orderBy('a.name', 'ASC')
             ->getQuery()
             ->getResult()
             ;

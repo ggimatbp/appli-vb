@@ -49,6 +49,7 @@ class ApCatalogModelBpRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.customer = :id')
             ->setParameter('id', $id)
+            ->orderBy('a.name', 'ASC')
             ->getQuery()
             ->getResult();
     }
