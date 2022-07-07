@@ -1,4 +1,4 @@
-<div class="aprole-global-container">
+{# <div class="aprole-global-container">
     {% set loop_qse = 0 %}
     {% set fileEmpty = 0 %}
     {% for parent in all_parent_section %}
@@ -17,14 +17,14 @@
                 {% set fileEmpty = 0 %}
                 {% set loop_qse = loop_qse + 1 %}
                     <h3 class="m-3">{{parent.name}}
-                    {# test #}
+
                         {% for ap_access in app.user.RoleId.apAccesses %}
                             {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
                                 <a title="Modifier la catégorie: {{parent.name}}" class="btn btn-edit" href="{{ path('information_parent_section_edit', {'id': parent.id}) }}">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             {% endif %}
-                        {% endfor %}
+                        {% endfor %} #}
 {# 
                         {% for ap_access in app.user.RoleId.apAccesses %}
                             {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
@@ -34,7 +34,7 @@
                             {% endif %}
                         {% endfor %} #}
                     {# test #}
-                    </h3>
+                    {# </h3> #}
                         {# {{ include('tabs/information/ap_information_parent_section/_delete_form.html.twig') }} #}
                         {# {% for ap_access in app.user.RoleId.apAccesses %}
                             {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
@@ -54,9 +54,9 @@
 
             {{ include('tabs/information/rh/section.html.twig') }}
             {# fin de l'include #}
-            {% endif %}
+            {# {% endif %}
         {% endif %}
     {% else %}
         <p>Pas de parent</p>
     {% endfor %}
-</div>
+</div> #}

@@ -1,14 +1,14 @@
-<div class="m-3">
-    <h4 class="text-center">Archive et section sans fichiers</h2>
+{# <div class="m-3"> #}
+    {# <h4 class="text-center">Archive et section sans fichiers</h2> #}
     {# parent section #}
-</div>
-{% for ap_access in app.user.RoleId.apAccesses %}
+{# </div> #}
+{# {% for ap_access in app.user.RoleId.apAccesses %}
     {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
         <a class="btn btn-create" href="{{ path('information_parent_section_new_rh') }}">Nouvelle Catégorie</a>
     {% endif %}
 {% endfor %}
-<div class="aprole-global-container">
-    {% for parent in all_parent_section %}
+<div class="aprole-global-container"> #}
+    {# {% for parent in all_parent_section %}
         {% if parent.state == 1 %}
             <h3 class="m-3">{{parent.name}}
                 {% for ap_access in app.user.RoleId.apAccesses %}
@@ -17,7 +17,7 @@
                             <i class="fas fa-edit"></i>
                         </a>
                     {% endif %}
-                {% endfor %}
+                {% endfor %} #}
                 {# {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
                         <a title="Créer une nouvelle catégorie" href="{{ path('information_parent_section_new_qse') }}" class="btn btn-create">
@@ -25,7 +25,7 @@
                         </a>
                     {% endif %}
                 {% endfor %} #}
-                {% for ap_access in app.user.RoleId.apAccesses %}
+                {# {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
                         <button title='Supprimer la section: {{parent.name}}' type="button" class="btn align-self-center btn-delete" data-bs-toggle="modal" data-bs-target="#exampleParentSectionModal{{parent.id}}">
                             <i class="fas fa-trash-alt"></i>
@@ -38,7 +38,7 @@
                     {% if ap_access.tab.name is same as(tabName) and ap_access.delete is same as(true) %}
                         {{ include('tabs/information/ap_information_parent_section/_modal_delete.html.twig') }}
                     {% endif %}
-                {% endfor %}
+                {% endfor %} #}
             {# <div class="d-flex">
                 {% for ap_access in app.user.RoleId.apAccesses %}
                     {% if ap_access.tab.name is same as(tabName) and ap_access.add is same as(true) %}
@@ -66,8 +66,8 @@
                 {{ include('tabs/information/rh/sectionArchived.html.twig') }}
                 {% endif %}
             {% endfor %}
-        {% endif %}
+        {# {% endif %}
     {% else %}
         <p>Pas de parent</p>
-    {% endfor %}
-</div>
+    {% endfor %} #}
+{# </div> #}

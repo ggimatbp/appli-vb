@@ -51,6 +51,7 @@ Encore
     //#endregion
 
     //#region information
+    .addEntry('apInformationRh', './assets/js/information/apInformationRh.js')
     .addEntry('apInformation', './assets/js/information/apInformationFile.js')
     .addEntry('apInformationForm', './assets/js/information/apInformationFormFile.js')
     //#endregion

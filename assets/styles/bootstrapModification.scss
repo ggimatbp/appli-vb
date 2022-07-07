@@ -61,13 +61,14 @@ a:hover{
 }
 
 .list-group-item {
-    background-color: $backgroundColor;
-    color: black;
+    background-color: $header1BackgroundColor;
+    color: white;
+    font-weight: 600;
 }
 
 .list-group-item-action {
     width:max-content; // For `<button>`s (anchors become 100% by default though)
-    color: black;
+    color: white;
     text-align: inherit; // For `<button>`s (anchors inherit)
     border: none;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;

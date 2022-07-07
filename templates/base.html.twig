@@ -18,8 +18,8 @@
         {% block javascripts %}
         {% endblock %}
     </head>
-    <body class="d-flex w-100 justify-content-center">
-        <div class="d-flex w-100 all-content">
+    <body  class="d-flex w-100 justify-content-center">
+        <div  class="d-flex w-100 all-content">
         {# {% if app.user %} #}
         {# {% if app.user.active == true %}
         Votre compte a été désactivé veuillez vous déconnectez. #}
@@ -30,12 +30,14 @@
             {% include "_headerBrut.html.twig" %}
             {% endblock %}
             </div>
-             <div class="content-container"> 
+             <div  class="content-container"> 
                 {% block tab %}
                 {% include "_subHeaderBrut.html.twig" %}
-                {% endblock %}           
+                {% endblock %}
+                <div class="global-zoom">           
                 {% block body %}
                 {% endblock %}
+                </div>
              </div> 
             {% block littlejavascripts %}    
             {% endblock %}
