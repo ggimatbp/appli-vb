@@ -106,8 +106,8 @@
                                         <h6>À faire</h6>
                                         {% endif  %}
                                             {% for viewed in file.apInformationVieweds %}
-                                                {% if viewed.state is same as 0 %}
-                                                <li class="text-danger">{{viewed.user.firstname}} {{viewed.user.lastname}}</li>
+                                                {% if viewed.state == 0 %}
+                                                 <li class="text-danger">{{viewed.user.firstname}} {{viewed.user.lastname}}</li> 
                                                 {% endif %}
                                             {% endfor %}
                                         {% if totalNumberViewedTrue > 0 %}
@@ -115,7 +115,7 @@
                                         {% endif %}
                                             {% for viewed in file.apInformationVieweds %}
                                                 {% if viewed.state == 1 %}
-                                                <li class="text-success">{{viewed.user.firstname}} {{viewed.user.lastname}}</li>
+                                                 <li class="text-success">{{viewed.user.firstname}} {{viewed.user.lastname}}</li> 
                                                 {% endif %}
                                             {% endfor %}
                                         </ul>
