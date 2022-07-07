@@ -24,6 +24,8 @@
 /node_modules/
 /public/build/
 /public/uploads/information/
+/public/uploads/models/
+/public/uploads/modelsVb/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
