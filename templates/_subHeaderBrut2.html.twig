@@ -20,11 +20,12 @@
                 {% if apAccess.tab.apTab is not null and apAccess.tab.apTab.id == parentTab %}
                 {% if app.request.attributes.get('_controller') matches "#" ~ apAccess.tab.ControlPath ~ "#" %}
                     <li class="header2 nav-item">
-                    <a class="header2 nav-item-uniform nav-link active text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a> 
+                        <a class="header2 nav-item-uniform nav-link active text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a> 
                     </li>
                 {% else %}
+
                     <li class="header2 nav-item">
-                    <a class="header2 nav-item-uniform nav-link text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a> 
+                        <a class="header2 nav-item-uniform nav-link text-center" href="{{ path(apAccess.tab.path)}}" >{{ apAccess.tab.name }}</a> 
                     </li>
                 {% endif %}
                 {% endif %}

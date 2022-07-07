@@ -13,7 +13,7 @@ use App\Repository\ApInformationFilesRepository;
  * @Route("/information", name="information_")
  */
 
-class InformationController extends AbstractController
+class InformationRecentController extends AbstractController
 {
 
   public const TAB_NAME_RH = "RH";
