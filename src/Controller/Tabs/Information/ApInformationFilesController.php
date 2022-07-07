@@ -156,6 +156,7 @@ class ApInformationFilesController extends AbstractController
      */
     public function show(ApInformationFiles $apInformationFile, ApInformationParapherRepository $apInformationParapherRepo, ApInformationSignatureRepository $apInformationSignatureRepository, ApInformationViewedRepository $apInformationViewedRepository): Response
     {
+       
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
         $fileToParaph = $apInformationParapherRepo->findByUserAndFile($user, $apInformationFile);
@@ -444,6 +445,7 @@ class ApInformationFilesController extends AbstractController
         $submittedToken = $request->get('editCsrf');
         $viewedId = $request->get('id');
         $viewed = $apInformationViewedRepo->find($viewedId);
+
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
                 $globalHistoryService->setInHistory($viewed, 'read and approved');
                 $viewed->setState(1);

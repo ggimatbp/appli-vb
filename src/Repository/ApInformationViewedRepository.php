@@ -54,7 +54,7 @@ class ApInformationViewedRepository extends ServiceEntityRepository
             ->andWhere('a.file = :fileId')
             ->setParameter('fileId', $file)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
 
