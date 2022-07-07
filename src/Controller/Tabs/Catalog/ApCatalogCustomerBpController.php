@@ -28,7 +28,7 @@ class ApCatalogCustomerBpController extends AbstractController
     public function index(ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository): Response
     {
         return $this->render('tabs/Catalog/ap_catalog_customer_bp/index.html.twig', [
-            'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAll(),
+            'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAllOrderName(),
         ]);
     }
 

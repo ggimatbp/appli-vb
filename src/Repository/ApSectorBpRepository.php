@@ -53,6 +53,7 @@ class ApSectorBpRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.model = :id')
             ->setParameter('id', $id)
+            ->orderBy('a.name', 'ASC')
             ->getQuery()
             ->getResult();
     }

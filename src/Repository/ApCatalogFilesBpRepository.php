@@ -63,6 +63,7 @@ class ApCatalogFilesBpRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.relation = :id')
             ->setParameter('id', $id)
+            ->orderBy('a.name', 'ASC')
             ->getQuery()
             ->getResult()
             ;
