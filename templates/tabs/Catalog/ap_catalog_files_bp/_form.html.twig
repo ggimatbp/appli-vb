@@ -2,7 +2,14 @@
 {{ form_start(form, {'attr': {'onsubmit': 'buttonName.disabled=true; return true;' }}) }}
 
     <div class="row">
-        {{ form_row(form.name, { 'label': 'Nom' }) }}
+        <div class="mb-3">
+            {{ form_label(form.orderNumber, 'Numéro pour trier', {'attr': { 'label': 'Numéro pour trier' }}) }}
+            {{ form_widget(form.orderNumber, {'attr': { 'placeholder': "Si non renseigné, dernière position." }}) }}
+        </div>
+    </div>
+
+    <div class="row">
+        {{ form_row(form.name, { 'label': 'Commentaire' }) }}
     </div>
 
         {% for error in form.vars.errors.form.getErrors(true) %}

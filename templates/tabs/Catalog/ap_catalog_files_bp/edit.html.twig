@@ -18,6 +18,9 @@
             <span class="form-new-container">
                 {{ form_start(form) }}
                     <div class="row">
+                        {{ form_row(form.orderNumber, { 'label': 'Numéro pour trier' }) }}
+                    </div>
+                    <div class="row">   
                         {{ form_row(form.name, { 'label': 'Nom' }) }}
                     </div>
                     <div class="row">

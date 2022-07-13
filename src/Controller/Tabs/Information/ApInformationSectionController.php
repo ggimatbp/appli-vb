@@ -41,6 +41,9 @@ class ApInformationSectionController extends AbstractController
      */
     public function newRh(Request $request, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService, ApInformationParentSectionRepository $parentRepo): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $apInformationSection = new ApInformationSection();
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
         $form->handleRequest($request);
@@ -51,7 +54,7 @@ class ApInformationSectionController extends AbstractController
             $apInformationSection->setParentSection(Null);
             $apInformationSection->setState(1);
             $apInformationSectionRepository->add($apInformationSection);
-            $globalHistoryService->setInHistory($apInformationSection, 'new rh');
+            $globalHistoryService->setInHistory($apInformationSection, 'New rh', $ipUser );
             return $this->redirectToRoute('information_rh_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -67,6 +70,9 @@ class ApInformationSectionController extends AbstractController
      */
     public function newQse(Request $request, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService, ApInformationParentSectionRepository $parentRepo): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $apInformationSection = new ApInformationSection();
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
         $form->handleRequest($request);
@@ -77,7 +83,7 @@ class ApInformationSectionController extends AbstractController
             $apInformationSection->setParentSection($parent);
             $apInformationSection->setState(2);
             $apInformationSectionRepository->add($apInformationSection);
-            $globalHistoryService->setInHistory($apInformationSection, 'new qse');
+            $globalHistoryService->setInHistory($apInformationSection, 'new qse', $ipUser);
             return $this->redirectToRoute('information_qse_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -93,6 +99,9 @@ class ApInformationSectionController extends AbstractController
      */
     public function edit(Request $request, ApInformationSection $apInformationSection, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
         $form->handleRequest($request);
         $state = $apInformationSection->getState();
@@ -105,7 +114,7 @@ class ApInformationSectionController extends AbstractController
         }
         if ($form->isSubmitted() && $form->isValid()) {
             $apInformationSectionRepository->add($apInformationSection);
-            $globalHistoryService->setInHistory($apInformationSection, 'edit');
+            $globalHistoryService->setInHistory($apInformationSection, 'Edit', $ipUser);
 
             if ($state == 1){
             return $this->redirectToRoute('information_rh_index', [], Response::HTTP_SEE_OTHER);
@@ -127,11 +136,14 @@ class ApInformationSectionController extends AbstractController
      */
     public function delete(ApInformationFilesRepository $fileRepo, Request $request, ApInformationSection $apInformationSection, ApInformationSectionRepository $apInformationSectionRepository, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $state = $apInformationSection->getState();
         if ($this->isCsrfTokenValid('delete'.$apInformationSection->getId(), $request->request->get('_token'))) {
             // dd($fileRepo->findAllInfoFilesBySector($apInformationSection->getId()));
             if($fileRepo->findAllInfoFilesBySector($apInformationSection->getId()) == NULL){
-            $globalHistoryService->setInHistory($apInformationSection, 'delete');
+            $globalHistoryService->setInHistory($apInformationSection, 'Delete', $ipUser);
             $apInformationSectionRepository->remove($apInformationSection);
             }
         }

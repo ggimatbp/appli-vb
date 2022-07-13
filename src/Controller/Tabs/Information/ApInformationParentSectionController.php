@@ -39,6 +39,8 @@ class ApInformationParentSectionController extends AbstractController
      */
     public function newQse(Request $request, ApInformationParentSectionRepository $apInformationParentSectionRepository, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
         $apInformationParentSection = new ApInformationParentSection();
         $form = $this->createForm(ApInformationParentSectionType::class, $apInformationParentSection);
         $form->handleRequest($request);
@@ -46,7 +48,7 @@ class ApInformationParentSectionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $apInformationParentSection->setState(2);
             $apInformationParentSectionRepository->add($apInformationParentSection);
-            $globalHistoryService->setInHistory($apInformationParentSection, 'new qse');
+            $globalHistoryService->setInHistory($apInformationParentSection, 'New qse', $ipUser);
             return $this->redirectToRoute('information_qse_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -62,6 +64,9 @@ class ApInformationParentSectionController extends AbstractController
     */
     public function newRh(Request $request, ApInformationParentSectionRepository $apInformationParentSectionRepository, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $apInformationParentSection = new ApInformationParentSection();
         $form = $this->createForm(ApInformationParentSectionType::class, $apInformationParentSection);
         $form->handleRequest($request);
@@ -70,7 +75,7 @@ class ApInformationParentSectionController extends AbstractController
             
             $apInformationParentSection->setState(1);
             $apInformationParentSectionRepository->add($apInformationParentSection);
-            $globalHistoryService->setInHistory($apInformationParentSection, 'new rh');
+            $globalHistoryService->setInHistory($apInformationParentSection, 'New rh', $ipUser);
             return $this->redirectToRoute('information_rh_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -86,6 +91,9 @@ class ApInformationParentSectionController extends AbstractController
      */
     public function edit(Request $request, ApInformationParentSection $apInformationParentSection, ApInformationParentSectionRepository $apInformationParentSectionRepository, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $form = $this->createForm(ApInformationParentSectionType::class, $apInformationParentSection);
         $form->handleRequest($request);
         $state = $apInformationParentSection->getState();
@@ -98,7 +106,7 @@ class ApInformationParentSectionController extends AbstractController
         }
         if ($form->isSubmitted() && $form->isValid()) {
             $apInformationParentSectionRepository->add($apInformationParentSection);
-            $globalHistoryService->setInHistory($apInformationParentSection, 'edit');
+            $globalHistoryService->setInHistory($apInformationParentSection, 'Edit', $ipUser);
             if ($state == 1){
                 return $this->redirectToRoute('information_rh_index', [], Response::HTTP_SEE_OTHER);
                 }else{
@@ -120,11 +128,14 @@ class ApInformationParentSectionController extends AbstractController
     public function delete(Request $request, ApInformationParentSection $apInformationParentSection, ApInformationParentSectionRepository $apInformationParentSectionRepository, ApInformationSectionRepository $parentSection, GlobalHistoryService $globalHistoryService): Response
 
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $state = $apInformationParentSection->getState();
         if ($this->isCsrfTokenValid('delete'.$apInformationParentSection->getId(), $request->request->get('_token'))) {
             if($parentSection->findAllInfoSectorsByParent($apInformationParentSection->getId()) == NULL)
                 {
-                    $globalHistoryService->setInHistory($apInformationParentSection, 'delete');
+                    $globalHistoryService->setInHistory($apInformationParentSection, 'Delete', $ipUser);
                      $apInformationParentSectionRepository->remove($apInformationParentSection);
                 }
         }

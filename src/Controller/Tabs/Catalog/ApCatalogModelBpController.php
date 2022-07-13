@@ -62,6 +62,9 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function new(Request $request, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $tabName = self::TAB_BP;
         $apCatalogModelBp = new ApCatalogModelBp();
         $form = $this->createForm(ApCatalogModelBpType::class, $apCatalogModelBp);
@@ -70,7 +73,7 @@ class ApCatalogModelBpController extends AbstractController
             $entityManager =  $doctrine->getManager();
             $entityManager->persist($apCatalogModelBp);
             $entityManager->flush();
-            $globalHistoryService->setInHistory($apCatalogModelBp, 'new');
+            $globalHistoryService->setInHistory($apCatalogModelBp, 'new', $ipUser);
             return $this->redirectToRoute('ap_catalog_model_bp_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -86,6 +89,9 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function newWithModel(Request $request, ApCatalogCustomerBpRepository $customerBpRepository, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $tabName = self::TAB_BP;
         $apCatalogModelBp = new ApCatalogModelBp();
         $form = $this->createForm(ApCatalogModelBpType::class, $apCatalogModelBp);
@@ -97,7 +103,7 @@ class ApCatalogModelBpController extends AbstractController
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogModelBp);
             $entityManager->flush();
-            $globalHistoryService->setInHistory($apCatalogModelBp, 'new', ['new with customer']);
+            $globalHistoryService->setInHistory($apCatalogModelBp, 'new', $ipUser , ['new with customer']);
             return $this->redirectToRoute('ap_catalog_customer_bp_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
@@ -130,6 +136,8 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function edit(Request $request, ApCatalogModelBp $apCatalogModelBp, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
 
         $id = $apCatalogModelBp->getId();
         $tabName = self::TAB_BP;
@@ -138,7 +146,7 @@ class ApCatalogModelBpController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $doctrine->getManager()->flush();
-            $globalHistoryService->setInHistory($apCatalogModelBp, 'edit');
+            $globalHistoryService->setInHistory($apCatalogModelBp, 'edit', $ipUser);
             return $this->redirectToRoute('ap_sector_bp_index', ['id' =>  $id], Response::HTTP_SEE_OTHER);
         }
 
@@ -154,7 +162,8 @@ class ApCatalogModelBpController extends AbstractController
      */
     public function delete(Request $request, ApCatalogModelBp $apCatalogModelBp, ApCatalogModelBpRepository $modelRepository, GlobalHistoryService $globalHistoryService, ApSectorBpRepository $sectors, ManagerRegistry $doctrine): Response
     {
-         //$customerId = $apCatalogModelBp->getCustomer();
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
 
           $id = intval(basename("$_SERVER[REQUEST_URI]"));
           $model = $modelRepository->find($id);
@@ -164,7 +173,7 @@ class ApCatalogModelBpController extends AbstractController
           $allSectorByModel = $sectors->findSectionByModel($catalogId);
         if ($this->isCsrfTokenValid('delete'.$apCatalogModelBp->getId(), $request->request->get('_token'))) {
             if($allSectorByModel == NULL){
-                $globalHistoryService->setInHistory($apCatalogModelBp, 'delete');
+                $globalHistoryService->setInHistory($apCatalogModelBp, 'delete', $ipUser);
                 $entityManager = $doctrine->getManager();
                 $entityManager->remove($apCatalogModelBp);
                 $entityManager->flush();
@@ -192,18 +201,22 @@ class ApCatalogModelBpController extends AbstractController
     public function archive(ApCatalogModelBp $apCatalogModelBp, ApCatalogFilesBpRepository $apCatalogFilesBpRepository, Request  $request, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
     {
         if ($this->isCsrfTokenValid('archiver'.$apCatalogModelBp->getId(), $request->request->get('_token'))) {
+
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
+
             if ($apCatalogModelBp->getArchive() == 0 ){
                 $apCatalogModelBp->setArchive(1);
                 $modelId = $apCatalogModelBp->getId();
-                $globalHistoryService->setInHistory($apCatalogModelBp, 'archive');
+                $globalHistoryService->setInHistory($apCatalogModelBp, 'archive', $ipUser);
                 $filesbyModelId = $apCatalogFilesBpRepository->findAllById($modelId);
             foreach($filesbyModelId as $file){
-                $globalHistoryService->setInHistory($file, 'children archive');
+                $globalHistoryService->setInHistory($file, 'children archive', $ipUser);
                 $file->setArchive(1);
             }
             }else{
                 $apCatalogModelBp->setArchive(0);
-                $globalHistoryService->setInHistory($apCatalogModelBp, 'unarchive');
+                $globalHistoryService->setInHistory($apCatalogModelBp, 'unarchive', $ipUser);
             }
             $customerId = $apCatalogModelBp->getCustomer()->getId();
             $entityManager = $doctrine->getManager();
@@ -222,6 +235,9 @@ class ApCatalogModelBpController extends AbstractController
 
     public function archiveBySection(ApSectorBp $apSectorBp, ApSectorBpRepository $apSectorBpRepository, Request  $request, ApCatalogFilesBpRepository $ApCatalogFilesBpRepository, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine):response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $modelId = $apSectorBp->getModel()->getId();
         $sectorId = $apSectorBp->getId();
         if ($this->isCsrfTokenValid('archiver'.$apSectorBp->getId(), $request->request->get('_token'))) {
@@ -229,15 +245,15 @@ class ApCatalogModelBpController extends AbstractController
                 $apSectorBp->setArchive(1);
                 $sectorId = $apSectorBp->getId();
                 $modelId = $apSectorBp->getModel();
-                $globalHistoryService->setInHistory($apSectorBp, 'archive');
+                $globalHistoryService->setInHistory($apSectorBp, 'archive', $ipUser);
                 $filesbySectorId = $ApCatalogFilesBpRepository->findFilesBySectors($sectorId);
             foreach($filesbySectorId as $file){
                 $file->setArchive(1);
-                $globalHistoryService->setInHistory($file, 'children archive');
+                $globalHistoryService->setInHistory($file, 'children archive', $ipUser);
             }
             }else{
                 $apSectorBp->setArchive(0);
-                $globalHistoryService->setInHistory($apSectorBp, 'Unarchive');
+                $globalHistoryService->setInHistory($apSectorBp, 'Unarchive', $ipUser);
             }
                 $modelId = $apSectorBp->getModel()->getId();
                 $entityManager = $doctrine->getManager();

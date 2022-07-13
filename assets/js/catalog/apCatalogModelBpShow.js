@@ -335,3 +335,22 @@ $('#deleteModal .delete-files-secure').each(function(){
   // document.addEventListener('contextmenu', event => event.preventDefault());
 
   //#endregion
+
+  //#region zoom image modal
+
+  // let zoomPlus = document.getElementsByClassName('zoom-plus')
+  // let zoomMinus = document.getElementsByClassName('zoom-minus')
+
+  // for (let i = 0; i < zoomPlus.length ; i++) {
+  //   zoomPlus[i].onclick = moreZoom;
+  // }
+
+  // for (let i = 0; i < zoomMinus.length ; i++) {
+  //   zoomMinus[i].onclick = lessZoom;
+  // }
+
+  // function moreZoom
+
+
+
+  //#endregion

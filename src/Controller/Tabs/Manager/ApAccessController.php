@@ -104,7 +104,9 @@ class ApAccessController extends AbstractController
     
     public function addAuthOnClick(Request $request, ApAccess $apAccess, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService) : response
     {
-        
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $submittedToken = $request->get('editAccessCsrf');
         $manager = $doctrine->getManager();
         $roleName = $apAccess->getRole()->getName();
@@ -112,13 +114,13 @@ class ApAccessController extends AbstractController
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
                 if($apAccess->getAdd() == 1)
                 {
-                    $globalHistoryService->setInHistory($apAccess, 'add edit unauth');
+                    $globalHistoryService->setInHistory($apAccess, 'Add edit unauth', $ipUser);
                     $apAccess->setAdd(0);
                     $manager->flush();
                 }
                 else
                 {
-                    $globalHistoryService->setInHistory($apAccess, 'add edit auth');
+                    $globalHistoryService->setInHistory($apAccess, 'Add edit auth', $ipUser);
                     $apAccess->setAdd(1);
                     $manager->flush();
                 }
@@ -136,6 +138,9 @@ class ApAccessController extends AbstractController
     
     public function DeleteAuthOnClick(Request $request, ApAccess $apAccess, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService) : response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $submittedToken = $request->get('editAccessCsrf');
         $manager = $doctrine->getManager();
         $roleName = $apAccess->getRole()->getName();
@@ -143,13 +148,13 @@ class ApAccessController extends AbstractController
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
                 if($apAccess->getDelete() == 1)
                 {
-                    $globalHistoryService->setInHistory($apAccess, 'delete edit unauth');
+                    $globalHistoryService->setInHistory($apAccess, 'Delete edit unauth', $ipUser);
                     $apAccess->setDelete(0);
                     $manager->flush();
                 }
                 else
                 {
-                    $globalHistoryService->setInHistory($apAccess, 'delete edit auth');
+                    $globalHistoryService->setInHistory($apAccess, 'delete edit auth', $ipUser);
                     $apAccess->setDelete(1);
                     $manager->flush();
                 }
@@ -167,6 +172,9 @@ class ApAccessController extends AbstractController
 
     public function editAuthOnClick(Request $request, ApAccess $apAccess, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService) : response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $submittedToken = $request->get('editAccessCsrf');
         $manager = $doctrine->getManager();
         $roleName = $apAccess->getRole()->getName();
@@ -175,13 +183,13 @@ class ApAccessController extends AbstractController
             {
                 if($apAccess->getEdit() == 1)
                 {
-                    $globalHistoryService->setInHistory($apAccess, 'edition edit unauth');
+                    $globalHistoryService->setInHistory($apAccess, 'edition edit unauth', $ipUser);
                     $apAccess->setEdit(0);
                     $manager->flush();
                 }
                 else
                 {
-                    $globalHistoryService->setInHistory($apAccess, 'edition edit unauth');
+                    $globalHistoryService->setInHistory($apAccess, 'edition edit unauth', $ipUser);
                     $apAccess->setEdit(1);
                     $manager->flush();
                 }
@@ -202,17 +210,19 @@ class ApAccessController extends AbstractController
         $submittedToken = $request->get('editAccessCsrf');
         $manager = $doctrine->getManager();
         $roleName = $apAccess->getRole()->getName();
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
         if(!($roleName == "ADMIN")){
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)){
                 if($apAccess->getView() == 1)
                 {
-                    $globalHistoryService->setInHistory($apAccess, 'view edit unauth');
+                    $globalHistoryService->setInHistory($apAccess, 'view edit unauth', $ipUser);
                     $apAccess->setView(0);
                     $manager->flush();
                 }
                 else
                 {
-                    $globalHistoryService->setInHistory($apAccess, 'view edit unauth');
+                    $globalHistoryService->setInHistory($apAccess, 'view edit unauth', $ipUser);
                     $apAccess->setView(1);
                     $manager->flush();
                 }

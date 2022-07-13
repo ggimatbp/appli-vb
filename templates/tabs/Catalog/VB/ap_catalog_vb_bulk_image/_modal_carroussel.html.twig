@@ -1,14 +1,11 @@
 
 <!-- Modal -->
 <div class="modal  fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-xl">
+	<div class="modal-dialog modal-fullscreen-edited">
 		<div class="modal-content modal-content-design">
-			<div
-				class="modal-body modal-body-design">
-
-
+			<div class="modal-body modal-body-design">
+   				<button type="button" class="btn-close modal-exit-edited" data-bs-dismiss="modal" aria-label="Close"></button>
 				{#region carroussel #}
-
 				<div id="bulkImageCarroussel" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="false">
 					<div class="carousel-indicators">
 						{% set loopCarrousselButton = 0 %}
@@ -25,8 +22,10 @@
 						{% for bulk_image in files %}
 							{% set loopCarroussel = loopCarroussel + 1 %}
 
-							<div
-								id="{{'active' ~ bulk_image.id}}" class="carousel-item" data-img-id='{{bulk_image.id}}'>
+							<div id="{{'active' ~ bulk_image.id}}" class="carousel-item" data-img-id='{{bulk_image.id}}'>
+								<a class="modal-fullscreen-link" href="{{ path('catalog_vb_bulk_image_show', {'id':bulk_image.id}) }}">
+									<i class="fas fa-expand"></i>
+								</a>
 								{# <div class="modal-header modal-header-design"> #}
 								<h5 class="modal-title modal-title-picture" id="exampleModalLabel">{{ bulk_image.name }}</h5>
 

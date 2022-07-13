@@ -39,6 +39,9 @@ class ApSectorVbController extends AbstractController
      */
     public function new(Request $request, ApCatalogCaseVbRepository $apCatalogCaseVbRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
     {
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
         $tabName = self::TAB_VB;
         $apSectorVb = new ApSectorVb();
         $caseId = intval(basename("$_SERVER[REQUEST_URI]"));
@@ -50,7 +53,7 @@ class ApSectorVbController extends AbstractController
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apSectorVb);
             $entityManager->flush();
-            $GlobalHistoryService->setInHistory($apSectorVb, 'new');
+            $GlobalHistoryService->setInHistory($apSectorVb, 'new', $ipUser);
 
             return $this->redirectToRoute('ap_catalog_case_vb_show', ['id' => $caseId], Response::HTTP_SEE_OTHER);
         }
@@ -85,13 +88,16 @@ class ApSectorVbController extends AbstractController
      */
     public function edit(Request $request, ApSectorVb $apSectorVb, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $tabName = self::TAB_VB;
         $form = $this->createForm(ApSectorVbType::class, $apSectorVb);
         $form->handleRequest($request);
         $sectorId = $apSectorVb->getId();
         if ($form->isSubmitted() && $form->isValid()) {
             $doctrine->getManager()->flush();
-            $GlobalHistoryService->setInHistory($apSectorVb, 'edit');
+            $GlobalHistoryService->setInHistory($apSectorVb, 'edit', $ipUser);
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId ], Response::HTTP_SEE_OTHER);
         }
 
@@ -107,13 +113,16 @@ class ApSectorVbController extends AbstractController
      */
     public function delete(Request $request, ApSectorVb $apSectorVb, GlobalHistoryService $GlobalHistoryService, ApCatalogFilesVbRepository $files, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
        $case = $apSectorVb->getCaseId();
        $caseId = $case->getId();
        $sectorId = $apSectorVb->getId();
        $allFilesInSector = $files->findFilesBySectors($sectorId);
         if ($this->isCsrfTokenValid('delete'.$apSectorVb->getId(), $request->request->get('_token'))) {
             if($allFilesInSector == NULL){
-                $GlobalHistoryService->setInHistory($apSectorVb, 'delete');
+                $GlobalHistoryService->setInHistory($apSectorVb, 'delete', $ipUser);
                 $entityManager = $doctrine->getManager();
                 $entityManager->remove($apSectorVb);
                 $entityManager->flush();
@@ -127,25 +136,27 @@ class ApSectorVbController extends AbstractController
      */
     public function archive(ApCatalogFilesVbRepository $files, Request  $request, GlobalHistoryService $GlobalHistoryService, ApSectorVb $apSectorVb, ManagerRegistry $doctrine): Response
     {   
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
         $sectorId = $apSectorVb->getId();
         $allFilesInSector = $files->findFilesBySectors($sectorId);
         if ($this->isCsrfTokenValid('archiver'. $sectorId, $request->request->get('_token')))
         {
             if($apSectorVb->getArchive() == 0)
             {
-                $GlobalHistoryService->setInHistory($apSectorVb, 'Archive');
+                $GlobalHistoryService->setInHistory($apSectorVb, 'Archive', $ipUser);
                 $apSectorVb->setArchive(1);
                 foreach($allFilesInSector as $file){
                     if ($file->getArchive() == 0 ){
                         $file->setArchive(1);
-                        $GlobalHistoryService->setInHistory($file, 'Archive');
+                        $GlobalHistoryService->setInHistory($file, 'Archive', $ipUser);
                         $entityManager = $doctrine->getManager();
                         $entityManager->persist($file);
                         $entityManager->flush();
                     }
                 }
             }else{
-                $GlobalHistoryService->setInHistory($apSectorVb, 'Unarchive');
+                $GlobalHistoryService->setInHistory($apSectorVb, 'Unarchive', $ipUser);
                 $apSectorVb->setArchive(0);
             }
                 $entityManager = $doctrine->getManager();

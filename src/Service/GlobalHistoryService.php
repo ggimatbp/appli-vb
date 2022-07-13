@@ -6,6 +6,7 @@ use App\Entity\ApGlobalHistory;
 use Symfony\Component\Security\Core\Security;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class GlobalHistoryService
 {
@@ -23,24 +24,27 @@ class GlobalHistoryService
 
 
     // function setInHistory($object, $action, $extra = null)
-    function setInHistory($object, $action, $extra = NULL)
+    function setInHistory($object, $action, $ipAdress , $extra = NULL)
     {
 
     $apGlobalHistory = new ApGlobalHistory;
 
+      //$request = Request::createFromGlobals();
+    //  $ipUser = $request->getClientIp();
     
-    // //entity name
+
+    //entity name
     $className = $this->manager->getClassMetadata(get_class($object))->getName();
     $apGlobalHistory->setEntityName($className);
     
-        //fake
-        //$apGlobalHistory->setEntityName('test');
+    //Ipadress
+     $apGlobalHistory->setIpAdress($ipAdress);
 
      //ObjectId
      $apGlobalHistory->setObjectId($object->getId());
 
-        // fake
-       // $apGlobalHistory->setObjectId(1);
+    // fake
+    // $apGlobalHistory->setObjectId(1);
 
     //date
     $apGlobalHistory->setCreatedAt(new \DateTime());
@@ -53,10 +57,10 @@ class GlobalHistoryService
     //action
     $apGlobalHistory->setAction($action);
 
-        //fake
-        
-     //   $apGlobalHistory->setAction('create');
-     //   dd($apGlobalHistory);
+    //fake
+
+    // $apGlobalHistory->setAction('create');
+    // dd($apGlobalHistory);
     //extra
     $apGlobalHistory->setExtra($extra);
 

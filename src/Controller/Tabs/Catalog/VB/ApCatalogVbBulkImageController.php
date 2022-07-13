@@ -63,6 +63,8 @@ class ApCatalogVbBulkImageController extends AbstractController
 
             $width = getimagesize($imgFile)[0];
             $height = getimagesize($imgFile)[1];
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
             $entityManager = $doctrine->getManager();
             if($form['miniature']->getData() == true && $actualImageThumb != null){
 
@@ -74,7 +76,7 @@ class ApCatalogVbBulkImageController extends AbstractController
 
             $intervention->resizeCatalogVbCarroussel($apCatalogVbBulkImage->getFileName(), $width,  $height);
 
-            $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'new');
+            $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'new', $ipUser);
 
             return $this->redirectToRoute('ap_catalog_case_vb_show', ['id' => $caseId], Response::HTTP_SEE_OTHER);
         }
@@ -102,8 +104,11 @@ class ApCatalogVbBulkImageController extends AbstractController
     /**
      * @Route("/{id}/edit", name="catalog_vb_bulk_image_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, ApCatalogVbBulkImage $apCatalogVbBulkImage, ApCatalogVbBulkImageRepository $apCatalogVbBulkImageRepository): Response
+    public function edit(Request $request, ApCatalogVbBulkImage $apCatalogVbBulkImage, ApCatalogVbBulkImageRepository $apCatalogVbBulkImageRepository, GlobalHistoryService $GlobalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $caseId = $apCatalogVbBulkImage->getCaseIs()->getId();
         $actualImageThumb = $apCatalogVbBulkImageRepository->findOneMiniature(['caseIs' => $apCatalogVbBulkImage->getCaseIs()]);
         $tabName = self::TAB_VB;
@@ -118,6 +123,7 @@ class ApCatalogVbBulkImageController extends AbstractController
             // dd($apCatalogVbBulkImage);
             $apCatalogVbBulkImage->setUpdatedAt(new \DateTime());
             $apCatalogVbBulkImageRepository->add($apCatalogVbBulkImage);
+            $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'Edit', $ipUser);
             return $this->redirectToRoute('ap_catalog_case_vb_show', ['id' => $caseId], Response::HTTP_SEE_OTHER);
         }
 
@@ -131,11 +137,13 @@ class ApCatalogVbBulkImageController extends AbstractController
     /**
      * @Route("/{id}", name="catalog_vb_bulk_image_delete", methods={"POST"})
      */
-    public function delete(Request $request, ApCatalogVbBulkImage $apCatalogVbBulkImage, ManagerRegistry $doctrine): Response
+    public function delete(Request $request, ApCatalogVbBulkImage $apCatalogVbBulkImage, ManagerRegistry $doctrine, GlobalHistoryService $GlobalHistoryService): Response
     {
-
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
         $caseId = $apCatalogVbBulkImage->getCaseIs()->getId();
         if ($this->isCsrfTokenValid('delete'.$apCatalogVbBulkImage->getId(), $request->request->get('_token'))) {
+            $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'Delete', $ipUser);
             $entityManager = $doctrine->getManager();
             $entityManager->remove($apCatalogVbBulkImage);
             $entityManager->flush();
@@ -150,15 +158,17 @@ class ApCatalogVbBulkImageController extends AbstractController
      */
     public function archive(ManagerRegistry $doctrine, ApCatalogVbBulkImage $apCatalogVbBulkImage , Request  $request, GlobalHistoryService $GlobalHistoryService): Response
     {   
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
         $caseId = $apCatalogVbBulkImage->getCaseIs()->getId();
         if ($this->isCsrfTokenValid('archiver'.$apCatalogVbBulkImage->getId(), $request->request->get('_token')))
         {
             if ($apCatalogVbBulkImage->getArchive() == 0 ){
                 $apCatalogVbBulkImage->setArchive(1);
-                $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'Archive');
+                $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'Archive', $ipUser);
             }else{
                 $apCatalogVbBulkImage->setArchive(0);
-                $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'Unarchive');
+                $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'Unarchive', $ipUser);
             }
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogVbBulkImage);
@@ -177,7 +187,9 @@ class ApCatalogVbBulkImageController extends AbstractController
     {
         $csrf = $request->get('csrf');
         if ($this->isCsrfTokenValid('delete', $csrf)){
-            $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'Ajax delete');
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
+            $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'Ajax delete', $ipUser);
              $manager = $doctrine->getManager();
              $manager->remove($apCatalogVbBulkImage);
              $manager->flush();

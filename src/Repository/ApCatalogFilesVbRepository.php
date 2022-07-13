@@ -53,7 +53,7 @@ class ApCatalogFilesVbRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.sector = :id')
             ->setParameter('id', $id)
-            ->orderBy('a.name', 'ASC')
+            ->orderBy('a.orderNumber', 'ASC')
             ->getQuery()
             ->getResult()
             ;
@@ -67,5 +67,31 @@ class ApCatalogFilesVbRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
+    }
+
+    public function findBiggestOrderNumberBySectorsForPdf($id)
+    {
+    return $this->createQueryBuilder('a')
+    ->andWhere('a.file_type LIKE :pdf')
+    ->setParameter('pdf', '%pdf%')
+    ->andWhere('a.caseId = :id' )
+    ->setParameter('id', $id)
+    ->orderBy('a.orderNumber', 'DESC')
+    ->getQuery()->setMaxresults(1)
+    ->getResult()
+    ;
+    }
+
+    public function findBiggestOrderNumberBySectorsForOther($id)
+    {
+    return $this->createQueryBuilder('a')
+    ->andWhere('a.file_type != :pdf')
+    ->setParameter('pdf', 'pdf')
+    ->andWhere('a.caseId = :id' )
+    ->setParameter('id', $id)
+    ->orderBy('a.orderNumber', 'DESC')
+    ->getQuery()->setMaxresults(1)
+    ->getResult()
+    ;
     }
 }

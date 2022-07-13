@@ -83,6 +83,11 @@ class ApCatalogFilesBp
      */
     private $relation;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $orderNumber;
+
     public function __construct()
     {
         $this->apCatalogFilesBpHistories = new ArrayCollection();
@@ -288,6 +293,18 @@ class ApCatalogFilesBp
                 $parent->setSon(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOrderNumber(): ?int
+    {
+        return $this->orderNumber;
+    }
+
+    public function setOrderNumber(?int $orderNumber): self
+    {
+        $this->orderNumber = $orderNumber;
 
         return $this;
     }

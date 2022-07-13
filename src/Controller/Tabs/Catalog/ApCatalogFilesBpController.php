@@ -44,7 +44,7 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/new/{id}", name="ap_catalog_files_bp_new", methods={"GET","POST"})
      */
-    public function new(InterventionImage $intervention , Request $request, ApCatalogModelBpRepository $apCatalogModelBp, ApSectorBp $apSectorBp, ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
+    public function new(InterventionImage $intervention , Request $request, ApCatalogModelBpRepository $apCatalogModelBp, ApSectorBp $apSectorBp, ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine, ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
     {
         $tabName = self::TAB_BP;
         $apCatalogFilesBp = new ApCatalogFilesBp();
@@ -54,6 +54,7 @@ class ApCatalogFilesBpController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // $apCatalogFilesBp->setFileName($apCatalogFilesBp->getName());
+            
             $sector = $ApSectorBpRepository->find($sectorId);
             $model = $sector->getModel();
             $apCatalogFilesBp->setModel($model);
@@ -68,11 +69,37 @@ class ApCatalogFilesBpController extends AbstractController
             $manager = $doctrine->getManager();
             $width = getimagesize($imgFile)[0];
             $height = getimagesize($imgFile)[1];
+
+    #region auto générate order number
+
+            if($apCatalogFilesBp->getOrderNumber() === NULL)
+            {
+                if($fileExtension === "pdf")
+                {
+                    $biggestFileOrderNumber = $apCatalogFilesBpRepository->findBiggestOrderNumberBySectorsForPdf($apCatalogFilesBp->getRelation()->getId());
+                }else{
+                    $biggestFileOrderNumber = $apCatalogFilesBpRepository->findBiggestOrderNumberBySectorsForOther($apCatalogFilesBp->getRelation()->getId());
+                }
+
+                    if( $biggestFileOrderNumber[0] === NULL)
+                    {
+                        $apCatalogFilesBp->setOrderNumber(0);
+                    }else{
+                        $biggestOrderNumber = $biggestFileOrderNumber[0]->getOrderNumber();
+                        $apCatalogFilesBp->setOrderNumber($biggestOrderNumber + 1);
+                    }
+
+                
+            }
+    #endregion
+
             $manager->persist($apCatalogFilesBp);
             $manager->flush();
             if($fileExtension == "pdf"){}else{$intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName(), $width, $height);};
             //set history
-            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'new');
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
+            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'new', $ipUser);
             return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm('tabs/Catalog/ap_catalog_files_bp/new.html.twig', [
@@ -100,6 +127,9 @@ class ApCatalogFilesBpController extends AbstractController
      */
     public function edit(InterventionImage $intervention, Request $request, ApCatalogFilesBp $apCatalogFilesBp,  ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $tabName = self::TAB_BP;
         $sectorId = $apCatalogFilesBp->getRelation();
         $id = $sectorId->getId();
@@ -125,7 +155,7 @@ class ApCatalogFilesBpController extends AbstractController
             $manager = $doctrine->getManager();
             $manager->persist($apCatalogFilesBp);
             $manager->flush();
-            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'edit');
+            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'edit', $ipUser);
 
             if($ifNewImage == true){
                 if($fileExtension == "pdf"){}else{
@@ -150,10 +180,13 @@ class ApCatalogFilesBpController extends AbstractController
      */
     public function delete(Request $request, ApCatalogFilesBp $apCatalogFilesBp, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $relationId = $apCatalogFilesBp->getrelation();
         $id = $relationId->getId();
         if ($this->isCsrfTokenValid('delete'.$apCatalogFilesBp->getId(), $request->request->get('_token'))) {
-            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'delete');
+            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'delete', $ipUser);
             $entityManager = $doctrine->getManager();
             $entityManager->remove($apCatalogFilesBp);
             $entityManager->flush();
@@ -172,15 +205,10 @@ class ApCatalogFilesBpController extends AbstractController
     {
         $csrf = $request->get('csrf');
         if ($this->isCsrfTokenValid('delete', $csrf)){
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
 
-            // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-            // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-            // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-            // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-            // $ApCatalogFilesBpHistory->setAction("delete");
-            // $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
-            // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'delete');
+            $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'delete', $ipUser);
             $manager = $doctrine->getManager();
             $manager->persist($apCatalogFilesBp);
             $manager->flush();
@@ -195,16 +223,6 @@ class ApCatalogFilesBpController extends AbstractController
 
     }
 
-
-    // $csrf = $request->get('csrf');
-    // if ($this->isCsrfTokenValid('delete', $csrf)){
-    //     $manager = $this->getDoctrine()->getManager();
-    //     $manager->remove($apCatalogFilesVb);
-    //     $manager->flush();
-    //     return $this->json(["code" => 200,
-    //     "message" => "delete"], 200);
-    // }
-
     /**
      *@Route("/archive/{id}", name="ap_catalog_files_bp_archive", methods={"GET","POST"})
      */
@@ -213,35 +231,15 @@ class ApCatalogFilesBpController extends AbstractController
         $sectorId = $apCatalogFilesBp->getRelation()->getId();
         if ($this->isCsrfTokenValid('archiver'.$apCatalogFilesBp->getId(), $request->request->get('_token')))
             {
+                $request = Request::createFromGlobals();
+                $ipUser = $request->getClientIp();
                 if ($apCatalogFilesBp->getArchive() == 0 ){
                     $apCatalogFilesBp->setArchive(1);
-                    $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'archiver');
-                    //historic
-                    // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-                    // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-                    // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-                    // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-                    // $ApCatalogFilesBpHistory->setAction("archive");
-                    // $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
-                    // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-                    // $entityManager = $this->getDoctrine()->getManager();
-                    // $entityManager->persist($ApCatalogFilesBpHistory);
-                    // $entityManager->flush();
-                }else{
+                    $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'archiver', $ipUser);
 
+                }else{
                     $apCatalogFilesBp->setArchive(0);
-                    $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'Unarchiver');
-                    //historic
-                    // $ApCatalogFilesBpHistory = New ApCatalogFilesBpHistory();
-                    // $ApCatalogFilesBpHistory->setUser($apCatalogFilesBp->getUser()->getId());
-                    // $ApCatalogFilesBpHistory->setFile($apCatalogFilesBp->getId());
-                    // $ApCatalogFilesBpHistory->setUpdateAt(new \DateTimeImmutable());
-                    // $ApCatalogFilesBpHistory->setAction("unarchive");
-                    // $ApCatalogFilesBpHistory->setModelName($apCatalogFilesBp->getModel()->getName());
-                    // $ApCatalogFilesBpHistory->setDocName($apCatalogFilesBp->getFileName());
-                    // $entityManager = $this->getDoctrine()->getManager();
-                    // $entityManager->persist($ApCatalogFilesBpHistory);
-                    // $entityManager->flush();
+                    $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'Unarchiver', $ipUser);
                 }
                 
                 $entityManager = $doctrine->getManager();

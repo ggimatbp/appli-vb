@@ -46,10 +46,12 @@ class ApCatalogCaseVbController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogCaseVb);
             $entityManager->flush();
-            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'new');
+            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'new',  $ipUser);
 
             return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
         }
@@ -88,8 +90,10 @@ class ApCatalogCaseVbController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
             $doctrine->getManager()->flush();
-            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'edit');
+            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'edit', $ipUser);
 
             return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
         }
@@ -110,7 +114,9 @@ class ApCatalogCaseVbController extends AbstractController
             $caseId = $apCatalogCaseVb->getId();
             $allFilesByCaseId = $sector->findSectionByCase($caseId);
             if($allFilesByCaseId == NULL){
-                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'delete');   
+                $request = Request::createFromGlobals();
+                $ipUser = $request->getClientIp();
+                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'delete', $ipUser);   
                 $entityManager = $doctrine->getManager();
                 $entityManager->remove($apCatalogCaseVb);
                 $entityManager->flush();
@@ -127,23 +133,25 @@ class ApCatalogCaseVbController extends AbstractController
     {
         if ($this->isCsrfTokenValid('archiver' . $apCatalogCaseVb->getId(), $request->request->get('_token')))
         {
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
             if ($apCatalogCaseVb->getArchive() == 0) {
                 $apCatalogCaseVb->setArchive(1);
                 $caseId = $apCatalogCaseVb->getId();
                 $allFilesByCaseId = $apCatalogFilesVbRepository->findAllFileByCaseId($caseId);
-                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent');   
+                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent', $ipUser);   
                 foreach ($allFilesByCaseId as $file) {
                     $file->setArchive(1);
-                    $GlobalHistoryService->setInHistory($file, 'archive children');   
+                    $GlobalHistoryService->setInHistory($file, 'archive children', $ipUser);   
                 }
             } else {
                 $apCatalogCaseVb->setArchive(0);
                 $caseId = $apCatalogCaseVb->getId();
                 $allFilesByCaseId = $apCatalogFilesVbRepository->findAllFileByCaseId($caseId);
-                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent');
+                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent', $ipUser);
                 foreach ($allFilesByCaseId as $file) {
                     $file->setArchive(0);
-                    $GlobalHistoryService->setInHistory($file, 'archive children');
+                    $GlobalHistoryService->setInHistory($file, 'archive children', $ipUser);
                 }
             }
             $entityManager = $doctrine->getManager();
