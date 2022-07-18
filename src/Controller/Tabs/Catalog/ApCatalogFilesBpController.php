@@ -30,16 +30,6 @@ class ApCatalogFilesBpController extends AbstractController
     const TAB_BP = "Batteries-Prod";
     #endregion
 
-    /**
-     * @Route("/", name="ap_catalog_files_bp_index", methods={"GET"})
-     */
-    public function index(ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
-    {
-
-        return $this->render('tabs/Catalog/ap_catalog_files_bp/index.html.twig', [
-            'ap_catalog_files_bps' => $apCatalogFilesBpRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/new/{id}", name="ap_catalog_files_bp_new", methods={"GET","POST"})
@@ -47,6 +37,10 @@ class ApCatalogFilesBpController extends AbstractController
     public function new(InterventionImage $intervention , Request $request, ApCatalogModelBpRepository $apCatalogModelBp, ApSectorBp $apSectorBp, ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine, ApCatalogFilesBpRepository $apCatalogFilesBpRepository): Response
     {
         $tabName = self::TAB_BP;
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $GlobalHistoryService->setInHistory('View', 'ap_catalog_files_bp_new', $ipUser);
+
         $apCatalogFilesBp = new ApCatalogFilesBp();
         $form = $this->createForm(ApCatalogFilesBpType::class, $apCatalogFilesBp, );
         $form->handleRequest($request);
@@ -113,8 +107,13 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_files_bp_show", methods={"GET"})
      */
-    public function show(ApCatalogFilesBp $apCatalogFilesBp): Response
+    public function show(ApCatalogFilesBp $apCatalogFilesBp, GlobalHistoryService $GlobalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'View', $ipUser);
+
         $tabName = self::TAB_BP;
         return $this->render('tabs/Catalog/ap_catalog_files_bp/show.html.twig', [
             'ap_catalog_files_bp' => $apCatalogFilesBp,
@@ -125,10 +124,12 @@ class ApCatalogFilesBpController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_catalog_files_bp_edit", methods={"GET","POST"})
      */
-    public function edit(InterventionImage $intervention, Request $request, ApCatalogFilesBp $apCatalogFilesBp,  ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
+    public function edit(InterventionImage $intervention, Request $request, ApCatalogFilesBp $apCatalogFilesBp, ApSectorBpRepository $ApSectorBpRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'ViewEdit', $ipUser);
 
         $tabName = self::TAB_BP;
         $sectorId = $apCatalogFilesBp->getRelation();

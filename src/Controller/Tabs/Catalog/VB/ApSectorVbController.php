@@ -25,16 +25,6 @@ class ApSectorVbController extends AbstractController
     #endregion
 
     /**
-     * @Route("/", name="ap_sector_vb_index", methods={"GET"})
-     */
-    public function index(ApSectorVbRepository $apSectorVbRepository): Response
-    {
-        return $this->render('tabs/Catalog/VB/ap_sector_vb/index.html.twig', [
-            'ap_sector_vbs' => $apSectorVbRepository->findAll(),
-        ]);
-    }
-
-    /**
      * @Route("/new/{id}", name="ap_sector_vb_new", methods={"GET","POST"})
      */
     public function new(Request $request, ApCatalogCaseVbRepository $apCatalogCaseVbRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
@@ -42,6 +32,9 @@ class ApSectorVbController extends AbstractController
 
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory('view', 'ap_sector_vb_new', $ipUser);
+
         $tabName = self::TAB_VB;
         $apSectorVb = new ApSectorVb();
         $caseId = intval(basename("$_SERVER[REQUEST_URI]"));
@@ -69,10 +62,16 @@ class ApSectorVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_sector_vb_show", methods={"GET"})
      */
-    public function show(ApSectorVb $apSectorVb, ApCatalogFilesVbRepository $apCatalogFilesVbRepository): Response
+    public function show(ApSectorVb $apSectorVb, ApCatalogFilesVbRepository $apCatalogFilesVbRepository, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
         $id = $apSectorVb->getId();
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory($apSectorVb, 'ap_sector_vb_show', $ipUser);
+
         $files = $apCatalogFilesVbRepository->findFilesBySectors($id);
         // $sectorId = intval(basename("$_SERVER[REQUEST_URI]"));
         // $apCatalogCaseVbRepository->find($sectorId);
@@ -90,7 +89,7 @@ class ApSectorVbController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $GlobalHistoryService->setInHistory($apSectorVb, 'View', $ipUser);
         $tabName = self::TAB_VB;
         $form = $this->createForm(ApSectorVbType::class, $apSectorVb);
         $form->handleRequest($request);

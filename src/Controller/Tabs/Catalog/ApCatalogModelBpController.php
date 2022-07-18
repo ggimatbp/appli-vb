@@ -29,26 +29,19 @@ class ApCatalogModelBpController extends AbstractController
     const TAB_BP = "Batteries-Prod";
     #endregion
 
-    /**
-     * @Route("/", name="ap_catalog_model_bp_index", methods={"GET"})
-     */
-    public function index(ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository): Response
-    {
-        $tabName = self::TAB_BP;
-        return $this->render('tabs/Catalog/ap_catalog_model_bp/index.html.twig', [
-            'ap_catalog_model_bps' => $apCatalogModelBpRepository->findAll(),
-            'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAll(),
-            'tabName' => $tabName
-        ]);
-    }
-
     // model show
     /**
      * @Route("/sectorByModel/{id}", name="ap_sector_bp_index", methods={"GET"})
      */
-    public function indexSectionByModel(ApCatalogModelBp $apCatalogModelBp, ApSectorBpRepository $apSectorBpRepository): Response
+    public function indexSectionByModel(ApCatalogModelBp $apCatalogModelBp, ApSectorBpRepository $apSectorBpRepository, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_BP;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory('view', 'ap_sector_bp_index', $ipUser);
+
         $id = $apCatalogModelBp->getId();
         return $this->render('tabs/Catalog/ap_catalog_model_bp/index_section.html.twig', [
             'ap_sector_bps' => $apSectorBpRepository->findSectionByModel($id),
@@ -64,6 +57,8 @@ class ApCatalogModelBpController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
+
+        $globalHistoryService->setInHistory('view', 'ap_catalog_model_bp_new', $ipUser);
 
         $tabName = self::TAB_BP;
         $apCatalogModelBp = new ApCatalogModelBp();
@@ -92,6 +87,7 @@ class ApCatalogModelBpController extends AbstractController
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
+        $globalHistoryService->setInHistory('View', 'ap_catalog_model_bp_new_precise', $ipUser);
         $tabName = self::TAB_BP;
         $apCatalogModelBp = new ApCatalogModelBp();
         $form = $this->createForm(ApCatalogModelBpType::class, $apCatalogModelBp);
@@ -119,8 +115,14 @@ class ApCatalogModelBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_model_bp_show", methods={"GET"})
      */
-    public function show(ApCatalogFilesBpRepository $ApCatalogFilesBpRepository, ApSectorBp $apSectorBp): Response
+    public function show(ApCatalogFilesBpRepository $ApCatalogFilesBpRepository, ApSectorBp $apSectorBp, GlobalHistoryService $globalHistoryService): Response
     {
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $globalHistoryService->setInHistory('view', 'ap_catalog_model_bp_new_precise', $ipUser);
+
         $tabName = self::TAB_BP;
         $id = $apSectorBp->getId();
         $files = $ApCatalogFilesBpRepository->findFilesBySectors($id);
@@ -139,6 +141,8 @@ class ApCatalogModelBpController extends AbstractController
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
+        $globalHistoryService->setInHistory($apCatalogModelBp, 'ViewEdit', $ipUser);
+
         $id = $apCatalogModelBp->getId();
         $tabName = self::TAB_BP;
         $form = $this->createForm(ApCatalogModelBppreciseType::class, $apCatalogModelBp);
@@ -146,7 +150,7 @@ class ApCatalogModelBpController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $doctrine->getManager()->flush();
-            $globalHistoryService->setInHistory($apCatalogModelBp, 'edit', $ipUser);
+            $globalHistoryService->setInHistory($apCatalogModelBp, 'Edit', $ipUser);
             return $this->redirectToRoute('ap_sector_bp_index', ['id' =>  $id], Response::HTTP_SEE_OTHER);
         }
 

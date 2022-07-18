@@ -31,7 +31,7 @@ class ApSectorBpController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $globalHistoryService->setInHistory('View', 'ap_sector_bp_new', $ipUser);
         $tabName = self::TAB_BP;
         $apSectorBp = new ApSectorBp();
         $form = $this->createForm(ApSectorBpType::class, $apSectorBp);
@@ -74,6 +74,8 @@ class ApSectorBpController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
+
+        $globalHistoryService->setInHistory($apSectorBp, 'ViewEdit', $ipUser);
 
         $tabName = self::TAB_BP;
         $form = $this->createForm(ApSectorBpType::class, $apSectorBp);

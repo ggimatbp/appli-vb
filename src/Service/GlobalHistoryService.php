@@ -30,18 +30,50 @@ class GlobalHistoryService
     $apGlobalHistory = new ApGlobalHistory;
 
       //$request = Request::createFromGlobals();
-    //  $ipUser = $request->getClientIp();
+      //$ipUser = $request->getClientIp();
     
+      if($object === "login failed")
+      {
+        $apGlobalHistory->setEntityName("SecurityController");
+        $apGlobalHistory->setObjectId(0);
+        $apGlobalHistory->setUserId(0);
+        //action
+        $apGlobalHistory->setAction($action);
 
+      }elseif($object === "view"){
+        $apGlobalHistory->setEntityName($action);
+        $apGlobalHistory->setObjectId(0);
+        //userId
+        $user = $this->security->getUser();
+        $userId = $this->userRepository->find($user);
+        $apGlobalHistory->setUserId($userId->getId());
+
+        //action
+        $apGlobalHistory->setAction($object);
+
+      }else{
     //entity name
     $className = $this->manager->getClassMetadata(get_class($object))->getName();
     $apGlobalHistory->setEntityName($className);
+
+    //ObjectId
+    $apGlobalHistory->setObjectId($object->getId());
+
+             //userId
+    $user = $this->security->getUser();
+    $userId = $this->userRepository->find($user);
+    $apGlobalHistory->setUserId($userId->getId());
+
+        //action
+        $apGlobalHistory->setAction($action);
+
+      }
+
     
     //Ipadress
      $apGlobalHistory->setIpAdress($ipAdress);
 
-     //ObjectId
-     $apGlobalHistory->setObjectId($object->getId());
+
 
     // fake
     // $apGlobalHistory->setObjectId(1);
@@ -49,13 +81,9 @@ class GlobalHistoryService
     //date
     $apGlobalHistory->setCreatedAt(new \DateTime());
     
-    //userId
-    $user = $this->security->getUser();
-    $userId = $this->userRepository->find($user);
-    $apGlobalHistory->setUserId($userId->getId());
 
-    //action
-    $apGlobalHistory->setAction($action);
+
+
 
     //fake
 

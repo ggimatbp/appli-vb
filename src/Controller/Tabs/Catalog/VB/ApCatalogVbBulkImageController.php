@@ -26,23 +26,17 @@ class ApCatalogVbBulkImageController extends AbstractController
     #endregion
 
     /**
-     * @Route("/", name="catalog_vb_bulk_image_index", methods={"GET"})
-     */
-    public function index(ApCatalogVbBulkImageRepository $apCatalogVbBulkImageRepository): Response
-    {
-        $tabName = self::TAB_VB;
-        return $this->render('tabs/Catalog/VB/ap_catalog_vb_bulk_image/index.html.twig', [
-            'ap_catalog_vb_bulk_images' => $apCatalogVbBulkImageRepository->findAll(),
-            'tabName' => $tabName,
-        ]);
-    }
-
-    /**
      * @Route("/new/{id}", name="catalog_vb_bulk_image_new", methods={"GET", "POST"})
      */
     public function new(InterventionImage $intervention, Request $request, ApCatalogCaseVbRepository $caseRepository,ManagerRegistry $doctrine, GlobalHistoryService $GlobalHistoryService, ApCatalogVbBulkImageRepository $bulkImageRepo ): Response
     {
         $tabName = self::TAB_VB;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory('view', 'catalog_vb_bulk_image_new', $ipUser);
+
         $caseId = intval(basename("$_SERVER[REQUEST_URI]"));
         $apCatalogVbBulkImage = new ApCatalogVbBulkImage();
         $form = $this->createForm(ApCatalogVbBulkImageType::class, $apCatalogVbBulkImage);
@@ -63,8 +57,6 @@ class ApCatalogVbBulkImageController extends AbstractController
 
             $width = getimagesize($imgFile)[0];
             $height = getimagesize($imgFile)[1];
-            $request = Request::createFromGlobals();
-            $ipUser = $request->getClientIp();
             $entityManager = $doctrine->getManager();
             if($form['miniature']->getData() == true && $actualImageThumb != null){
 
@@ -92,9 +84,14 @@ class ApCatalogVbBulkImageController extends AbstractController
     /**
      * @Route("/{id}", name="catalog_vb_bulk_image_show", methods={"GET"})
      */
-    public function show(ApCatalogVbBulkImage $apCatalogVbBulkImage): Response
+    public function show(ApCatalogVbBulkImage $apCatalogVbBulkImage, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'View', $ipUser);
         return $this->render('tabs/Catalog/VB/ap_catalog_vb_bulk_image/show.html.twig', [
             'ap_catalog_vb_bulk_image' => $apCatalogVbBulkImage,
             'tabName' => $tabName,
@@ -108,7 +105,7 @@ class ApCatalogVbBulkImageController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $GlobalHistoryService->setInHistory($apCatalogVbBulkImage, 'ViewEdit', $ipUser);
         $caseId = $apCatalogVbBulkImage->getCaseIs()->getId();
         $actualImageThumb = $apCatalogVbBulkImageRepository->findOneMiniature(['caseIs' => $apCatalogVbBulkImage->getCaseIs()]);
         $tabName = self::TAB_VB;

@@ -39,8 +39,13 @@ class ApInformationFilesController extends AbstractController
     /**
      * @Route("/", name="information_files_index", methods={"GET"})
      */
-    public function index(ApInformationFilesRepository $apInformationFilesRepository): Response
+    public function index(ApInformationFilesRepository $apInformationFilesRepository, GlobalHistoryService $globalHistoryService): Response
     {
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $globalHistoryService->setInHistory('view', 'information_files_index', $ipUser);
 
         $recentRhFiles = $apInformationFilesRepository->findRecentRhFiles();
         $recentQseFiles = $apInformationFilesRepository->findRecentRhFiles();
@@ -62,7 +67,7 @@ class ApInformationFilesController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $globalHistoryService->setInHistory('view', 'information_files_new', $ipUser);
         $apInformationFile = new ApInformationFiles();
         $form = $this->createForm(ApInformationFilesType::class, $apInformationFile);
         $form->handleRequest($request);
@@ -157,9 +162,13 @@ class ApInformationFilesController extends AbstractController
     /**
      * @Route("/{id}", name="information_files_show", methods={"GET"})
      */
-    public function show(ApInformationFiles $apInformationFile, ApInformationParapherRepository $apInformationParapherRepo, ApInformationSignatureRepository $apInformationSignatureRepository, ApInformationViewedRepository $apInformationViewedRepository): Response
+    public function show(ApInformationFiles $apInformationFile, ApInformationParapherRepository $apInformationParapherRepo, ApInformationSignatureRepository $apInformationSignatureRepository, ApInformationViewedRepository $apInformationViewedRepository, GlobalHistoryService $globalHistoryService): Response
     {
-       
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $globalHistoryService->setInHistory('view', 'information_files_new', $ipUser);
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
         $fileToParaph = $apInformationParapherRepo->findByUserAndFile($user, $apInformationFile);
@@ -190,7 +199,7 @@ class ApInformationFilesController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $globalHistoryService->setInHistory($apInformationFile, 'ViewEdit', $ipUser);
         $form = $this->createForm(ApInformationFilesEditType::class, $apInformationFile);
         $form->handleRequest($request);
         $state = $apInformationFile->getSection()->getState();

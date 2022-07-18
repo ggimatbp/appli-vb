@@ -28,8 +28,11 @@ class ApInformationSectionController extends AbstractController
     /**
      * @Route("/", name="information_section_index", methods={"GET"})
      */
-    public function index(ApInformationFilesRepository $apInformationFilesRepository): Response
+    public function index(ApInformationFilesRepository $apInformationFilesRepository, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory('view', 'information_section_index', $ipUser);
         $recentFiles = $apInformationFilesRepository->findRecentFiles();
         return $this->render('tabs/information/ap_information_section/index.html.twig', [
             'files' => $recentFiles,
@@ -43,6 +46,7 @@ class ApInformationSectionController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory('view', 'information_section_new_rh', $ipUser);
 
         $apInformationSection = new ApInformationSection();
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
@@ -72,7 +76,7 @@ class ApInformationSectionController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $globalHistoryService->setInHistory('view', 'information_section_new_qse', $ipUser);
         $apInformationSection = new ApInformationSection();
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
         $form->handleRequest($request);
@@ -101,7 +105,7 @@ class ApInformationSectionController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $globalHistoryService->setInHistory($apInformationSection, 'ViewEdit', $ipUser);
         $form = $this->createForm(ApInformationSectionType::class, $apInformationSection);
         $form->handleRequest($request);
         $state = $apInformationSection->getState();

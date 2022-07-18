@@ -25,15 +25,6 @@ class UserController extends AbstractController
 {
     public const TAB_EMPLOYEE = "Employé";
     private $myglobalvar = 'user';
-    /**
-     * @Route("/", name="user_index", methods={"GET"})
-     */
-    public function index(UserRepository $userRepository): Response
-    {
-        return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/new", name="user_new", methods={"GET","POST"})
@@ -45,7 +36,7 @@ class UserController extends AbstractController
 
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $globalHistoryService->setInHistory('view', 'user_new', $ipUser);
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -80,8 +71,11 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}", name="user_show", methods={"GET"})
      */
-    public function show(User $user): Response
+    public function show(User $user, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory($user, 'View', $ipUser);
         $tabNameEmployee = self::TAB_EMPLOYEE;
         return $this->render('tabs/manager/user/show.html.twig', [
             'user' => $user,
@@ -96,7 +90,7 @@ class UserController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $globalHistoryService->setInHistory($user, 'ViewEdit', $ipUser);
         $tabNameEmployee = self::TAB_EMPLOYEE;
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);

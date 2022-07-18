@@ -27,8 +27,11 @@ class ApInformationParentSectionController extends AbstractController
     /**
      * @Route("/", name="information_parent_section_index", methods={"GET"})
      */
-    public function index(ApInformationParentSectionRepository $apInformationParentSectionRepository): Response
+    public function index(ApInformationParentSectionRepository $apInformationParentSectionRepository, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory('view', 'information_parent_section_index', $ipUser);
         return $this->render('tabs/information/ap_information_parent_section/index.html.twig', [
             'ap_information_parent_sections' => $apInformationParentSectionRepository->findAll(),
         ]);
@@ -41,6 +44,7 @@ class ApInformationParentSectionController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory('view', 'information_parent_section_new_qse', $ipUser);
         $apInformationParentSection = new ApInformationParentSection();
         $form = $this->createForm(ApInformationParentSectionType::class, $apInformationParentSection);
         $form->handleRequest($request);
@@ -66,7 +70,7 @@ class ApInformationParentSectionController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $globalHistoryService->setInHistory('view', 'information_parent_section_new_rh', $ipUser);
         $apInformationParentSection = new ApInformationParentSection();
         $form = $this->createForm(ApInformationParentSectionType::class, $apInformationParentSection);
         $form->handleRequest($request);
@@ -93,7 +97,7 @@ class ApInformationParentSectionController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
+        $globalHistoryService->setInHistory($apInformationParentSection, 'ViewEdit', $ipUser);
         $form = $this->createForm(ApInformationParentSectionType::class, $apInformationParentSection);
         $form->handleRequest($request);
         $state = $apInformationParentSection->getState();

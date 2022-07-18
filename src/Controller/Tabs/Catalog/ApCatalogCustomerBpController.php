@@ -25,8 +25,13 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      * @Route("/", name="ap_catalog_customer_bp_index", methods={"GET"})
      */
-    public function index(ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository): Response
+    public function index(ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository, GlobalHistoryService $GlobalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory('View', 'ap_catalog_customer_bp_index', $ipUser);
+
         return $this->render('tabs/Catalog/ap_catalog_customer_bp/index.html.twig', [
             'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAllOrderName(),
         ]);
@@ -39,6 +44,8 @@ class ApCatalogCustomerBpController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory('View', 'ap_catalog_customer_bp_new', $ipUser);
 
         $tabName = self::TAB_BP;
         $apCatalogCustomerBp = new ApCatalogCustomerBp();
@@ -65,9 +72,14 @@ class ApCatalogCustomerBpController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_customer_bp_show", methods={"GET"})
      */
-    public function show(ApCatalogCustomerBp $apCatalogCustomerBp, ApCatalogModelBpRepository $apCatalogModelBpRepository, $id): Response
+    public function show(ApCatalogCustomerBp $apCatalogCustomerBp,GlobalHistoryService $GlobalHistoryService, ApCatalogModelBpRepository $apCatalogModelBpRepository, $id): Response
     {
         $tabName = self::TAB_BP;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'View', $ipUser);
         $id = $apCatalogCustomerBp->getId();
         $ModelById = $apCatalogModelBpRepository->findAllById($id);
         return $this->render('tabs/Catalog/ap_catalog_customer_bp/show.html.twig', [
@@ -85,13 +97,15 @@ class ApCatalogCustomerBpController extends AbstractController
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
+        $GlobalHistoryService->setInHistory('View', 'ap_catalog_customer_bp_edit', $ipUser);
+
         $tabName = self::TAB_BP;
         $form = $this->createForm(ApCatalogCustomerBpType::class, $apCatalogCustomerBp);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $doctrine->getManager()->flush();
-            $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'edit', $ipUser);
+            $GlobalHistoryService->setInHistory($apCatalogCustomerBp, 'Edit', $ipUser);
             return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
         }
 

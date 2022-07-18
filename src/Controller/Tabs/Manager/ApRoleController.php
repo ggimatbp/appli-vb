@@ -47,6 +47,8 @@ class ApRoleController extends AbstractController
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
+        $globalHistoryService->setInHistory('view', 'ap_role_new', $ipUser);
+
         $tabName = self::TAB_NAME;
         $apRole = new ApRole();
         $form = $this->createForm(ApRoleType::class, $apRole);
@@ -110,8 +112,11 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/show/{id}", name="ap_role_show", methods={"GET"})
      */
-    public function show(ApRole $apRole): Response
+    public function show(ApRole $apRole, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory($apRole, 'View', $ipUser);
         return $this->render('tabs/manager/ap_role/show.html.twig', [
             'ap_role' => $apRole,
         ]);
@@ -121,9 +126,13 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ap_role_edit", methods={"GET","POST"})
      */
-    public function edit($id, ApRole $apRole, ManagerRegistry $entityManager): Response
+    public function edit($id, ApRole $apRole, ManagerRegistry $entityManager, GlobalHistoryService $globalHistoryService): Response
     {
         $tabName = self::TAB_NAME;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory($apRole, 'ViewEdit', $ipUser);
 
          if (null === $apRole = $entityManager->getRepository(ApRole::class)->find($id)) {
             throw $this->createNotFoundException('No task found for id '.$id);
