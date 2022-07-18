@@ -23,17 +23,6 @@ class ApCatalogCaseVbController extends AbstractController
     #region constant
       const TAB_VB = "Velobatterie";
     #endregion
-
-    /**
-     * @Route("/", name="ap_catalog_case_vb_index", methods={"GET"})
-     */
-    public function index(ApCatalogCaseVbRepository $apCatalogCaseVbRepository): Response
-    {
-        return $this->render('tabs/Catalog/VB/ap_catalog_case_vb/google_chart.html.twig', [
-            'ap_catalog_case_vbs' => $apCatalogCaseVbRepository->findAll(),
-        ]);
-    }
-
     
     /**
      * @Route("/new", name="ap_catalog_case_vb_new", methods={"GET","POST"})
@@ -41,15 +30,21 @@ class ApCatalogCaseVbController extends AbstractController
     public function new(Request $request, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
     {
         $tabName = self::TAB_VB;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $apCatalogCaseVb = new ApCatalogCaseVb();
         $form = $this->createForm(ApCatalogCaseVbType::class, $apCatalogCaseVb);
         $form->handleRequest($request);
+        $GlobalHistoryService->setInHistory('View', 'ap_catalog_case_vb_new',  $ipUser, ['View']);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogCaseVb);
             $entityManager->flush();
-            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'new');
+            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'New',  $ipUser);
 
             return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
         }
@@ -64,9 +59,15 @@ class ApCatalogCaseVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_case_vb_show", methods={"GET"})
      */
-    public function show(ApCatalogCaseVb $apCatalogCaseVb, ApSectorVbRepository $apSectorVbRepository, ApCatalogVbBulkImageRepository $bulkImageRepository): Response
+    public function show(ApCatalogCaseVb $apCatalogCaseVb, ApSectorVbRepository $apSectorVbRepository, ApCatalogVbBulkImageRepository $bulkImageRepository, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'View',  $ipUser);
+
         $id = $apCatalogCaseVb->getId();
         $apSectorVbs = $apSectorVbRepository->findSectionByCase($id);
         $bulkImage = $bulkImageRepository->findByCase($id);
@@ -84,12 +85,18 @@ class ApCatalogCaseVbController extends AbstractController
     public function edit(Request $request, ApCatalogCaseVb $apCatalogCaseVb, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
     {
         $tabName = self::TAB_VB;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $form = $this->createForm(ApCatalogCaseVbType::class, $apCatalogCaseVb);
         $form->handleRequest($request);
+        $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'ViewEdit',  $ipUser);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $doctrine->getManager()->flush();
-            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'edit');
+            $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'Edit', $ipUser);
 
             return $this->redirectToRoute('catalog_index', ['roleback' => 2], Response::HTTP_SEE_OTHER);
         }
@@ -110,7 +117,9 @@ class ApCatalogCaseVbController extends AbstractController
             $caseId = $apCatalogCaseVb->getId();
             $allFilesByCaseId = $sector->findSectionByCase($caseId);
             if($allFilesByCaseId == NULL){
-                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'delete');   
+                $request = Request::createFromGlobals();
+                $ipUser = $request->getClientIp();
+                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'delete', $ipUser);   
                 $entityManager = $doctrine->getManager();
                 $entityManager->remove($apCatalogCaseVb);
                 $entityManager->flush();
@@ -127,23 +136,25 @@ class ApCatalogCaseVbController extends AbstractController
     {
         if ($this->isCsrfTokenValid('archiver' . $apCatalogCaseVb->getId(), $request->request->get('_token')))
         {
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
             if ($apCatalogCaseVb->getArchive() == 0) {
                 $apCatalogCaseVb->setArchive(1);
                 $caseId = $apCatalogCaseVb->getId();
                 $allFilesByCaseId = $apCatalogFilesVbRepository->findAllFileByCaseId($caseId);
-                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent');   
+                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent', $ipUser);   
                 foreach ($allFilesByCaseId as $file) {
                     $file->setArchive(1);
-                    $GlobalHistoryService->setInHistory($file, 'archive children');   
+                    $GlobalHistoryService->setInHistory($file, 'archive children', $ipUser);   
                 }
             } else {
                 $apCatalogCaseVb->setArchive(0);
                 $caseId = $apCatalogCaseVb->getId();
                 $allFilesByCaseId = $apCatalogFilesVbRepository->findAllFileByCaseId($caseId);
-                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent');
+                $GlobalHistoryService->setInHistory($apCatalogCaseVb, 'archive parent', $ipUser);
                 foreach ($allFilesByCaseId as $file) {
                     $file->setArchive(0);
-                    $GlobalHistoryService->setInHistory($file, 'archive children');
+                    $GlobalHistoryService->setInHistory($file, 'archive children', $ipUser);
                 }
             }
             $entityManager = $doctrine->getManager();

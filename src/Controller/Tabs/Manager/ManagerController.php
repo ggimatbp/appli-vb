@@ -5,13 +5,14 @@ namespace App\Controller\Tabs\Manager;
 use App\Repository\UserRepository;
 use App\Repository\ApTabRepository;
 use App\Repository\ApRoleRepository;
+use App\Service\GlobalHistoryService;
 use App\Repository\ApAccessRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 
@@ -30,13 +31,15 @@ class ManagerController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(SessionInterface $session, Request $request, ApAccessRepository $apAccessRepository, ApRoleRepository $apRoleRepository, ApTabRepository $apTabRepository, UserRepository $userRepository): Response
+    public function index(SessionInterface $session, Request $request, ApAccessRepository $apAccessRepository, ApRoleRepository $apRoleRepository, ApTabRepository $apTabRepository, UserRepository $userRepository, GlobalHistoryService $globalHistoryService): Response
     {
     #region Session and pagination
         #region declare
         $tabNameEmployee = self::TAB_EMPLOYEE;
         $tabNameRole = self::TAB_ROLE;
-
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory('view', 'manager_index', $ipUser);
         $ap_accesses = $apAccessRepository->findAll();
 
         //declare element's number by page

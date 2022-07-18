@@ -47,6 +47,11 @@ class ApGlobalHistory
      */
     private $extra = [];
 
+    /**
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    private $ipAdress;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +125,18 @@ class ApGlobalHistory
     public function setExtra(?array $extra): self
     {
         $this->extra = $extra;
+
+        return $this;
+    }
+
+    public function getIpAdress(): ?string
+    {
+        return $this->ipAdress;
+    }
+
+    public function setIpAdress(?string $ipAdress): self
+    {
+        $this->ipAdress = $ipAdress;
 
         return $this;
     }

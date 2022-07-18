@@ -44,6 +44,11 @@ class ApRoleController extends AbstractController
      */
     public function new(Request $request, ApTabRepository $apTabRepository, ApRoleRepository $apRoleRepository, GlobalHistoryService $globalHistoryService, ManagerRegistry $entityManager): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $globalHistoryService->setInHistory('view', 'ap_role_new', $ipUser);
+
         $tabName = self::TAB_NAME;
         $apRole = new ApRole();
         $form = $this->createForm(ApRoleType::class, $apRole);
@@ -77,7 +82,7 @@ class ApRoleController extends AbstractController
 
                     $entityManager->getManager()->flush();
                     $id = $apRole->getId();
-                    $globalHistoryService->setInHistory($apRole, 'new');
+                    $globalHistoryService->setInHistory($apRole, 'New', $ipUser);
             return $this->redirect('/ap/role/' . $id . '/edit');
             }
         }elseif($sameName >= 1)
@@ -107,8 +112,11 @@ class ApRoleController extends AbstractController
     /**
      * @Route("/show/{id}", name="ap_role_show", methods={"GET"})
      */
-    public function show(ApRole $apRole): Response
+    public function show(ApRole $apRole, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory($apRole, 'View', $ipUser);
         return $this->render('tabs/manager/ap_role/show.html.twig', [
             'ap_role' => $apRole,
         ]);
@@ -121,6 +129,10 @@ class ApRoleController extends AbstractController
     public function edit($id, ApRole $apRole, ManagerRegistry $entityManager, GlobalHistoryService $globalHistoryService): Response
     {
         $tabName = self::TAB_NAME;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory($apRole, 'ViewEdit', $ipUser);
 
          if (null === $apRole = $entityManager->getRepository(ApRole::class)->find($id)) {
             throw $this->createNotFoundException('No task found for id '.$id);
@@ -145,6 +157,10 @@ class ApRoleController extends AbstractController
      */
     public function delete(Request $request, ApRole $apRole, UserRepository $userRepository, ApRoleRepository $apRoleRepository, GlobalHistoryService $globalHistoryService,ManagerRegistry $doctrine): Response
     {
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         if ($this->isCsrfTokenValid('delete'.$apRole->getId(), $request->request->get('_token'))) {
 
             //We took all the users who got the role who's gonna be deleted
@@ -155,7 +171,7 @@ class ApRoleController extends AbstractController
             foreach ($userArray as $user){
                 $user->setRoleId($lambdaRole);
             }
-            $globalHistoryService->setInHistory($apRole, 'delete');
+            $globalHistoryService->setInHistory($apRole, 'Delete', $ipUser);
             $entityManager = $doctrine->getManager();
             $entityManager->remove($apRole);
             $entityManager->flush();
@@ -171,6 +187,9 @@ class ApRoleController extends AbstractController
 
     public function editotest(Request $request, ApRole $apRole, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService, ApRoleRepository $apRoleRepository) : response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $submittedToken = $request->get('csrfEditName');
         // 'search-item' is the same value used in the template to generate the token
         $allRoles = $apRoleRepository->findAll();
@@ -188,7 +207,7 @@ class ApRoleController extends AbstractController
             if($sameName == 0)
             {
                 if ($this->isCsrfTokenValid('edit-name', $submittedToken)) {
-                    $globalHistoryService->setInHistory($apRole, 'edit name');
+                    $globalHistoryService->setInHistory($apRole, 'Edit name', $ipUser);
                     ;
                     $apRole->setName($roleName);
                     $manager = $doctrine->getManager();

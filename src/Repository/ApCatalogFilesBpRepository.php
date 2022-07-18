@@ -63,9 +63,37 @@ class ApCatalogFilesBpRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.relation = :id')
             ->setParameter('id', $id)
-            ->orderBy('a.name', 'ASC')
+            ->orderBy('a.orderNumber', 'ASC')
             ->getQuery()
             ->getResult()
             ;
     }
+
+
+    public function findBiggestOrderNumberBySectorsForPdf($id)
+    {
+    return $this->createQueryBuilder('a')
+    ->andWhere('a.fileType LIKE :pdf')
+    ->setParameter('pdf', '%pdf%')
+    ->andWhere('a.relation = :id' )
+    ->setParameter('id', $id)
+    ->orderBy('a.orderNumber', 'DESC')
+    ->getQuery()->setMaxresults(1)
+    ->getResult()
+    ;
+    }
+
+    public function findBiggestOrderNumberBySectorsForOther($id)
+    {
+    return $this->createQueryBuilder('a')
+    ->andWhere('a.fileType != :pdf')
+    ->setParameter('pdf', 'pdf')
+    ->andWhere('a.relation = :id' )
+    ->setParameter('id', $id)
+    ->orderBy('a.orderNumber', 'DESC')
+    ->getQuery()->setMaxresults(1)
+    ->getResult()
+    ;
+    }
+
 }

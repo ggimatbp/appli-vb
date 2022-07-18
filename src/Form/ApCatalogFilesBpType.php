@@ -15,7 +15,7 @@ class ApCatalogFilesBpType extends AbstractType
     {
         $builder
             ->add('name')
-            //->add('fileName')
+            ->add('orderNumber')
             ->add('imageFile', VichFileType::class, [            
                 'required'      => true,
                 'allow_delete'  => false, // not mandatory, default is true

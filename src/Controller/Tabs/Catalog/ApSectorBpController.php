@@ -24,34 +24,26 @@ class ApSectorBpController extends AbstractController
     const TAB_BP = "Batteries-Prod";
     #endregion
 
-    // /**
-    //  * @Route("/", name="ap_sector_bp_index", methods={"GET"})
-    //  */
-    // public function indexSectionByModel(ApSectorBpRepository $apSectorBpRepository): Response
-    // {
-    //     return $this->render('ap_sector_bp/index.html.twig', [
-    //         'ap_sector_bps' => $apSectorBpRepository->findSectionByModel($id),
-    //     ]);
-    // }
-
-
     /**
      * @Route("/new/{id}", name="ap_sector_bp_new", methods={"GET","POST"})
      */
     public function new(Request $request, ApCatalogModelBpRepository $modelRepo, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory('View', 'ap_sector_bp_new', $ipUser);
         $tabName = self::TAB_BP;
         $apSectorBp = new ApSectorBp();
         $form = $this->createForm(ApSectorBpType::class, $apSectorBp);
         $form->handleRequest($request);
         $modelId = intval(basename("$_SERVER[REQUEST_URI]"));
         if ($form->isSubmitted() && $form->isValid()) {
-            $model = $modelRepo->find($modelId); 
+            $model = $modelRepo->find($modelId);
             $apSectorBp->setModel($model);
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apSectorBp);
             $entityManager->flush(); 
-            $globalHistoryService->setInHistory($apSectorBp, 'new');
+            $globalHistoryService->setInHistory($apSectorBp, 'new', $ipUser);
             return $this->redirectToRoute('ap_sector_bp_index', ['id' => $modelId], Response::HTTP_SEE_OTHER);
         }
 
@@ -80,6 +72,10 @@ class ApSectorBpController extends AbstractController
      */
     public function edit(Request $request, ApSectorBp $apSectorBp, GlobalHistoryService $globalHistoryService, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $globalHistoryService->setInHistory($apSectorBp, 'ViewEdit', $ipUser);
 
         $tabName = self::TAB_BP;
         $form = $this->createForm(ApSectorBpType::class, $apSectorBp);
@@ -87,7 +83,7 @@ class ApSectorBpController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $doctrine->getManager()->flush();
-            $globalHistoryService->setInHistory($apSectorBp, 'edit');
+            $globalHistoryService->setInHistory($apSectorBp, 'edit', $ipUser);
             return $this->redirectToRoute('ap_catalog_model_bp_show', ['id'=> $apSectorBp->getid()], Response::HTTP_SEE_OTHER);
         }
 
@@ -103,6 +99,9 @@ class ApSectorBpController extends AbstractController
      */
     public function delete(Request $request, ApSectorBp $apSectorBp, GlobalHistoryService $globalHistoryService, ApCatalogFilesBpRepository $files, ManagerRegistry $doctrine): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $model = $apSectorBp->getModel();
         $modelId = $model->getId();
         $sectorId = $apSectorBp->getId();
@@ -110,7 +109,7 @@ class ApSectorBpController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete'.$apSectorBp->getId(), $request->request->get('_token'))) {
             if( $allFilesInSector == NULL){
-                $globalHistoryService->setInHistory($apSectorBp, 'delete');
+                $globalHistoryService->setInHistory($apSectorBp, 'delete', $ipUser);
                 $entityManager = $doctrine->getManager();
                 $entityManager->remove($apSectorBp);
                 $entityManager->flush();

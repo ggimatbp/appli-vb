@@ -9,8 +9,7 @@
         
             <div class="card-body card-body-design">
                 <span class="d-flex flex-column justify-content-between">
-                    
-                        <span class="d-flex justify-content-center card-title">{{ ap_catalog_file_vb.name }}</span>
+                        <span class="d-flex justify-content-center card-title"> Image n°{{ ap_catalog_file_vb.orderNumber }}</span>
                             <span class="d-flex justify-content-around">
                                 {% for ap_access in app.user.RoleId.apAccesses %}
                                     {% if ap_access.tab.name is same as(tabName) and ap_access.edit is same as(true) %}
@@ -36,6 +35,9 @@
                                         </span>	
                                     {% endif %}
                                 {% endfor %}
+                                <a class="color-lambda" href="{{ path('ap_catalog_files_vb_show', {'id':ap_catalog_file_vb.id}) }}">
+                                    <i class="fas fa-expand"></i>
+                                </a>
                         </span>
                 </span>
                 <p class="card-text d-flex justify-content-around">

@@ -16,7 +16,10 @@
             <span class="form-new-container">
                 {{ form_start(form) }}
                     <div class="row">
-                        {{ form_row(form.name, { 'label': 'Nom' }) }}
+                        {{ form_row(form.orderNumber, { 'label': 'Numéro pour trier' }) }}
+                    </div>
+                    <div class="row">
+                        {{ form_row(form.name, { 'label': 'Commentaire' }) }}
                     </div>
                     {% for error in form.vars.errors.form.getErrors(true) %}
                         <p class="alert alert-danger">{{ error.message }}</p>

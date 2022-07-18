@@ -39,8 +39,13 @@ class ApInformationFilesController extends AbstractController
     /**
      * @Route("/", name="information_files_index", methods={"GET"})
      */
-    public function index(ApInformationFilesRepository $apInformationFilesRepository): Response
+    public function index(ApInformationFilesRepository $apInformationFilesRepository, GlobalHistoryService $globalHistoryService): Response
     {
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $globalHistoryService->setInHistory('view', 'information_files_index', $ipUser);
 
         $recentRhFiles = $apInformationFilesRepository->findRecentRhFiles();
         $recentQseFiles = $apInformationFilesRepository->findRecentRhFiles();
@@ -60,6 +65,9 @@ class ApInformationFilesController extends AbstractController
      */
     public function new(Request $request, ApInformationSectionRepository $sectionRepository, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService, UserRepository $userRepo): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory('view', 'information_files_new', $ipUser);
         $apInformationFile = new ApInformationFiles();
         $form = $this->createForm(ApInformationFilesType::class, $apInformationFile);
         $form->handleRequest($request);
@@ -89,7 +97,7 @@ class ApInformationFilesController extends AbstractController
             $entityManager->persist($apInformationFile);
 
            $entityManager->flush();
-            $globalHistoryService->setInHistory($apInformationFile, 'new');
+            $globalHistoryService->setInHistory($apInformationFile, 'new', $ipUser);
 
                 
 
@@ -154,9 +162,13 @@ class ApInformationFilesController extends AbstractController
     /**
      * @Route("/{id}", name="information_files_show", methods={"GET"})
      */
-    public function show(ApInformationFiles $apInformationFile, ApInformationParapherRepository $apInformationParapherRepo, ApInformationSignatureRepository $apInformationSignatureRepository, ApInformationViewedRepository $apInformationViewedRepository): Response
+    public function show(ApInformationFiles $apInformationFile, ApInformationParapherRepository $apInformationParapherRepo, ApInformationSignatureRepository $apInformationSignatureRepository, ApInformationViewedRepository $apInformationViewedRepository, GlobalHistoryService $globalHistoryService): Response
     {
-       
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $globalHistoryService->setInHistory('view', 'information_files_new', $ipUser);
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
         $fileToParaph = $apInformationParapherRepo->findByUserAndFile($user, $apInformationFile);
@@ -185,6 +197,9 @@ class ApInformationFilesController extends AbstractController
      */
     public function edit(Request $request, ApInformationFiles $apInformationFile, ApInformationFilesRepository $apInformationFilesRepository, GlobalHistoryService $globalHistoryService, UserRepository $userRepo, ApInformationViewedRepository $apInformationViewedRepository, ApInformationParapherRepository $apInformationParapherRepo, ApInformationSignatureRepository $apInformationSignatureRepository): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory($apInformationFile, 'ViewEdit', $ipUser);
         $form = $this->createForm(ApInformationFilesEditType::class, $apInformationFile);
         $form->handleRequest($request);
         $state = $apInformationFile->getSection()->getState();
@@ -206,7 +221,6 @@ class ApInformationFilesController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             #region target edit
-
             $ChoseUsers = explode(",", $_POST['choseUsers']);
             $newUsers = [];
                 foreach ($ChoseUsers as $ChoseUser) {
@@ -325,7 +339,7 @@ class ApInformationFilesController extends AbstractController
 
 
             $apInformationFilesRepository->add($apInformationFile);
-            $globalHistoryService->setInHistory($apInformationFile, 'edit');
+            $globalHistoryService->setInHistory($apInformationFile, 'Edit', $ipUser);
 
             if ($state == 1){
                 return $this->redirectToRoute('information_rh_index', [], Response::HTTP_SEE_OTHER);
@@ -352,10 +366,13 @@ class ApInformationFilesController extends AbstractController
      */
     public function delete(Request $request, ApInformationFiles $apInformationFile, ApInformationFilesRepository $apInformationFilesRepository, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $section = $apInformationFile->getSection();
         $sectionState = $section->getState();
         if ($this->isCsrfTokenValid('delete'.$apInformationFile->getId(), $request->request->get('_token'))) {
-            $globalHistoryService->setInHistory($apInformationFile, 'delete');
+            $globalHistoryService->setInHistory($apInformationFile, 'Delete', $ipUser);
             $apInformationFilesRepository->remove($apInformationFile);
 
         }
@@ -371,15 +388,18 @@ class ApInformationFilesController extends AbstractController
      */
     public function archive(Request $request, ApInformationFiles $apInformationFile, ApInformationFilesRepository $apInformationFilesRepository, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $section = $apInformationFile->getSection();
         $sectionState = $section->getState();
         if ($this->isCsrfTokenValid('archiver'.$apInformationFile->getId(), $request->request->get('_token'))) {
             if($apInformationFile->getArchive() == 0){
                 $apInformationFile->setArchive(1);
-                $globalHistoryService->setInHistory($apInformationFile, 'archived');
+                $globalHistoryService->setInHistory($apInformationFile, 'Archived', $ipUser);
             }else{
                 $apInformationFile->setArchive(0);
-                $globalHistoryService->setInHistory($apInformationFile, 'unarchived');
+                $globalHistoryService->setInHistory($apInformationFile, 'Unarchived', $ipUser);
             }
             $apInformationFilesRepository->add($apInformationFile);
         }
@@ -396,13 +416,17 @@ class ApInformationFilesController extends AbstractController
 
     public function parapher(Request $request,GlobalHistoryService $globalHistoryService, ApInformationParapherRepository $apInformationParapherRepo) : response
     {
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $submittedToken = $request->get('editCsrf');
         // 'search-item' is the same value used in the template to generate the token
 
         $parapherId = $request->get('id');
         $parapher = $apInformationParapherRepo->find($parapherId);
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
-                $globalHistoryService->setInHistory($parapher, 'read and approved');
+                $globalHistoryService->setInHistory($parapher, 'Read and approved', $ipUser);
                 $parapher->setState(1);
                 $parapher->setDateTime(new \DateTime());
                 $apInformationParapherRepo->add($parapher);
@@ -420,12 +444,16 @@ class ApInformationFilesController extends AbstractController
 
     public function signature(Request $request,GlobalHistoryService $globalHistoryService, ApInformationSignatureRepository $apInformationSignatureRepo) : response
     {
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $submittedToken = $request->get('editCsrf');
-        // 'search-item' is the same value used in the template to generate the token
+
         $signatureId = $request->get('id');
         $signature = $apInformationSignatureRepo->find($signatureId);
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
-                $globalHistoryService->setInHistory($signature, 'read and approved');
+                $globalHistoryService->setInHistory($signature, 'read and approved', $ipUser);
                 $signature->setState(1);
                 $signature->setDateTime(new \DateTime());
                 $apInformationSignatureRepo->add($signature);
@@ -442,12 +470,15 @@ class ApInformationFilesController extends AbstractController
 
     public function viewed(Request $request,GlobalHistoryService $globalHistoryService, ApInformationViewedRepository $apInformationViewedRepo) : response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $submittedToken = $request->get('editCsrf');
         $viewedId = $request->get('id');
         $viewed = $apInformationViewedRepo->find($viewedId);
 
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
-                $globalHistoryService->setInHistory($viewed, 'read and approved');
+                $globalHistoryService->setInHistory($viewed, 'Read and approved', $ipUser);
                 $viewed->setState(1);
                 $viewed->setDateTime(new \DateTime());
                 $apInformationViewedRepo->add($viewed);

@@ -28,25 +28,19 @@ class ApCatalogFilesVbController extends AbstractController
     #endregion
 
     /**
-     * @Route("/", name="ap_catalog_files_vb_index", methods={"GET"})
-     */
-    public function index(ApCatalogFilesVbRepository $apCatalogFilesVbRepository): Response
-    {
-        return $this->render('ap_catalog_files_vb/index.html.twig', [
-            'ap_catalog_files_vbs' => $apCatalogFilesVbRepository->findAll(),
-        ]);
-    }
-
-    /**
      * @Route("/new/{id}", name="ap_catalog_files_vb_new", methods={"GET","POST"})
      */
-    public function new(InterventionImage $intervention, Request $request, ApSectorVbRepository $ApSectorVbRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
+    public function new(InterventionImage $intervention, Request $request, ApSectorVbRepository $ApSectorVbRepository, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine, ApCatalogFilesVbRepository $apCatalogFilesVbRepository): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $tabName = self::TAB_VB;
         $sectorId = intval(basename("$_SERVER[REQUEST_URI]"));
         $apCatalogFilesVb = new ApCatalogFilesVb();
         $form = $this->createForm(ApCatalogFilesVbType::class, $apCatalogFilesVb);
         $form->handleRequest($request);
+        $GlobalHistoryService->setInHistory('view', 'ap_catalog_files_vb_new', $ipUser);
 
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -65,12 +59,33 @@ class ApCatalogFilesVbController extends AbstractController
 
             $width = getimagesize($imgFile)[0];
             $height = getimagesize($imgFile)[1];
+            #region auto générate order number
 
+                if($apCatalogFilesVb->getOrderNumber() === NULL)
+                {
+                    if($fileExtension === "pdf")
+                    {
+                        $biggestFileOrderNumber = $apCatalogFilesVbRepository->findBiggestOrderNumberBySectorsForPdf($apCatalogFilesVb->getCaseId()->getId());
+                    }else{
+                        $biggestFileOrderNumber = $apCatalogFilesVbRepository->findBiggestOrderNumberBySectorsForOther($apCatalogFilesVb->getCaseId()->getId());
+                    }
+    
+                        if( $biggestFileOrderNumber[0] === NULL)
+                        {
+                            $apCatalogFilesVb->setOrderNumber(0);
+                        }else{
+                            $biggestOrderNumber = $biggestFileOrderNumber[0]->getOrderNumber();
+                            $apCatalogFilesVb->setOrderNumber($biggestOrderNumber + 1);
+                        }
+    
+                    
+                }
+        #endregion
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogFilesVb);
             $entityManager->flush();
             if($fileExtension == "pdf"){}else{$intervention->resizeCatalogVbCarroussel($apCatalogFilesVb->getFileName(), $width,  $height);};            
-            $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'new');
+            $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'new', $ipUser);
             return $this->redirectToRoute('ap_sector_vb_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
         }
 
@@ -85,9 +100,14 @@ class ApCatalogFilesVbController extends AbstractController
     /**
      * @Route("/{id}", name="ap_catalog_files_vb_show", methods={"GET"})
      */
-    public function show(ApCatalogFilesVb $apCatalogFilesVb): Response
+    public function show(ApCatalogFilesVb $apCatalogFilesVb, GlobalHistoryService $GlobalHistoryService): Response
     {
         $tabName = self::TAB_VB;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory('view', 'ap_catalog_files_vb_show', $ipUser);
         return $this->render('tabs/Catalog/VB/ap_catalog_files_vb/show.html.twig', [
             'ap_catalog_files_vb' => $apCatalogFilesVb,
             'tabName' => $tabName,
@@ -100,6 +120,12 @@ class ApCatalogFilesVbController extends AbstractController
     public function edit(InterventionImage $intervention, Request $request, ApCatalogFilesVb $apCatalogFilesVb, GlobalHistoryService $GlobalHistoryService, ManagerRegistry $doctrine): Response
     {
         $tabName = self::TAB_VB;
+
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
+        $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'view', $ipUser);
+
         $sector = $apCatalogFilesVb->getSector();
         $sectorId = $sector->getId();
         $form = $this->createForm(ApCatalogFilesVbEditType::class, $apCatalogFilesVb);
@@ -130,7 +156,7 @@ class ApCatalogFilesVbController extends AbstractController
             $apCatalogFilesVb->setUpdatedAt(new \DateTime());
             $manager->persist($apCatalogFilesVb);
             $manager->flush();
-             $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'edit');
+            $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'edit', $ipUser);
 
             if($ifNewImage == true){
                 if($fileExtension == "pdf"){}else{
@@ -157,7 +183,9 @@ class ApCatalogFilesVbController extends AbstractController
         $sectorId = $sector->getId();
         dd($sectorId);
         if ($this->isCsrfTokenValid('delete'.$apCatalogFilesVb->getId(), $request->request->get('_token'))) {
-            $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'delete');
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
+            $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'delete', $ipUser);
             $entityManager = $doctrine->getManager();
             $entityManager->remove($apCatalogFilesVb);
             $entityManager->flush();
@@ -173,7 +201,9 @@ class ApCatalogFilesVbController extends AbstractController
     {
         $csrf = $request->get('csrf');
         if ($this->isCsrfTokenValid('delete', $csrf)){
-            $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'Ajax delete');
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
+            $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'Ajax delete', $ipUser);
             $manager = $doctrine->getManager();
             $manager->remove($apCatalogFilesVb);
             $manager->flush();
@@ -191,12 +221,14 @@ class ApCatalogFilesVbController extends AbstractController
         $sectorId = $apCatalogFilesVb->getSector()->getId();
         if ($this->isCsrfTokenValid('archiver'.$apCatalogFilesVb->getId(), $request->request->get('_token')))
         {
+            $request = Request::createFromGlobals();
+            $ipUser = $request->getClientIp();
             if ($apCatalogFilesVb->getArchive() == 0 ){
                 $apCatalogFilesVb->setArchive(1);
-                $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'Archive');
+                $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'Archive', $ipUser);
             }else{
                 $apCatalogFilesVb->setArchive(0);
-                $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'Unarchive');
+                $GlobalHistoryService->setInHistory($apCatalogFilesVb, 'Unarchive', $ipUser);
             }
             $entityManager = $doctrine->getManager();
             $entityManager->persist($apCatalogFilesVb);

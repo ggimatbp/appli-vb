@@ -14,6 +14,7 @@ class ApCatalogFilesVbEditType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('orderNumber')
             ->add('imageFile', VichFileType::class, [            
                 'required'      => false,
                 'allow_delete'  => false, // not mandatory, default is true

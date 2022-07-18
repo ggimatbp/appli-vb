@@ -25,15 +25,6 @@ class UserController extends AbstractController
 {
     public const TAB_EMPLOYEE = "Employé";
     private $myglobalvar = 'user';
-    /**
-     * @Route("/", name="user_index", methods={"GET"})
-     */
-    public function index(UserRepository $userRepository): Response
-    {
-        return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
 
     /**
      * @Route("/new", name="user_new", methods={"GET","POST"})
@@ -43,6 +34,9 @@ class UserController extends AbstractController
         // à faire pour mettre de la sécurité en back 
         // $userId = $this->get('security.token_storage')->getToken()->getUser()->getRoleId()->getApAccesses();
 
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory('view', 'user_new', $ipUser);
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -63,7 +57,7 @@ class UserController extends AbstractController
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            $globalHistoryService->setInHistory($user, 'new');
+            $globalHistoryService->setInHistory($user, 'new', $ipUser);
             return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -77,8 +71,11 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}", name="user_show", methods={"GET"})
      */
-    public function show(User $user): Response
+    public function show(User $user, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory($user, 'View', $ipUser);
         $tabNameEmployee = self::TAB_EMPLOYEE;
         return $this->render('tabs/manager/user/show.html.twig', [
             'user' => $user,
@@ -91,6 +88,9 @@ class UserController extends AbstractController
      */
     public function edit(ManagerRegistry $doctrine, Request $request, User $user, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+        $globalHistoryService->setInHistory($user, 'ViewEdit', $ipUser);
         $tabNameEmployee = self::TAB_EMPLOYEE;
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -102,7 +102,7 @@ class UserController extends AbstractController
                 $user->setNoRoles();
             }
             $doctrine->getManager()->flush();
-            $globalHistoryService->setInHistory($user, 'edit');
+            $globalHistoryService->setInHistory($user, 'Edit', $ipUser);
             return $this->redirectToRoute('manager_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -121,6 +121,9 @@ class UserController extends AbstractController
    
     public function editPasswordOnClick(Request $request, User $user,UserPasswordHasherInterface $passwordEncoder, ManagerRegistry $doctrine, GlobalHistoryService $globalHistoryService) : response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         $userPassword = $request->get('task');
         $majuscule = preg_match('@[A-Z]@', $userPassword);
 	    $minuscule = preg_match('@[a-z]@', $userPassword);
@@ -133,7 +136,7 @@ class UserController extends AbstractController
                 $passwordEncoder->hashPassword($user,$userPassword)
                 );
                 $doctrine->getManager()->flush();
-                $globalHistoryService->setInHistory($user, 'edit password');
+                $globalHistoryService->setInHistory($user, 'Edit password', $ipUser);
                 return $this->json(["code" => 200,
                 "message" => "changer de mot de passe"], 200);
         }
@@ -155,8 +158,11 @@ class UserController extends AbstractController
      */
     public function delete( ManagerRegistry $doctrine, Request $request, User $user, GlobalHistoryService $globalHistoryService): Response
     {
+        $request = Request::createFromGlobals();
+        $ipUser = $request->getClientIp();
+
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $globalHistoryService->setInHistory($user, 'delete');
+            $globalHistoryService->setInHistory($user, 'Delete', $ipUser);
             $entityManager = $doctrine->getManager();
             $entityManager->remove($user);
             $entityManager->flush();

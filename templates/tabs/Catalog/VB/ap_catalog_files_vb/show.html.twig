@@ -1,0 +1,18 @@
+{% extends 'base_login.html.twig' %}
+{% block navbar %}
+{# {% include "_headerBrutSharedLogic.html.twig" %} #}
+{% endblock %}
+{% block tab %}
+{% endblock %}
+{% block title %}ApInformationFiles{% endblock %}  
+{% block body %}  
+
+{% for ap_access in app.user.RoleId.apAccesses %}
+    {% if ap_access.tab.name is same as(tabName) and ap_access.view is same as(true) %}
+        <a class="modal-fullscreen-link" href="{{ path('ap_sector_vb_show', {'id': ap_catalog_files_vb.sector.id}) }}">
+            <i class="fas fa-compress-arrows-alt"></i>
+        </a>        
+        <img style=" min-width: -webkit-fill-available;" src="{{ vich_uploader_asset(ap_catalog_files_vb, 'imageFile')}}" class="image-modal-design d-block " alt="...">
+    {% endif %}
+{% endfor %}
+{% endblock %}

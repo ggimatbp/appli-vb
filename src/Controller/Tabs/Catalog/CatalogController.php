@@ -10,6 +10,7 @@ use App\Repository\ApCatalogModelBpRepository;
 use App\Repository\ApCatalogFilesBpRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\GlobalHistoryService;
 
 
 /**
@@ -30,11 +31,13 @@ class CatalogController extends AbstractController
   /**
    * @Route("/", name="index")
    */
-  public function index(ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository, ApCatalogCaseVbRepository $apCatalogCaseVbRepository, Request $request): Response
+  public function index(ApCatalogModelBpRepository $apCatalogModelBpRepository, ApCatalogCustomerBpRepository $apCatalogCustomerBpRepository, ApCatalogFilesBpRepository $apCatalogFilesBpRepository, ApCatalogCaseVbRepository $apCatalogCaseVbRepository, Request $request,GlobalHistoryService $globalHistoryService): Response
   {
     $tabName = self::TAB_BP;
     $tabName2 = self::TAB_VB;
-
+    $request = Request::createFromGlobals();
+    $ipUser = $request->getClientIp();
+    $globalHistoryService->setInHistory('view', 'catalogController', $ipUser, [$tabName, $tabName2]);
     //#region BP
     $errors = [];
     $errorsCustomer = [];

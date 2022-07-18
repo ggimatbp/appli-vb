@@ -84,6 +84,11 @@ class ApCatalogFilesVb
      */
     private $updatedAt;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $orderNumber;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -221,6 +226,18 @@ class ApCatalogFilesVb
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getOrderNumber(): ?int
+    {
+        return $this->orderNumber;
+    }
+
+    public function setOrderNumber(?int $orderNumber): self
+    {
+        $this->orderNumber = $orderNumber;
 
         return $this;
     }

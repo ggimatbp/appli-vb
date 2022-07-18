@@ -8,7 +8,7 @@
 			<div class="card-body card-body-design">
 			<span class="d-flex flex-column justify-content-between">
 				
-				<span class="card-title d-flex justify-content-center">{{ ap_catalog_files_bp.name }}</span>
+				<span class="card-title d-flex justify-content-center"> Fichier PDF n°{{ ap_catalog_files_bp.orderNumber }}</span>
 				<span class="d-flex justify-content-around">
 					{# <a href="{{ path('ap_catalog_files_bp_show', {'id': ap_catalog_files_bp.id}) }}">show</a> #}
 					{% for ap_access in app.user.RoleId.apAccesses %}
@@ -45,7 +45,7 @@
 {# modal for pdf display #}
 <!-- Modal for pdf display -->
 <div class="modal fade" id="{{'exampleModalPdf' ~ ap_catalog_files_bp.id}}" tabindex="-1" aria-labelledby="exampleModalLabelPdf" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen d-flex justify-content-around"> 
+    <div class="modal-dialog modal-fullscreen-edited d-flex justify-content-around"> 
 	{#  #}
 	<div class="modal-content">
 	{#  #}

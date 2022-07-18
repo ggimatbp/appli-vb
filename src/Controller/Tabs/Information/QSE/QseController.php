@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\ApInformationSectionRepository;
 use App\Repository\ApInformationFilesRepository;
 use App\Repository\ApInformationParentSectionRepository;
+use App\Service\GlobalHistoryService;
 
 /**
  * @Route("/information/qse", name="information_qse_")
@@ -20,12 +21,14 @@ class QseController extends AbstractController
    /**
    * @Route("/", name="index")
    */
-  public function index (ApInformationSectionRepository $sectionRepo, ApInformationFilesRepository $infoFileRepo, ApInformationParentSectionRepository $parentSectionRepo )
+  public function index (ApInformationSectionRepository $sectionRepo, ApInformationFilesRepository $infoFileRepo, ApInformationParentSectionRepository $parentSectionRepo, GlobalHistoryService $globalHistoryService )
   {
 
     $tabName = self::TAB_NAME;
+    $request = Request::createFromGlobals();
+    $ipUser = $request->getClientIp();
+    $globalHistoryService->setInHistory('view', 'information_qse_index', $ipUser, [$tabName]);
     $allSection = $sectionRepo->findAll();
-
     $allParentSection = $parentSectionRepo->findAll();
     $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     $user = $this->getUser();

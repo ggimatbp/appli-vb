@@ -6,6 +6,7 @@ use App\Entity\ApGlobalHistory;
 use Symfony\Component\Security\Core\Security;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class GlobalHistoryService
 {
@@ -23,40 +24,71 @@ class GlobalHistoryService
 
 
     // function setInHistory($object, $action, $extra = null)
-    function setInHistory($object, $action, $extra = NULL)
+    function setInHistory($object, $action, $ipAdress , $extra = NULL)
     {
 
     $apGlobalHistory = new ApGlobalHistory;
 
+      //$request = Request::createFromGlobals();
+      //$ipUser = $request->getClientIp();
     
-    // //entity name
+      if($object === "login failed")
+      {
+        $apGlobalHistory->setEntityName("SecurityController");
+        $apGlobalHistory->setObjectId(0);
+        $apGlobalHistory->setUserId(0);
+        //action
+        $apGlobalHistory->setAction($action);
+
+      }elseif($object === "view"){
+        $apGlobalHistory->setEntityName($action);
+        $apGlobalHistory->setObjectId(0);
+        //userId
+        $user = $this->security->getUser();
+        $userId = $this->userRepository->find($user);
+        $apGlobalHistory->setUserId($userId->getId());
+
+        //action
+        $apGlobalHistory->setAction($object);
+
+      }else{
+    //entity name
     $className = $this->manager->getClassMetadata(get_class($object))->getName();
     $apGlobalHistory->setEntityName($className);
-    
-        //fake
-        //$apGlobalHistory->setEntityName('test');
 
-     //ObjectId
-     $apGlobalHistory->setObjectId($object->getId());
+    //ObjectId
+    $apGlobalHistory->setObjectId($object->getId());
 
-        // fake
-       // $apGlobalHistory->setObjectId(1);
-
-    //date
-    $apGlobalHistory->setCreatedAt(new \DateTime());
-    
-    //userId
+             //userId
     $user = $this->security->getUser();
     $userId = $this->userRepository->find($user);
     $apGlobalHistory->setUserId($userId->getId());
 
-    //action
-    $apGlobalHistory->setAction($action);
+        //action
+        $apGlobalHistory->setAction($action);
 
-        //fake
-        
-     //   $apGlobalHistory->setAction('create');
-     //   dd($apGlobalHistory);
+      }
+
+    
+    //Ipadress
+     $apGlobalHistory->setIpAdress($ipAdress);
+
+
+
+    // fake
+    // $apGlobalHistory->setObjectId(1);
+
+    //date
+    $apGlobalHistory->setCreatedAt(new \DateTime());
+    
+
+
+
+
+    //fake
+
+    // $apGlobalHistory->setAction('create');
+    // dd($apGlobalHistory);
     //extra
     $apGlobalHistory->setExtra($extra);
 

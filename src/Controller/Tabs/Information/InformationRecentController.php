@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\ApInformationFilesRepository;
+use App\Service\GlobalHistoryService;
 
 
 /**
@@ -22,7 +23,7 @@ class InformationRecentController extends AbstractController
    /**
    * @Route("/", name="index")
    */
-  public function index (ApInformationFilesRepository $apInformationFilesRepository): Response
+  public function index (ApInformationFilesRepository $apInformationFilesRepository, GlobalHistoryService $globalHistoryService): Response
   {
 
     $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -30,6 +31,10 @@ class InformationRecentController extends AbstractController
     // $accesses = $this->getUser()->getRoleId()->getApAccesses();
     $tabNameRh = self::TAB_NAME_RH;
     $tabNameQse = self::TAB_NAME_QSE;
+
+    $request = Request::createFromGlobals();
+    $ipUser = $request->getClientIp();
+    $globalHistoryService->setInHistory('view', 'information_section_index', $ipUser);
 
     $recentRhFiles = $apInformationFilesRepository->findRecentRhFilesByUserView($user);
     $recentQseFiles = $apInformationFilesRepository->findRecentQseFilesByUserView($user);
