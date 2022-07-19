@@ -40,7 +40,7 @@
             
             <span class="catalog-grid-customer">
             {% for ap_sector_bp in ap_sector_bps %}
-                <span class="p-2 d-flex flex-column"><a class="{% if ap_sector_bp.archive == 1  %} archived {% endif %} folder-change" href="{{ path('ap_catalog_model_bp_show', {'id': ap_sector_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+                <span class="p-2 d-flex flex-column {% if ap_sector_bp.archive == 1  %} archived {% endif %}"><a class="{% if ap_sector_bp.archive == 1  %} archived {% endif %} folder-change" href="{{ path('ap_catalog_model_bp_show', {'id': ap_sector_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
                 <h4 class="overflow-hidden">{{ap_sector_bp.name}}</h4>
                 </span>
             {% else %}

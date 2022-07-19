@@ -41,7 +41,7 @@
                 </span>
                 <span class="catalog-grid-customer">
                     {% for model in ModelById %}
-                        <span class="p-2 d-flex flex-column"><a class="{% if model.archive == 1  %} archived {% endif %} folder-change" href="{{ path('ap_sector_bp_index', {'id': model.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+                        <span class="p-2 d-flex flex-column {% if model.archive == 1  %} archived {% endif %}"><a class="{% if model.archive == 1  %} archived {% endif %} folder-change" href="{{ path('ap_sector_bp_index', {'id': model.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
                         <h4 class="overflow-hidden">{{model.name}}</h4>
                         </span>
                     {% else %}
