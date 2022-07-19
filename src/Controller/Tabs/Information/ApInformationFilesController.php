@@ -162,7 +162,7 @@ class ApInformationFilesController extends AbstractController
     /**
      * @Route("/{id}", name="information_files_show", methods={"GET"})
      */
-    public function show(ApInformationFiles $apInformationFile, ApInformationParapherRepository $apInformationParapherRepo, ApInformationSignatureRepository $apInformationSignatureRepository, ApInformationViewedRepository $apInformationViewedRepository, GlobalHistoryService $globalHistoryService): Response
+    public function show(ApInformationFiles $apInformationFile, ApInformationParapherRepository $apInformationParapherRepo, ApInformationSignatureRepository $apInformationSignatureRepository, ApInformationViewedRepository $apInformationViewedRepository, GlobalHistoryService $globalHistoryService, ApInformationViewedRepository $apInformationViewedRepo): Response
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
@@ -175,6 +175,16 @@ class ApInformationFilesController extends AbstractController
         $fileTosign = $apInformationSignatureRepository->findByUserAndFile($user, $apInformationFile);
         $fileToView = $apInformationViewedRepository->findByUserAndFile($user, $apInformationFile);
         $sectionState = $apInformationFile->getSection()->getState();
+        
+        if($fileToView->getState() == 0 )
+        {
+            $fileToView->setState(1) ;
+            $fileToView->setDateTime(new \DateTime());
+            $apInformationViewedRepo->add($fileToView);
+            $globalHistoryService->setInHistory($fileToView, 'Read', $ipUser);
+
+        }
+
         if ($sectionState == 1){
             $tabName = self::TAB_RH;
             $actual_tab = self::TAB_REF_RH;
@@ -447,7 +457,7 @@ class ApInformationFilesController extends AbstractController
     public function signature(Request $request,GlobalHistoryService $globalHistoryService, ApInformationSignatureRepository $apInformationSignatureRepo) : response
     {
         $signatureId = $request->get('id');
-        
+
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
@@ -467,27 +477,27 @@ class ApInformationFilesController extends AbstractController
 
     }
 
-    /**
-    * @route("/viewed/{id}", methods={"GET"})
-    */
+    // /**
+    // * @route("/viewed/{id}", methods={"GET"})
+    // */
 
-    public function viewed(Request $request,GlobalHistoryService $globalHistoryService, ApInformationViewedRepository $apInformationViewedRepo) : response
-    {
-        $viewedId = $request->get('id');
-        $request = Request::createFromGlobals();
-        $ipUser = $request->getClientIp();
-        $submittedToken = $request->get('editCsrf');
-        $viewed = $apInformationViewedRepo->find($viewedId);
+    // public function viewed(Request $request,GlobalHistoryService $globalHistoryService, ApInformationViewedRepository $apInformationViewedRepo) : response
+    // {
+    //     $viewedId = $request->get('id');
+    //     $request = Request::createFromGlobals();
+    //     $ipUser = $request->getClientIp();
+    //     $submittedToken = $request->get('editCsrf');
+    //     $viewed = $apInformationViewedRepo->find($viewedId);
 
-            if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
-                $globalHistoryService->setInHistory($viewed, 'Read and approved', $ipUser);
-                $viewed->setState(1);
-                $viewed->setDateTime(new \DateTime());
-                $apInformationViewedRepo->add($viewed);
+    //         if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
+    //             $globalHistoryService->setInHistory($viewed, 'Read and approved', $ipUser);
+    //             $viewed->setState(1);
+    //             $viewed->setDateTime(new \DateTime());
+    //             $apInformationViewedRepo->add($viewed);
 
-            return $this->json(["code" => 200,
-            "message" => "Lu et approuvé"], 200);
-            }
+    //         return $this->json(["code" => 200,
+    //         "message" => "Lu et approuvé"], 200);
+    //         }
 
-    }
+    // }
 }
