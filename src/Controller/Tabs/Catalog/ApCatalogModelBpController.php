@@ -87,7 +87,7 @@ class ApCatalogModelBpController extends AbstractController
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
-        $globalHistoryService->setInHistory('View', 'ap_catalog_model_bp_new_precise', $ipUser);
+        $globalHistoryService->setInHistory('view', 'ap_catalog_model_bp_new_precise', $ipUser);
         $tabName = self::TAB_BP;
         $apCatalogModelBp = new ApCatalogModelBp();
         $form = $this->createForm(ApCatalogModelBpType::class, $apCatalogModelBp);
@@ -264,10 +264,6 @@ class ApCatalogModelBpController extends AbstractController
                 $entityManager->persist($apSectorBp);
                 $entityManager->flush();
             return $this->redirectToRoute('ap_sector_bp_index', ['id' => $modelId], Response::HTTP_SEE_OTHER);
-           // return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
-    //     }else{
-    //         return $this->redirectToRoute('catalog_index', [], Response::HTTP_SEE_OTHER);
-    //  }
         }
      return $this->redirectToRoute('ap_sector_bp_index', ['id' => $modelId], Response::HTTP_SEE_OTHER);
     }

@@ -39,7 +39,7 @@ class ApCatalogFilesBpController extends AbstractController
         $tabName = self::TAB_BP;
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-        $GlobalHistoryService->setInHistory('View', 'ap_catalog_files_bp_new', $ipUser);
+        $GlobalHistoryService->setInHistory('view', 'ap_catalog_files_bp_new', $ipUser);
 
         $apCatalogFilesBp = new ApCatalogFilesBp();
         $form = $this->createForm(ApCatalogFilesBpType::class, $apCatalogFilesBp, );
@@ -91,8 +91,6 @@ class ApCatalogFilesBpController extends AbstractController
             $manager->flush();
             if($fileExtension == "pdf"){}else{$intervention->resizeCatalogBpCarroussel($apCatalogFilesBp->getFileName(), $width, $height);};
             //set history
-            $request = Request::createFromGlobals();
-            $ipUser = $request->getClientIp();
             $GlobalHistoryService->setInHistory($apCatalogFilesBp, 'new', $ipUser);
             return $this->redirectToRoute('ap_catalog_model_bp_show', ['id' => $sectorId], Response::HTTP_SEE_OTHER);
         }

@@ -37,7 +37,7 @@ class ApCatalogCaseVbController extends AbstractController
         $apCatalogCaseVb = new ApCatalogCaseVb();
         $form = $this->createForm(ApCatalogCaseVbType::class, $apCatalogCaseVb);
         $form->handleRequest($request);
-        $GlobalHistoryService->setInHistory('View', 'ap_catalog_case_vb_new',  $ipUser, ['View']);
+        $GlobalHistoryService->setInHistory('view', 'ap_catalog_case_vb_new',  $ipUser, ['View']);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
