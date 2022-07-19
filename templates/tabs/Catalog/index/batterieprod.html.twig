@@ -54,7 +54,7 @@
         {% for ap_catalog_customer_bp in ap_catalog_customer_bps %}
         <div >
             <span class=" {% if ap_catalog_customer_bp.archive == 1  %} archived {% endif %} d-flex flex-column">
-                    <a class="folder-change" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
+                    <a class="folder-change {% if ap_catalog_customer_bp.archive == 1  %} archived {% endif %}" href="{{ path('ap_catalog_customer_bp_show', {'id': ap_catalog_customer_bp.id}) }}"><i class="fas fa-folder fa-6x"></i></a>
                     <h4 class="overflow-hidden">{{ ap_catalog_customer_bp.name }}</h4>
             </span>
         </div>

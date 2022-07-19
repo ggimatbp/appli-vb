@@ -52,7 +52,7 @@
 				</span>
 				<span class="catalog-grid-customer">
 					{% for ap_sector_vb in ap_sector_vbs %}
-						<span class="p-2 d-flex flex-column">
+						<span class="p-2 d-flex flex-column {% if ap_sector_vb.archive == 1  %} archived {% endif %}">
 							<a class="{% if ap_sector_vb.archive == 1 %} archived {% endif %} folder-change" href="{{ path('ap_sector_vb_show', {'id': ap_sector_vb.id}) }}">
 								<i class="fas fa-folder fa-6x"></i>
 							</a>
