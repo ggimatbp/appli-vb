@@ -417,13 +417,15 @@ class ApInformationFilesController extends AbstractController
     public function parapher(Request $request,GlobalHistoryService $globalHistoryService, ApInformationParapherRepository $apInformationParapherRepo) : response
     {
 
+
+        $parapherId = $request->get('id');
+
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
         $submittedToken = $request->get('editCsrf');
         // 'search-item' is the same value used in the template to generate the token
 
-        $parapherId = $request->get('id');
         $parapher = $apInformationParapherRepo->find($parapherId);
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
                 $globalHistoryService->setInHistory($parapher, 'Read and approved', $ipUser);
@@ -444,13 +446,14 @@ class ApInformationFilesController extends AbstractController
 
     public function signature(Request $request,GlobalHistoryService $globalHistoryService, ApInformationSignatureRepository $apInformationSignatureRepo) : response
     {
-
+        $signatureId = $request->get('id');
+        
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
         $submittedToken = $request->get('editCsrf');
 
-        $signatureId = $request->get('id');
+
         $signature = $apInformationSignatureRepo->find($signatureId);
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
                 $globalHistoryService->setInHistory($signature, 'read and approved', $ipUser);
