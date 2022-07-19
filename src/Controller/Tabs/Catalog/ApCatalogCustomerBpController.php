@@ -30,7 +30,7 @@ class ApCatalogCustomerBpController extends AbstractController
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
-        $GlobalHistoryService->setInHistory('View', 'ap_catalog_customer_bp_index', $ipUser);
+        $GlobalHistoryService->setInHistory('view', 'ap_catalog_customer_bp_index', $ipUser);
 
         return $this->render('tabs/Catalog/ap_catalog_customer_bp/index.html.twig', [
             'ap_catalog_customer_bps' => $apCatalogCustomerBpRepository->findAllOrderName(),
@@ -45,7 +45,7 @@ class ApCatalogCustomerBpController extends AbstractController
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
-        $GlobalHistoryService->setInHistory('View', 'ap_catalog_customer_bp_new', $ipUser);
+        $GlobalHistoryService->setInHistory('view', 'ap_catalog_customer_bp_new', $ipUser);
 
         $tabName = self::TAB_BP;
         $apCatalogCustomerBp = new ApCatalogCustomerBp();
@@ -97,7 +97,7 @@ class ApCatalogCustomerBpController extends AbstractController
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
 
-        $GlobalHistoryService->setInHistory('View', 'ap_catalog_customer_bp_edit', $ipUser);
+        $GlobalHistoryService->setInHistory('view', 'ap_catalog_customer_bp_edit', $ipUser);
 
         $tabName = self::TAB_BP;
         $form = $this->createForm(ApCatalogCustomerBpType::class, $apCatalogCustomerBp);

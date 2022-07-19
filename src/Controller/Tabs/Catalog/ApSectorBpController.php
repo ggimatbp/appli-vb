@@ -31,7 +31,7 @@ class ApSectorBpController extends AbstractController
     {
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-        $globalHistoryService->setInHistory('View', 'ap_sector_bp_new', $ipUser);
+        $globalHistoryService->setInHistory('view', 'ap_sector_bp_new', $ipUser);
         $tabName = self::TAB_BP;
         $apSectorBp = new ApSectorBp();
         $form = $this->createForm(ApSectorBpType::class, $apSectorBp);
