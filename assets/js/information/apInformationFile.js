@@ -147,36 +147,36 @@ import $ from 'jquery';
   //#region form
 
       //#region viewed
-      function onClickAddViewed() {
+      // function onClickAddViewed() {
 
-        let editCsrf = $('#csrf-edit').val();
-        let viewedId = $('#csrf-edit').data('viewed-id');
-        $.ajax({
-          type: 'GET',
-          url: '/information/files/viewed/' + viewedId,
-          dataType: 'json',
-          data: {
-            "editCsrf": editCsrf,
-            "viewedId": viewedId,
-          },
-          async: true,
+      //   let editCsrf = $('#csrf-edit').val();
+      //   let viewedId = $('#csrf-edit').data('viewed-id');
+      //   $.ajax({
+      //     type: 'GET',
+      //     url: '/information/files/viewed/' + viewedId,
+      //     dataType: 'json',
+      //     data: {
+      //       "editCsrf": editCsrf,
+      //       "viewedId": viewedId,
+      //     },
+      //     async: true,
       
-          success: function (response) {
-          vNotify().success({ text: 'Ce document a été vue.', title: 'Vue' });
-              // icone.classList.replace('fa-times-circle', 'fa-check-square');
-              // icone.classList.replace('text-danger', 'text-success');
-              // document.getElementById('btnViewed').classList.replace('btn', 'button-success');
-              // document.getElementById('viewed-check').classList.replace('fa-false', 'fa-check');
-          },
-          error: function () {
-            vNotify().error({ text: 'Vous allez commettre une terrible erreur !', title: 'Erreur' });
-          },
-        });
-      }
-      if($('#csrf-edit').data('viewed-state') == 0)
-      {
-        onClickAddViewed();
-      }
+      //     success: function (response) {
+      //     vNotify().success({ text: 'Ce document a été vue.', title: 'Vue' });
+      //         // icone.classList.replace('fa-times-circle', 'fa-check-square');
+      //         // icone.classList.replace('text-danger', 'text-success');
+      //         // document.getElementById('btnViewed').classList.replace('btn', 'button-success');
+      //         // document.getElementById('viewed-check').classList.replace('fa-false', 'fa-check');
+      //     },
+      //     error: function () {
+      //       vNotify().error({ text: 'Vous allez commettre une terrible erreur !', title: 'Erreur' });
+      //     },
+      //   });
+      // }
+      // if($('#csrf-edit').data('viewed-state') == 0)
+      // {
+      //   onClickAddViewed();
+      // }
   
       //#endregion viewed
 
