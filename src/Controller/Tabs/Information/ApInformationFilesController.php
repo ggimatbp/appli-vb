@@ -470,11 +470,10 @@ class ApInformationFilesController extends AbstractController
 
     public function viewed(Request $request,GlobalHistoryService $globalHistoryService, ApInformationViewedRepository $apInformationViewedRepo) : response
     {
+        $viewedId = $request->get('id');
         $request = Request::createFromGlobals();
         $ipUser = $request->getClientIp();
-
         $submittedToken = $request->get('editCsrf');
-        $viewedId = $request->get('id');
         $viewed = $apInformationViewedRepo->find($viewedId);
 
             if ($this->isCsrfTokenValid('edit-item', $submittedToken)) {
